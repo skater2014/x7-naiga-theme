@@ -1,0 +1,724 @@
+/*
+ブロックエディター用のスタイルシートを読み込む 実際のウェブサイトには反映されないのでカスタム　CSSで追加
+
+bodyと記述していた場合、それも自動的に.editor-styles-wrapperに置き換えてくれます。
+
+エディター用スタイルの中では、特にセレクターを意識せずに記述しても、ブロックエディター内にだけ適用される形
+
+editor-style.cssに@importがあると「@importが効かない」ではなく「editor-style.cssが効かな」くなります。
+
+WordPressの編集画面ではその先祖要素はないため外しましょう。
+*/
+
+/* ブロックエディタで生成される strong 要素内のテキストにスタイルを指定 */
+.editor-styles-wrapper strong {
+    color: var(--main-text, #333);
+    /* 他のスタイルも追加できます */
+}
+
+.dark-theme .editor-styles-wrapper strong {
+    color: var(--link-color-red, #FF0099);
+    /* 他のスタイルも追加できます */
+}
+
+ /*@import url('sample.css');*/
+
+
+/* モバイルサイズの画面に対するスタイル */
+@media (max-width: 768px) {
+    .wp-block-image img {
+        width: 100%;
+    }
+}
+
+body {
+  font-family: 'Inter', sans-serif
+ }
+
+
+table {
+  width: 100%;
+  height: auto;
+}
+
+
+.img {
+  width: 100%;
+  height: auto;
+  }
+
+.blog-main-content a img:hover {
+  border-color: #0bd;
+}
+
+.main-custom-post {
+  border: 2px solid #f5f2eb; /* 白の枠線 */
+  border-radius: 8px;        /* 角を少し丸める（任意） */
+  margin-bottom: 2em;        /* 投稿同士の余白 */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05); /* ほんの少しの影（任意） */
+}
+
+
+.editor-styles-wrapper h4 {
+  font-size: 1.125rem;
+  line-height: 1.4;
+  background: url(images/sprite.svg) no-repeat;
+  background-size: 302px 900px;
+  background-position: 0 -200px;
+  border-block: 3px #f8bbd0 solid;
+  padding: 10px 0 8px 25px;
+  margin-bottom: 15px;
+  fill: #000;
+}
+
+.editor-styles-wrapper h4 {
+  position: relative;
+  border-top: solid 2px #f8bbd0;
+  border-bottom: solid 2px #f8bbd0;
+  border-left: solid 2px #f8bbd0;
+  border-right: solid 2px #f8bbd0;
+  border-radius: 5px 5px 5px 5px;
+  background: -webkit-repeating-linear-gradient(-45deg, #ffe6e6, #ffe6e6 3px, #ffd9d9 3px, #ffd9d9 7px, #ffe6e6 7px);
+  background: repeating-linear-gradient(-45deg, #ffe6e6, #ffe6e6 3px, #ffd9d9 3px, #ffd9d9 7px, #ffe6e6 7px);
+  padding: 0.4em 0.5em;
+  margin: 2em 0 0.5em;
+  color: #000;
+}
+
+.editor-styles-wrapper h4:after {
+  /*タブ*/
+  position: absolute;
+  font-family: "Font Awesome 5 Free",'Quicksand','Avenir','Arial',sans-serif;
+  font-weight: 900;
+  content: '\f0a7\ POINT';
+  background: #f8bbd0;
+  color: #fff;
+  left: 0px;
+  bottom: 100%;
+  border-radius: 5px 5px 0 0;
+  padding: 5px 7px 3px;
+  /*font-size: 0.7em;*/
+  line-height: 1;
+  letter-spacing: 0.05em;
+}
+
+.editor-styles-wrapper h6 {
+    font-size: 1.125rem;
+    line-height: 1.4;
+    background: url(images/sprite.svg) no-repeat;
+    background-size: 302px 900px;
+    background-position: 0 -200px;
+    border-block: 3px #f8bbd0 solid;
+    padding:0.25em 0.5em;
+    margin-bottom: 15px;
+    fill: #000;
+}
+
+
+  /*Check*/
+.editor-styles-wrapper h5 {
+  position: relative;
+  color: #000;
+  outline: auto;
+  outline-color: #6cb4e4;
+  background: -webkit-repeating-linear-gradient(-45deg, #f0f8ff, #f0f8ff 3px,#e9f4ff 3px, #e9f4ff 7px);
+  background: repeating-linear-gradient(-45deg, #f0f8ff, #f0f8ff 3px,#e9f4ff 3px, #e9f4ff 7px);
+  padding: 0.25em 0.5em;
+  margin: 2em 0 0.5em;
+  border-radius: 0 5px 5px 5px;
+
+}
+
+.editor-styles-wrapper h5:after {
+  position: absolute;
+  font-family: "Font Awesome 5 Free",'Quicksand','Avenir','Arial',sans-serif;
+  font-weight: 900;
+  content: '\f00c Check';
+  background: #2196F3;
+  color: #fff;
+  left: 0px;
+  bottom: 100%;
+  border-radius: 5px 5px 0 0;
+  padding: 3px 7px 1px;
+  /*font-size: 0.7em;*/
+  line-height: 1;
+  letter-spacing: 0.05em
+
+}
+/*Pont*/
+.editor-styles-wrapper h4　{
+  position: relative;
+  border-top: solid 2px #f8bbd0;
+  border-bottom: solid 2px #f8bbd0;
+  border-left: solid 2px #f8bbd0;
+  border-right: solid 2px #f8bbd0;
+  border-radius: 5px 5px 5px 5px;
+  background: -webkit-repeating-linear-gradient(-45deg, #ffe6e6, #ffe6e6 3px, #ffd9d9 3px, #ffd9d9 7px, #ffe6e6 7px);
+  background: repeating-linear-gradient(-45deg, #ffe6e6, #ffe6e6 3px, #ffd9d9 3px, #ffd9d9 7px, #ffe6e6 7px);
+  padding: 0.4em 0.5em;
+  margin: 2em 0 0.5em;
+  color: #000;
+}
+
+
+.editor-styles-wrapper h4:after {
+  /*タブ*/
+  position: absolute;
+  font-family: "Font Awesome 5 Free",'Quicksand','Avenir','Arial',sans-serif;
+  font-weight: 900;
+  content: '\f0a7\ POINT';
+  background: #f8bbd0;
+  color: #fff;
+  left: 0px;
+  bottom: 100%;
+  border-radius: 5px 5px 0 0;
+  padding: 5px 7px 3px;
+  /*font-size: 0.7em;*/
+  line-height: 1;
+  letter-spacing: 0.05em;
+}
+
+
+
+/* タイトルのスタイルを変更 */
+.editor-post-title {
+    font-family: 'Inter', sans-serif; /* フォントを変更 */
+    font-size: 24px; /* フォントサイズを変更 */
+    color: #333; /* フォントの色を変更 */
+    font-style: italic; 
+    font-size:30px;
+}
+
+/* 他のブロックのスタイルも変更可能 */
+.blog-main-content p {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  /* color: #555; */ /* 必要なら有効にしてください */
+  letter-spacing: normal;
+}
+
+
+ .post type p {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    color: #555;
+    letter-spacing: normal;
+}
+
+
+/* 投稿ページのスタイル */
+.type-post ol,
+.edit-post-layout.interface-interface-skeleton:not(.post-type-genshin_updated) ol {
+  counter-reset: number; /* 数字をリセット */
+  list-style-type: none!important; /* 番号を一旦消す */
+  padding: 0.3em 0.8em;
+  border: solid 2px pink; /* 枠線の色をピンクに */
+}
+
+.type-post ol li,
+.edit-post-layout.interface-interface-skeleton:not(.post-type-genshin_updated) ol li {
+  border-bottom: dashed 1px pink; /* 下線の色をピンクに */
+  position: relative;
+  padding: 0.5em 0.5em 0.5em 30px;
+  line-height: 1.5em;
+}
+
+.type-post ol li:before,
+.edit-post-layout.interface-interface-skeleton:not(.post-type-genshin_updated) ol li:before {
+  /* 数字をつける */
+  position: absolute;
+  counter-increment: number;
+  content: counter(number);
+  /* 数字のデザイン変える */
+  display: inline-block;
+  background: pink; /* 背景色をピンクに */
+  color: white;
+  font-family: 'Avenir', 'Arial Black', 'Arial', sans-serif;
+  font-weight: bold;
+  font-size: 15px;
+  border-radius: 50%;
+  left: 0;
+  width: 25px;
+  height: 25px;
+  line-height: 25px;
+  text-align: center;
+  /* 上下中央寄せのため */
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+/* リストのドットスタイル */
+/*.type-post ul,
+.edit-post-layout.interface-interface-skeleton:not(.post-type-genshin_updated) ul {
+  counter-reset: number; /* 数字をリセット */
+  /*list-style-type: none!important; /* リストスタイルを消す */
+  /*padding: 0.3em 0.8em;
+  border: solid 2px pink; /* 枠線の色をピンクに */
+/*}
+*/
+
+/*.type-post ul li,
+.edit-post-layout.interface-interface-skeleton:not(.post-type-genshin_updated) ul li {
+  border-bottom: dashed 1px pink; /* 下線の色をピンクに */
+  /*position: relative;
+  padding: 0.5em 0.5em 0.5em 30px;
+  line-height: 1.5em;
+}*/
+
+
+
+/*.type-post ul li::before,
+.edit-post-layout.interface-interface-skeleton:not(.post-type-genshin_updated) ul li::before {
+  /* ドットを表示 */
+  /*position: absolute;
+  content: "●"; /* ドットを表示 */
+  /* デザイン変更 */
+  /*display: inline-block;
+  background: pink; /* 背景色をピンクに */
+  /*color: pink;
+  font-family: 'Avenir', 'Arial Black', 'Arial', sans-serif;
+  font-weight: bold;
+  font-size: 15px;
+  border-radius: 50%;
+  left: 0;
+  width: 25px;
+  height: 25px;
+  line-height: 25px;
+  text-align: center;
+  /* 上下中央寄せ */
+  /*top: 50%;
+  transform: translateY(-50%);
+}*/
+
+
+/* 管理画面 ul li */
+/*.edit-post-layout.interface-interface-skeleton:not(.post-type-genshin_updated) ul {
+  counter-reset: number; /* 数字をリセット */
+  /*list-style-type: none!important; /* リストスタイルを消す */
+  /*padding: 0.3em 0.8em;
+  border: solid 2px pink;
+}
+
+.edit-post-layout.interface-interface-skeleton:not(.post-type-genshin_updated) ul li {
+  border-bottom: dashed 1px pink;
+  position: relative;
+  padding: 0.5em 0.5em 0.5em 30px;
+  line-height: 1.5em;
+}
+
+/*.edit-post-layout.interface-interface-skeleton:not(.post-type-genshin_updated) ul li:before {
+  content: "●"; /* ドットを表示 */
+  /* デザイン変更 */
+  /*display: inline-block;
+  background: pink;
+  color: pink;
+  font-family: 'Avenir', 'Arial Black', 'Arial', sans-serif;
+  font-weight: bold;
+  font-size: 15px;
+  border-radius: 50%;
+  /*padding-left: 7px; /* 記号の間隔を調整 */
+  /*margin-right: 10px; /* 記号とテキストの間隔を調整 */
+  /*width: 25px; /* 丸の幅 */
+  /*height: 25px; /* 丸の高さ */
+  /*line-height: 25px; /* テキストの行の高さ */
+/*}
+
+/* カスタム投稿ページのスタイル */
+.blog-main-content ol {
+  counter-reset: number; /* 数字をリセット */
+  list-style-type: none !important; /* 番号を一旦消す */
+  padding: 0.3em 0.8em;
+  border: solid 2px #ffb107; /* オレンジの枠線 */
+}
+
+.blog-main-content ol li {
+  border-bottom: dashed 1px #ffb107; /* オレンジの下線 */
+  position: relative;
+  padding: 0.5em 0.5em 0.5em 30px;
+  line-height: 1.5em;
+}
+
+.blog-main-content ol li:before {
+  /* 数字をつける */
+  position: absolute;
+  counter-increment: number;
+  content: counter(number);
+  /* 数字のデザイン変える */
+  display: inline-block;
+  background: #ffb107;
+  color: white;
+  font-family: 'Avenir', 'Arial Black', 'Arial', sans-serif;
+  font-weight: bold;
+  font-size: 15px;
+  border-radius: 50%;
+  left: 0;
+  width: 25px;
+  height: 25px;
+  line-height: 25px;
+  text-align: center;
+  /* 上下中央寄せのため */
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+
+/* カスタム投稿ページ ul li */
+/*.genshin_updated ul,
+.edit-post-layout.post-type-genshin_updated.interface-interface-skeleton ul {
+  counter-reset: number; /* 数字をリセット */
+  /*list-style-type: none!important; /* リストスタイルを消す */
+  /*padding: 0.3em 0.8em;
+  border: solid 2px #ffb107; /* 枠線の色を変更 */
+/*}
+
+.genshin_updated ul li,
+.edit-post-layout.post-type-genshin_updated.interface-interface-skeleton ul li {
+  border-bottom: dashed 1px #ffb107; /* 下線の色を変更 */
+  /*position: relative;
+  padding: 0.5em 0.5em 0.5em 30px;
+  line-height: 1.5em;
+}
+
+.genshin_updated ul li::before,
+.edit-post-layout.post-type-genshin_updated.interface-interface-skeleton ul li::before {
+  /* ドットを表示 */
+  /*position: absolute;
+  content: "●"; /* ドットを表示 */
+  /* デザイン変更 */
+  /*display: inline-block;
+  background: #ffb107; /* 背景色を変更 */
+  /*color: #ffb107; /* テキストの色を変更 */
+  /*font-family: 'Avenir', 'Arial Black', 'Arial', sans-serif;
+  font-weight: bold;
+  font-size: 15px;
+  border-radius: 50%;
+  left: 0;
+  width: 25px;
+  height: 25px
+}
+
+
+/* カスタム投稿タイプgenshin_updatedの編集画面のスタイル 反映されていない */
+/*.edit-post-layout.post-type-genshin_updated.interface-interface-skeleton ul {
+  padding: 0.3em 0.8em;
+  border: solid 2px #ffb107; /* オレンジの枠線 */
+/*}
+
+.edit-post-layout.post-type-genshin_updated.interface-interface-skeleton ul li {
+  border-bottom: dashed 1px #ffb107; /* オレンジの下線 */
+  /*position: relative;
+  padding: 0.5em 0.5em 0.5em 30px;
+  line-height: 1.5em;
+}
+
+.edit-post-layout.post-type-genshin_updated.interface-interface-skeleton ul li::before {
+  /* 番号をつける */
+  /*content: "●"; /* ここで記号を指定 */
+  /* 数字のデザイン変える */
+  /*display: inline-block;
+  background: #ffb107; /* オレンジの背景色 */
+  /*color: white;
+  font-family: 'Avenir', 'Arial Black', 'Arial', sans-serif;
+  font-weight: bold;
+  font-size: 15px;
+  border-radius: 50%;
+  /*padding-left: 7px; /* 記号の間隔を調整 */
+  /*margin-right: 10px; /* 記号とテキストの間隔を調整 */
+  /*width: 25px; /* 丸の幅 */
+  /*height: 25px; /* 丸の高さ */
+  /*line-height: 25px; /* テキストの行の高さ */
+/*}
+
+
+
+
+/*投稿ページ*/
+
+/* テーブルのスタイル */
+/*.design17 {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px; /* テーブルの下部に余白を追加 */
+/*}
+
+/* CSSで管理するテーブルのサイズ */
+/*.design17 th:nth-child(1) {
+  width: 15%; /* Title の幅を設定 */
+/*}
+
+/*.design17 th:nth-child(2) {
+  width: 40%; /* Description の幅を設定 */
+/*}
+
+/*.design17 th:nth-child(3) {
+  width: 30%; /* Text の幅を設定 */
+/*}
+
+/* テーブルのヘッダー行のスタイル */
+/*.design17 thead th {
+  background-color: #f2f2f2;
+  color: var(--link-color-black);
+  border: 1px solid #dddddd;
+  padding: 8px;
+  text-align: left;
+}
+
+/* テーブルのデータ行のスタイル */
+/*.design17 tbody td {
+  border: 1px solid #dddddd;
+  padding: 8px;
+}
+
+/* 画像の幅を100%に設定 */
+/*.design17 tbody td img {
+  max-width: 100%;
+  height: auto; /* 高さを自動調整してアスペクト比を保持 */
+/*}
+
+/*.design17 {
+  overflow-x: auto;
+}
+
+/* レスポンシブデザイン */
+/*@media screen and (max-width: 640px) {
+  .design17 thead tr {
+      display: none; /* モバイルビューで見出し行を非表示にする */
+  /*}
+}
+
+/* 640 レスポンシブデザイン */
+/*@media screen and (max-width: 640px) {
+  .design17 thead th,
+  .design17 tbody td {
+      display: block;
+      width: 100%;
+  }
+  /*.design17 tbody td::before {
+      content: attr(data-label); /* ラベルを表示 */
+      /*font-weight: bold;
+      padding: 4px 8px; /* パディング */
+      /*border-radius: 4px; /* 角丸 */
+      /*margin-right: 4px; /* 右側のマージン */
+  /*}
+  
+  /*.design17 tbody td:nth-child(1)::before {
+      content: "Name: ";
+      background-color: rgb(81, 178, 131); /* 色 */
+  /*}
+  
+  /*.design17 tbody td:nth-child(2)::before {
+      /*content: "Artifacts Effect: ";*/
+              /*content: attr(data-content);
+
+      background-color: rgb(205, 114, 179); /* 色 */
+  /*}
+  
+  .design17 tbody td:nth-child(3)::before {
+      content: "Image: ";
+      background-color: rgb(68 138 224); /* 色 */
+  }
+/*}
+*/
+
+
+#Title-Text1,
+#Title-Text2,
+#Title-Text3,
+#Title-Text4,
+#Title-Text5,
+#Title-Text6 {
+  width: 100%; /* 幅を100%に指定 */
+  /*height: 100px; /* 高さを100pxに指定 */
+}
+
+#Text_Detail-1,
+#Text_Detail-2,
+#Text_Detail-3,
+#Text_Detail-4,
+#Text_Detail-5,
+#Text_Detail-6 {
+    width: 100%;
+}
+
+#Description_Detail1,
+#Description_Detail2,
+#Description_Detail3,
+#Description_Detail4,
+#Description_Detail5,
+#Description_Detail6 {
+  width: 100%;
+}
+
+#editor .postbox {
+  float: left;
+}
+
+
+
+#Title-Text1_meta_box,
+#Title-Text2_meta_box,
+#Title-Text3_meta_box,
+#Title-Text4_meta_box,
+#Title-Text5_meta_box,
+#Title-Text6_meta_box {
+  width: 50%;
+}
+
+.postbox {
+  float: left; 
+  width: calc(50% - 20px);
+}
+
+.postbox:nth-child(even) {
+  float: right;
+  margin-right: 0;
+}
+
+.postbox-header {
+  overflow: hidden;
+}
+
+
+/* レスポンシブデザイン */
+/*@media screen and (max-width: 600px) {
+  /* モバイルデバイス用のテーブルヘッダー */
+  /*.design16 thead th:nth-child(1) {
+    width: 20%; /* Title の幅を設定 */
+  /*}
+  /*.design16 thead th:nth-child(2) {
+    width: 30%; /* Description の幅を設定 */
+  /*}
+  /*.design16 thead th:nth-child(3) {
+    width: 50%; /* Text の幅を設定 */
+  /*}
+}*/
+
+/* レスポンシブデザイン */
+/*@media screen and (max-width: 600px) {
+  /* テーブルが横幅600px以下の場合に適用されるスタイル */
+  /*.design16 {
+    overflow-x: auto;
+    white-space: nowrap; /* コンテンツが折り返されないように設定 */
+  /*}
+  /* モバイルデバイス用の画像サイズ */
+  /*.design16 tbody td img {
+    width: 100%; /* 画像の幅を親要素の幅いっぱいに設定 */
+    /*height: auto; /* 高さを自動調整してアスペクト比を保持 */
+  /*}
+  /* モバイルデバイス用のテーブルレイアウト */
+  /*.design16 thead th,
+  .design16 tbody td {
+    display: table-cell; /* セルをテーブルセルに変更して水平方向に並べる */
+    /*width: auto; /* セルの幅を自動調整 */
+    /*white-space: normal; /* テキストを折り返す */
+  /*}
+}
+*/
+
+    .custom-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    .custom-table th, .custom-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
+    .custom-table th {
+        background-color: #f2f2f2;
+        text-align: left;
+    }
+
+
+
+/* 新しいギャラリーのスタイル */
+.gallary-container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.gallary-item {
+    width: 30%; /* カラムの幅を調整 */
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.gallary-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* 画像を領域にフィットさせる */
+    border: solid 1px #ffffff;
+}
+
+.gallary-item p {
+    padding: 10px;
+    background: #ffffff;
+}
+
+
+.post-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.post-list {
+  width: 48%; /* Adjust as needed for spacing between items */
+  margin-bottom: 20px; /* Add margin between items */
+}
+
+.post-list a {
+  display: block;
+  text-decoration: none;
+  color: #333;
+}
+
+.post-list img {
+  max-width: 100%;
+  height: auto;
+  border: 1px solid #ddd; /* Optional: Add a border to images */
+}
+
+@media (max-width: 768px) {
+  .post-list {
+    width: 100%; /* Make it full-width on smaller screens */
+  }
+}
+
+
+
+/* iframe をレスポンシブにするためのスタイル */
+.google-map-iframe {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 アスペクト比 (高さ:幅 = 9:16) */
+    height: 0;
+    overflow: hidden;
+    max-width: 100%;
+    width: 100%;
+}
+
+.google-map-iframe iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+
+/*ブログCTA ボタン*/
+.cta-orange-button .wp-block-button__link {
+  background-color: #ff6600;
+  color: #fff !important;
+}
+
+.cta-orange-button .wp-block-button__link:hover {
+  background-color: #cc5200;
+  color: #fff !important;
+}
+
+.cta-orange-button {
+  margin: 24px 0;
+}

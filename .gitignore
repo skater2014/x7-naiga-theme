@@ -1,0 +1,24 @@
+.DS_Store
+.vscode/
+.idea/
+node_modules/
+dist/
+build/
+.cache/
+vendor/
+*.log
+.env
+.env.*
+
+# backup / sql（ここ重要）
+*.sql
+*.sql.*
+backup*.sql*
+*_backup*.sql*
+_bak/
+*.bak*
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.bz2

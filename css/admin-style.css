@@ -1,0 +1,26 @@
+/*
+ブロックエディター用のスタイルシートを読み込む 実際のウェブサイトには反映されないのでカスタム　CSSで追加
+
+bodyと記述していた場合、それも自動的に.editor-styles-wrapperに置き換えてくれます。
+
+エディター用スタイルの中では、特にセレクターを意識せずに記述しても、ブロックエディター内にだけ適用される形
+
+editor-style.cssに@importがあると「@importが効かない」ではなく「editor-style.cssが効かな」くなります。
+
+WordPressの編集画面ではその先祖要素はないため外しましょう。
+
+
+
+table {
+	width: 100%;
+	height: auto;
+}
+
+/*table {
+    background-color: #cdefff;  /* 背景色指定 */
+/*}*/
+ 
+th {
+    background-color: #cdefff;  /* 背景色指定 */
+}
+

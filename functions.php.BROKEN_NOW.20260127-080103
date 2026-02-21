@@ -1,0 +1,5389 @@
+<?php
+/****************************************
+
+        functions.php
+
+        テーマ内で利用する関数を定義したり、
+        テーマの設定を行うためのファイルです。
+
+        functions.php のコードに関しては、
+        CHAPTER 11, 12 で詳しく解説しています。
+
+*****************************************/
+
+
+
+// ============================
+// ============================
+// ✅ 抜粋を「読みやすく」作る（共通化）
+// - ブロック境界に空白を入れて “AdsGenshin” を防ぐ
+// - 余計な文言（Turn Off Ads / Contents 等）を削る
+// - 短くする（既定80文字）
+// ============================
+
+if (!function_exists('gw_readable_excerpt_by_id')) {
+  function gw_readable_excerpt_by_id($post_id, $max = 80) {
+    $post_id = (int) $post_id;
+    if ($post_id <= 0) return '';
+
+    // get_the_excerpt() は再帰しやすいので生値から作る
+    $raw = (string) get_post_field('post_excerpt', $post_id);
+    if ($raw === '') {
+      $raw = (string) get_post_field('post_content', $post_id);
+    }
+
+    $title_txt = trim((string) get_the_title($post_id));
+
+    // ブロック境界に空白（AdsGenshinみたいな結合を防ぐ）
+    $ex = preg_replace('~<\\s*br\\s*/?\\s*>~i', ' ', $raw);
+    $ex = preg_replace('~</\\s*(p|div|li|h[1-6]|tr|td|th)\\s*>~i', ' ', $ex);
+
+    // ショートコード→タグ除去→空白正規化
+    $ex = strip_shortcodes($ex);
+    $ex = wp_strip_all_tags($ex);
+    $ex = trim(preg_replace('/\\s+/', ' ', $ex));
+
+    // ゴミ除去（必要なら追加OK）
+    $ex = preg_replace('/\\bTurn\\s*Off\\s*Ads\\b/i', '', $ex);
+    $ex = preg_replace('/\\bContents\\b/i', '', $ex);
+    $ex = trim(preg_replace('/\\s+/', ' ', $ex));
+
+    // タイトルが先頭なら削る
+    if ($title_txt !== '' && stripos($ex, $title_txt) === 0) {
+      $ex = trim(mb_substr($ex, mb_strlen($title_txt, 'UTF-8'), null, 'UTF-8'));
+    }
+
+    $max = (int) $max;
+    if ($max <= 0) $max = 80;
+    return mb_strimwidth($ex, 0, $max, '…', 'UTF-8');
+  }
+}
+
+// get_the_excerpt() を差し替える（Swiperカードの抜粋もこれで直る）
+add_filter('get_the_excerpt', function($excerpt, $post) {
+  if ($post instanceof WP_Post) {
+    return gw_readable_excerpt_by_id($post->ID, 80);
+  }
+  return $excerpt;
+}, 20, 2);
+
+/**
+ * ============================================================
+ * GameWidth: 共通ページャ + 共通クエリ調整（functions.php）
+ * ============================================================
+ *
+ * 目的：
+ * 1) paginate_links() のURL生成を壊さない（base/format二重化や ?paged の崩れを防止）
+ * 2) s / post_type / view をページャーで保持
+ * 3) 「不要にページ番号が増える」系の事故を、found_posts から total 再計算して抑える
+ * 4) （任意）メインクエリに対して posts_per_page 等を共通設定する
+ *
+ * 注意：
+ * - pre_get_posts は「メインクエリ」だけに効く。
+ *   つまり search.php 内で new WP_Query() を使っている場合、
+ *   そのWP_Queryには pre_get_posts の変更は反映されない（=あなたのsearch.phpは自前で設定済みだからOK）。
+ */
+
+
+/* ------------------------------------------------------------
+ * view パラメータの正規化
+ * ------------------------------------------------------------ */
+
+/**
+ * view パラメータを 'grid' / 'list' に正規化する。
+ * - それ以外は全部 'list' 扱い（変な値が来ても崩れない）
+ */
+if (!function_exists('gw_get_view_param')) {
+  function gw_get_view_param() {
+    $v = isset($_GET['view']) ? sanitize_text_field(wp_unslash($_GET['view'])) : '';
+    return ($v === 'grid') ? 'grid' : 'list';
+  }
+}
+
+
+/* ------------------------------------------------------------
+ * ページャーで保持したい GET パラメータ
+ * ------------------------------------------------------------ */
+
+/**
+ * いまのURLパラメータをページャーリンクに引き継ぐ。
+ * - s / post_type / view を保持する
+ */
+if (!function_exists('gw_build_pager_add_args')) {
+  function gw_build_pager_add_args($view_param = 'list') {
+    $add_args = [];
+
+    // 検索キーワード：空でも保持したいなら isset を見る（あなたの方式）
+    if (isset($_GET['s'])) {
+      $add_args['s'] = (string) wp_unslash($_GET['s']); // '' のままでもOK
+    }
+
+    // 絞り込み：post_type
+    if (isset($_GET['post_type'])) {
+      $add_args['post_type'] = sanitize_text_field(wp_unslash($_GET['post_type']));
+    }
+
+    // 表示モード：grid/list
+    $add_args['view'] = ($view_param === 'grid') ? 'grid' : 'list';
+
+    return $add_args;
+  }
+}
+
+
+/* ------------------------------------------------------------
+ * 共通ページャ本体
+ * ------------------------------------------------------------ */
+
+/**
+ * ✅共通ページャ（カテゴリ専用WP_Query / メインクエリ どっちでもOK）
+ *
+ * 使い方：
+ * - メインクエリ：gw_render_pager(null, gw_get_view_param());
+ * - カスタムWP_Query：gw_render_pager($my_query, $view_param);
+ *
+ * 重要：
+ * - total が壊れる（不要なページ番号が大量に出る）ときがあるので、
+ *   found_posts / posts_per_page で total を再計算して抑える。
+ */
+if (!function_exists('gw_render_pager')) {
+  function gw_render_pager($query = null, $view_param = 'list') {
+
+    // 1) クエリ未指定ならメインクエリを使う
+    if (!$query) {
+      global $wp_query;
+      $query = $wp_query;
+    }
+
+    // 2) 現在ページ（/page/2/ でも ?paged=2 でも get_query_var('paged') が正）
+    $paged = max(1, (int) get_query_var('paged', 1));
+
+    // 3) posts_per_page の決定（クエリ優先、無ければWP設定）
+    $ppp = 0;
+    if (is_object($query) && isset($query->query_vars['posts_per_page'])) {
+      $ppp = (int) $query->query_vars['posts_per_page'];
+    }
+    if ($ppp <= 0) $ppp = (int) get_option('posts_per_page', 10);
+    if ($ppp <= 0) $ppp = 10;
+
+    // 4) ✅総ページ数（total）を安全に決める
+    // - found_posts が取れるなら found_posts / ppp で再計算
+    // - 取れない場合のみ max_num_pages を採用
+    $total = 0;
+    $found = 0;
+
+    if (is_object($query) && isset($query->found_posts)) {
+      $found = (int) $query->found_posts;
+    }
+    if ($found > 0) {
+      $total = (int) ceil($found / $ppp);
+    }
+    if ($total <= 0 && is_object($query) && isset($query->max_num_pages)) {
+      $total = (int) $query->max_num_pages;
+    }
+
+    $total = max(1, (int) $total);
+
+    // 5) 1ページしか無いならページャ不要
+    if ($total <= 1) return;
+
+    // 6) base の作り方（壊れない）
+    // - get_pagenum_link($big) は、prettyなら /page/999.../、plainなら ?paged=999... を返す
+    // - そこから 999... を %#% に置換して base を作る
+    $big = 999999999;
+
+    $base_raw = get_pagenum_link($big, false);   // escapeしない（置換のため）
+    $base     = str_replace($big, '%#%', $base_raw);
+
+    // paged（%#%）は消さない。付け直すものだけ掃除して add_args に任せる。
+    $base = remove_query_arg(['s', 'post_type', 'view'], $base);
+
+    // 7) add_args（検索や表示モードを保持）
+    $add_args = gw_build_pager_add_args($view_param);
+
+    // 8) paginate_links
+    $links = paginate_links([
+      'base'      => $base,
+      'format'    => '',          // ✅ base に %#% が入ってるので format は空（=二重化防止）
+      'current'   => $paged,
+      'total'     => $total,
+      'prev_text' => '&#8592;',
+      'next_text' => '&#8594;',
+      'add_args'  => $add_args,
+      'type'      => 'array',
+
+      // 表示が多すぎる場合の抑制（必要なら調整）
+      'mid_size'  => 2,
+      'end_size'  => 1,
+    ]);
+
+    if (!$links) return;
+
+    // 9) 出力（href内の &amp; を実URLに戻してから esc_url）
+    echo '<div class="blog-pagination">';
+    foreach ($links as $link) {
+      $link = preg_replace_callback('/href=("|\')(.*?)\1/i', function ($m) {
+        $href = html_entity_decode($m[2], ENT_QUOTES, 'UTF-8');
+        return 'href="' . esc_url($href) . '"';
+      }, $link);
+      echo $link;
+    }
+    echo '</div>';
+  }
+}
+
+
+/* ------------------------------------------------------------
+ * （任意）メインクエリ共通設定：pre_get_posts は1つに統合
+ * ------------------------------------------------------------ */
+
+/**
+ * ✅メインクエリに対して共通で posts_per_page 等を設定したい場合
+ *
+ * 注意：
+ * - ここは「メインクエリ」だけに効く。
+ * - あなたの search.php は new WP_Query($args) で独自に作っているので、
+ *   その $search_query にはこの設定は効かない（=search.php 側で args に書いてるならそれでOK）。
+ */
+add_action('pre_get_posts', function($q){
+  if (is_admin() || !$q->is_main_query()) return;
+
+  // ✅検索結果（標準の search.php を使う場合の保険）
+  if ($q->is_search()) {
+    $q->set('posts_per_page', 10);
+    $q->set('ignore_sticky_posts', true);
+    return; // searchだけ別扱いならここでreturnしてOK
+  }
+
+  // ✅カテゴリ
+  if ($q->is_category()) {
+    $q->set('posts_per_page', 10);
+    $q->set('ignore_sticky_posts', true);
+    return;
+  }
+
+  // ✅カスタム投稿タイプのアーカイブ（例：/genshin_updated/）
+  if ($q->is_post_type_archive()) {
+    $q->set('posts_per_page', 10);
+    $q->set('ignore_sticky_posts', true);
+    return;
+  }
+
+  // 必要なら他（home / tag / taxonomy）も追加できる
+  // if ($q->is_tag() || $q->is_tax()) { ... }
+
+}, 9);
+
+
+
+
+
+
+/**
+ * AdSense 共通JSを「全ページで1回だけ」読み込む
+ *
+ * ✅ これは “特定の footer テンプレ” に書くのではなく、
+ *    functions.php に書くことで、WordPressの仕組みで全ページへ適用されます。
+ *
+ * ✅ ここで読み込まれるJSは、HTMLの <ins class="adsbygoogle"> に対して動く “共通エンジン” です。
+ *    各広告枠ごとに毎回このJSを読み込むのは NG（重複読み込みで不安定になる）
+ *
+ * ✅ `true` を指定しているので、出力位置は footer 側（wp_footerの位置）になります。
+ *
+ * 必須条件：
+ * - テーマの footer.php（または get_footer() で呼ばれるテンプレ）に
+ *   `<?php wp_footer(); ?>` が存在すること。
+ *   これが無いと、footer出力が行われず、JSも出ません。
+ */
+add_action('wp_enqueue_scripts', function () {
+
+  // ----------------------------
+  // 1) 管理画面（wp-admin）では読み込まない
+  //    ※ AdSenseはフロント表示用なので、管理画面に出す意味がない
+  // ----------------------------
+  if (is_admin()) {
+    return;
+  }
+
+  // ----------------------------
+  // 2) AdSense 共通JSを “1回だけ” 読み込む
+  //    handle（識別名）を固定することで、他の場所で同じhandleを使うと重複を防げます
+  // ----------------------------
+  $handle = 'gw-adsbygoogle';
+
+  // すでに読み込み予約済みなら何もしない（念のためのガード）
+  if (wp_script_is($handle, 'enqueued') || wp_script_is($handle, 'done')) {
+    return;
+  }
+
+  // ----------------------------
+  // 3) 読み込むURL（あなたの AdSense client を指定）
+  // ----------------------------
+  $src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9458790149381361';
+
+  // ----------------------------
+  // 4) enqueue（読み込み予約）
+  // - 第3引数：依存（今回は無し）
+  // - 第4引数：バージョン（CDNなので null）
+  // - 第5引数：true = footer（wp_footerの位置で読み込む）
+  // ----------------------------
+  wp_enqueue_script(
+    $handle,
+    $src,
+    [],
+    null,
+    true
+  );
+
+  // ----------------------------
+  // 5) AdSense推奨の属性 crossorigin="anonymous" を付けたい場合
+  //    wp_enqueue_script だけだと属性は付かないので、フィルタで付与する
+  // ----------------------------
+  add_filter('script_loader_tag', function ($tag, $current_handle) use ($handle) {
+    if ($current_handle !== $handle) return $tag;
+
+    // 既に crossorigin があればそのまま
+    if (stripos($tag, 'crossorigin=') !== false) return $tag;
+
+    // <script ...> に crossorigin="anonymous" を追加
+    return str_replace('<script ', '<script crossorigin="anonymous" ', $tag);
+  }, 10, 2);
+
+});
+
+
+// functions.phpファイルに追加するコード
+
+//手順1,　wordpress 管理画面パーマリンク　カテゴリー非表示　/%postname%/　→　投稿やページのスラッグだけが URL に表示
+//手順2, 下記のコードを作成。カテゴリーページのURLから
+//手順3, index.php 複製したcategory.php 作成　カテゴリーのタイトルに合わせた固定ページでカテゴリ用のテンプレレートを読み込ませる。
+//手順4, 必ずwordpress 管理画面パーマリンク設定ボタンを保存する
+//カテゴリーページのURLから /category/ が取り除かれ、よりクリーンでシンプルなURLが実現
+//手順5, 必ず下記のコードの動作をパーマリンク設定を教えてcategory url 消えたか確認する。　
+// レンタルサーバーでの設定は関係ない。wordpress 管理画面で完結
+
+
+/**
+ * カテゴリURLから /category/ を消して /{slug}/ に見せるための処理（安全版）
+ *
+ * やっていること：
+ * 1) category_link フィルタで、カテゴリリンクの見た目から /category/ を除去する
+ * 2) category_rewrite_rules で、/{slug}/ を category_name に解決できるルールを追加する
+ *
+ * やらないこと（重要）：
+ * - extra_permastructs['category']['struct'] = '%category%' のように、
+ *   WPのカテゴリ構造そのものを “ベース無し” に変更しない
+ *   → これをやると (. + ?)/?$ みたいな広域ルールが出て投稿/CPTが死にやすい
+ */
+
+/** 1) 表示するカテゴリURLから /category/ を消す（リンク出力だけ） */
+add_filter('category_link', function($link, $term_id){
+  return str_replace('/category/', '/', $link);
+}, 10, 2);
+
+/**
+ * 2) /{slug}/ をカテゴリとして解決できるようにする（限定ルール）
+ * - 実在するカテゴリslugだけを列挙してルールを作るので、誤爆しにくい
+ * - /{slug}/page/2 なども対応
+ */
+add_filter('category_rewrite_rules', function($rules){
+  $new  = [];
+  $cats = get_categories(['hide_empty' => false]);
+
+  foreach ($cats as $cat) {
+    // slug（階層カテゴリの場合は parent/child の形にする）
+    $path = $cat->slug;
+    if ($cat->parent) {
+      $path = trim(get_category_parents($cat->parent, false, '/', true), '/') . '/' . $path;
+    }
+
+    // /{category}/
+    $new["({$path})/?$"] = 'index.php?category_name=$matches[1]';
+
+    // /{category}/page/2
+    $new["({$path})/page/?([0-9]{1,})/?$"] = 'index.php?category_name=$matches[1]&paged=$matches[2]';
+
+    // /{category}/feed
+    $new["({$path})/(feed|rdf|rss|rss2|atom)/?$"] = 'index.php?category_name=$matches[1]&feed=$matches[2]';
+  }
+
+  // 既存ルールより「先に」評価させたいので前に足す
+  return $new + $rules;
+});
+
+
+
+
+
+// Adcense 縦長広告用のwidgete 設定
+
+// PCだけ／home と genshin-impact-*-best-build だけ表示
+function gw_should_show_ad_rails() {
+  if ( wp_is_mobile() ) return false; // PCのみ
+  if ( is_admin() )     return false;
+
+  // 投稿一覧（home.php）
+  if ( is_home() ) return true;
+
+  // 個別ページ：スラッグが genshin-impact-*-best-build
+  if ( is_singular() ) {
+    $slug = get_post_field('post_name', get_queried_object_id());
+    if ( $slug && preg_match('/^genshin-impact-[a-z0-9-]+-best-build$/i', $slug) ) return true;
+  }
+  return false;
+}
+
+// レール用ウィジェット登録（★widgets_initのタイミングで登録される）
+add_action('widgets_init', function(){
+  register_sidebar([
+    'name'=>'Ad Rail Left','id'=>'ad-rail-left',
+    'before_widget'=>'<div class="ad-rail__slot ad-rail__slot--left">','after_widget'=>'</div>'
+  ]);
+  register_sidebar([
+    'name'=>'Ad Rail Right','id'=>'ad-rail-right',
+    'before_widget'=>'<div class="ad-rail__slot ad-rail__slot--right">','after_widget'=>'</div>'
+  ]);
+});
+
+
+
+/**
+ * 添付ファイルページを完全に無効化（リダイレクト処理）
+ *
+ * 【目的】
+ * WordPressは画像（例: royal_longsword.png）をアップロードすると、
+ * 自動的に「添付ファイルページ（attachment page）」という個別のページ
+ * （例: https://example.com/royal_longsword）を生成します。
+ *
+ * これらのページは、SEO的に重複・低品質とみなされる恐れがあり、
+ * またユーザーにとっても画像しか表示されないため、不要なページです。
+ *
+ * この関数は、添付ファイルページへのアクセスがあった場合に、
+ * その親投稿（親の投稿・固定ページ・カスタム投稿など）へリダイレクトします。
+ * 親がない場合はトップページへリダイレクトします。
+ *
+ * ※ 通常の投稿、固定ページ、カスタム投稿には影響しません。
+ */
+function disable_attachment_pages() {
+    // 現在のページが「添付ファイルページ（投稿タイプ: attachment）」の場合に処理を実行
+    if (is_attachment()) {
+        global $post;
+
+        // 親投稿がある場合はその投稿ページへ、なければトップページへリダイレクト
+        $redirect_url = $post && $post->post_parent ? get_permalink($post->post_parent) : home_url('/');
+
+        // 301リダイレクト（恒久的な転送）
+        wp_redirect($redirect_url, 301);
+        exit;
+    }
+}
+// WordPressのページ出力直前にこの処理を実行するようにフック
+add_action('template_redirect', 'disable_attachment_pages');
+
+/**
+ * 添付ファイルページ（attachment）に noindex を付加する
+ * ※ リダイレクトと併用しても問題なし（リダイレクトが優先）
+ */
+function add_noindex_to_attachment_pages() {
+    if (is_attachment()) {
+        echo '<meta name="robots" content="noindex, follow">';
+    }
+}
+add_action('wp_head', 'add_noindex_to_attachment_pages');
+
+
+// Gutenberg Editor 投稿画面内にCSS適用
+// ブロックエディター用のスタイルシートを読み込む
+// Add support for Block Styles.
+add_theme_support('wp-block-styles');
+
+
+// Add support for full and wide align images.
+add_theme_support('align-wide');
+
+// 挿入した動画などがレスポンシブ対応（YouTubeなど）
+add_theme_support('responsive-embeds');
+
+add_theme_support('post-thumbnails');
+
+// functions.phpでカスタムサイズを追加する
+add_image_size('custom-thumbnail', 200, 150, true);
+
+
+// カスタムメニュー機能を有効にする
+add_theme_support('menus');
+
+//管理画面カスタマイズ　format 
+//add_theme_support( 'post-formats', array( 'aside', 'gallery','image','chat','link','quote','status','audio','video' ) );
+
+function is_first()
+{
+    global $wp_query;
+    return ($wp_query->current_post === 0);
+}
+
+
+
+$defaults = array(
+    'default-color' => '',
+    'default-image' => '',
+    'default-repeat' => '',
+    'default-position-x' => '',
+    'default-attachment' => '',
+    'wp-head-callback' => '_custom_background_cb',
+    'admin-head-callback' => '',
+    'admin-preview-callback' => ''
+);
+add_theme_support('custom-background', $defaults);
+
+/** <head>内に RSSフィードのリンクを表示するコード */
+add_theme_support('automatic-feed-links');
+
+add_image_size('thumb640', 640, 400, true);
+
+// genshin_updated テーブル表の画像 カスタムの画像サイズを追加する
+add_image_size('custom-size', 150, 100, true);
+
+// 投稿画像の指定サイズを決める
+// the_post_thumbnail(array(150, 150));
+
+// アイキャッチ画像機能を有効にする
+add_theme_support('post-thumbnails');
+
+// 抜粋の[...]を...に変更する
+function new_excerpt_more($more)
+{
+    return ' ... ';
+}
+add_filter('excerpt_more', 'new_excerpt_more');
+
+// カスタムメニューの「場所」を設定する
+
+
+/* ============================================================
+ * Navigation definitions + REST output
+ * ============================================================
+ * このセクションの役割：
+ *
+ * 1. WordPressに「ナビの置き場所（location）」を登録する
+ *    - global-navigation（PC）
+ *    - mobile-navigation（モバイル）
+ *
+ * 2. Custom_Mega_Menu_Walker を必ず読み込む
+ *    - ナビHTMLの構造（メガメニュー / Swiper / 動画）は
+ *      すべて Walker 側で決まる
+ *
+ * 3. header.php と同じ wp_nav_menu() を
+ *    REST API 経由でも実行できるようにする
+ *    → Next.js から HTML をそのまま取得するため
+ * ============================================================ */
+
+
+/* ------------------------------------------------------------
+ * ① ナビゲーションの「表示位置」を登録
+ * ------------------------------------------------------------
+ * ここでは HTML は一切出さない
+ * 管理画面「外観 > メニュー」で
+ * どのメニューをどこに割り当てるかを決めるための定義
+ */
+
+// 旧定義（必要なら残す）
+register_nav_menu('header-navi', 'ヘッダーのナビゲーション');
+// register_nav_menu('sidebar-navi', 'サイドバーのナビケーション');
+
+register_nav_menu('footer-navi', 'フッターのナビケーション');
+
+
+
+
+/* ============================================================
+ * REST: ナビを JSON で返す（dangerous HTML 不要）
+ * /wp-json/gw/v1/nav?location=global-navigation&include_brand=1&max_depth=3
+ * ============================================================ */
+
+add_action('rest_api_init', function () {
+
+  // ✅ nav-html は危険なので無効化（存在しても 410 を返す）
+  register_rest_route('gw/v1', '/nav-html', [
+    'methods'             => 'GET',
+    'permission_callback' => '__return_true',
+    'callback'            => function () {
+      return new WP_REST_Response([
+        'ok' => false,
+        'error' => 'gone',
+        'message' => 'nav-html endpoint is disabled. Use /gw/v1/nav (JSON) instead.',
+      ], 410);
+    },
+  ]);
+
+  register_rest_route('gw/v1', '/nav', [
+    'methods'             => 'GET',
+    'callback'            => 'gw_rest_nav_json',
+    'permission_callback' => '__return_true',
+    'args' => [
+      'location' => [
+        'required' => false,
+        'sanitize_callback' => 'sanitize_text_field',
+      ],
+      'include_brand' => [
+        'required' => false,
+        'sanitize_callback' => 'absint',
+      ],
+      'max_depth' => [
+        'required' => false,
+        'sanitize_callback' => 'absint',
+      ],
+    ],
+  ]);
+});
+
+/**
+ * 利用可能ロケーション（register_nav_menus の内容から動的に取得）
+ */
+function gw_nav_allowed_locations(): array {
+  $menus = get_registered_nav_menus(); // slug => label
+  return array_keys(is_array($menus) ? $menus : []);
+}
+
+/**
+ * Menu Item を安全な配列に変換
+ */
+function gw_nav_sanitize_item($it): array {
+  $title = wp_strip_all_tags((string) $it->title);
+  $url   = esc_url_raw((string) $it->url);
+
+  $classes = [];
+  if (!empty($it->classes) && is_array($it->classes)) {
+    foreach ($it->classes as $cls) {
+      $cls = sanitize_html_class((string) $cls);
+      if ($cls !== '') $classes[] = $cls;
+    }
+    $classes = array_values(array_unique($classes));
+  }
+
+  // target/rel は “許可したものだけ” 残す（事故防止）
+  $target = $it->target ? (string) $it->target : null;
+  if (!in_array($target, ['_blank', '_self', '_parent', '_top'], true)) {
+    $target = null;
+  }
+
+  $rel = $it->xfn ? (string) $it->xfn : null;
+  if ($rel !== null) {
+    $rel = trim(preg_replace('/\s+/', ' ', $rel));
+    // 必要なら許可リストで絞ってもいい
+  }
+
+  return [
+    'id'        => (int) $it->ID,
+    'parent'    => (int) $it->menu_item_parent,
+    'order'     => (int) $it->menu_order,
+    'title'     => $title,
+    'url'       => $url,
+    'target'    => $target,
+    'rel'       => $rel,
+    'classes'   => $classes,
+    'children'  => [],
+  ];
+}
+
+/**
+ * ツリー化 + ソート + 深さ制限
+ */
+function gw_nav_build_tree(array $flat, int $max_depth): array {
+  $tree = [];
+
+  foreach ($flat as $id => &$node) {
+    $p = (int) $node['parent'];
+    if ($p > 0 && isset($flat[$p])) {
+      $flat[$p]['children'][] = &$node;
+    } else {
+      $tree[] = &$node;
+    }
+  }
+  unset($node);
+
+  $sort_and_limit = function (&$nodes, $depth) use (&$sort_and_limit, $max_depth) {
+    usort($nodes, fn($a, $b) => ($a['order'] ?? 0) <=> ($b['order'] ?? 0));
+    if ($depth >= $max_depth) {
+      foreach ($nodes as &$n) { $n['children'] = []; }
+      return;
+    }
+    foreach ($nodes as &$n) {
+      if (!empty($n['children'])) $sort_and_limit($n['children'], $depth + 1);
+    }
+  };
+
+  $sort_and_limit($tree, 1);
+  return $tree;
+}
+
+function gw_rest_nav_json(WP_REST_Request $req) {
+
+  $location = (string) ($req->get_param('location') ?: 'global-navigation');
+
+  $allowed = gw_nav_allowed_locations();
+  if (!in_array($location, $allowed, true)) {
+    return new WP_REST_Response([
+      'ok' => false,
+      'error' => 'invalid_location',
+      'allowed' => $allowed,
+    ], 400);
+  }
+
+  $include_brand = absint($req->get_param('include_brand') ?? 1);
+
+  $max_depth = absint($req->get_param('max_depth') ?? 3);
+  if ($max_depth <= 0) $max_depth = 3;
+  if ($max_depth > 5)  $max_depth = 5;
+
+  // ✅ キャッシュ（ナビは頻繁に変わらない）
+  $cache_key = 'gw_nav_' . md5($location . '|' . $include_brand . '|' . $max_depth);
+  $cached = get_transient($cache_key);
+  if (is_array($cached)) {
+    return $cached;
+  }
+
+  $locations = get_nav_menu_locations();
+  $menu_id = (int) ($locations[$location] ?? 0);
+
+  $brand = null;
+  if ($include_brand) {
+    $brand = [
+      'title' => wp_strip_all_tags(get_bloginfo('name')),
+      'url'   => esc_url_raw(home_url('/')),
+    ];
+  }
+
+  if (!$menu_id) {
+    $res = [
+      'ok'       => true,
+      'location' => $location,
+      'brand'    => $brand, // ✅ 型を揃える（null or {title,url}）
+      'items'    => [],
+      'note'     => 'no_menu_assigned',
+    ];
+    set_transient($cache_key, $res, 60); // 60秒（必要なら伸ばす）
+    return $res;
+  }
+
+  $raw_items = wp_get_nav_menu_items($menu_id, ['update_post_term_cache' => false]);
+  if (!is_array($raw_items)) $raw_items = [];
+
+  $flat = [];
+  foreach ($raw_items as $it) {
+    $flat[(int)$it->ID] = gw_nav_sanitize_item($it);
+  }
+
+  $tree = gw_nav_build_tree($flat, $max_depth);
+
+  $res = [
+    'ok'       => true,
+    'location' => $location,
+    'brand'    => $brand,
+    'items'    => $tree,
+  ];
+
+  set_transient($cache_key, $res, 60);
+  return $res;
+}
+
+
+
+// 縦Slick（ニュースティカー）を非表示にする固定ページ判定
+function gw_should_hide_vertical_ticker(): bool {
+  if ( ! is_page() ) return false; // 固定ページだけ対象
+
+  $post = get_post();
+  if ( ! $post ) return false;
+
+  $slug = get_post_field('post_name', $post); // ページのスラッグ
+  if ( ! $slug ) return false;
+
+  // 例: genshin-impact-ineffa-best-build / genshin-impact-furina-best-build 等
+  return (bool) preg_match('/^genshin-impact-.*-best-build$/', $slug);
+}
+
+
+
+
+// home.php サブネイル
+if (function_exists('add_theme_support')) {
+    add_theme_support('automatic-feed-links');
+    add_theme_support('title-tag');
+    add_image_size('home-thumb', 600, 400);
+}
+// ブロックエディタ用スタイル機能をテーマに追加
+add_action('after_setup_theme', function () {
+    add_theme_support('editor-styles');
+    // ブロックエディタ用CSSの読み込み
+    add_editor_style('/css/editor-style.css');
+});
+
+// WebP画像サポートを追加
+function add_webp_support($content)
+{
+    $content['webp'] = 'image/webp';
+    return $content;
+}
+add_filter('mime_types', 'add_webp_support');
+
+
+
+//サブネイルの画像はアップロードしたタイミングでlazy load で画像が調整されるので、
+//2回目以降での新規の画像をアップロードするには、前回と同じ方法でする必要がある。regenerstor というツールもある。
+
+
+
+
+
+/* =========================
+ * Admin（管理画面だけ）
+ * ========================= */
+add_action('admin_enqueue_scripts', function () {
+  $p = get_theme_file_path('css/admin-style.css');
+  if ($p && file_exists($p)) {
+    wp_enqueue_style(
+      'theme-admin-style',
+      get_theme_file_uri('css/admin-style.css'),
+      [],
+      filemtime($p)
+    );
+  }
+});
+
+
+/* =========================
+ * Front（CSS：順序固定）
+ * vendor → style.css →（必要なら editor-style）→（原神だけ sample.css + tokens）
+ * ========================= */
+add_action('wp_enqueue_scripts', function () {
+
+  /* 0) Google Fonts */
+  wp_enqueue_style('gf-poppins','https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap',[],null);
+  wp_enqueue_style('gf-roboto','https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap',[],null);
+
+  /* 1) Vendor */
+  $vendors = [
+    'slick'        => 'css/slick.css',
+    'swiper'       => 'css/swiper-bundle.css',
+    'slicknav'     => 'css/slicknav.css',
+    'lite-yt'      => 'css/lite-yt-embed.css',
+    'lite-vimeo'   => 'css/lite-vimeo-embed.css',
+    'lightbox'     => 'css/lightbox.css',
+    'font-awesome' => 'css/all.css',
+  ];
+  foreach ($vendors as $handle => $rel) {
+    $abs = get_theme_file_path($rel);
+    if ($abs && file_exists($abs)) {
+      wp_enqueue_style($handle, get_theme_file_uri($rel), [], filemtime($abs));
+    }
+  }
+
+  /* 2) style.css（全ページ共通：ナビ/レイアウト本体はここ） */
+  $base_handle = 'theme-base';
+  $style_abs = get_theme_file_path('style.css');
+  if ($style_abs && file_exists($style_abs)) {
+    wp_enqueue_style($base_handle, get_theme_file_uri('style.css'), [], filemtime($style_abs));
+  } else {
+    $base_handle = null;
+  }
+
+  /* 3) 単一記事だけ editor-style.css（必要なら） */
+  if (is_singular(['genshin_updated', 'genshin_updated_jp', 'post'])) {
+    $abs = get_theme_file_path('css/editor-style.css');
+    if ($abs && file_exists($abs)) {
+      wp_enqueue_style(
+        'editor-style-front',
+        get_theme_file_uri('css/editor-style.css'),
+        $base_handle ? [$base_handle] : [],
+        filemtime($abs)
+      );
+    }
+  }
+
+  /* 4) 原神ページ判定（EN/JP 両対応） */
+  $need_sample = false;
+
+  // CPT
+  if (is_singular('genshin_build') || is_post_type_archive('genshin_build')) {
+    $need_sample = true;
+  }
+
+  // 固定ページ（一覧など）
+  if (!$need_sample) {
+    $genshin_pages = [
+      'genshin-impact-characters',
+      'genshin-impact-weapons',
+      'genshin-impact-farming',
+      'genshin-impact-tier-list',
+      'genshin-impact-tierlist-page',
+      'genshin-impact-tier-list-characters-page',
+      'genshin-impact-customize-characters',
+      'test99',
+      'new-test-tier',
+    ];
+    foreach ($genshin_pages as $slug) {
+      if (is_page($slug)) { $need_sample = true; break; }
+    }
+  }
+
+  // pagename（EN/JP build）
+  if (!$need_sample) {
+    $pagename = (string) get_query_var('pagename');
+    if ($pagename !== '') {
+      // EN/JP slug
+      if (preg_match('#^genshin-impact-.+-build(?:-(?:en|jp))?$#', $pagename)) $need_sample = true;
+
+      // 例外：ウィジェットページ等
+      if ($pagename === 'Weekly_Material_Schedule_Widget.php') $need_sample = true;
+    }
+  }
+
+  /* 5) 原神だけ sample.css（※トークン上書きだけ） */
+  if ($need_sample) {
+    $abs = get_theme_file_path('css/sample.css');
+    if ($abs && file_exists($abs)) {
+      wp_enqueue_style(
+        'page-sample',
+        get_theme_file_uri('css/sample.css'),
+        $base_handle ? [$base_handle] : [],
+        filemtime($abs)
+      );
+    }
+  }
+
+  /* 6) 常時追加CSS（必要なら） */
+  $abs = get_theme_file_path('css/gw-gantt.css');
+  if ($abs && file_exists($abs)) {
+    wp_enqueue_style('gw-gantt', get_theme_file_uri('css/gw-gantt.css'), [], filemtime($abs));
+  }
+
+}, 20);
+
+
+
+
+
+
+
+
+
+
+
+/* =========================
+ * フロント：JS（Bootstrap/Popper なし）
+ * ========================= */
+add_action('wp_enqueue_scripts', function () {
+    // WP 同梱 jQuery
+    wp_enqueue_script('jquery');
+
+    // コア系
+    $core = [
+        'datatables'   => 'js/datatables.min.js',
+        'fullcalendar' => 'js/index.global.min.js',
+    ];
+    foreach ($core as $handle => $rel) {
+        $abs = get_theme_file_path($rel);
+        if (file_exists($abs)) {
+            wp_enqueue_script($handle, get_theme_file_uri($rel), ['jquery'], filemtime($abs), true);
+        }
+    }
+
+    // アドオン
+    $addons = [
+        'js/swiper-bundle.min.js',
+        'js/jquery.slicknav.min.js',
+        'js/slick.min.js',
+        'js/isotope.pkgd.min.js',
+        'js/jquery.dotdotdot.min.js',
+        'js/imagesloaded.pkgd.min.js',
+        'js/lite-yt-embed.js',
+        'js/lite-vimeo-embed.js',
+        'js/lightbox.min.js',
+        'js/clipboard.min.js',
+    ];
+    foreach ($addons as $rel) {
+        $abs = get_theme_file_path($rel);
+        if (file_exists($abs)) {
+            $handle = 'js-' . str_replace(['.min.js','.js'], '', basename($rel));
+            wp_enqueue_script($handle, get_theme_file_uri($rel), ['jquery'], filemtime($abs), true);
+        }
+    }
+
+    // テーマ共通 scripts.js
+    $abs = get_theme_file_path('js/scripts.js');
+    if (file_exists($abs)) {
+        wp_enqueue_script('theme-scripts', get_theme_file_uri('js/scripts.js'), ['jquery'], filemtime($abs), true);
+    }
+
+    // JS 追加
+    $abs = get_theme_file_path('js/gw-gantt.js');
+    if (file_exists($abs)) {
+        wp_enqueue_script('gw-gantt', get_theme_file_uri('js/gw-gantt.js'), ['jquery'], filemtime($abs), true);
+    }
+
+}, 30);
+
+
+
+
+
+
+
+
+
+
+
+
+//SVGをアップロード プラグインなし
+function add_svg_upload($file_types)
+{
+    $add_filetypes = array();
+    $add_filetypes['svg'] = 'image/svg+xml';
+    $file_types = array_merge($file_types, $add_filetypes);
+    return $file_types;
+}
+add_action('upload_mimes', 'add_svg_upload');
+
+
+// 抜粋の文字数をPCとスマホそれぞれに設定
+//function twpp_change_excerpt_length( $length ) {
+//return ( wp_is_mobile() ) ? 30 : 150;
+//}
+//add_filter( 'excerpt_length', 'twpp_change_excerpt_length', 999 );
+
+
+function dess_get_excerpt($num_chars)
+{
+    // ショートコードを取り除き、HTMLおよびPHPコードを削除したコンテンツを取得
+    $temp_str = substr(strip_shortcodes(strip_tags(get_the_content())), 0, $num_chars);
+
+    // 取得したコンテンツを空白で分割
+    $temp_parts = explode(" ", $temp_str);
+
+    // 分割された単語数を数えて最後の単語を空にする
+    $temp_parts[(count($temp_parts) - 1)] = '';
+
+    // コンテンツの文字列長が125文字を超える場合
+    if (strlen(strip_tags(get_the_content())) > 125) {
+        // 連結した単語を返し、末尾に省略記号を付ける
+        return implode(" ", $temp_parts) . '...';
+    } else {
+        // 連結した単語を返す
+        return implode(" ", $temp_parts);
+    }
+}
+
+
+
+
+
+
+/* 管理画面に「サムネイル」「ID」「文字数」を追加 */
+function add_posts_columns($columns)
+{
+    $columns['thumbnail'] = 'サムネイル';
+    $columns['postid'] = 'ID';
+    $columns['count'] = '文字数';
+
+    echo '';
+
+    return $columns;
+}
+
+//投稿一覧管理画にサブネイル投稿一覧を表示
+function add_posts_columns_row($column_name, $post_id)
+{
+    if ('thumbnail' == $column_name) {
+        $thumb = get_the_post_thumbnail($post_id, array(100, 100), 'thumbnail');
+        echo ($thumb) ? $thumb : '－';
+    } elseif ('postid' == $column_name) {
+        echo $post_id;
+    } elseif ('count' == $column_name) {
+        $count = mb_strlen(strip_tags(get_post_field('post_content', $post_id)));
+        echo $count;
+    }
+}
+add_filter('manage_posts_columns', 'add_posts_columns');
+add_action('manage_posts_custom_column', 'add_posts_columns_row', 10, 2);
+
+
+//固定ページ一覧画面でサムネイル表示
+function add_page_columns($columns)
+{
+    $columns['thumbnail'] = 'サムネイル';
+    return $columns;
+}
+function add_page_column_row($column_name, $post_id)
+{
+    if ('thumbnail' == $column_name) {
+        $thumb = get_the_post_thumbnail($post_id, array(100, 100), 'thumbnail');
+        echo ($thumb) ? $thumb : '－';
+    }
+}
+add_filter('manage_pages_columns', 'add_page_columns');
+add_action('manage_pages_custom_column', 'add_page_column_row', 10, 2);
+
+/* 固定ページ一覧にスラッグを追加する */
+function add_page_column_slug_title($columns)
+{
+    $columns['slug'] = "スラッグ";
+    return $columns;
+}
+function add_page_column_slug($column_name, $post_id)
+{
+    if ($column_name == 'slug') {
+        $post = get_post($post_id);
+        $slug = $post->post_name;
+        echo esc_attr($slug);
+    }
+}
+add_filter('manage_pages_columns', 'add_page_column_slug_title');
+add_action('manage_pages_custom_column', 'add_page_column_slug', 10, 2);
+
+//固定ページ一覧に ページIDを管理画面に表示
+function add_page_id_column($columns)
+{
+    $columns['page_id'] = 'Page ID';
+    return $columns;
+}
+
+function display_page_id_column($column, $post_id)
+{
+    if ($column === 'page_id') {
+        echo $post_id;
+    }
+}
+
+add_filter('manage_pages_columns', 'add_page_id_column');
+add_action('manage_pages_custom_column', 'display_page_id_column', 10, 2);
+
+
+/** メインカラムの幅を指定する変数。下記は 600px を指定（記述推奨） */
+if (!isset($content_width))
+    $content_width = 600;
+
+
+
+/**
+ * サイドバーウィジェットエリアの定義（CHAPTER 11）
+ * ウィジェットエリア（サイドバー）の登録: register_sidebar 関数を使用して新しいウィジェットエリアを登録します。この関数にはウィジェットエリアの名前やID、表示される位置やスタイルに関する設定が含まれます。
+ */
+
+
+/* ===============================
+ * Sidebar 全ウィジェット登録（広告＋任意）
+ * =============================== */
+add_action('widgets_init','gw_register_all_sidebars');
+function gw_register_all_sidebars(){
+  // あなたのCSS（.sb-block .card .sb-title）に合わせたラッパ
+  $common = [
+    'before_widget' => '<section id="%1$s" class="sb-block card widget %2$s">',
+    'after_widget'  => '</section>',
+    'before_title'  => '<h2 class="sb-title">',
+    'after_title'   => '</h2>',
+  ];
+
+  // 任意ウィジェット
+  register_sidebar(array_merge($common, [
+    'name' => 'サイドバーウィジット-1',
+    'id'   => 'sidebar-1',
+    'description' => '任意ウィジェット用（上段）',
+  ]));
+  register_sidebar(array_merge($common, [
+    'name' => 'サイドバーウィジット-2',
+    'id'   => 'sidebar-2',
+    'description' => '任意ウィジェット用（中段）',
+  ]));
+  register_sidebar(array_merge($common, [
+    'name' => 'Farming Today',
+    'id'   => 'weekly-farming-schedule',
+    'description' => '任意ウィジェット用（下段・Farming Today）',
+  ]));
+
+  // 広告3枠
+  register_sidebar(array_merge($common, [
+    'name' => 'Sidebar Ad (Top)',
+    'id'   => 'sidebar-ad-top',
+    'description' => 'サイドバー冒頭の広告枠',
+  ]));
+  register_sidebar(array_merge($common, [
+    'name' => 'Sidebar Ad (Middle)',
+    'id'   => 'sidebar-ad-middle',
+    'description' => 'サイドバー中ほどの広告枠',
+  ]));
+  register_sidebar(array_merge($common, [
+    'name' => 'Sidebar Ad (Bottom)',
+    'id'   => 'sidebar-ad-bottom',
+    'description' => 'サイドバー下部の広告枠',
+  ]));
+
+  // 既存を残したい場合だけ
+  register_sidebar(array_merge($common, [
+    'name' => 'Custom Ad Banner Widget Area',
+    'id'   => 'custom-ad-banner-widget-area',
+    'description' => 'カスタム広告バナー用（任意）',
+  ]));
+}
+
+// 各ウィジェットのラッパーに data-area="sidebar-1" のような属性を付ける
+add_filter('dynamic_sidebar_params', function ($params) {
+  $area = $params[0]['id'] ?? '';
+  if (!empty($area)) {
+    $params[0]['before_widget'] = preg_replace(
+      '/^<section\b/',
+      '<section data-area="'.esc_attr($area).'"',
+      $params[0]['before_widget'],
+      1
+    );
+  }
+  return $params;
+});
+
+/* ===============================
+ * 画像＆動画ヘルパー（LiteTube対応）
+ * =============================== */
+add_action('after_setup_theme', function () {
+  add_theme_support('post-thumbnails');
+  add_image_size('sidebar-card', 320, 180, true); // サイドバー用16:9
+  add_image_size('nav-card',     400, 225, true); // 前後ナビ用16:9
+});
+
+/* 本文から動画IDを抽出（<lite-〜> or 通常URL） */
+if ( ! function_exists('gw_extract_video_from_content') ) {
+  function gw_extract_video_from_content( $post_id ) {
+    $type=''; $video_id='';
+    $content = get_post_field('post_content', $post_id);
+    if ( preg_match('/<lite-youtube[^>]*videoid="([A-Za-z0-9_\-]{6,})"/i', $content, $m) ) {
+      $type='youtube'; $video_id=$m[1];
+    } elseif ( preg_match('/<lite-vimeo[^>]*videoid="([0-9]+)"/i', $content, $m) ) {
+      $type='vimeo';   $video_id=$m[1];
+    } elseif ( preg_match('~https?://(?:www\.)?youtu(?:\.be/|be\.com/(?:watch\?v=|shorts/))([A-Za-z0-9_\-]{6,})~', $content, $m) ) {
+      $type='youtube'; $video_id=$m[1];
+    } elseif ( preg_match('~https?://(?:www\.)?vimeo\.com/([0-9]+)~', $content, $m) ) {
+      $type='vimeo';   $video_id=$m[1];
+    }
+    return array($type, $video_id);
+  }
+}
+
+/* メタ or 本文からタイプ/ID を取得 */
+if ( ! function_exists('gw_get_video_type_id') ) {
+  function gw_get_video_type_id( $post_id ) {
+    $type     = get_post_meta($post_id, 'page_featured_type', true); // 'youtube' | 'vimeo'
+    $video_id = get_post_meta($post_id, 'page_video_id',   true);
+    if ( empty($type) || empty($video_id) ) {
+      list($type, $video_id) = gw_extract_video_from_content($post_id);
+    }
+    return array($type, $video_id);
+  }
+}
+
+/* ★「この投稿は動画を持つか？」 */
+if ( ! function_exists('gw_has_video') ) {
+  function gw_has_video( $post_id ) {
+    list($type, $video_id) = gw_get_video_type_id($post_id);
+    return (bool) ($type && $video_id);
+  }
+}
+
+/* 前後ナビ用サムネ（アイキャッチ→動画ポスター→noimage） */
+if ( ! function_exists('gw_nav_thumb_html') ) {
+  function gw_nav_thumb_html( $post_id ) {
+    if ( has_post_thumbnail($post_id) ) {
+      $url = wp_get_attachment_image_url(get_post_thumbnail_id($post_id), 'nav-card');
+      if ( $url ) {
+        $url = set_url_scheme($url,'https');
+        return '<img class="nav-thumb" src="'.esc_url($url).'" alt="'.esc_attr(get_the_title($post_id)).'" loading="lazy" decoding="async">';
+      }
+    }
+    list($type, $video_id) = gw_get_video_type_id($post_id);
+    if ( $type === 'youtube' && $video_id ) {
+      $url = 'https://i.ytimg.com/vi/'.rawurlencode($video_id).'/hqdefault.jpg';
+      return '<img class="nav-thumb" src="'.esc_url($url).'" alt="'.esc_attr(get_the_title($post_id)).'" loading="lazy" decoding="async">';
+    }
+    if ( $type === 'vimeo' && $video_id ) {
+      $key='gw_vimeo_thumb_'.$video_id;
+      $thumb = get_transient($key);
+      if ( ! $thumb ) {
+        $res = wp_remote_get('https://vimeo.com/api/oembed.json?url='.rawurlencode('https://vimeo.com/'.$video_id), ['timeout'=>6]);
+        if ( ! is_wp_error($res) && 200 === (int) wp_remote_retrieve_response_code($res) ) {
+          $data = json_decode(wp_remote_retrieve_body($res), true);
+          if ( ! empty($data['thumbnail_url']) ) {
+            $thumb = $data['thumbnail_url'];
+            set_transient($key, $thumb, DAY_IN_SECONDS*7);
+          }
+        }
+      }
+      if ( $thumb ) {
+        $thumb = set_url_scheme($thumb,'https');
+        return '<img class="nav-thumb" src="'.esc_url($thumb).'" alt="'.esc_attr(get_the_title($post_id)).'" loading="lazy" decoding="async">';
+      }
+    }
+    $noimage = set_url_scheme(get_template_directory_uri().'/images/noimage.gif','https');
+    return '<img class="nav-thumb" src="'.esc_url($noimage).'" alt="" loading="lazy" decoding="async">';
+  }
+}
+
+/* サイドバー用サムネ（sidebar-card を優先。なければ nav ロジック流用） */
+if ( ! function_exists('gw_sidebar_thumb_html') ) {
+  function gw_sidebar_thumb_html( $post_id ) {
+    if ( has_post_thumbnail($post_id) ) {
+      $url = wp_get_attachment_image_url(get_post_thumbnail_id($post_id), 'sidebar-card');
+      if ( $url ) {
+        $url = set_url_scheme($url,'https');
+        return '<img class="sidebar-thumb" src="'.esc_url($url).'" alt="'.esc_attr(get_the_title($post_id)).'" loading="lazy" decoding="async">';
+      }
+    }
+    return str_replace('nav-thumb','sidebar-thumb', gw_nav_thumb_html($post_id));
+  }
+}
+
+/* LiteTube 埋め込み（その場再生） */
+if ( ! function_exists('gw_lite_embed_html') ) {
+  function gw_lite_embed_html( $post_id, $class = 'lite-embed' ) {
+    list($type, $video_id) = gw_get_video_type_id($post_id);
+    $title = esc_attr(get_the_title($post_id));
+    if ( $type === 'youtube' && $video_id ) {
+      return '<lite-youtube videoid="'.esc_attr($video_id).'" class="'.esc_attr($class).'" title="'.$title.'"></lite-youtube>';
+    }
+    if ( $type === 'vimeo' && $video_id ) {
+      return '<lite-vimeo videoid="'.esc_attr($video_id).'" class="'.esc_attr($class).'"><div class="ltv-playbtn" aria-label="Play '.$title.'"></div></lite-vimeo>';
+    }
+    // 無ければ画像
+    return gw_sidebar_thumb_html($post_id);
+  }
+}
+
+/* 最近の“動画つき”投稿を集める（genshin_updated 優先 → post） */
+if ( ! function_exists('gw_collect_recent_videos') ) {
+  function gw_collect_recent_videos( $count = 5 ) {
+    $collected = [];
+    // genshin_updated
+    $q1 = new WP_Query([
+      'post_type'      => ['genshin_updated'],
+      'posts_per_page' => $count * 2,
+      'no_found_rows'  => true,
+      'ignore_sticky_posts' => true,
+      'meta_query' => [
+        'relation' => 'OR',
+        ['key'=>'page_featured_type', 'compare'=>'EXISTS'],
+        ['key'=>'page_video_id',     'compare'=>'EXISTS'],
+      ],
+    ]);
+    foreach ( $q1->posts as $p ) {
+      if ( gw_has_video($p->ID) ) { $collected[] = $p; if (count($collected)>=$count) break; }
+    }
+    wp_reset_postdata();
+
+    // post で補完
+    if ( count($collected) < $count ) {
+      $need = $count - count($collected);
+      $q2 = new WP_Query([
+        'post_type'      => ['post'],
+        'posts_per_page' => $need * 2,
+        'no_found_rows'  => true,
+        'ignore_sticky_posts' => true,
+        'meta_query' => [
+          'relation' => 'OR',
+          ['key'=>'page_featured_type', 'compare'=>'EXISTS'],
+          ['key'=>'page_video_id',     'compare'=>'EXISTS'],
+        ],
+      ]);
+      foreach ( $q2->posts as $p ) {
+        if ( gw_has_video($p->ID) ) { $collected[] = $p; if (count($collected)>=$count) break; }
+      }
+      wp_reset_postdata();
+    }
+    return array_slice($collected, 0, $count);
+  }
+}
+
+
+/**
+ * フッターウィジェットエリアの定義
+ */
+
+function dess_widgets_init()
+{
+    // サイドバーウィジェットの登録などを行う
+}
+
+// Footer Widget - Column 1
+register_sidebar(
+    array(
+        'name' => __('Footer Column 1', ''),
+        'id' => 'footer-1',
+        'before_widget' => '<div id="%1$s" class="widget-box %2$s">',
+        'after_widget' => '</div>',
+        'before_title' => '<h3 class="footer-title">',
+        'after_title' => '</h3>',
+    )
+);
+
+// Footer Widget - Column 2
+register_sidebar(
+    array(
+        'name' => __('Footer Column 2', ''),
+        'id' => 'footer-2',
+        'before_widget' => '<div id="%1$s" class="widget-box %2$s">',
+        'after_widget' => '</div>',
+        'before_title' => '<h3 class="footer-title">',
+        'after_title' => '</h3>',
+    )
+);
+
+// Footer Widget - Column 3
+register_sidebar(
+    array(
+        'name' => __('Footer Column 3', ''),
+        'id' => 'footer-3',
+        'before_widget' => '<div id="%1$s" class="widget-box %2$s">',
+        'after_widget' => '</div>',
+        'before_title' => '<h3 class="footer-title">',
+        'after_title' => '</h3>',
+        'ignore_sticky_posts' => true,
+    )
+);
+
+// 関数の呼び出しをフックに追加
+add_action('widgets_init', 'dess_widgets_init');
+
+
+// functions.phpに追加
+function theme_setup()
+{
+    register_nav_menus(
+        array(
+            'primary' => esc_html__('Primary Menu', 'your-theme-slug'),
+        )
+    );
+}
+add_action('after_setup_theme', 'theme_setup');
+
+
+
+
+
+
+//Gallery Page for  meta box "show_in_homepage" catefory-functions
+//require get_template_directory().'/inc/functions/category-functions.php';
+
+// single.php パンクズ　投稿ページ　対応
+require get_template_directory() . '/inc/functions/bread1-comment.php';
+
+// genshin_build.php　パンクズ　カスタム投稿ページ　対応
+require get_template_directory() . '/inc/functions/bread2-comment.php';
+
+
+//Customize meta box //
+//require get_template_directory().'/inc/functions/customizer-metabox-menu.php';
+
+//Comment Forme //　　コメントフォームを送信した後に、ユーザーのmy_comment_list　が表示する仕組み
+require get_template_directory() . '/inc/functions/comment-functions.php';
+
+// 原神　キャラクター固定ページのメタボックス
+require get_template_directory() . '/inc/functions/genshin-character-build-metabox.php';
+
+//https://github.com/wp-bootstrap/wp-bootstrap-navwalker
+//Bootstrap navi bar for pull down menu
+
+//require_once get_template_directory() . '/class-wp-bootstrap-navwalker.php';
+
+
+// 親テーマ functions.php など（親側）
+// inc/rest-app-shell.php を「親テーマから」必ず読む
+require_once get_template_directory() . '/inc/rest/gwc-characters.php';
+add_action('after_setup_theme', function () {
+  $path = trailingslashit(get_template_directory()) . 'inc/rest-app-shell.php';
+
+  if (file_exists($path)) {
+    require_once $path;
+  } else {
+    error_log('GW: missing file => ' . $path);
+  }
+}, 1);
+
+
+
+
+
+// 原神 ガントチャート作成画面ページ
+$gw_file = get_template_directory() . '/inc/functions/functions-gw-gantt.php';
+error_log('読み込みテスト: ' . $gw_file);
+
+if ( file_exists($gw_file) ) {
+    require_once $gw_file;
+    error_log('✅ 読み込み成功');
+} else {
+    error_log('❌ 見つからない: ' . $gw_file);
+}
+
+
+
+
+
+
+// Custom_Bootstrap_NavwalkerクラスがWP_Bootstrap_Navwalkerクラスを拡張していることを示すコメント
+// functions.php やカスタムテーマのファイルに以下のコードを追加します
+
+// メガメニュー用のウォーカーを設定
+//function mega_menu_walker( $args ) {
+//$args['walker'] = new Custom_Mega_Menu_Walker(); // Custom_Mega_Menu_Walker はメガメニュー用のウォーカー
+//return $args;
+//}
+//add_filter( 'wp_nav_menu_args', 'mega_menu_walker' );
+
+
+
+//function register_my_menu() {
+//register_nav_menu('mainMenu', 'Main Menu');
+//}
+//add_action('after_setup_theme', 'register_my_menu');
+
+// Custom Mega Menu Walker のファイルを読み込む
+//require_once get_template_directory() . '/Custom_Mega_Menu_Walker.php';
+
+// テーマのメニューを登録
+//function register_custom_menus() {
+//register_nav_menus(
+//array(
+//'primary_test' => __( 'Primary Menu_Test' ),
+//'mega_menu_test' => __( 'Mega Menu_Test' )
+//)
+//);
+//}
+//add_action( 'init', 'register_custom_menus' );
+
+// カスタムウォーカーをテーマのメニューに適用
+//function custom_menu_walker( $args ) {
+//$args['walker'] = new Custom_Mega_Menu_Walker(); // カスタムウォーカーを指定 コメントアウト
+//return $args;
+//}
+//add_filter( 'wp_nav_menu_args', 'custom_menu_walker' );
+
+
+
+
+
+
+
+
+
+//Bootstrap参考リフェレンス
+
+//items_wrapの値は、メニューアイテムを囲むHTML構造を指定するものです。具体的には、%1$s、%2$s、および %3$s はそれぞれパラメータに置き換えられます。
+
+//%1$s: メニューのIDを指します。
+//%2$s: メニューのクラスを指します。
+//%3$s: メニューアイテムの実際のHTMLを指します。
+//したがって、'items_wrap' => '<ul id="%1$s" class="%2$s navbar-nav">%3$s</ul>' の場合、実際の出力は以下のようになります：
+
+/*
+<?php wp_nav_menu(
+    array(
+      'menu'            => '',  //管理画面でつけたメニューの名前 サイトにメニューが表示
+      'menu_id'         => '{メニューのスラッグ}-{連番}',　//メインのulタグにつけるid名
+      'menu_class'      => 'menu',　//メインのulタグにつけるクラス名
+      'container'       => 'div',　// メニューを何のタグで囲むか　div nav false が利用できる。falseなら囲まない
+      'container_id'    => '',　 //containerのid名
+      'container_class' => 'menu-{メニューのスラッグ}-container',　// containerのクラス名
+      'fallback_cb'     => 'wp_page_menu',　// メニューが存在しない場合に呼び出す関数
+      'before'          => '',　// リンクテキストの前に表示するテキスト
+      'after'           => '',　// リンクテキストの後に表示するテキスト
+      'link_before'     => '',　// リンクの前に表示するテキスト
+      'link_after'      => '',　// リンクの後に表示するテキスト
+      'echo'            => true,　// true: HTML出力　 false:phpで返す 
+      'depth'           => 0,　// 何階層まで表示するか。０を指定すると全階層
+      'walker'          => '',　// 適用するカスタムウォーカーを指定
+      'theme_location'  => '',　// テーマの中で使われる位置。あらかじめ register_nav_menu() で登録しておく 
+      'items_wrap'      => '<ul id="%1$s" class="%2$s">%3$s</ul>',　//出力形式。　%1$s に 'menu_id'の値 、 %2$s に 'menu_class'の値 、%3$sにメニュー項目が展開される。%3$sは省略不可
+      )
+  );
+  ?>*/
+
+//カスタムメタボックスを通常の投稿タイプと指定のカスタム投稿タイプに追加し、そのメタボックス内に画像や動画などの設定を行うことができるようにしています。
+add_action('add_meta_boxes', 'dess_post_meta_box');
+
+// 通常の投稿タイプ、指定のカスタム投稿タイプ、メタボックスを定義
+function dess_post_meta_box()
+{
+    // 通常の投稿タイプ
+    add_meta_box(
+        'dess_post_settings',
+        __('Post Settings', ''),
+        'dess_post_meta_box_callback',
+        'post'
+    );
+
+    // 新しいカスタム投稿タイプにも同じメタボックスを追加
+    add_meta_box(
+        'dess_post_settings',
+        __('Post Settings', ''),
+        'dess_post_meta_box_callback',
+        'genshin_updated'  // カスタム投稿タイプの識別子
+    );
+
+    // 別のカスタム投稿タイプにも同じメタボックスを追加
+    add_meta_box(
+        'dess_post_settings',
+        __('Post Settings', ''),
+        'dess_post_meta_box_callback',
+        'artifacts'  // カスタム投稿タイプの識別子
+    );
+
+        // 別のカスタム投稿タイプにも同じメタボックスを追加
+    add_meta_box(
+        'dess_post_settings',
+        __('Post Settings', ''),
+        'dess_post_meta_box_callback',
+        'genshin_updated_jp'  // カスタム投稿タイプの識別子
+    );
+}
+//_callbackコールバック関数は必要に応じて再利用することができます。つまり、同じコールバック関数を複数のメタボックスに使用することができます。
+
+// カスタムメタボックス内の表示とフォームフィールド
+function dess_post_meta_box_callback($post)
+{
+    // nonce（ワンタイムトークン）を生成してフォームのセキュリティを確保
+    wp_nonce_field('dess_post_save_meta_box_data', 'dess_post_meta_box_nonce');
+
+    // データベースから既存のメタボックスの値を取得
+    $show_in_slider = get_post_meta($post->ID, 'show_in_slider', true);
+    $show_in_homepage = get_post_meta($post->ID, 'show_in_homepage', true);
+    $type = get_post_meta($post->ID, 'page_featured_type', true);
+
+    // チェックボックスとセレクトボックスを出力
+    echo '<p><label for="show_in_slider">' . __('Show in Slider', '') . ': </label>';
+    echo '<input type="checkbox" id="show_in_slider" name="show_in_slider" value="Yes" ' . ($show_in_slider == 'Yes' ? 'checked' : '') . ' /></p>';
+
+    echo '<p><label for="show_in_homepage">' . __('Show in Homepage', '') . ': </label>';
+    echo '<input type="checkbox" id="show_in_homepage" name="show_in_homepage" value="Yes" ' . ($show_in_homepage == 'Yes' ? 'checked' : '') . ' /></p>';
+
+    echo '<p><label for="video_type">' . __('Featured Type', '') . ': </label><br/>';
+    echo '<select id="video_type" name="dess_post[page_featured_type]"><option value="">Image</option><option value="youtube" ' . ($type == 'youtube' ? 'selected="selected"' : '') . '>Youtube</option><option value="vimeo" ' . ($type == 'vimeo' ? 'selected="selected"' : '') . '>Vimeo</option></select></p>';
+
+    echo '<p><label for="video_id">' . __('Video ID', '') . ': </label><br/>';
+    echo '<input type="text" id="video_id" name="dess_post[page_video_id]" value="' . get_post_meta($post->ID, 'page_video_id', true) . '" /></p>';
+}
+
+// カスタムメタボックスのデータ保存
+function dess_post_save_meta_box_data($post_id)
+{
+    // nonceの確認
+    if (!isset($_POST['dess_post_meta_box_nonce'])) {
+        return;
+    }
+
+    if (!wp_verify_nonce($_POST['dess_post_meta_box_nonce'], 'dess_post_save_meta_box_data')) {
+        return;
+    }
+
+    // 自動保存中は処理を中断
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+        return;
+    }
+
+    // 権限の確認
+    if (isset($_POST['post_type']) && 'page' == $_POST['post_type']) {
+        if (!current_user_can('edit_page', $post_id)) {
+            return;
+        }
+    } else {
+        if (!current_user_can('edit_post', $post_id)) {
+            return;
+        }
+    }
+
+    // チェックボックスの値をサニタイズして保存　追加変更
+    $show_in_slider = isset($_POST['show_in_slider']) ? sanitize_text_field($_POST['show_in_slider']) : '';
+    $show_in_homepage = isset($_POST['show_in_homepage']) ? sanitize_text_field($_POST['show_in_homepage']) : '';
+    update_post_meta($post_id, 'show_in_slider', $show_in_slider);
+    update_post_meta($post_id, 'show_in_homepage', $show_in_homepage);
+
+
+    // セレクトボックスとテキストフィールドの値をサニタイズして保存
+    $arr = array();
+    if (isset($_POST['dess_post'])) {
+        $arr = $_POST['dess_post'];
+    }
+
+    foreach ($arr as $key => $value) {
+        $val = sanitize_text_field($value);
+        update_post_meta($post_id, $key, $val);
+    }
+}
+
+// メタボックスのデータ保存を実行
+add_action('save_post', 'dess_post_save_meta_box_data');
+
+function gwc_register_post_meta_for_rest() {
+    // 対象の meta キー
+    $meta_keys = array(
+        'show_in_slider',
+        'show_in_homepage',
+        'page_featured_type',
+        'page_video_id',
+        'media_id',
+    );
+
+    // 対象の投稿タイプ
+    $post_types = array(
+        'post',
+        'genshin_updated',
+        'artifacts',
+        'genshin_updated_jp',
+    );
+
+    foreach ( $post_types as $post_type ) {
+        foreach ( $meta_keys as $meta_key ) {
+            register_post_meta(
+                $post_type,
+                $meta_key,
+                array(
+                    'single'       => true,
+                    'type'         => 'string',
+                    'show_in_rest' => true,       // ★これがないと JSON に出ない
+                    'auth_callback' => '__return_true',
+                )
+            );
+        }
+    }
+}
+add_action( 'init', 'gwc_register_post_meta_for_rest' );
+
+
+
+// カテゴリーのコントロールを設定
+
+// カスタムコントロールクラスが存在するかどうかを確認してから定義　このif 分は独自のカストマイザー作成には必須です。
+if (class_exists('WP_Customize_Control')) {
+    // カスタムカスタマイズコントロールクラスを定義
+    class DESS_Customize_Control_Checkbox_Multiple extends WP_Customize_Control
+    {
+        // カスタムコントロールのタイプを定義
+        public $type = 'checkbox-multiple';
+
+        // カスタムコントロールに必要なスクリプトを読み込むためのメソッド
+        public function enqueue()
+        {
+            wp_enqueue_script('jt-customize-controls', trailingslashit(get_template_directory_uri()) . 'js/customize-controls.js', array('jquery'));
+        }
+
+        // カスタムコントロールの内容を出力するメソッド
+        public function render_content()
+        {
+            // カスタムコントロールに選択肢がない場合は終了
+            if (empty($this->choices))
+                return; ?>
+
+            <?php if (!empty($this->label)): ?>
+                <!-- カスタムコントロールのタイトルを出力 -->
+                <span class="customize-control-title"><?php echo esc_html($this->label); ?></span>
+            <?php endif; ?>
+
+            <?php if (!empty($this->description)): ?>
+                <!-- カスタムコントロールの説明を出力 -->
+                <span class="description customize-control-description"><?php echo esc_html($this->description); ?></span>
+            <?php endif; ?>
+
+            <?php
+            // カスタムコントロールの値を配列に変換
+            $multi_values = !is_array($this->value()) ? explode(',', $this->value()) : $this->value();
+            ?>
+
+            <!-- チェックボックスのリストを出力 -->
+            <ul>
+                <?php foreach ($this->choices as $value => $label): ?>
+                    <li>
+                        <label>
+                            <!-- チェックボックスを出力し、選択状態にする -->
+                            <input type="checkbox" value="<?php echo esc_attr($value); ?>" <?php checked(in_array($value, $multi_values)); ?> />
+                            <!-- チェックボックスのラベルを出力 -->
+                            <?php echo esc_html($label); ?>
+                        </label>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+
+            <!-- 選択された値を保存するための隠しフィールドを出力 -->
+            <input type="hidden" <?php $this->link(); ?> value="<?php echo esc_attr(implode(',', $multi_values)); ?>" />
+
+            <!-- 選択された値を保存するための隠しフィールドを出力 -->
+            <input type="hidden" <?php $this->link(); ?> value="<?php echo esc_attr(implode(',', $multi_values)); ?>" />
+
+        <?php }
+    }
+}
+
+
+// lite-youtubeとVimeoの投稿画面に追加するためのメタボックスを追加します。
+function add_media_selection_meta_box()
+{
+    // メタボックスの追加
+    add_meta_box(
+        'media_selection_meta_box', // メタボックスのID
+        '動画フォーマットID入力', // メタボックスのタイトル
+        'render_media_selection_meta_box', // メタボックスの表示関数
+        array('post', 'page', 'genshin_updated', 'genshin_updated_jp'), // メタボックスを表示する投稿タイプ
+        'normal', // メタボックスの位置
+        'default' // メタボックスの優先度
+    );
+}
+
+// メディア選択メタボックスの表示をレンダリングします。
+function render_media_selection_meta_box($post)
+{
+    // 現在の選択されているメディアの値を取得
+    $selectedMedia = get_post_meta($post->ID, 'media_selection', true);
+
+    // メディアタイプの選択肢を表示
+    echo '<label for="media_selection">Select Media Type:</label>';
+    echo '<select id="media_selection" name="media_selection">';
+    echo '<option value="youtube" ' . selected($selectedMedia, 'youtube', false) . '>YouTube</option>';
+    echo '<option value="vimeo" ' . selected($selectedMedia, 'vimeo', false) . '>Vimeo</option>';
+    echo '</select>';
+
+    // メディアIDの入力フィールドを表示
+    echo '<br><br>';
+    echo '<label for="media_id">Enter Media ID:</label>';
+    echo '<input type="text" id="media_id" name="media_id" value="' . esc_attr(get_post_meta($post->ID, 'media_id', true)) . '" />';
+
+    // メタボックスに nonce を追加
+    wp_nonce_field('save_media_selection', 'media_selection_nonce');
+}
+
+// メディア選択メタボックスの内容を保存します。
+function save_media_selection_meta_box($post_id)
+{
+    // nonce の検証
+    if (!isset($_POST['media_selection_nonce']) || !wp_verify_nonce($_POST['media_selection_nonce'], 'save_media_selection')) {
+        return;
+    }
+
+    // 自動保存中は処理を終了
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+        return;
+    }
+
+    // ユーザーの権限を確認
+    if (!current_user_can('edit_post', $post_id)) {
+        return;
+    }
+
+    // メディア選択とメディアIDを保存
+    $selectedMedia = isset($_POST['media_selection']) ? sanitize_text_field($_POST['media_selection']) : '';
+    $mediaId = isset($_POST['media_id']) ? sanitize_text_field($_POST['media_id']) : '';
+
+    update_post_meta($post_id, 'media_selection', $selectedMedia);
+    update_post_meta($post_id, 'media_id', $mediaId);
+}
+
+// 投稿コンテンツに埋め込まれたメディアを表示します。
+function display_embedded_media($content)
+{
+    // 投稿に関連付けられたメディア情報を取得
+    $selectedMedia = get_post_meta(get_the_ID(), 'media_selection', true);
+    $mediaId = get_post_meta(get_the_ID(), 'media_id', true);
+
+    // メディアが設定されていれば埋め込みコードを追加
+    if (!empty($selectedMedia) && !empty($mediaId)) {
+        switch ($selectedMedia) {
+            case 'youtube':
+                // YouTubeの埋め込みコードを追加
+                $content .= '<lite-youtube videoid="' . esc_attr($mediaId) . '" playlabel="Play Video" style="max-width:100%; height:auto;"></lite-youtube>';
+                break;
+
+            case 'vimeo':
+                // Vimeoの埋め込みコードを追加
+                $content .= '<lite-vimeo videoid="' . esc_attr($mediaId) . '">
+                    <div class="ltv-playbtn"></div>
+                    </lite-vimeo>';
+                break;
+        }
+    }
+
+    return $content;
+}
+
+// メタボックスを追加するアクションフックを登録します。
+add_action('add_meta_boxes', 'add_media_selection_meta_box');
+// メタボックスの内容を保存するアクションフックを登録します。
+add_action('save_post', 'save_media_selection_meta_box');
+// コンテンツフィルターに埋め込みメディアを表示するフィルターフックを登録します。
+add_filter('the_content', 'display_embedded_media');
+
+
+
+// 動画構造化データを <head> 内に出力する処理
+function load_videoobject_structured_data() {
+    if (is_single()) {
+        // ① page_featured_type / page_video_id を取得
+        $type = get_post_meta(get_the_ID(), 'page_featured_type', true);
+        $video_id = get_post_meta(get_the_ID(), 'page_video_id', true);
+
+        // ② もし未設定なら media_selection / media_id を取得
+        if (empty($type) || empty($video_id)) {
+            $type = get_post_meta(get_the_ID(), 'media_selection', true);
+            $video_id = get_post_meta(get_the_ID(), 'media_id', true);
+        }
+
+        // ③ YouTube または Vimeo の場合に構造化データを出力
+        if (($type === 'youtube' || $type === 'vimeo') && !empty($video_id)) {
+            get_template_part('inc/functions/video-object');
+        }
+    }
+}
+add_action('wp_head', 'load_videoobject_structured_data');
+
+
+
+function dess_customize_register($wp_customize) {
+
+    //
+    // 1. フッターのSNSリンクセクション
+    //
+    $wp_customize->add_section('sm_section', array(
+        'title' => __('Footer Social Media', ''),
+        'capability' => 'edit_theme_options',
+        'description' => __('Allows you to set your social media URLs', ''),
+    ));
+
+    $socials = array('twitter', 'facebook', 'google-plus', 'instagram', 'pinterest', 'linkedin', 'vimeo', 'youtube');
+    foreach ($socials as $social) {
+        $wp_customize->add_setting('dess_' . $social, array(
+            'capability' => 'edit_theme_options',
+            'type' => 'theme_mod',
+            'sanitize_callback' => 'dess_sanitize_url',
+        ));
+
+        $wp_customize->add_control(new WP_Customize_Control(
+            $wp_customize,
+            'dess_' . $social,
+            array(
+                'settings' => 'dess_' . $social,
+                'label' => ucfirst(str_replace('-', ' ', $social)) . ' URL',
+                'section' => 'sm_section',
+                'type' => 'text',
+            )
+        ));
+    }
+
+    //
+    // 2. Tekken7 ロゴセクション
+    //
+    $wp_customize->add_section('tekken7_logo_section', array(
+        'title' => __('Tekken7 Logo', 'text-domain'),
+        'capability' => 'edit_theme_options',
+        'description' => __('Allows you to update your theme\'s Tekken7 logo.', 'text-domain'),
+    ));
+
+    $wp_customize->add_setting('dess_logo_tekken7', array(
+        'default' => get_template_directory_uri() . '/images/logo.png',
+        'type' => 'theme_mod',
+        'sanitize_callback' => 'esc_url_raw',
+    ));
+
+    $wp_customize->add_control(new WP_Customize_Image_Control(
+        $wp_customize,
+        'dess_logo_tekken7',
+        array(
+            'label' => __('Upload Tekken7 Logo', 'text-domain'),
+            'section' => 'tekken7_logo_section',
+            'settings' => 'dess_logo_tekken7',
+        )
+    ));
+
+    $wp_customize->add_setting('logo_width_tekken7', array(
+        'default' => 100,
+        'type' => 'theme_mod',
+        'sanitize_callback' => 'absint',
+            'transport' => 'refresh', // ← 追加
+
+    ));
+    $wp_customize->add_control('logo_width_tekken7', array(
+        'label' => __('Tekken7 Logo Width', 'text-domain'),
+        'section' => 'tekken7_logo_section',
+        'type' => 'number',
+        'input_attrs' => array('min' => 1, 'step' => 1),
+    ));
+
+    $wp_customize->add_setting('logo_height_tekken7', array(
+        'default' => 100,
+        'type' => 'theme_mod',
+        'sanitize_callback' => 'absint',
+            'transport' => 'refresh', // ← 追加
+
+    ));
+    $wp_customize->add_control('logo_height_tekken7', array(
+        'label' => __('Tekken7 Logo Height', 'text-domain'),
+        'section' => 'tekken7_logo_section',
+        'type' => 'number',
+        'input_attrs' => array('min' => 1, 'step' => 1),
+    ));
+
+    // Tekken7 リンク先セレクト
+    $tekken7_choices = array('' => '— 選択しない —'); // ← ここを追加
+    $tekken7_category = get_category_by_slug('tekken7');
+    if ($tekken7_category) {
+        $query = new WP_Query(array(
+            'post_type' => array('post', 'page'),
+            'post_status' => 'publish',
+            'category_name' => 'tekken7',
+            'posts_per_page' => -1,
+        ));
+        while ($query->have_posts()) {
+            $query->the_post();
+            $tekken7_choices[get_permalink()] = get_the_title();
+        }
+        wp_reset_postdata();
+    }
+
+    $wp_customize->add_setting('logo_link_tekken7_select', array(
+        'default' => '',
+        'sanitize_callback' => 'esc_url_raw',
+    ));
+    $wp_customize->add_control('logo_link_tekken7_select', array(
+        'label' => __('Tekken7 Logo Link (Select)', 'text-domain'),
+        'section' => 'tekken7_logo_section',
+        'type' => 'select',
+        'choices' => $tekken7_choices,
+    ));
+
+
+    //
+    // 3. Genshin Impact ロゴセクション
+    //
+    $wp_customize->add_section('genshin_logo_section', array(
+        'title' => __('Genshin Impact Logo', 'text-domain'),
+        'capability' => 'edit_theme_options',
+        'description' => __('Allows you to update your theme\'s Genshin Impact logo.', 'text-domain'),
+    ));
+
+    $wp_customize->add_setting('dess_logo_genshin', array(
+        'type' => 'theme_mod',
+        'sanitize_callback' => 'esc_url_raw',
+    ));
+    $wp_customize->add_control(new WP_Customize_Image_Control(
+        $wp_customize,
+        'dess_logo_genshin',
+        array(
+            'label' => __('Upload Genshin Logo', 'text-domain'),
+            'section' => 'genshin_logo_section',
+            'settings' => 'dess_logo_genshin',
+        )
+    ));
+
+    $wp_customize->add_setting('logo_width_genshin', array(
+        'default' => 100,
+        'type' => 'theme_mod',
+        'sanitize_callback' => 'absint',
+            'transport' => 'refresh', // ✅ 追加
+
+    ));
+    $wp_customize->add_control('logo_width_genshin', array(
+        'label' => __('Genshin Logo Width', 'text-domain'),
+        'section' => 'genshin_logo_section',
+        'type' => 'number',
+        'input_attrs' => array('min' => 1, 'step' => 1),
+    ));
+
+    $wp_customize->add_setting('logo_height_genshin', array(
+        'default' => 100,
+        'type' => 'theme_mod',
+        'sanitize_callback' => 'absint',
+            'transport' => 'refresh', // ✅ 追加
+
+    ));
+    $wp_customize->add_control('logo_height_genshin', array(
+        'label' => __('Genshin Logo Height', 'text-domain'),
+        'section' => 'genshin_logo_section',
+        'type' => 'number',
+        'input_attrs' => array('min' => 1, 'step' => 1),
+    ));
+
+    // Genshin リンク先セレクト
+    $genshin_choices = array('' => '— 選択しない —'); // ← 空選択肢追加
+    $genshin_category = get_category_by_slug('genshin-impact');
+    if ($genshin_category) {
+        $posts = get_posts(array(
+            'post_type' => 'post',
+            'post_status' => 'publish',
+            'category' => $genshin_category->term_id,
+            'posts_per_page' => -1,
+        ));
+        foreach ($posts as $post) {
+            $genshin_choices[get_permalink($post->ID)] = get_the_title($post->ID);
+        }
+    }
+
+    $wp_customize->add_setting('logo_link_genshin_select', array(
+        'default' => '',
+        'transport' => 'refresh',
+        'sanitize_callback' => 'sanitize_text_field',
+    ));
+    $wp_customize->add_control('logo_link_genshin_select', array(
+        'label' => __('Genshin Logo Link (Select)', 'text-domain'),
+        'section' => 'genshin_logo_section',
+        'type' => 'select',
+        'choices' => $genshin_choices,
+    ));
+
+    //
+    // 4. ホームページ表示カテゴリー
+    //
+    $wp_customize->add_section('hc_section', array(
+        'title' => __('Home Categories', ''),
+        'capability' => 'edit_theme_options',
+        'description' => __('Allows you to select categories in your theme\'s homepage.', ''),
+    ));
+
+    $cats = get_terms('category');
+    $cat_choices = array();
+    foreach ($cats as $cat) {
+        $cat_choices[$cat->term_id] = $cat->name;
+    }
+
+    $wp_customize->add_setting('dess_home_cats', array(
+        'capability' => 'edit_theme_options',
+        'type' => 'theme_mod',
+        'sanitize_callback' => 'dess_sanitize_text',
+    ));
+
+    $wp_customize->add_control(new DESS_Customize_Control_Checkbox_Multiple(
+        $wp_customize,
+        'dess_home_cats',
+        array(
+            'label' => __('Select categories to display in your homepage', ''),
+            'section' => 'hc_section',
+            'settings' => 'dess_home_cats',
+            'choices' => $cat_choices,
+        )
+    ));
+
+    //
+    // 5. 背景カラー設定
+    //
+    $wp_customize->add_section('background_section', array(
+        'title' => __('Backgrounds', ''),
+        'capability' => 'edit_theme_options',
+        'description' => __('Allows you to change slider and content background colors', ''),
+    ));
+
+    $wp_customize->add_setting('dess_slider_bg', array(
+        'default' => '#464E54',
+        'sanitize_callback' => 'sanitize_hex_color',
+    ));
+    $wp_customize->add_control(new WP_Customize_Color_Control(
+        $wp_customize,
+        'dess_slider_bg',
+        array(
+            'label' => __('Slider Background', ''),
+            'section' => 'background_section',
+            'settings' => 'dess_slider_bg',
+        )
+    ));
+
+    $wp_customize->add_setting('dess_content_bg', array(
+        'default' => '#F9F9F9',
+        'sanitize_callback' => 'sanitize_hex_color',
+    ));
+    $wp_customize->add_control(new WP_Customize_Color_Control(
+        $wp_customize,
+        'dess_content_bg',
+        array(
+            'label' => __('Content Background', ''),
+            'section' => 'background_section',
+            'settings' => 'dess_content_bg',
+        )
+    ));
+}
+
+add_action('customize_register', 'dess_customize_register');
+
+
+
+
+// カスタムCSSを出力する関数
+function dess_custom_css()
+{
+    ?>
+    <style>
+        .home-slider {
+            background-color:
+                <?php echo esc_html(dess_setting('dess_slider_bg', '#464E54')); ?>
+            ;
+        }
+
+        .home-box,
+        .content {
+            background-color:
+                <?php echo esc_html(dess_setting('dess_content_bg', '#F9F9F9')); ?>
+            ;
+        }
+    </style>
+    <?php
+}
+
+// wp_head フックでの呼び出し
+add_action('wp_head', 'dess_custom_css');
+
+
+// カスタマイズオプションの値を取得する関数
+function dess_setting($name, $default = false)
+{
+    return get_theme_mod($name, $default);
+}
+
+// 他のサニタイズ関数
+function dess_sanitize_html($value)
+{
+    return wp_filter_post_kses($value);
+}
+
+function dess_sanitize_text($value)
+{
+    return sanitize_text_field($value);
+}
+
+function dess_sanitize_url($value)
+{
+    return esc_url_raw($value);
+}
+
+
+//カストマイザーからURLを入力してSNSアイコンを表示　　header.php  <aside class="header-aside">
+//'default' => '' としているので、もし footer_twitter がまだ設定されていない場合は空の文字列がデフォルト値として使われます。
+//デフォルト値が空の文字列であるため、footer_twitter がまだ設定されていない場合、空の文字列が返されます。これが $link に代入され、後のコードで使われる
+
+function options_customize_register($wp_customize)
+{
+
+    // Side Social Icons セクションの追加
+    $wp_customize->add_section(
+        'social_section',
+        array(
+            'title' => 'Side Menu Social Icons',
+            'priority' => 1,
+        )
+    );
+
+    // 各ソーシャルメディアの設定とコントロールの追加
+    $social_media = array('twitter', 'facebook', 'google', 'instagram', 'pinterest', 'vimeo', 'youtube', 'linkedin', 'discord');
+    foreach ($social_media as $social_icon) {
+        $wp_customize->add_setting(
+            'footer_' . $social_icon,
+            array(
+                'default' => ''
+            )
+        );
+
+        $wp_customize->add_control(
+            'footer_' . $social_icon,
+            array(
+                'label' => ucfirst($social_icon), // ソーシャルメディア名をラベルに使用
+                'section' => 'social_section',
+                'settings' => 'footer_' . $social_icon,
+                'type' => 'text',
+                'priority' => 3
+            )
+        );
+    }
+
+    // Footer セクションの追加
+    $wp_customize->add_section(
+        'footer_section',
+        array(
+            'title' => __('Footer'),
+            'priority' => 2,
+        )
+    );
+
+    // Footer Copyright 設定とコントロールの追加
+    $wp_customize->add_setting(
+        'footer_copyright',
+        array(
+            'default' => ''
+        )
+    );
+
+    $wp_customize->add_control(
+        'footer_copyright',
+        array(
+            'label' => 'Footer Copyright',
+            'section' => 'footer_section',
+            'settings' => 'footer_copyright',
+            'type' => 'text',
+            'priority' => 3
+        )
+    );
+
+    // Featured Text セクションの追加
+    $wp_customize->add_section(
+        'featured_text_section',
+        array(
+            'title' => __('Text Options', ''), // セクションのタイトル
+            'capability' => 'edit_theme_options',   // ユーザーがこのセクションを編集できる権限
+            'description' => __('Allows you to set your footer settings', 'creator') // セクションの説明
+        )
+    );
+
+    // Featured Text 設定の追加
+    $wp_customize->add_setting(
+        'dess_hometext',
+        array(
+            'capability' => 'edit_theme_options',    // ユーザーがこの設定を編集できる権限
+            'type' => 'theme_mod',             // 設定の種類 (theme_mod はテーマの設定を指定します)
+            'sanitize_callback' => 'dess_sanitize_html',    // 値を保存する前に適用するコールバック関数
+        )
+    );
+
+    // Featured Text コントロールの追加
+    $wp_customize->add_control(
+        new WP_Customize_Control(
+            $wp_customize,
+            'dess_hometext',
+            array(
+                'settings' => 'dess_hometext',         // コントロールが紐づく設定の名前
+                'label' => __('Featured Text', ''), // コントロールのラベル
+                'section' => 'featured_text_section', // コントロールが属するセクションの名前
+                'type' => 'textarea',               // コントロールの種類 (textarea は複数行のテキスト入力)
+            )
+        )
+    );
+
+}
+
+// カスタマイズオプションを登録するアクションフック
+add_action('customize_register', 'options_customize_register');
+
+
+// Discord WebhookのURL
+$webhook_url = 'https://discord.com/api/webhooks/1215486304859725944/eTLjK9GMNLYxLmJYWeSkT4wd9hT10EuFPwUHTA--x0Pn1yexsslkOIycovIuWUIinhLq';
+
+// Discordにメッセージを送信する関数
+function send_post_to_discord($ID, $post)
+{
+    global $webhook_url;
+
+    // 投稿の情報を取得
+    $post_title = $post->post_title;
+    $post_url = get_permalink($ID);
+
+    // チャンネルに表示されるメッセージの形式を設定
+    $message = [
+        'content' => "新しい投稿が公開されました: $post_title\n$post_url",
+    ];
+
+    // メッセージデータをJSON形式に変換
+    $data = json_encode($message);
+
+    // HTTPリクエストのオプション
+    $options = [
+        'body' => $data,
+        'headers' => ['Content-Type' => 'application/json'],
+        'timeout' => 5,
+        'redirection' => 5,
+        'blocking' => true,
+        'httpversion' => '1.0',
+        'sslverify' => false,
+    ];
+
+    // Discordにメッセージを送信
+    wp_remote_post($webhook_url, $options);
+}
+
+// publish_post アクションフックに関数を追加
+add_action('publish_post', 'send_post_to_discord', 10, 2);
+
+
+
+
+
+/**
+ * タームのスラッグを取得するオリジナル関数（CHAOTER 25）お勉強
+ */
+
+function get_term_slug()
+{
+    if (is_tax()) {
+        $term_name = single_tag_title('', false);
+        if (is_tax('roomtype')) {
+            $term_properties = get_term_by('name', $term_name, 'roomtype');
+        } else {
+            $term_properties = get_term_by('name', $term_name, 'item');
+        }
+        $term_slug = $term_properties->slug;
+        return $term_slug;
+    } else {
+        return false;
+    }
+}
+
+
+
+/**
+ * 個別記事のタームを配列に格納するオリジナル関数（CHAPTER 25）
+ */
+
+function get_my_terms_array($taxonomy)
+{
+    global $post;
+    $terms_array = array();
+    $terms = get_the_terms($post->ID, $taxonomy);
+    if ($terms && !is_wp_error($terms)) {
+        foreach ($terms as $term) {
+            $terms_array[] = $term->slug;
+        }
+    }
+    return $terms_array;
+}
+
+
+add_action('init', function () {
+
+    // ===== 英語記事 =====
+    register_post_type('genshin_updated', [
+        'label'         => 'Genshin Updated',
+        'public'        => true,
+        'has_archive'   => true,
+        'show_in_rest'  => true,
+        'rest_base'     => 'gu', // ★ 追加：RESTのエンドポイントを /wp-json/wp/v2/gu に
+        'supports'      => ['title','editor','thumbnail','excerpt','custom-fields','revisions','author'],
+        'rewrite'       => ['slug' => 'genshin-impact/genshin_updated'],
+        'capability_type' => 'post',
+        'map_meta_cap'    => true,
+    ]);
+
+    // ===== 日本語記事 =====
+    register_post_type('genshin_updated_jp', [
+        'label'         => 'Genshin Updated JP',
+        'public'        => true,
+        'has_archive'   => true,
+        'show_in_rest'  => true,
+        'rest_base'     => 'gu-jp', // ★ 追加
+        'supports'      => ['title','editor','thumbnail','excerpt','custom-fields','revisions','author'],
+        'rewrite'       => ['slug' => 'genshin-impact/genshin_updated_jp'],
+        'capability_type' => 'post',
+        'map_meta_cap'    => true,
+    ]);
+
+    // ===== タクソノミー =====
+    register_taxonomy('new-character', 'genshin_updated', [
+        'label'        => 'New Character',
+        'public'       => true,
+        'hierarchical' => true,
+        'show_in_rest' => true,
+        'rest_base'    => 'gu-character', // ★ 追加（任意）
+        'rewrite'      => ['slug' => 'genshin-impact/new-character'],
+    ]);
+
+    register_taxonomy('news', 'genshin_updated', [
+        'label'        => 'News',
+        'public'       => true,
+        'hierarchical' => false,
+        'show_in_rest' => true,
+        'rest_base'    => 'gu-news', // ★ 追加（任意）
+        'rewrite'      => ['slug' => 'genshin-impact/news'],
+    ]);
+
+    register_taxonomy('new-character-jp', 'genshin_updated_jp', [
+        'label'        => '新キャラクター',
+        'public'       => true,
+        'hierarchical' => true,
+        'show_in_rest' => true,
+        'rest_base'    => 'gu-jp-character', // ★ 追加（任意）
+        'rewrite'      => ['slug' => 'genshin-impact-jp/new-character'],
+    ]);
+
+    register_taxonomy('news-jp', 'genshin_updated_jp', [
+        'label'        => 'ニュース',
+        'public'       => true,
+        'hierarchical' => false,
+        'show_in_rest' => true,
+        'rest_base'    => 'gu-jp-news', // ★ 追加（任意）
+        'rewrite'      => ['slug' => 'genshin-impact-jp/news'],
+    ]);
+});
+
+
+
+
+/**
+ * CPTにも「通常のカテゴリ(category)」と「通常のタグ(post_tag)」を使えるようにする
+ *
+ * 目的：
+ * - genshin_updated / genshin_updated_jp / genshin_build / artifacts を
+ *   通常投稿(post)と同じ「カテゴリ」「タグ」で分類できるようにする
+ *
+ * 効果：
+ * - 管理画面の編集画面で「カテゴリ」「タグ」メタボックスが使える
+ * - category / tag アーカイブ・検索・サイドバー絞り込みで同じ分類が効く
+ *
+ * 注意：
+ * - 追加後は「設定 > パーマリンク」を開いて「変更を保存」（リライトルール再生成）推奨
+ */
+add_action('init', function () {
+  foreach (['genshin_updated','genshin_updated_jp','genshin_build','artifacts'] as $pt) {
+    register_taxonomy_for_object_type('category', $pt);
+    register_taxonomy_for_object_type('post_tag', $pt);
+  }
+}, 20);
+
+
+
+/**
+ * 共通タクソノミー「parent_taxonomy」を作成
+ * 
+ * 目的：
+ * - カスタム投稿タイプ `genshin_updated`（英語記事）と `genshin_updated_jp`（日本語記事）の両方で使える
+ *   共通の階層型タクソノミーを作成する。
+ * - 階層型なので親子関係（カテゴリのような階層構造）が作れる。
+ * - REST APIやGutenberg（ブロックエディタ）でも利用できる。
+ * - 公開状態にしてスラッグは `parent-taxonomy` にする。
+ */
+function create_new_taxonomy()
+{
+    register_taxonomy(
+        'parent_taxonomy', // タクソノミー名（システム内部で使う識別子）
+        array('genshin_updated', 'genshin_updated_jp'), // このタクソノミーを適用する投稿タイプ
+        array(
+            'label' => 'Parent Taxonomy', // 管理画面で表示されるラベル
+            'hierarchical' => true,       // true で親子階層を持てる（カテゴリー型）
+            'show_in_rest' => true,       // GutenbergやREST API対応
+            'public' => true,             // 公開（管理画面にも表示）
+            'rewrite' => array('slug' => 'parent-taxonomy'), // パーマリンクのスラッグ
+        )
+    );
+}
+add_action('init', 'create_new_taxonomy');
+
+
+
+// 日本語用の記事
+function create_genshin_updated_jp_post_type() {
+
+    // カスタム投稿タイプ登録
+    register_post_type(
+        'genshin_updated_jp', // 投稿タイプ名
+        array(
+            'label' => 'Genshin Updated JP', // 管理画面メニュー表示名
+            'labels' => array(
+                'add_new' => '新規日本語記事を追加',
+                'edit_item' => '日本語記事を編集',
+                'view_item' => '日本語記事を表示',
+                'search_items' => '日本語記事を検索',
+                'not_found' => '日本語記事は見つかりません。',
+                'not_found_in_trash' => 'ゴミ箱に日本語記事はありません。'
+            ),
+            'public' => true,
+            'description' => 'Genshin Updated の日本語翻訳記事用カスタム投稿タイプ',
+            'hierarchical' => false,
+            'has_archive' => true, // アーカイブ有効
+            'show_in_rest' => true, // ブロックエディター対応
+            'supports' => array(
+                'title',
+                'editor',
+                'thumbnail',
+                'excerpt',
+                'custom-fields',
+                'revisions',
+                'comments',
+                'trackbacks',
+                'page-attributes',
+                'post-formats',
+            ),
+            'menu_position' => 6, // 「Genshin Updated」の下に表示
+            'menu_icon' => 'dashicons-translation', // 翻訳っぽいアイコン
+            'rewrite' => array('slug' => 'genshin-impact/genshin_updated_jp'), // URL構造
+            'taxonomies' => array('category', 'post_tag') // 通常カテゴリ・タグも使用可
+        )
+    );
+}
+add_action('init', 'create_genshin_updated_jp_post_type');
+
+// 通常のカテゴリーを有効化
+function enable_categories_for_genshin_updated_jp() {
+    register_taxonomy_for_object_type('category', 'genshin_updated_jp');
+}
+add_action('init', 'enable_categories_for_genshin_updated_jp');
+
+
+
+
+/**
+ * 通常の投稿（post）で「new-character」と「news」という
+ * カスタムタクソノミー（分類）を使用できるようにする。
+ *
+ * これにより、通常の投稿でも「新キャラ」や「ニュース」などの
+ * タクソノミーを割り当てて、分類や一覧表示、ターム別リンク遷移が可能になる。
+ *
+ * たとえば：
+ * - 投稿編集画面に「New Character」「News」選択欄が表示される
+ * - 該当タームをクリックするとその一覧（アーカイブ）に遷移できる
+ * - `the_terms()` などで紐づけられたタームを表示可能になる
+ */
+function enable_custom_taxonomies_for_post() {
+    // 投稿タイプ「post」にタクソノミー「new-character」を追加
+    register_taxonomy_for_object_type('new-character', 'post');
+
+    // 投稿タイプ「post」にタクソノミー「news」を追加
+    register_taxonomy_for_object_type('news', 'post');
+}
+// initアクションフックで登録（WordPress初期化時に実行）
+add_action('init', 'enable_custom_taxonomies_for_post');
+
+
+
+
+
+// 対象タクソノミー（必要に応じて追加）
+$taxonomies = ['category', 'new-character', 'news'];
+
+// カラーピッカー読み込み
+add_action('admin_enqueue_scripts', function () {
+    wp_enqueue_style('wp-color-picker');
+    wp_enqueue_script('wp-color-picker');
+});
+
+// ターム追加画面：カラーピッカー表示
+foreach ($taxonomies as $taxonomy) {
+    add_action("{$taxonomy}_add_form_fields", function () {
+        ?>
+        <div class="form-field">
+            <label for="taxonomy_color">色（カラーコード）</label>
+            <input name="taxonomy_color" type="text" id="taxonomy_color" value="#007bff" class="taxonomy-color-picker" />
+            <p class="description">この色は投稿リンクの文字色に使用されます。</p>
+        </div>
+        <script>
+        jQuery(document).ready(function($) {
+            $('.taxonomy-color-picker').wpColorPicker();
+        });
+        </script>
+        <?php
+    });
+
+    // ターム編集画面：カラーピッカー表示
+    add_action("{$taxonomy}_edit_form_fields", function ($term) {
+        $color = get_term_meta($term->term_id, 'taxonomy_color', true);
+        ?>
+        <tr class="form-field">
+            <th scope="row"><label for="taxonomy_color">色（カラーコード）</label></th>
+            <td>
+                <input name="taxonomy_color" type="text" id="taxonomy_color" value="<?php echo esc_attr($color ?: '#007bff'); ?>" class="taxonomy-color-picker" />
+                <p class="description">この色は投稿リンクの文字色に使用されます。</p>
+            </td>
+        </tr>
+        <script>
+        jQuery(document).ready(function($) {
+            $('.taxonomy-color-picker').wpColorPicker();
+        });
+        </script>
+        <?php
+    });
+
+    // 保存処理
+    add_action("created_{$taxonomy}", function ($term_id) {
+        if (isset($_POST['taxonomy_color'])) {
+            update_term_meta($term_id, 'taxonomy_color', sanitize_hex_color($_POST['taxonomy_color']));
+        }
+    });
+    add_action("edited_{$taxonomy}", function ($term_id) {
+        if (isset($_POST['taxonomy_color'])) {
+            update_term_meta($term_id, 'taxonomy_color', sanitize_hex_color($_POST['taxonomy_color']));
+        }
+    });
+}
+
+
+// 投稿やカスタム投稿のフロント側でタクソノミーに色をつける
+function colored_term_labels($taxonomy = 'category') {
+    $terms = get_the_terms(get_the_ID(), $taxonomy);
+    if ($terms && !is_wp_error($terms)) {
+        foreach ($terms as $term) {
+            $color = get_term_meta($term->term_id, 'taxonomy_color', true);
+            echo '<span class="term-label" style="color:' . esc_attr($color ?: '#007bff') . ';">' . esc_html($term->name) . '</span> ';
+        }
+    }
+}
+
+// 投稿一覧の「カテゴリー列」に色を適用
+add_action('admin_head', function () {
+    global $pagenow;
+    if ($pagenow === 'edit.php') {
+        $terms = get_terms(['taxonomy' => 'category', 'hide_empty' => false]);
+        echo '<style>';
+        foreach ($terms as $term) {
+            $color = get_term_meta($term->term_id, 'taxonomy_color', true);
+            if ($color) {
+                echo 'td.column-categories a[aria-label*="' . esc_attr($term->name) . '"] { color: ' . esc_attr($color) . ' !important; }';
+            }
+        }
+        echo '</style>';
+    }
+});
+
+// カテゴリー一覧画面（管理画面）で色を適用
+add_action('admin_head-edit-tags.php', function () {
+    $screen = get_current_screen();
+    if ($screen->taxonomy === 'category') {
+        $terms = get_terms(['taxonomy' => 'category', 'hide_empty' => false]);
+        echo '<style>';
+        foreach ($terms as $term) {
+            $color = get_term_meta($term->term_id, 'taxonomy_color', true);
+            if ($color) {
+                echo '#tag-' . esc_attr($term->term_id) . ' .name.column-name strong { color: ' . esc_attr($color) . '; }';
+            }
+        }
+        echo '</style>';
+    }
+});
+
+
+
+
+/**
+ * ============================================================
+ * 【目的】カテゴリ親子の投稿表示 + タグ/タクソノミーでCPTも拾う + TagCloudキャッシュ即反映
+ * ============================================================
+ *
+ * ① 親カテゴリ（例：genshin-impact）の一覧で「子カテゴリの投稿」も一緒に表示する
+ * ② /tag/xxx や /taxonomy/xxx の一覧で、通常投稿(post)だけでなく
+ *    CPT（genshin_updated / genshin_updated_jp）も検索対象に含める
+ * ③ サイドバーの Tag Cloud（sb_render_tag_cloud_scoped の transient）が
+ *    “最大10分古いまま” になるのを防ぐため、タグ更新/投稿更新時にキャッシュを削除する
+ *
+ * ------------------------------------------------------------
+ * 【なぜ必要？】あなたの症状
+ * ------------------------------------------------------------
+ * - /tag/ineffa に実際は genshin_updated の投稿があるのに No posts になる
+ *   → タグアーカイブのメインクエリが post だけを検索しており、CPTが落ちている可能性が高い
+ *
+ * - Tag Cloud がすぐ反映されない
+ *   → sb_render_tag_cloud_scoped() が transient をキャッシュ（例：10分）しているため
+ *
+ * ------------------------------------------------------------
+ * 【このコードの原則】
+ * ------------------------------------------------------------
+ * - 管理画面（is_admin）は絶対に触らない
+ * - “フロントのメインクエリ” だけを触る（ウィジェット等のサブクエリを壊さない）
+ * - タグ/タクソノミーでは post_type を広げて CPT も拾う
+ */
+
+
+/**
+ * ============================================================
+ * 1) メインクエリ調整：カテゴリ親子 + タグ/タクソノミーにCPTを含める
+ * ============================================================
+ */
+add_action('pre_get_posts', function (WP_Query $query) {
+
+  // ✅ 管理画面 / メインクエリ以外は触らない（最重要）
+  if (is_admin() || ! $query->is_main_query()) {
+    return;
+  }
+
+  /**
+   * ------------------------------------------------------------
+   * 1-A) カテゴリ一覧（is_category）
+   * ------------------------------------------------------------
+   * 例：/genshin-impact/（親カテゴリ）
+   * - 親カテゴリに直接属する投稿だけでなく
+   * - 子カテゴリに属する投稿もまとめて表示する
+   *
+   * ※ WordPressデフォルト：親カテゴリに “直接” 属する投稿しか出ない
+   */
+  if ($query->is_category()) {
+
+    $category = get_queried_object(); // WP_Term を想定
+
+    if ($category instanceof WP_Term && ! empty($category->term_id)) {
+
+      // 子カテゴリIDをすべて取得（配列）
+      $children = get_term_children((int)$category->term_id, 'category');
+
+      // 子があるなら、親＋子のID全部を category__in に入れる
+      if (! empty($children)) {
+        $all_ids = array_merge(
+          [(int)$category->term_id],
+          array_map('intval', (array)$children)
+        );
+
+        // メインクエリに「このカテゴリ群を含む投稿を出せ」と指示
+        $query->set('category__in', $all_ids);
+      }
+    }
+
+    // カテゴリ処理はここで終了（下の tag/tax を誤爆させない）
+    return;
+  }
+
+  /**
+   * ------------------------------------------------------------
+   * 1-B) タグ一覧 / タクソノミー一覧（is_tag / is_tax）
+   * ------------------------------------------------------------
+   * 例：/tag/ineffa
+   * ここが “No posts” を直す本体。
+   *
+   * ※ WordPress/テーマ次第で tag アーカイブが post だけになることがあるため、
+   *    ここで検索対象 post_type を増やす。
+   */
+  if ($query->is_tag() || $query->is_tax()) {
+
+    // ✅ タグ/タクソノミー一覧で拾いたい投稿タイプ（必要に応じて追加OK）
+    $query->set('post_type', [
+      'post',
+      'genshin_updated',
+      'genshin_updated_jp',
+    ]);
+
+    return;
+  }
+
+});
+
+
+/**
+ * ============================================================
+ * 2) Tag Cloud の transient キャッシュ削除（安全版）
+ * ============================================================
+ *
+ * sb_render_tag_cloud_scoped() は transient キーとして
+ *   sb_tagcloud_{md5...}
+ * を作ってキャッシュしている（例：10分）。
+ *
+ * だから、タグ付け替え・投稿保存・タグ編集などが起きたら
+ * “sb_tagcloud_ で始まる transient” をまとめて削除する。
+ *
+ * ✅ delete_option を直叩きすると、Redis等の object cache 環境で消えないことがある
+ * → delete_transient() を使うのが正道
+ */
+
+
+/**
+ * sb_tagcloud_ 系 transient を全部削除する
+ */
+function gw_clear_sb_tagcloud_transients() {
+  global $wpdb;
+
+  // options テーブル上の transient 実体（_transient_〜）を拾う
+  $like = $wpdb->esc_like('_transient_sb_tagcloud_') . '%';
+
+  $option_names = $wpdb->get_col(
+    $wpdb->prepare(
+      "SELECT option_name FROM {$wpdb->options} WHERE option_name LIKE %s",
+      $like
+    )
+  );
+
+  if (empty($option_names)) return;
+
+  foreach ($option_names as $opt_name) {
+    // option_name: "_transient_sb_tagcloud_xxx" → transient key: "sb_tagcloud_xxx"
+    $tkey = preg_replace('/^_transient_/', '', $opt_name);
+
+    if ($tkey) {
+      // ✅ timeoutも含めて、オブジェクトキャッシュでも確実に消える
+      delete_transient($tkey);
+    }
+  }
+}
+
+
+/**
+ * 投稿が保存されたらキャッシュ削除
+ * - タグ変更も save_post に含まれることが多い（投稿画面でタグ編集した場合など）
+ */
+add_action('save_post', function($post_id){
+  // revision/autosave は除外（無駄に消さない）
+  if (wp_is_post_revision($post_id) || wp_is_post_autosave($post_id)) return;
+
+  // 必要なら対象 post_type を絞ってもOK（例：post / genshin_updated だけ等）
+  gw_clear_sb_tagcloud_transients();
+}, 20);
+
+
+/**
+ * タグ・タクソノミーが付け替えられたら削除（より確実）
+ * - 投稿にタグを付け替える操作は set_object_terms が確実に走る
+ */
+add_action('set_object_terms', function($object_id, $terms, $tt_ids, $taxonomy){
+  // post_tag だけに絞る（他taxもキャッシュ対象なら追加）
+  if ($taxonomy === 'post_tag') {
+    gw_clear_sb_tagcloud_transients();
+  }
+}, 20, 4);
+
+
+/**
+ * タグ自体（用語）が編集/追加/削除されたら削除
+ * - タグ名変更・新規作成・削除でも Tag Cloud に影響する
+ */
+add_action('created_term', function($term_id, $tt_id, $taxonomy){
+  if ($taxonomy === 'post_tag') gw_clear_sb_tagcloud_transients();
+}, 20, 3);
+
+add_action('edited_term', function($term_id, $tt_id, $taxonomy){
+  if ($taxonomy === 'post_tag') gw_clear_sb_tagcloud_transients();
+}, 20, 3);
+
+add_action('delete_term', function($term_id, $tt_id, $taxonomy, $deleted_term){
+  if ($taxonomy === 'post_tag') gw_clear_sb_tagcloud_transients();
+}, 20, 4);
+
+
+
+/**
+ * 【目的】
+ * 通常 WordPress のカテゴリーページのURLは以下のような形式になります：
+ *   - 親カテゴリ： https://example.com/category/genshin-impact/
+ *   - 子カテゴリ： https://example.com/category/new-character/
+ *
+ * しかしこのままだと、親子関係がURLに反映されないため、情報構造が分かりづらくSEO的にも弱い構造になります。
+ *
+ * このコードでは、カスタムなリライトルールを追加することで、
+ *   /example.com/genshin-impact/new-character/
+ * のように「親スラッグ / 子スラッグ」というURL構造を実現します。
+ *
+ * 【SEO的メリット】
+ * - URLから情報構造（親子カテゴリの関係）が明確に伝わる
+ * - Googleにとってもコンテンツ構造が理解されやすく、インデックスやクローリング効率が良くなる
+ * - ユーザーにとっても「どのジャンルの下にある記事か」がURLで一目でわかる
+ *
+ * 【URLリダイレクトを避ける意図】
+ * - `genshin_updated` などの **カスタム投稿タイプのスラッグ** と、カテゴリーのスラッグが競合している場合、
+ *    WordPressは `/category/slug/` のURLを `/slug/` へリダイレクトしてしまうことがある。
+ * - これにより、**本来のアーカイブページではなく index.php が表示されてしまう**問題が発生する。
+ * - 本コードでは `$exclude_slugs` にカスタム投稿スラッグを指定して、リライトルールから除外することで
+ *    **アーカイブページ本来のURL（例: /genshin_updated）で正しく表示されるようにしている**。
+ *
+ * 【例】
+ * カテゴリー構成：
+ * - 親：genshin-impact（スラッグ：genshin-impact）
+ * - 子：new-character（スラッグ：new-character）
+ *
+ * 通常URL：
+ *   /category/new-character/
+ *
+ * このコードを使うと：
+ *   /genshin-impact/new-character/ ← SEOにも正しいURL構造で、意図しないリダイレクトも防止
+ */
+
+
+function custom_category_rewrite_rules($wp_rewrite) {
+    $rules = [];
+
+    // 除外したいスラッグ（カスタム投稿などと競合するもの）
+    $exclude_slugs = ['genshin_updated'];
+
+    $categories = get_categories(['hide_empty' => false]);
+
+    foreach ($categories as $category) {
+        $category_nicename = $category->slug;
+
+        // 除外リストに含まれているならスキップ
+        if (in_array($category_nicename, $exclude_slugs, true)) {
+            continue;
+        }
+
+        // 親カテゴリでなければ処理
+        if ($category->category_parent === 0) {
+            continue;
+        }
+
+        $parent = get_category($category->category_parent);
+
+        if ($parent) {
+            // 親カテゴリ自体が除外対象ならスキップ
+            if (in_array($parent->slug, $exclude_slugs, true)) {
+                continue;
+            }
+
+            $rules["{$parent->slug}/{$category_nicename}/?$"] =
+                "index.php?category_name={$parent->slug}/{$category_nicename}";
+        }
+    }
+
+    $wp_rewrite->rules = $rules + $wp_rewrite->rules;
+}
+add_filter('generate_rewrite_rules', 'custom_category_rewrite_rules');
+
+
+
+
+
+
+// カテゴリー・タクソノミーリンク機能を読み込み
+require get_template_directory() . '/inc/functions/category-taxonomy-links.php';
+
+
+
+// カスタム投稿タイプとタクソノミーの登録を1つの関数にまとめる
+function register_banner_custom_post_type_and_taxonomies()
+{
+    // Banner カスタム投稿タイプを登録
+    register_post_type(
+        'banner',
+        array(
+            'label' => 'Banners',
+            'labels' => array(
+                'add_new' => '新規Banner追加',
+                'edit_item' => 'Bannerの編集',
+                'view_item' => 'Bannerを表示',
+                'search_items' => 'Bannerを検索',
+                'not_found' => 'Bannerは見つかりませんでした。',
+                'not_found_in_trash' => 'ゴミ箱にBannerはありません。'
+            ),
+            'public' => true,
+            'description' => 'カスタム投稿タイプ「Banner」の説明文です。',
+            'hierarchical' => false,
+            'has_archive' => true,
+            'show_in_rest' => true,
+            'supports' => array(
+                'title',
+                'editor',
+                'thumbnail',
+                'excerpt',
+                'custom-fields',
+                'revisions',
+                'comments',
+                'trackbacks',
+                'page-attributes',
+                'post-formats',
+            ),
+            'menu_position' => 5,
+            'rewrite' => array('slug' => 'banner'),
+            'taxonomies' => array('banner_category', 'banner_tag')
+        )
+    );
+
+    // Banner カテゴリータクソノミーの登録
+    register_taxonomy(
+        'banner_category',
+        'banner',
+        array(
+            'label' => 'Banner Categories',
+            'labels' => array(
+                'popular_items' => 'よく使うBanner Categories',
+                'edit_item' => 'Banner Categoryを編集',
+                'add_new_item' => '新規Banner Categoryを追加',
+                'search_items' => 'Banner Categoryを検索'
+            ),
+            'public' => true,
+            'description' => 'Banner Categoriesの説明文です。',
+            'hierarchical' => true,
+            'show_in_rest' => true
+        )
+    );
+
+    // Banner タグタクソノミーの登録
+    register_taxonomy(
+        'banner_tag',
+        'banner',
+        array(
+            'label' => 'Banner Tags',
+            'labels' => array(
+                'popular_items' => 'よく使うBanner Tags',
+                'edit_item' => 'Banner Tagを編集',
+                'add_new_item' => '新規Banner Tagを追加',
+                'search_items' => 'Banner Tagを検索'
+            ),
+            'public' => true,
+            'description' => 'Banner Tagsの説明文です。',
+            'hierarchical' => false,
+            'update_count_callback' => '_update_post_term_count',
+            'show_in_rest' => true
+        )
+    );
+
+    // 通常のカテゴリーを有効にする（必要なら）
+    register_taxonomy_for_object_type('category', 'banner');
+}
+
+// init アクションフックで登録
+add_action('init', 'register_banner_custom_post_type_and_taxonomies');
+
+// 親タクソノミーの登録（必要なら）
+function create_banner_parent_taxonomy()
+{
+    register_taxonomy(
+        'banner_parent_category',
+        'banner',
+        array(
+            'label' => 'Banner Parent Category',
+            'hierarchical' => true
+        )
+    );
+}
+add_action('init', 'create_banner_parent_taxonomy');
+
+
+
+
+
+
+
+
+
+//固定ページの追加キャラクター　Template: character-build.php
+//function my_styles()  {
+// genshin-impact-ayaka-build　スラッグ　用のCSS
+//if ( is_page('genshin-impact-ayaka-build') ) {
+//wp_enqueue_style( 'sample', get_template_directory_uri() . '/css/sample.css', array(), '1.0.0' );
+//wp_enqueue_style( 'sample', get_template_directory_uri() . '/css/sample.css', array(), '1.0.0' );
+//更新・追加..
+//}
+//}
+//add_action( 'wp_enqueue_scripts', 'my_styles' );
+
+//function custom_page_styles() {
+// ページIDが9473の場合
+//if ( is_page( 9473 ) ) {
+//echo '<style>';
+//echo '.content{';
+//echo 'background-color: #1c1f46;';
+//echo '    background-image: url("path/to/your/background-image.jpg");';
+//echo '    background-size: cover;';
+// 他のスタイルプロパティを必要に応じて追加
+//echo '}';
+//echo '</style>';
+//}
+//}
+//add_action( 'wp_head', 'custom_page_styles' );
+
+
+
+
+
+
+
+
+
+
+
+/*******************************************************
+ * GameWidth – Genshin Characters Helpers (FULL REWRITE)
+ * -----------------------------------------------------
+ * 目的
+ *  - キャラビルド一覧データを生成してテンプレ側で描画
+ *  - 遷移先リンクの優先度：
+ *      1) 固定ページ（キャラ用テンプレ付き）＞ 2) 通常固定ページ
+ *      ＞ 3) カスタム投稿（genshin_build）＞ 4) レガシー推測URL
+ *  - 別名の統合（Childe→Tartaglia, Raiden→Raiden Shogun 等）
+ *  - Traveler/主人公（aether/lumine/traveler/主人公）は一覧に出さない
+ *******************************************************/
+
+if (!defined('ABSPATH')) exit;
+
+/* ===============================
+ * 基本ヘルパ
+ * =============================== */
+
+/** 任意文字列→安全なスラッグ */
+if (!function_exists('gw_slug')) {
+  function gw_slug($s){
+    $s = strtolower((string)$s);
+    $s = preg_replace('/[^a-z0-9]+/', '-', $s);
+    $s = trim($s, '-');
+    $s = preg_replace('/-+/', '-', $s);
+    return $s;
+  }
+}
+
+/** タイトル整形（Genshin/Impact/(Best) Build などを除去） */
+if (!function_exists('gw_clean_title')) {
+  function gw_clean_title($s){
+    $s = preg_replace('/\b(genshin|impact)\b/i','', (string)$s);
+    $s = preg_replace('/\b(best)?\s*build\b/i','', $s);
+    $s = preg_replace('/\s+/',' ', trim($s));
+    return $s;
+  }
+}
+
+/** 別名→正式名の正規化マップ */
+if (!function_exists('gw_alias_map')) {
+  function gw_alias_map(){
+    return [
+      // 同一人物の別名を統合
+      'childe'            => 'tartaglia',
+
+      // ★ Raiden 系はすべて 'raiden' に統一
+      'raiden'            => 'raiden',
+      'raiden shogun'     => 'raiden',
+      'raiden shougun'    => 'raiden',   // ← 綴り違いも吸収
+      '雷電将軍'              => 'raiden',
+      'shogun'            => 'raiden',
+
+      // Kujou Sara 系
+      'sara'              => 'kujou sara',
+
+      // Traveler 系は全て traveler に寄せ、後段で除外
+      'aether'            => 'traveler',
+      'lumine'            => 'traveler',
+      '主人公'                => 'traveler',
+      'traveler (anemo)'   => 'traveler',
+      'traveler (geo)'     => 'traveler',
+      'traveler (electro)' => 'traveler',
+      'traveler (dendro)'  => 'traveler',
+    ];
+  }
+}
+
+
+/** 表示名→正規化表示名（別名統合 + 余計語除去） */
+if (!function_exists('gw_to_canonical_name')) {
+  function gw_to_canonical_name($s){
+    $s = gw_clean_title($s);
+    $lower = strtolower(trim($s));
+    $map   = gw_alias_map();
+    if (isset($map[$lower])) $s = $map[$lower];
+    return trim(preg_replace('/\s+/', ' ', $s));
+  }
+}
+
+/** Traveler/主人公 判定（一覧から除外） */
+if (!function_exists('gw_is_traveler_family')) {
+  function gw_is_traveler_family($name){
+    $n = strtolower($name);
+    return in_array($n, ['traveler','主人公'], true);
+  }
+}
+
+/** char key（重複排除キー）：正規化→スラッグ */
+if (!function_exists('gw_char_key')) {
+  function gw_char_key($s){
+    return gw_slug(gw_to_canonical_name($s));
+  }
+}
+
+/* ===============================
+ * 補助: 固定ページ存在チェック（/genshin-impact-<name>-best-build/）
+ * =============================== */
+if (!function_exists('gw_find_gi_build_page_id')) {
+  function gw_find_gi_build_page_id($slug_name){
+    $slug_full = 'genshin-impact-' . $slug_name . '-best-build';
+    $maybe     = get_page_by_path($slug_full, OBJECT, 'page');
+    return $maybe ? (int)$maybe->ID : false;
+  }
+}
+
+/* ===============================
+ * 補助: テンプレ判定 & 優先度
+ * =============================== */
+
+/** キャラ用テンプレを使っている固定ページか？ */
+if (!function_exists('gw_is_genshin_build_template')) {
+  function gw_is_genshin_build_template($post_id){
+    // ★必要に応じて、あなたのテンプレファイル名を増減
+    $preferred = [
+      'template-genshin-character.php',
+      'page-genshin-build.php',
+      'genshin-character.php',
+    ];
+    $slug = get_page_template_slug($post_id);
+    return $slug && in_array($slug, $preferred, true);
+  }
+}
+
+/** 情報ソースの優先度（大きいほど強い） */
+if (!function_exists('gw_card_rank')) {
+  function gw_card_rank(array $card){
+    $id = (int)($card['id'] ?? 0);
+    if ($id && get_post_type($id) === 'page') {
+      if (gw_is_genshin_build_template($id)) return 100; // テンプレ付き固定ページ
+      return 90;                                          // 通常固定ページ
+    }
+    if ($id && get_post_type($id) === 'genshin_build') return 80; // CPT
+    return 10;                                                    // レガシー
+  }
+}
+
+/** 既存カードと新カードを優先度でマージ（弱い方は捨てる） */
+if (!function_exists('gw_merge_card')) {
+  function gw_merge_card(array $old, array $new){
+    $r_old = gw_card_rank($old);
+    $r_new = gw_card_rank($new);
+    if ($r_new > $r_old) {
+      // new が勝つ。空欄は old で補完
+      foreach (['element','weapon','rarity','element_icon','icon','tier','alt'] as $k){
+        if (($new[$k] ?? '') === '' && isset($old[$k])) $new[$k] = $old[$k];
+      }
+      return $new;
+    }
+    return $old; // 同格以下は現状維持
+  }
+}
+
+/* ===============================
+ * 投稿→カード配列 変換
+ * =============================== */
+if (!function_exists('gw_build_card_from_post')) {
+  function gw_build_card_from_post($pid, $type='page', $override_link=null){
+    $raw_name = trim((string) get_post_meta($pid, '_gwc_char_name', true));
+    $portrait = trim((string) get_post_meta($pid, '_gwc_portrait',   true));
+    if ($raw_name === '' || $portrait === '') return null;
+
+    $display = gw_to_canonical_name($raw_name); // ← 正規化名
+    if ($display === '') $display = $raw_name;
+
+    // Traveler/主人公はそもそも出さない
+    if (gw_is_traveler_family($display)) return null;
+
+    // 元素推定
+    $element = '';
+    $elem_raw = strtolower(trim((string) get_post_meta($pid, '_gwc_element_key', true)));
+    if ($elem_raw && preg_match('/^(anemo|cryo|dendro|electro|geo|hydro|pyro)$/', $elem_raw)) {
+      $element = $elem_raw;
+    }
+    if ($element === '') {
+      $elem_icon_meta = (string) get_post_meta($pid, '_gwc_element_icon', true);
+      if ($elem_icon_meta && preg_match('#element_(anemo|cryo|dendro|electro|geo|hydro|pyro)\.png#i', $elem_icon_meta, $m)) {
+        $element = strtolower($m[1]);
+      }
+    }
+    if ($element === '') $element = 'anemo';
+
+    $weapon = trim((string) get_post_meta($pid, '_gwc_weapon_type', true));
+    $weapon = ($weapon !== '') ? ucfirst(strtolower($weapon)) : 'Sword';
+
+$rarity_meta = (int) get_post_meta($pid, '_gwc_char_rarity', true);
+$rarity_meta = ($rarity_meta === 4 || $rarity_meta === 5) ? (string)$rarity_meta : '5';
+$rarity_class = 'rarity-' . $rarity_meta;
+
+
+    $element_icon = trim((string) get_post_meta($pid, '_gwc_element_icon', true));
+    if ($element_icon === '') {
+      $element_icon = trailingslashit(get_template_directory_uri()) .
+                      'images/genshin/Characters/Element_' . ucfirst($element) . '.png';
+    }
+
+    $alt_text = 'Genshin Impact ' . $display . ' Build';
+
+    $tier = strtoupper(trim((string) get_post_meta($pid, '_gwc_tier', true)));
+    if (!in_array($tier, ['S','A','B','C','D'], true)) $tier = '';
+
+    $link = $override_link ?: get_permalink($pid);
+
+    return [
+      'name'         => $display,
+      'raw_name'     => $raw_name,
+      'element'      => $element,
+      'rarity'       => $rarity_class,
+      'weapon'       => $weapon,
+      'icon'         => $portrait,
+      'element_icon' => $element_icon,
+      'link'         => $link,
+      'alt'          => $alt_text,
+      'tier'         => $tier,
+      'id'           => $pid,
+    ];
+  }
+}
+
+// 文字列から要素キーを推定（element_icon URLから抜く）
+function gwc_guess_element_key_from_icon_url($url){
+  $url = (string)$url;
+  if ($url === '') return '';
+  if (preg_match('~(anemo|cryo|dendro|electro|geo|hydro|pyro)~i', $url, $m)) {
+    return strtolower($m[1]);
+  }
+  return '';
+}
+
+// 表示名を作る（"Genshin Impact Ayaka Build" → "Ayaka"）
+function gwc_clean_character_display_name($raw){
+  $s = trim((string)$raw);
+  if ($s === '') return '';
+  $s = preg_replace('~^Genshin Impact\s*~i', '', $s);
+  $s = preg_replace('~\s*(?:Best\s*)?Build\s*$~i', '', $s);
+  $s = trim($s);
+  return $s;
+}
+
+// ★ここが一覧の本体：メタからカード配列を作る
+function get_genshin_characters(){
+  $cards = [];
+
+  $q = new WP_Query([
+    'post_type'      => ['genshin_build','page'],   // page を一覧に含めないなら genshin_build だけにする
+    'post_status'    => 'publish',
+    'posts_per_page' => -1,
+    'fields'         => 'ids',
+
+    // ★このメタがあるものだけ＝プラグインで作ったビルドだけ拾う
+    'meta_query'     => [
+      [
+        'key'     => '_gwc_portrait',
+        'compare' => 'EXISTS',
+      ],
+    ],
+  ]);
+
+  foreach ($q->posts as $pid) {
+    $portrait = (string) get_post_meta($pid, '_gwc_portrait', true);
+    if ($portrait === '') continue;
+
+    $rarity = (int) get_post_meta($pid, '_gwc_char_rarity', true);
+    if ($rarity !== 4 && $rarity !== 5) $rarity = 5;
+
+    $element_icon = (string) get_post_meta($pid, '_gwc_element_icon', true);
+    $weapon_type  = (string) get_post_meta($pid, '_gwc_weapon_type', true);
+    $char_name    = (string) get_post_meta($pid, '_gwc_char_name', true);
+
+    // 表示名：メタ優先 → タイトル
+    $display = gwc_clean_character_display_name($char_name);
+    if ($display === '') $display = gwc_clean_character_display_name(get_the_title($pid));
+    if ($display === '') $display = get_the_title($pid);
+
+    // filter用：element/rarity/weapon
+    $element_key = gwc_guess_element_key_from_icon_url($element_icon); // electro 等
+    $weapon_key  = strtolower(trim($weapon_type));                     // sword 等
+
+    $key = sanitize_title($display); // ざっくり一意キー
+
+    $cards[$key] = [
+      'id'           => $pid,
+      'name'         => $display,
+      'raw_name'     => $display,
+      'link'         => get_permalink($pid),
+
+      // ここがテンプレが読む値
+      'icon'         => $portrait,                  // キャラアイコンとして使う
+      'element_icon' => $element_icon,
+      'element'      => $element_key,               // "electro"（JSフィルタ用）
+      'weapon'       => $weapon_key ?: $weapon_type, // "sword"（JSフィルタ用）
+      'rarity'       => 'rarity-'.$rarity,          // "rarity-5"
+      'alt'          => 'Genshin Impact '.$display.' Build',
+    ];
+  }
+
+  // 表示名でソート
+  uasort($cards, function($a,$b){
+    return strnatcasecmp($a['name'], $b['name']);
+  });
+
+  return $cards;
+}
+
+
+add_action('rest_api_init', function () {
+  register_rest_route('gw/v1', '/genshin-characters', [
+    'methods'  => 'GET',
+    'permission_callback' => '__return_true',
+    'callback' => function () {
+      $cards = get_genshin_characters();
+      return array_values($cards);
+    },
+  ]);
+});
+
+
+
+
+
+
+
+
+
+
+/**
+ * =========================================================
+ * Slider Items (Image + YouTube)　　投稿記事
+ * - meta:   _slider_items  (mixed items: image/youtube)
+ * - legacy: _slider_images (images only, compatibility)
+ * =========================================================
+ */
+
+const GW_SLIDER_META_ITEMS         = '_slider_items';
+const GW_SLIDER_META_LEGACY_IMAGES = '_slider_images';
+
+/** ---------------------------------------------------------
+ * YouTube ID 抽出（URLでもID直入力でもOK）
+ * --------------------------------------------------------- */
+function gw_extract_youtube_id($raw) {
+  $raw = trim((string)$raw);
+  if ($raw === '') return '';
+
+  // ID直入力（11文字）
+  if (preg_match('/^[a-zA-Z0-9_-]{11}$/', $raw)) return $raw;
+
+  // URLから拾う
+  $patterns = [
+    '/[?&]v=([a-zA-Z0-9_-]{11})/',
+    '#youtu\.be/([a-zA-Z0-9_-]{11})#',
+    '#/shorts/([a-zA-Z0-9_-]{11})#',
+    '#/embed/([a-zA-Z0-9_-]{11})#',
+  ];
+  foreach ($patterns as $re) {
+    if (preg_match($re, $raw, $m)) return $m[1];
+  }
+  return '';
+}
+
+/** ---------------------------------------------------------
+ * items 正規化（legacy _slider_images も吸収）
+ * --------------------------------------------------------- */
+function gw_get_slider_items($post_id) {
+  $items = get_post_meta($post_id, GW_SLIDER_META_ITEMS, true);
+
+  if (is_array($items) && !empty($items)) {
+    $out = [];
+    foreach ($items as $it) {
+      $type = $it['type'] ?? '';
+      if ($type === 'youtube') {
+        $id = gw_extract_youtube_id($it['id'] ?? '');
+        if ($id) $out[] = ['type'=>'youtube','id'=>$id];
+      } elseif ($type === 'image') {
+        $url = trim((string)($it['url'] ?? ''));
+        if ($url) $out[] = ['type'=>'image','url'=>$url];
+      }
+    }
+    return $out;
+  }
+
+  // legacy fallback（画像だけ）
+  $imgs = get_post_meta($post_id, GW_SLIDER_META_LEGACY_IMAGES, true);
+  if (is_array($imgs) && !empty($imgs)) {
+    return array_values(array_filter(array_map(function ($u) {
+      $u = trim((string)$u);
+      return $u ? ['type'=>'image','url'=>$u] : null;
+    }, $imgs)));
+  }
+
+  return [];
+}
+
+/** ---------------------------------------------------------
+ * ① フロント：スライダーHTML出力（JSは書かない）
+ * - YouTube: <lite-youtube videoid="...">
+ * --------------------------------------------------------- */
+function display_slider_images() {
+  $post_id = get_the_ID();
+  $items = gw_get_slider_items($post_id);
+  if (empty($items)) return;
+
+  $uid = 'gwss_' . $post_id . '_' . wp_rand(1000, 9999);
+
+  echo '<div class="gw-single-slider" data-gw-single-slider="1" data-gw-uid="'.esc_attr($uid).'">';
+
+  // main
+  echo '<div class="swiper gw-swiper-main" data-gw-role="main">';
+  echo '<div class="swiper-wrapper">';
+  foreach ($items as $it) {
+    echo '<div class="swiper-slide">';
+    if (($it['type'] ?? '') === 'youtube') {
+      $id = esc_attr($it['id']);
+      echo '<lite-youtube videoid="'.$id.'" playlabel="Play"></lite-youtube>';
+    } else {
+      $url = esc_url($it['url']);
+      echo '<img src="'.$url.'" alt="Slider Image" loading="lazy">';
+    }
+    echo '</div>';
+  }
+  echo '</div>';
+  echo '<div class="swiper-button-prev"></div>';
+  echo '<div class="swiper-button-next"></div>';
+  echo '</div>';
+
+  // thumbs
+  echo '<div class="swiper gw-swiper-thumbs" data-gw-role="thumbs">';
+  echo '<div class="swiper-wrapper">';
+  foreach ($items as $it) {
+    if (($it['type'] ?? '') === 'youtube') {
+      $id = esc_attr($it['id']);
+      $thumb = esc_url('https://img.youtube.com/vi/'.$id.'/mqdefault.jpg');
+      echo '<div class="swiper-slide"><img src="'.$thumb.'" alt="Thumb" loading="lazy"></div>';
+    } else {
+      $url = esc_url($it['url']);
+      echo '<div class="swiper-slide"><img src="'.$url.'" alt="Thumb" loading="lazy"></div>';
+    }
+  }
+  echo '</div>';
+  echo '</div>';
+
+  echo '</div>';
+}
+
+/** ---------------------------------------------------------
+ * ③ 管理画面：メタボックス追加
+ * --------------------------------------------------------- */
+function add_slider_items_metabox() {
+  $post_types = ['post', 'genshin_updated', 'genshin_updated-jp']; // ←必要ならここだけ調整
+  foreach ($post_types as $post_type) {
+    add_meta_box(
+      'gw_slider_items_metabox',
+      'Slider (Images + YouTube)',
+      'slider_items_metabox_callback',
+      $post_type,
+      'normal',
+      'default'
+    );
+  }
+}
+add_action('add_meta_boxes', 'add_slider_items_metabox');
+
+/** ---------------------------------------------------------
+ * ④ 管理画面：メタボックス表示
+ * - ✅ JSが死んでも保存できるよう、配列 input も入れる
+ *   name="gw_slider_item_type[]" / name="gw_slider_item_value[]"
+ * - JSON hidden(name="slider_items") は状態管理用の保険
+ * --------------------------------------------------------- */
+function slider_items_metabox_callback($post) {
+  $items = gw_get_slider_items($post->ID);
+
+  // ✅ nonce名は save 側と一致必須
+  wp_nonce_field('gw_slider_items_metabox', 'gw_slider_items_metabox_nonce');
+
+  echo '<div class="gw-slider-metabox" data-gw-slider-metabox="1">';
+
+  echo '<p style="display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin:0 0 8px;">';
+  echo '  <button type="button" class="button" data-gw-action="select-images">Select Images</button>';
+  echo '  <input type="text" class="regular-text" data-gw-yt-input="1" placeholder="YouTube URL or ID (11 chars)">';
+  echo '  <button type="button" class="button" data-gw-action="add-youtube">Add YouTube</button>';
+  echo '</p>';
+
+  // ✅ 何を追加したか分かる表示エリア
+  echo '<div data-gw-yt-status="1" style="margin:0 0 10px;font-size:12px;opacity:.9;"></div>';
+
+  echo '<ul class="gw-slider-images" data-gw-list="1" style="margin:0; padding:0;">';
+  foreach ($items as $it) {
+    $type = $it['type'] ?? 'image';
+
+    if ($type === 'youtube') {
+      $id = esc_attr($it['id']);
+      $thumb = esc_url('https://img.youtube.com/vi/'.$id.'/mqdefault.jpg');
+
+      echo '<li class="gw-slider-item" style="list-style:none; margin:0 0 10px;">';
+      echo '  <img src="'.$thumb.'" alt="" style="max-width:160px;height:auto;display:block;">';
+      echo '  <div style="margin-top:4px;">';
+      echo '    <code style="font-size:12px;">YT: '.$id.'</code> ';
+      echo '    <a href="#" data-gw-action="remove">Remove</a>';
+      echo '  </div>';
+
+      // ✅ 保存の本体（配列でPOST）
+      echo '  <input type="hidden" name="gw_slider_item_type[]" value="youtube">';
+      echo '  <input type="hidden" name="gw_slider_item_value[]" value="'.$id.'">';
+      echo '</li>';
+    } else {
+      $url = esc_url($it['url']);
+
+      echo '<li class="gw-slider-item" style="list-style:none; margin:0 0 10px;">';
+      echo '  <img src="'.$url.'" alt="" style="max-width:160px;height:auto;display:block;">';
+      echo '  <div style="margin-top:4px;">';
+      echo '    <a href="#" data-gw-action="remove">Remove</a>';
+      echo '  </div>';
+
+      // ✅ 保存の本体（配列でPOST）
+      echo '  <input type="hidden" name="gw_slider_item_type[]" value="image">';
+      echo '  <input type="hidden" name="gw_slider_item_value[]" value="'.esc_attr($url).'">';
+      echo '</li>';
+    }
+  }
+  echo '</ul>';
+
+  // ✅ 状態管理（JSがこれも更新する）
+  echo '<input type="hidden" name="slider_items" data-gw-hidden="1" value="' . esc_attr(wp_json_encode($items)) . '">';
+
+  echo '</div>';
+}
+
+/** ---------------------------------------------------------
+ * ⑤ 管理画面：メタボックス用JS enqueue
+ * --------------------------------------------------------- */
+add_action('admin_enqueue_scripts', function ($hook) {
+  if ($hook !== 'post.php' && $hook !== 'post-new.php') return;
+
+  wp_enqueue_media();
+
+  wp_enqueue_script(
+    'gw-admin-slider-metabox',
+    get_stylesheet_directory_uri() . '/js/admin-slider-metabox.js',
+    ['jquery'],
+    '1.0.0',
+    true
+  );
+});
+
+/** ---------------------------------------------------------
+ * ⑥ 保存（配列 input を最優先で保存）
+ * - _slider_items に保存
+ * - 互換で _slider_images も更新（画像だけ）
+ * --------------------------------------------------------- */
+function save_slider_items_metabox($post_id) {
+  if (!isset($_POST['gw_slider_items_metabox_nonce']) ||
+      !wp_verify_nonce($_POST['gw_slider_items_metabox_nonce'], 'gw_slider_items_metabox')) return;
+
+  if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
+  if (!current_user_can('edit_post', $post_id)) return;
+
+  $items = [];
+  $legacy_images = [];
+
+  // ✅ まず “配列入力” を読む（これが一番確実）
+  $types  = isset($_POST['gw_slider_item_type'])  ? (array)$_POST['gw_slider_item_type']  : [];
+  $values = isset($_POST['gw_slider_item_value']) ? (array)$_POST['gw_slider_item_value'] : [];
+
+  if (!empty($types) && count($types) === count($values)) {
+    foreach ($types as $i => $t) {
+      $t = sanitize_text_field($t);
+      $v = wp_unslash($values[$i]);
+
+      if ($t === 'youtube') {
+        $id = gw_extract_youtube_id($v);
+        if ($id) $items[] = ['type'=>'youtube','id'=>$id];
+      } elseif ($t === 'image') {
+        $url = esc_url_raw($v);
+        if ($url) {
+          $items[] = ['type'=>'image','url'=>$url];
+          $legacy_images[] = $url;
+        }
+      }
+    }
+
+    update_post_meta($post_id, GW_SLIDER_META_ITEMS, $items);
+    update_post_meta($post_id, GW_SLIDER_META_LEGACY_IMAGES, $legacy_images);
+    return;
+  }
+
+  // ✅ 保険：配列が無い場合は JSON hidden を読む
+  if (!isset($_POST['slider_items'])) return;
+
+  $decoded = json_decode(wp_unslash($_POST['slider_items']), true);
+  if (!is_array($decoded)) return;
+
+  foreach ($decoded as $it) {
+    $type = $it['type'] ?? '';
+    if ($type === 'youtube') {
+      $id = gw_extract_youtube_id($it['id'] ?? '');
+      if ($id) $items[] = ['type'=>'youtube','id'=>$id];
+    } elseif ($type === 'image') {
+      $url = esc_url_raw($it['url'] ?? '');
+      if ($url) {
+        $items[] = ['type'=>'image','url'=>$url];
+        $legacy_images[] = $url;
+      }
+    }
+  }
+
+  update_post_meta($post_id, GW_SLIDER_META_ITEMS, $items);
+  update_post_meta($post_id, GW_SLIDER_META_LEGACY_IMAGES, $legacy_images);
+}
+add_action('save_post', 'save_slider_items_metabox', 10, 1);
+
+
+// reset API 
+add_action('rest_api_init', function () {
+
+  // ✅ object_type は "genshin_updated"（post type）
+  register_rest_field('genshin_updated', 'gw_slider_items', [
+    'get_callback' => function ($obj) {
+      $post_id = (int)($obj['id'] ?? 0);
+      if (!$post_id) return [];
+      return gw_get_slider_items($post_id);
+    },
+    'schema' => [
+      'description' => 'Slider items (image/youtube)',
+      'type' => 'array',
+      'context' => ['view','edit'],
+    ],
+  ]);
+
+});
+
+
+
+
+
+/****************************************
+ * カスタムフィールド：テーブル1・テーブル2
+ * 共通管理・完全版（全ページリンク対応）
+ ****************************************/
+
+// ------------------------------
+// 共通: フィールド定義
+// ------------------------------
+function gwc_get_fields($prefix = '') {
+    $fields = [];
+    for ($i = 1; $i <= 6; $i++) {
+        $fields[] = "{$prefix}Title-Text{$i}";
+        $fields[] = "{$prefix}Text_Detail-{$i}";
+        $fields[] = "{$prefix}Description_Detail{$i}";
+        $fields[] = "{$prefix}Image{$i}";
+        // ⚠️ _link は入れない → 保存処理で別に扱う
+    }
+    return $fields;
+}
+
+// ------------------------------
+// 管理画面：入力フォーム（メタボックス内）
+// ------------------------------
+// 
+function gwc_display_fields_table($post, $prefix = '') {
+    $fields = gwc_get_fields($prefix);
+    $pages  = get_pages(['post_status' => 'publish']); // 全公開ページ
+
+    echo '<table class="form-table gwc-form-table">'; // ← クラス付与
+    foreach ($fields as $field) {
+        $value      = get_post_meta($post->ID, $field, true);
+        $link_value = get_post_meta($post->ID, $field . '_link', true);
+
+        echo '<tr>';
+        echo '<th><label for="' . esc_attr($field) . '">' . esc_html($field) . '</label></th>';
+        echo '<td>';
+
+        // ===== 画像フィールド =====
+        if (strpos($field, 'Image') !== false) {
+
+            // コントロール群（1行）
+            echo '<div class="gwc-field-controls">';
+            echo '  <input type="text" name="' . esc_attr($field) . '" id="' . esc_attr($field) . '" value="' . esc_attr($value) . '" class="regular-text gwc-text">';
+            echo '  <input type="button" class="button select-image" data-field="' . esc_attr($field) . '" value="Select">';
+            echo '  <input type="button" class="button delete-image" data-field="' . esc_attr($field) . '" value="Delete">';
+
+            // ページ選択
+            echo '  <select name="' . esc_attr($field) . '_link" id="' . esc_attr($field) . '_link" class="gwc-select">';
+            echo '    <option value="">Select a page</option>';
+            foreach ($pages as $page) {
+                $selected = selected((int)$link_value, (int)$page->ID, false);
+                echo '    <option value="' . (int)$page->ID . '" ' . $selected . '>' . esc_html($page->post_title) . '</option>';
+            }
+            echo '  </select>';
+            echo '</div>';
+
+            // プレビュー（常に medium）
+            echo '<div id="' . esc_attr($field) . '_preview" class="gwc-img-preview" aria-live="polite">';
+            if ($value) {
+                $image_url = '';
+                if (is_numeric($value)) {
+                    $src = wp_get_attachment_image_src((int)$value, 'medium');
+                    if ($src && !empty($src[0])) $image_url = $src[0];
+                } else {
+                    $image_url = esc_url_raw($value);
+                }
+
+                if ($image_url) {
+                    $page_url = $link_value ? get_permalink((int)$link_value) : '';
+                    $img = '<img src="' . esc_url($image_url) . '" alt="" />';
+                    echo $page_url ? '<a href="' . esc_url($page_url) . '" target="_blank" rel="noopener">' . $img . '</a>' : $img;
+                }
+            }
+            echo '</div>';
+
+        } else {
+            // ===== 通常テキスト =====
+            echo '<input type="text" name="' . esc_attr($field) . '" id="' . esc_attr($field) . '" value="' . esc_attr($value) . '" class="regular-text gwc-text">';
+        }
+
+        echo '</td></tr>';
+    }
+    echo '</table>';
+
+    // JSは一度だけ出力
+    static $media_once = false;
+    if (!$media_once) {
+        $media_once = true; ?>
+        <script>
+        jQuery(function($){
+          var mediaFrames = {};
+          var $root = $("#tables_meta_box");
+
+          $root.on("click.gwc", ".select-image", function(e){
+            e.preventDefault();
+            var field = $(this).data("field");
+            if(!field) return;
+
+            if(!mediaFrames[field]){
+              mediaFrames[field] = wp.media({
+                title: "画像を選択またはアップロード",
+                button: { text: "この画像を使用" },
+                library: { type: "image" },
+                multiple: false
+              });
+
+              mediaFrames[field].on("select", function(){
+                var att = mediaFrames[field].state().get("selection").first().toJSON();
+                if(!att || !att.id) return;
+                $("#" + field).val(att.id);
+
+                // medium優先（なければ元URL）
+                var url = (att.sizes && att.sizes.medium) ? att.sizes.medium.url : att.url;
+                var $prev = $("#" + field + "_preview");
+                $prev.html(url ? "<img src='"+url+"' alt='' />" : "");
+              });
+            } else {
+              mediaFrames[field].state().get("selection").reset();
+            }
+            mediaFrames[field].open();
+          });
+
+          $root.on("click.gwc", ".delete-image", function(e){
+            e.preventDefault();
+            var field = $(this).data("field");
+            $("#" + field).val("");
+            $("#" + field + "_preview").empty();
+          });
+        });
+        </script>
+    <?php }
+}
+
+// 追加：管理画面用スタイル
+add_action('admin_enqueue_scripts', function($hook){
+    // 投稿・固定ページの編集画面のみ
+    if ($hook !== 'post.php' && $hook !== 'post-new.php') return;
+
+    $screen = function_exists('get_current_screen') ? get_current_screen() : null;
+    if (!$screen || !in_array($screen->post_type, ['post','page','genshin_updated','genshin_updated_jp','genshin_build'], true)) return;
+
+    $css = <<<CSS
+#tables_meta_box .gwc-form-table { width: 100%; table-layout: fixed; }
+#tables_meta_box .gwc-form-table th { width: 200px; vertical-align: top; padding-top: 10px; }
+
+#tables_meta_box .gwc-field-controls {
+  display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+  max-width: 860px;
+}
+#tables_meta_box .gwc-text { width: min(420px, 100%); }
+#tables_meta_box .gwc-select { min-width: 220px; max-width: 100%; }
+
+#tables_meta_box .gwc-img-preview {
+  margin-top: 8px;
+  max-width: 860px;
+}
+#tables_meta_box .gwc-img-preview img {
+  display: block;
+  max-width: 520px;      /* 横幅の上限 */
+  max-height: 150px;     /* 高さの上限（長すぎ対策） */
+  width: auto; height: auto;
+  border: 1px solid #e5e7eb; background: #fff;
+  padding: 2px; border-radius: 6px;
+  box-shadow: 0 1px 2px rgba(0,0,0,.03);
+}
+@media (max-width: 1024px){
+  #tables_meta_box .gwc-form-table th { width: 140px; }
+  #tables_meta_box .gwc-img-preview img { max-width: 100%; }
+}
+CSS;
+
+    // ハンドルを作ってインラインで差し込む
+    wp_register_style('gwc-admin-fields', false);
+    wp_enqueue_style('gwc-admin-fields');
+    wp_add_inline_style('gwc-admin-fields', $css);
+});
+
+// ------------------------------
+// 保存処理
+// ------------------------------
+function gwc_save_custom_fields($post_id) {
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
+    if (!current_user_can('edit_post', $post_id)) return;
+
+    $fields = array_merge(gwc_get_fields(''), gwc_get_fields('New-'));
+
+    foreach ($fields as $field) {
+        // 通常フィールド
+        if (isset($_POST[$field])) {
+            $val = sanitize_text_field($_POST[$field]);
+            $val === '' ? delete_post_meta($post_id, $field) : update_post_meta($post_id, $field, $val);
+        }
+
+        // ページリンク (別扱い)
+        $link_key = $field.'_link';
+        if (isset($_POST[$link_key])) {
+            $id = (int) $_POST[$link_key];
+            $id ? update_post_meta($post_id, $link_key, $id) : delete_post_meta($post_id, $link_key);
+        }
+    }
+}
+add_action('save_post', 'gwc_save_custom_fields');
+
+// ------------------------------
+// フロント表示（single.php などから呼ぶ）
+// ------------------------------
+function gwc_render_table($post_id, $prefix = '') {
+    $rows = [];
+    for ($i = 1; $i <= 6; $i++) {
+        $title   = get_post_meta($post_id, "{$prefix}Title-Text{$i}", true);
+        $desc    = get_post_meta($post_id, "{$prefix}Description_Detail{$i}", true);
+        $img_id  = get_post_meta($post_id, "{$prefix}Image{$i}", true);
+        $text    = get_post_meta($post_id, "{$prefix}Text_Detail-{$i}", true);
+        $link_id = get_post_meta($post_id, "{$prefix}Image{$i}_link", true);
+
+        if ($title || $desc || $img_id || $text) {
+            // 画像URL
+            $img_url = is_numeric($img_id) ? wp_get_attachment_url((int)$img_id) : $img_id;
+
+            // ページリンクURL（公開済みチェックあり）
+            $page_url = '';
+            if ($link_id && get_post_status((int)$link_id) === 'publish') {
+                $page_url = get_permalink((int)$link_id);
+            }
+
+            $rows[] = compact('title','desc','img_url','text','page_url');
+        }
+    }
+
+    if ($rows) {
+        echo '<table class="design17 responsive-table">';
+        echo '<thead><tr><th>Title</th><th>Description</th><th>Image</th><th>Text</th></tr></thead><tbody>';
+        foreach ($rows as $r) {
+            echo '<tr>';
+            echo '<td>'.esc_html($r['title']).'</td>';
+            echo '<td>'.esc_html($r['desc']).'</td>';
+            echo '<td>';
+
+            if ($r['img_url']) {
+                // 画像タグ
+                $img = '<img src="'.esc_url($r['img_url']).'" style="max-width:100%;height:auto;">';
+
+                // ページリンクがあれば <a> でラップ
+                if ($r['page_url']) {
+                    echo '<a href="'.esc_url($r['page_url']).'" target="_blank">'.$img.'</a>';
+                } else {
+                    echo $img;
+                }
+            }
+
+            echo '</td>';
+            echo '<td>'.esc_html($r['text']).'</td>';
+            echo '</tr>';
+        }
+        echo '</tbody></table>';
+    }
+}
+
+
+// ------------------------------
+// 管理画面メタボックス
+// ------------------------------
+function gwc_add_custom_fields_meta_boxes() {
+    $candidates = ['post','page','genshin_updated','genshin_updated_jp']; // page も追加
+    foreach ($candidates as $pt) {
+        if (post_type_exists($pt)) {
+            add_meta_box(
+                'tables_meta_box',
+                'テーブル選択',
+                'gwc_tables_meta_box_callback',
+                $pt,
+                'normal',
+                'high'
+            );
+        }
+    }
+}
+add_action('add_meta_boxes', 'gwc_add_custom_fields_meta_boxes');
+
+function gwc_tables_meta_box_callback($post) {
+    wp_nonce_field('gwc_tables_save', 'gwc_tables_nonce');
+    ?>
+    <div class="tab-container">
+      <h2 class="nav-tab-wrapper" style="margin-top:0">
+        <a href="#" class="nav-tab nav-tab-active" data-target="gwc-tab-1">テーブル1</a>
+        <a href="#" class="nav-tab" data-target="gwc-tab-2">テーブル2</a>
+      </h2>
+
+      <div id="gwc-tab-1" class="gwc-tab"><?php gwc_display_fields_table($post, ''); ?></div>
+      <div id="gwc-tab-2" class="gwc-tab" style="display:none"><?php gwc_display_fields_table($post, 'New-'); ?></div>
+    </div>
+
+    <script>
+    jQuery(function($){
+      $(document).on("click", "#tables_meta_box .nav-tab", function(e){
+        e.preventDefault();
+        var $box = $(this).closest("#tables_meta_box");
+        var target = $(this).data("target");
+        $box.find(".nav-tab").removeClass("nav-tab-active");
+        $(this).addClass("nav-tab-active");
+        $box.find(".gwc-tab").hide();
+        $("#"+target).show();
+      });
+    });
+    </script>
+    <?php
+}
+
+
+
+
+// テーマの functions.php に追加
+require_once get_template_directory() . '/inc/templates/function-table.php';
+
+
+
+
+
+
+// ウィークリーマテリアルデータの取得関数
+function get_weekly_materials_data()
+{
+    // ここでデータを取得するロジックを追加
+    $materialsData = [
+        [
+            'name' => 'Admonition',
+            'days' => 'Monday, Thursday',
+            'characters' => [
+                ['name' => 'Tighnari', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Tighnari.png', 'element' => 'Dendro', 'rarity' => 5],
+                ['name' => 'Traveler (Dendro)', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Traveler (Dendro).png', 'element' => 'Dendro', 'rarity' => 5],
+                ['name' => 'Cyno', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Cyno.png', 'element' => 'Electro', 'rarity' => 5],
+                ['name' => 'Faruzan', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Faruzan.png', 'element' => 'Anemo', 'rarity' => 4],
+                ['name' => 'Candace', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Candace.png', 'element' => 'Hydro', 'rarity' => 4],
+            ],
+        ],
+        [
+            'name' => 'Freedom',
+            'days' => 'Monday, Thursday',
+            'characters' => [
+                ['name' => 'Eula', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Eula.png', 'element' => 'Cryo', 'rarity' => 5],
+                ['name' => 'Rosaria', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Rosaria.png', 'element' => 'Cryo', 'rarity' => 4],
+                ['name' => 'Xingqiu', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Xingqiu.png', 'element' => 'Hydro', 'rarity' => 4],
+            ],
+        ],
+
+        [
+            'name' => 'Justice',
+            'days' => 'Monday, Thursday',
+            'characters' => [
+                ['name' => 'Furina', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Furina.png', 'element' => 'Hydro', 'rarity' => 5],
+                ['name' => 'Charlotte', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Charlotte.png', 'element' => 'Cryo', 'rarity' => 4],
+                ['name' => 'Freminet', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Freminet.png', 'element' => 'Cryo', 'rarity' => 4],
+            ],
+        ],
+
+        [
+            'name' => 'Order',
+            'days' => 'Wednesday, Saturday',
+            'characters' => [
+                ['name' => 'Wriothesley', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Wriothesley.png', 'element' => 'Cryo', 'rarity' => 5],
+                ['name' => 'Chevreuse', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Chevreuse.png', 'element' => 'Pyro', 'rarity' => 4],
+                ['name' => 'Lynette', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Lynette.png', 'element' => 'Anemo', 'rarity' => 4],
+            ],
+        ],
+        [
+            'name' => 'Prosperity',
+            'days' => 'Monday, Thursday',
+            'characters' => [
+                ['name' => 'Keqing', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Keqing.png', 'element' => 'Electro', 'rarity' => 5],
+                ['name' => 'Qiqi', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Qiqi.png', 'element' => 'Cryo', 'rarity' => 5],
+                ['name' => 'Shenhe', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Shenhe.png', 'element' => 'Cryo', 'rarity' => 5],
+                ['name' => 'Traveler (Geo)', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Traveler (Geo).png', 'element' => 'Geo', 'rarity' => 5],
+                ['name' => 'Xiao', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Xiao.png', 'element' => 'Anemo', 'rarity' => 5],
+                ['name' => 'Yelan', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Yelan.png', 'element' => 'Hydro', 'rarity' => 5],
+                ['name' => 'Ningguang', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Ningguang.png', 'element' => 'Geo', 'rarity' => 4],
+            ],
+        ],
+        [
+            'name' => 'Transience',
+            'days' => 'Monday, Thursday',
+            'characters' => [
+                ['name' => 'Kokomi', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Kokomi.png', 'element' => 'Hydro', 'rarity' => 5],
+                ['name' => 'Yoimiya', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Yoimiya.png', 'element' => 'Pyro', 'rarity' => 5],
+                ['name' => 'Traveler (Electro)', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Traveler (Electro).png', 'element' => 'Electro', 'rarity' => 5],
+                ['name' => 'Heizou', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Heizou.png', 'element' => 'Anemo', 'rarity' => 4],
+                ['name' => 'Kirara', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Kirara.png', 'element' => 'Dendro', 'rarity' => 4],
+                ['name' => 'Thoma', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Thoma.png', 'element' => 'Pyro', 'rarity' => 4],
+            ],
+        ],
+        [
+            'name' => 'Diligence',
+            'days' => 'Tuesday, Friday',
+            'characters' => [
+                ['name' => 'Ganyu', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Ganyu.png', 'element' => 'Cryo', 'rarity' => 5],
+                ['name' => 'Hu Tao', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Hu Tao.png', 'element' => 'Pyro', 'rarity' => 5],
+                ['name' => 'Kazuha', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Kazuha.png', 'element' => 'Anemo', 'rarity' => 5],
+                ['name' => 'Xiangling', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Xiangling.png', 'element' => 'Pyro', 'rarity' => 4],
+                ['name' => 'Yaoyao', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Yaoyao.png', 'element' => 'Dendro', 'rarity' => 4],
+                ['name' => 'Yun Jin', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Yun Jin.png', 'element' => 'Geo', 'rarity' => 4],
+                ['name' => 'Chongyun', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Chongyun.png', 'element' => 'Cryo', 'rarity' => 4],
+            ],
+        ],
+
+        [
+            'name' => 'Elegance',
+            'days' => 'Tuesday, Friday',
+            'characters' => [
+                ['name' => 'Ayaka', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Ayaka.png', 'element' => 'Cryo', 'rarity' => 5],
+                ['name' => 'Ayato', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Ayato.png', 'element' => 'Hydro', 'rarity' => 5],
+                ['name' => 'Itto', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Itto.png', 'element' => 'Geo', 'rarity' => 5],
+                ['name' => 'Kuki Shinobu', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Kuki Shinobu.png', 'element' => 'Electro', 'rarity' => 4],
+                ['name' => 'Sara', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Sara.png', 'element' => 'Electro', 'rarity' => 4],
+            ],
+        ],
+
+        [
+            'name' => 'Ingenuity',
+            'days' => 'Tuesday, Friday',
+            'characters' => [
+                ['name' => 'Alhaitham', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Alhaitham.png', 'element' => 'Dendro', 'rarity' => 5],
+                ['name' => 'Nahida', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Nahida.png', 'element' => 'Dendro', 'rarity' => 5],
+                ['name' => 'Dori', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Dori.png', 'element' => 'Electro', 'rarity' => 4],
+                ['name' => 'Kaveh', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Kaveh.png', 'element' => 'Dendro', 'rarity' => 4],
+                ['name' => 'Layla', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Layla.png', 'element' => 'Cryo', 'rarity' => 4],
+            ],
+        ],
+        [
+            'name' => 'Resistance',
+            'days' => 'Tuesday, Friday',
+            'characters' => [
+                ['name' => 'Diluc', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Diluc.png', 'element' => 'Pyro', 'rarity' => 5],
+                ['name' => 'Eula', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Eula.png', 'element' => 'Cryo', 'rarity' => 5],
+                ['name' => 'Jean', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Jean.png', 'element' => 'Anemo', 'rarity' => 5],
+                ['name' => 'Mona', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Mona.png', 'element' => 'Hydro', 'rarity' => 5],
+                ['name' => 'Noelle', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Noelle.png', 'element' => 'Geo', 'rarity' => 4],
+                ['name' => 'Razor', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Razor.png', 'element' => 'Electro', 'rarity' => 4],
+                ['name' => 'Bennett', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Bennett.png', 'element' => 'Pyro', 'rarity' => 4],
+            ],
+        ],
+        [
+            'name' => 'Ballad',
+            'days' => 'Wednesday, Saturday',
+            'characters' => [
+                ['name' => 'Albedo', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Albedo.png', 'element' => 'Geo', 'rarity' => 5],
+                ['name' => 'Venti', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Venti.png', 'element' => 'Anemo', 'rarity' => 5],
+                ['name' => 'Fischl', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Fischl.png', 'element' => 'Electro', 'rarity' => 4],
+                ['name' => 'Kaeya', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Kaeya.png', 'element' => 'Cryo', 'rarity' => 4],
+                ['name' => 'Lisa', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Lisa.png', 'element' => 'Electro', 'rarity' => 4],
+                ['name' => 'Mika', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Mika.png', 'element' => 'Cryo', 'rarity' => 4],
+                ['name' => 'Rosaria', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Rosaria.png', 'element' => 'Cryo', 'rarity' => 4],
+            ],
+        ],
+
+        [
+            'name' => 'Gold',
+            'days' => 'Wednesday, Saturday',
+            'characters' => [
+                ['name' => 'Baizhu', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Baizhu.png', 'element' => 'Dendro', 'rarity' => 5],
+                ['name' => 'Zhongli', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Zhongli.png', 'element' => 'Geo', 'rarity' => 5],
+                ['name' => 'Beidou', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Beidou.png', 'element' => 'Electro', 'rarity' => 4],
+                ['name' => 'Xingqiu', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Xingqiu.png', 'element' => 'Hydro', 'rarity' => 4],
+                ['name' => 'Xinyan', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Xinyan.png', 'element' => 'Pyro', 'rarity' => 4],
+                ['name' => 'Yanfei', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Yanfei.png', 'element' => 'Pyro', 'rarity' => 4],
+            ],
+        ],
+        [
+            'name' => 'Light',
+            'days' => 'Wednesday, Saturday',
+            'characters' => [
+                ['name' => 'Raiden', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Raiden.png', 'element' => 'Electro', 'rarity' => 5],
+                ['name' => 'Yae Miko', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Yae%20Miko.png', 'element' => 'Electro', 'rarity' => 5],
+                ['name' => 'Gorou', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Gorou.png', 'element' => 'Geo', 'rarity' => 4],
+                ['name' => 'Sayu', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Sayu.png', 'element' => 'Anemo', 'rarity' => 4],
+            ],
+        ],
+        [
+            'name' => 'Praxis',
+            'days' => 'Wednesday, Saturday',
+            'characters' => [
+                ['name' => 'Dehya', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Dehya.png', 'element' => 'Pyro', 'rarity' => 5],
+                ['name' => 'Nilou', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Nilou.png', 'element' => 'Hydro', 'rarity' => 5],
+                ['name' => 'Wanderer', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Wanderer.png', 'element' => 'Anemo', 'rarity' => 5],
+                ['name' => 'Collei', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Collei.png', 'element' => 'Dendro', 'rarity' => 4],
+            ],
+        ],
+        // 他のマテリアルデータ...
+    ];
+
+    // 本日のタレントマテリアルソート
+    // 今後の追加情報をコメントアウト
+    usort($materialsData, function ($a, $b) {
+        // 名前で比較
+        return strcmp($a['name'], $b['name']);
+    });
+
+    // 新しいキャラクターの育成素材の追加情報をコメントアウト
+    /*$newCharacterMaterials = [
+        'name' => 'New Character',
+        'days' => 'Tuesday, Friday',
+        'characters' => [
+            // 新しいキャラクターの情報
+        ],
+    ];
+    $materialsData[] = $newCharacterMaterials;*/
+
+    return $materialsData;
+}
+
+// Weekly_Material_Schedule_Widget　ウィジェットを登録
+function register_weekly_material_schedule_widget()
+{
+    include_once get_template_directory() . '/Weekly_Material_Schedule_Widget.php';
+    register_widget('Weekly_Material_Schedule_Widget');
+}
+
+add_action('widgets_init', 'register_weekly_material_schedule_widget');
+
+
+
+// Weekly Weapon Material Data 関数の名前が　fairming page と違う。
+function get_weekly_weapon_materials_data()
+{
+    // 武器アセンション素材データを返す関数
+    return [
+        ['name' => 'Branch', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Farming/Branch.png', 'days' => 'Monday, Thursday'],
+        ['name' => 'Decarabian', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Farming/Decarabian.png', 'days' => 'Monday, Thursday'],
+        ['name' => 'Guyun', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Farming/Guyun.png', 'days' => 'Monday, Thursday'],
+        ['name' => 'Talisman of the Forest Dew', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Farming/Talisman_of_the_Forest_Dew.png', 'days' => 'Monday, Thursday'],
+        ['name' => 'Boreal Wolf', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Farming/Boreal_Wolf.png', 'days' => 'Tuesday, Friday'],
+        ['name' => 'Mist Veiled Elixir', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Farming/Mist_Veiled_Elixir.png', 'days' => 'Tuesday, Friday'],
+        ['name' => 'Narukami', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Farming/Narukami.png', 'days' => 'Tuesday, Friday'],
+        ['name' => 'Oasis Garden', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Farming/Oasis_Garden.png', 'days' => 'Tuesday, Friday'],
+        ['name' => 'Aerosiderite', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Farming/Aerosiderite.png', 'days' => 'Wednesday, Saturday'],
+        ['name' => 'Dandelion Gladiator', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Farming/Dandelion_Gladiator.png', 'days' => 'Wednesday, Saturday'],
+        ['name' => 'Mask', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Farming/Mask.png', 'days' => 'Wednesday, Saturday'],
+        ['name' => 'Scorching Might', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Farming/Scorching_Might.png', 'days' => 'Wednesday, Saturday'],
+        // 新しい武器のアセンション素材のデータを追加
+        // ...
+    ];
+}
+
+
+
+
+
+
+
+
+/* ============================================================
+ * Side Drawer (header.php と REST で共通) 完成版
+ *
+ * 目的：
+ * - 通常表示（header.php）では URL から slug 判定してサイド表示
+ * - REST（Next.js）では ?slug=genshin-impact のように slug を渡して同じHTMLを返す
+ *
+ * 重要：
+ * - REST_REQUEST は定数なので unset できない → 触らない
+ * - REST では現在ページURLが存在しない → slug をクエリで渡す
+ * - the_widget に WP_Query を渡すのはやめる → Widget 内で WP_Query する
+ * ============================================================ */
+
+
+/* ============================================================
+ * 0) 「致命的エラー爆弾」対策：未定義フックを殺す
+ *    ※ custom_template_directory を使ってないならこの行自体が不要
+ *    使うなら最低限、関数を定義しておく
+ * ============================================================ */
+if (!function_exists('custom_template_directory')) {
+    function custom_template_directory($templates) {
+        return $templates;
+    }
+}
+add_filter('theme_page_templates', 'custom_template_directory');
+
+
+/* ============================================================
+ * 1) Latest_Posts_Widget を登録
+ * ============================================================ */
+add_action('widgets_init', function () {
+    register_widget('Latest_Posts_Widget');
+});
+
+
+/* ============================================================
+ * 2) Latest_Posts_Widget 本体（内部で WP_Query）
+ * ============================================================ */
+class Latest_Posts_Widget extends WP_Widget
+{
+    function __construct()
+    {
+        parent::__construct(
+            'latest_posts_widget',
+            __('Latest Posts Widget', 'text_domain'),
+            array('description' => __('Display latest posts with thumbnails', 'text_domain'))
+        );
+    }
+
+    public function widget($args, $instance)
+    {
+        echo $args['before_widget'];
+
+        $title = isset($instance['title']) ? $instance['title'] : 'Latest Posts';
+        echo $args['before_title']
+            . '<div class="widgettitle custom-widget-title side-title">'
+            . esc_html(apply_filters('widget_title', $title))
+            . '</div>'
+            . $args['after_title'];
+
+        $number = !empty($instance['number_of_posts']) ? (int)$instance['number_of_posts'] : 5;
+        $cat    = !empty($instance['category_name']) ? sanitize_title($instance['category_name']) : '';
+
+        $q_args = array(
+            'posts_per_page'      => $number,
+            'ignore_sticky_posts' => true,
+        );
+        if (!empty($cat)) {
+            $q_args['category_name'] = $cat;
+        }
+
+        $q = new WP_Query($q_args);
+
+        if ($q->have_posts()) {
+            echo '<div class="custom-widget-container">';
+
+            $count = 0;
+            while ($q->have_posts()) {
+                $q->the_post();
+
+                echo '<div class="custom-widget-item" style="width:50%;float:left;height:200px;">';
+
+                if (has_post_thumbnail()) {
+                    echo '<a href="' . esc_url(get_permalink()) . '" title="' . esc_attr(get_the_title()) . '">';
+                    echo '<img width="150" height="100" src="' . esc_url(get_the_post_thumbnail_url(get_the_ID(), 'home-thumb')) . '" class="attachment-home-thumb size-home-thumb wp-post-image" alt="" decoding="async" loading="lazy">';
+                    echo '</a>';
+                }
+
+                echo '<a href="' . esc_url(get_permalink()) . '" title="' . esc_attr(get_the_title()) . '">'
+                    . esc_html(get_the_title())
+                    . '</a>';
+
+                echo '</div>';
+
+                $count++;
+                if ($count % 2 === 0) echo '<div style="clear: both;"></div>';
+            }
+
+            echo '</div>';
+        } else {
+            echo '<p>No posts found</p>';
+        }
+
+        wp_reset_postdata();
+        echo $args['after_widget'];
+    }
+
+    public function form($instance)
+    {
+        $title  = !empty($instance['title']) ? $instance['title'] : 'Latest Posts';
+        $number = !empty($instance['number_of_posts']) ? (int)$instance['number_of_posts'] : 5;
+        $cat    = !empty($instance['category_name']) ? $instance['category_name'] : '';
+        ?>
+        <p>
+            <label for="<?php echo $this->get_field_id('title'); ?>">Title:</label>
+            <input class="widefat"
+                id="<?php echo $this->get_field_id('title'); ?>"
+                name="<?php echo $this->get_field_name('title'); ?>"
+                type="text"
+                value="<?php echo esc_attr($title); ?>">
+        </p>
+        <p>
+            <label for="<?php echo $this->get_field_id('category_name'); ?>">Category slug:</label>
+            <input class="widefat"
+                id="<?php echo $this->get_field_id('category_name'); ?>"
+                name="<?php echo $this->get_field_name('category_name'); ?>"
+                type="text"
+                value="<?php echo esc_attr($cat); ?>"
+                placeholder="genshin-impact / tekken7">
+        </p>
+        <p>
+            <label for="<?php echo $this->get_field_id('number_of_posts'); ?>">Number of posts:</label>
+            <input class="widefat"
+                id="<?php echo $this->get_field_id('number_of_posts'); ?>"
+                name="<?php echo $this->get_field_name('number_of_posts'); ?>"
+                type="number"
+                value="<?php echo esc_attr($number); ?>" min="1" max="10">
+        </p>
+        <?php
+    }
+
+    public function update($new_instance, $old_instance)
+    {
+        return array(
+            'title'           => !empty($new_instance['title']) ? sanitize_text_field($new_instance['title']) : '',
+            'category_name'   => !empty($new_instance['category_name']) ? sanitize_title($new_instance['category_name']) : '',
+            'number_of_posts' => !empty($new_instance['number_of_posts']) ? (int)$new_instance['number_of_posts'] : 5,
+        );
+    }
+}
+
+
+/* ============================================================
+ * 3) 本体：my_custom_menu（header.php と REST で共通）
+ *
+ * header.php では： my_custom_menu();
+ * REST では：      my_custom_menu(true, 'genshin-impact'); など
+ * ============================================================ */
+function my_custom_menu($allow_rest = false, $force_slug = '')
+{
+    // ✅ REST中は通常は出さない（allow_rest=true なら出す）
+    if (function_exists('wp_doing_rest') && wp_doing_rest() && !$allow_rest) {
+        return;
+    }
+    // wp_doing_rest() が無い環境の保険
+    if (defined('REST_REQUEST') && REST_REQUEST && !$allow_rest) {
+        return;
+    }
+
+    global $wp;
+
+    // 1) slug 決定（RESTは force_slug を使う）
+    $page_slug = '';
+
+    if (!empty($force_slug)) {
+        $page_slug = sanitize_title($force_slug);
+    } else {
+        // 通常表示：今見てるURLパスから判定
+        $path = isset($wp->request) ? '/' . ltrim($wp->request, '/') : '';
+
+        if (strpos($path, '/genshin-impact') !== false) {
+            $page_slug = 'genshin-impact';
+        } elseif (strpos($path, '/tekken7') !== false) {
+            $page_slug = 'tekken7';
+        } else {
+            $page_slug = '';
+        }
+    }
+
+    // 2) サイドメニュー（nav）
+    wp_nav_menu(array(
+        'theme_location' => 'side-menu',
+        'menu'           => 'side-menu',
+        'menu_id'        => 'header-navigation',
+        'container'      => 'div',
+        'items_wrap'     => '<ul class="%2$s sidebar-dropdown-menu">%3$s</ul>',
+        'depth'          => 3,
+    ));
+
+    // 3) 検索フォーム
+    echo '<div class="mobile-search" style="padding-left: 60px">';
+    include get_template_directory() . '/searchform30.php';
+    echo '</div>';
+
+    // 4) 最新投稿（カテゴリ別）を Widget で表示
+    the_widget(
+        'Latest_Posts_Widget',
+        array(
+            'title'           => 'Latest Posts',
+            'category_name'   => $page_slug, // ← genshin-impact / tekken7
+            'number_of_posts' => 5,
+        ),
+        array(
+            'before_widget' => '<div class="widget latest-posts">',
+            'after_widget'  => '</div>',
+        )
+    );
+}
+
+
+/* ============================================================
+ * 4) REST：サイドドロワー HTML を返す
+ *
+ * 使い方（Next.js側から必ず slug 渡せ）：
+ * /wp-json/gw/v1/side-drawer-html?slug=genshin-impact
+ * /wp-json/gw/v1/side-drawer-html?slug=tekken7
+ * ============================================================ */
+add_action('rest_api_init', function () {
+    register_rest_route('gw/v1', '/side-drawer-html', array(
+        'methods'             => 'GET',
+        'callback'            => 'gw_rest_side_drawer_html',
+        'permission_callback' => '__return_true',
+        'args' => array(
+            'slug' => array(
+                'required' => false,
+                'sanitize_callback' => 'sanitize_title',
+            ),
+        ),
+    ));
+});
+
+function gw_rest_side_drawer_html(WP_REST_Request $request)
+{
+    $slug = (string)$request->get_param('slug');
+
+    ob_start();
+
+    echo '<div class="sidebar-navigation drawer">';
+
+    // header.php と同じ：ウィジェットエリア（使ってるなら）
+    if (is_active_sidebar('custom-widget-area')) {
+        dynamic_sidebar('custom-widget-area');
+    }
+
+    // ✅ RESTでも出力する（allow_rest=true + slug渡し）
+    my_custom_menu(true, $slug);
+
+    echo '</div>';
+
+    return array(
+        'html' => ob_get_clean(),
+    );
+}
+
+// ----------------------------------------------------
+// ① カスタムテンプレートをテンプレート選択肢に追加
+// 管理画面の「固定ページ」編集時に、
+// 指定フォルダ内のテンプレートファイルを選択肢として表示させるための処理
+// ----------------------------------------------------
+function custom_template_directory($templates)
+{
+    $theme_dir = get_template_directory(); // 現在のテーマディレクトリの絶対パスを取得
+
+    // カスタムテンプレートを配置しているディレクトリのリスト
+    $custom_template_dirs = array(
+        $theme_dir . '/templates/character/genshin',
+        $theme_dir . '/templates/character/tekken',
+        $theme_dir . '/templates/',
+    );
+
+    foreach ($custom_template_dirs as $custom_template_dir) {
+        // ディレクトリが存在しない場合はスキップ
+        if (!is_dir($custom_template_dir)) {
+            continue;
+        }
+
+        // ディレクトリ内のファイル一覧を取得
+        $template_files = scandir($custom_template_dir);
+
+        foreach ($template_files as $file) {
+            // PHPファイルのみ処理する
+            if (pathinfo($file, PATHINFO_EXTENSION) === 'php') {
+                // テンプレートパスを相対パスに変換してテンプレート配列に追加
+                $relative_path = str_replace($theme_dir . '/', '', $custom_template_dir) . '/' . $file;
+                $templates[$relative_path] = $file;
+            }
+        }
+    }
+
+    return $templates;
+}
+add_filter('theme_page_templates', 'custom_template_directory'); // 固定ページのテンプレート選択肢に追加
+
+// ----------------------------------------------------
+// ② WordPress REST API にカスタムエンドポイントを追加
+// フロント側（例：FullCalendarなど）で記事データをJSONとして取得するため
+// URL例：https://example.com/wp-json/custom/v1/events
+// ----------------------------------------------------
+function get_post_events($request)
+{
+    // 取得する投稿の条件を設定
+    $args = array(
+        'post_type'      => 'post',        // 投稿タイプ（必要に応じて 'house' などに変更）
+        'posts_per_page' => -1,            // 全件取得
+        'post_status'    => 'publish'      // 公開済みのみ対象
+    );
+
+    $posts = get_posts($args); // 投稿を取得
+    $events = [];
+
+    foreach ($posts as $post) {
+        $events[] = array(
+            'title' => get_the_title($post),                 // 投稿タイトル
+            'date'  => get_the_date('Y-m-d', $post),         // 投稿日付（FullCalendar対応形式）
+            'link'  => get_permalink($post),                 // 投稿へのリンク
+        );
+    }
+
+    return rest_ensure_response($events); // REST APIのレスポンス形式で返す
+}
+
+// REST APIエンドポイントの登録
+add_action('rest_api_init', function () {
+    register_rest_route('custom/v1', '/events', array(
+        'methods'             => 'GET',              // HTTPメソッド
+        'callback'            => 'get_post_events',  // データ取得関数
+        'permission_callback' => '__return_true',    // 誰でもアクセス可能に設定
+    ));
+});
+
+
+
+
+// WOSPRESS RESET API コントロール リクエストされた投稿のレスポンスをカスタマイズする
+//function customize_post_rest_response($data, $post, $request) {
+    // リンク情報を削除してタイトルと詳細情報のみを残す
+    //$data->data['link'] = null; // リンクを削除
+    //$data->data['title'] = $data->data['title']['rendered']; // タイトルのみを残す
+    //$data->data['content'] = $data->data['content']['rendered']; // 詳細情報のみを残す
+
+    //return $data;
+//}
+//add_filter('rest_prepare_post', 'customize_post_rest_response', 10, 3);
+
+
+
+// functions.php もしくはカスタムプラグイン内で以下のコードを追加します。
+//JavaScriptのAjaxリクエストで指定したactionパラメーターの値は、WordPressのadd_action関数で定義されたAjaxアクションの名前と一致する必要
+//このコードは、Ajaxリクエストがget_post_titlesというアクション名で送信された場合に、custom_ajax_get_post_titlesという関数が実行されるように設定しています。wp_ajax_get_post_titlesは、管理画面からのAjaxリクエストを処理し、wp_ajax_nopriv_get_post_titlesは、非ログインユーザーからのAjaxリクエストを処理します。custom_ajax_get_post_titles関数は、WordPressのWP_Queryを使用して投稿を取得し、取得したデータをJSON形式で出力しています
+
+//したがって、JavaScriptのAjaxリクエストでaction: 'get_post_titles'と指定されている場合、WordPressはそれをwp_ajax_get_post_titlesまたはwp_ajax_nopriv_get_post_titlesのいずれかのフックと関連付け、それに対応する関数であるcustom_ajax_get_post_titlesを呼び出します。
+
+add_image_size( 'small', 150, 150, true ); // 幅150px、高さ150pxのサムネイルサイズを追加
+
+// Ajaxアクションを定義
+add_action('wp_ajax_get_post_titles', 'custom_ajax_get_post_titles');
+add_action('wp_ajax_nopriv_get_post_titles', 'custom_ajax_get_post_titles');
+
+function custom_ajax_get_post_titles() {
+    if (!defined('DOING_AJAX') || !DOING_AJAX) {
+        wp_die();
+    }
+
+    $args = array(
+        "posts_per_page" => -1,
+        'post_type'      => array( 'post', 'genshin_updated' ),
+        'post_status'    => 'publish'
+    );
+
+    $the_query = new WP_Query($args);
+    $cdContents = array();
+
+    if ($the_query->have_posts()) {
+        while ($the_query->have_posts()) {
+            $the_query->the_post();
+            $ID = get_the_ID();
+
+            $excerpt = wp_trim_words(get_the_excerpt(), 20, '...');
+            $content = wp_trim_words(get_the_content(), 20, '...');
+
+            $title = htmlspecialchars_decode(get_the_title());
+            $title = removeKeywordsFromTitle($title);
+
+            $cdContents[] = array(
+                "pamalink"      => get_permalink(),
+                "title"         => $title,
+                "start"         => get_the_date("Y-m-d"),
+                "allDay"        => true,
+                "eyecatch"      => get_the_post_thumbnail_url($ID, 'small'),
+                "eyecatch_alt"  => get_post_meta($ID, '_wp_attachment_image_alt', true),
+                "excerpt"       => $excerpt,
+                "content"       => $content,
+            );
+        }
+    }
+
+    wp_reset_postdata();
+
+    if (!headers_sent()) {
+        header('Content-Type: application/json');
+    }
+
+    echo wp_json_encode($cdContents);
+    wp_die();
+}
+
+
+// キーワードを削除する関数
+function removeKeywordsFromTitle($title) {
+    $keywords = array('Genshin Impact', 'Genshin-Impact', 'Tekken7');
+    $trimmedTitle = $title;
+
+    foreach ($keywords as $keyword) {
+        $regex = '/\b' . preg_quote($keyword, '/') . '\b/i'; // キーワードを正規表現のパターンに変換
+        $trimmedTitle = preg_replace($regex, '', $trimmedTitle); // タイトルからキーワードを削除
+    }
+
+    return trim($trimmedTitle);
+}
+
+
+
+
+function custom_enqueue_scripts() {
+    // スクリプトの登録
+    wp_enqueue_script('custom-ajax', get_template_directory_uri() . '/js/scripts.js', array('jquery'), '1.0', true);
+ 
+    // AjaxハンドラーのURLとNonceのローカライズ
+    wp_localize_script('custom-ajax', 'customAjax', array(
+        'ajaxurl' => admin_url('admin-ajax.php'),
+        'nonce' => wp_create_nonce('custom-nonce')
+    ));
+}
+add_action('wp_enqueue_scripts', 'custom_enqueue_scripts');
+
+/**
+ * 【目的】
+ * この関数は、WordPressにおけるAjax通信を使って、
+ * 「genshin-impact」カテゴリーの投稿を非同期で取得・表示するための処理です。
+ *
+ * 主に「もっと見る」ボタンや無限スクロールなどのUIで、
+ * ページをリロードせずに投稿を追加読み込みしたい場面で使います。
+ *
+ * クライアント（JavaScript）側から `POST` で `page` パラメータを送ることで、
+ * 指定ページの投稿10件を取得し、HTMLで返します。
+ */
+
+// Ajaxリクエスト用の処理
+function custom_ajax_handler() {
+    // ページ番号の取得（JavaScriptから送られてくる）
+    $paged = isset($_POST['page']) ? intval($_POST['page']) : 1;
+
+    // WP_Queryを使用して、新しいページの「genshin-impact」投稿を取得
+    $genshin_impact_query = new WP_Query(array(
+        'category_name' => 'genshin-impact', // 対象カテゴリーのスラッグ
+        'posts_per_page' => 10,               // 1ページあたりの表示件数
+        'paged' => $paged                     // ページ番号で取得位置を変更
+    ));
+
+    // 投稿が存在する場合はループで表示
+    if ($genshin_impact_query->have_posts()) :
+        while ($genshin_impact_query->have_posts()) : $genshin_impact_query->the_post();
+            // 投稿の表示部分（HTMLとして出力）
+            // 例:
+            echo '<div class="post-item">';
+            echo '<h2><a href="' . get_permalink() . '">' . get_the_title() . '</a></h2>';
+            echo '</div>';
+        endwhile;
+        wp_reset_postdata();
+    else :
+        // 投稿がなかった場合の出力
+        echo '<p>No posts found.</p>';
+    endif;
+
+    // 処理を終了（Ajax通信では必須）
+    wp_die();
+}
+
+// ログインユーザー向けのAjaxアクション登録
+add_action('wp_ajax_custom_ajax_handler', 'custom_ajax_handler');
+
+// 非ログインユーザー向けのAjaxアクション登録
+add_action('wp_ajax_nopriv_custom_ajax_handler', 'custom_ajax_handler');
+
+
+
+
+/**
+ * 日本語記事リンク選択メタボックス追加
+ * 
+ * このメタボックスは「英語版記事（post, genshin_updated）」の編集画面に表示され、
+ * 対応する日本語記事（genshin_updated_jp）をプルダウンから選択できるようにします。
+ */
+function add_japanese_link_select_meta_box() {
+    add_meta_box(
+        'japanese_link_meta',          // メタボックスID（ユニークな識別子）
+        '対応する日本語記事',           // メタボックスのタイトル
+        'render_japanese_link_select_meta', // メタボックスの内容を描画するコールバック関数
+        ['post', 'genshin_updated'],   // メタボックスを表示する投稿タイプ（英語記事側）
+        'side',                        // 表示位置（サイドカラム）
+        'default'                      // 表示優先度
+    );
+}
+add_action('add_meta_boxes', 'add_japanese_link_select_meta_box');
+
+
+/**
+ * メタボックスの描画処理
+ */
+function render_japanese_link_select_meta($post) {
+    // 現在保存されている日本語記事のリンクIDを取得
+    $selected_id = get_post_meta($post->ID, '_japanese_link_post_id', true);
+
+    // 保存時のセキュリティ用nonceフィールドを出力
+    wp_nonce_field('save_japanese_link_select_meta', 'japanese_link_select_nonce');
+
+    /**
+     * 日本語記事（genshin_updated_jp 投稿タイプ）のみ取得
+     * 
+     * - post_type: genshin_updated_jp（今回作成した日本語記事用カスタム投稿タイプ）
+     * - posts_per_page: -1（全件取得）
+     * - orderby: title（タイトル順）
+     * - order: ASC（昇順）
+     */
+    $jp_posts = get_posts([
+        'post_type'      => ['genshin_updated_jp'],
+        'posts_per_page' => -1,
+        'orderby'        => 'title',
+        'order'          => 'ASC'
+    ]);
+
+    // プルダウンを出力
+    echo '<select name="japanese_link_post_id" style="width:100%;">';
+    echo '<option value="">選択してください</option>';
+
+    foreach ($jp_posts as $jp_post) {
+        // 保存済みのIDと一致している場合は selected 属性を付与
+        $selected = selected($selected_id, $jp_post->ID, false);
+
+        // タイトルを表示（エスケープ済み）
+        echo '<option value="' . esc_attr($jp_post->ID) . '" ' . $selected . '>'
+            . esc_html($jp_post->post_title) . '</option>';
+    }
+
+    echo '</select>';
+}
+
+
+/**
+ * メタボックスの保存処理
+ * 
+ * 記事保存時に選択された日本語記事IDを
+ * カスタムフィールド `_japanese_link_post_id` に保存します。
+ */
+function save_japanese_link_select_meta($post_id) {
+    // nonceチェック（CSRF対策）
+    if (!isset($_POST['japanese_link_select_nonce']) ||
+        !wp_verify_nonce($_POST['japanese_link_select_nonce'], 'save_japanese_link_select_meta')) {
+        return;
+    }
+
+    // 自動保存時は何もしない
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
+
+    // 編集権限のチェック
+    if (!current_user_can('edit_post', $post_id)) return;
+
+    // フォームから送信された日本語記事IDがある場合は保存、なければ削除
+    if (!empty($_POST['japanese_link_post_id'])) {
+        update_post_meta($post_id, '_japanese_link_post_id', intval($_POST['japanese_link_post_id']));
+    } else {
+        delete_post_meta($post_id, '_japanese_link_post_id');
+    }
+}
+add_action('save_post', 'save_japanese_link_select_meta');
+
+
+
+
+
+
+// sidebar-unified.php 用：サイドバー引数を作る（※ここではテンプレ呼び出ししない）
+if (!function_exists('gw_sidebar_args')) {
+  function gw_sidebar_args(){
+
+    // Genshin系CPT（必要に応じて増減）
+    $genshin_cpts = ['genshin_updated','genshin_updated_jp','genshin_build','artifacts'];
+
+    // ★既定（必ずこのキーを持つ）
+    $defaults = [
+      'cats' => [],
+      'post_types' => ['post'],
+      'show_materials' => false,
+      'allow_movies_fallback' => false,
+      'featured_post_id' => 0,
+
+      // ★TagCloud 用：文脈スコープ（ここが重要）
+      // - post_id: 個別記事なら「その記事のタグだけ」等が可能
+      // - tax: タクソ/タグアーカイブなら「そのタームに属する投稿群のタグ」にできる
+      'scope' => [
+        'post_id' => 0,
+        'tax'     => null, // ['taxonomy'=>'xxx','field'=>'slug','terms'=>['yyy']]
+      ],
+
+      // ★TagCloud の挙動（お好み）
+      // 'category' : その文脈カテゴリのタグ（tekken/genshin を分離）
+      // 'post'     : その記事に付いてるタグだけ（記事別）
+      // 'tax'      : タクソ/タグのタームで絞る（タクソ別）
+      'tagcloud_mode' => 'category',
+    ];
+
+    $merge = function($overrides) use ($defaults){
+      return wp_parse_args($overrides, $defaults);
+    };
+
+    $qo  = get_queried_object();
+    $qid = (int) get_queried_object_id();
+
+    // ─────────────────────────────
+    // 1) 単一ページ（投稿・固定・CPT）
+    // ─────────────────────────────
+    if (is_singular() && $qid > 0) {
+      $pt = get_post_type($qid);
+
+      // ★Genshin CPT：CPTだけに絞る（カテゴリでは絞らない）
+      if (in_array($pt, $genshin_cpts, true)) {
+        return $merge([
+          'post_types' => [$pt],
+          'cats' => [],
+          'show_materials' => false,
+          'allow_movies_fallback' => false,
+
+          // TagCloud：記事別にするなら post、CPT全体にするなら category に変える
+          'tagcloud_mode' => 'post',
+          'scope' => [
+            'post_id' => $qid,
+            'tax' => null,
+          ],
+        ]);
+      }
+
+      // 通常投稿：Genshin
+      if (in_category('genshin-impact', $qid)) {
+        return $merge([
+          'post_types' => ['post'],
+          'cats' => ['genshin-impact'],
+          'show_materials' => true,
+          'allow_movies_fallback' => true,
+
+          // ★ここがポイント：
+          // tekken/genshin を “記事ページでもカテゴリ別のタグクラウド” にしたいなら category
+          // “その記事に付けたタグだけ”にしたいなら post
+          'tagcloud_mode' => 'category',
+          'scope' => [
+            'post_id' => ($defaults['tagcloud_mode']==='post') ? $qid : 0,
+            'tax' => null,
+          ],
+        ]);
+      }
+
+      // 通常投稿：Tekken
+      if (in_category('tekken7', $qid)) {
+        return $merge([
+          'post_types' => ['post'],
+          'cats' => ['tekken7'],
+          'show_materials' => false,
+          'allow_movies_fallback' => false,
+
+          'tagcloud_mode' => 'category',
+          'scope' => [
+            'post_id' => 0,
+            'tax' => null,
+          ],
+        ]);
+      }
+
+      // その他
+      return $defaults;
+    }
+
+    // ─────────────────────────────
+    // 2) カテゴリアーカイブ（tekken/genshin）
+    // ─────────────────────────────
+    if (is_category() && $qo instanceof WP_Term) {
+      if ($qo->slug === 'genshin-impact') {
+        return $merge([
+          'post_types' => ['post'],
+          'cats' => ['genshin-impact'],
+          'show_materials' => true,
+          'allow_movies_fallback' => true,
+          'tagcloud_mode' => 'category',
+        ]);
+      }
+      if ($qo->slug === 'tekken7') {
+        return $merge([
+          'post_types' => ['post'],
+          'cats' => ['tekken7'],
+          'show_materials' => false,
+          'allow_movies_fallback' => false,
+          'tagcloud_mode' => 'category',
+        ]);
+      }
+    }
+
+    // ─────────────────────────────
+    // 3) CPTアーカイブ（genshin_*）
+    // ─────────────────────────────
+    if (is_post_type_archive($genshin_cpts)) {
+      $pt = '';
+      if ($qo instanceof WP_Post_Type) $pt = $qo->name;          // ←これが一番確実
+      if (!$pt) {
+        $tmp = get_query_var('post_type');
+        $pt = is_array($tmp) ? reset($tmp) : (string)$tmp;
+      }
+      if (!$pt) $pt = 'genshin_updated';
+
+      return $merge([
+        'post_types' => [$pt],
+        'cats' => [],
+        'show_materials' => false,
+        'allow_movies_fallback' => false,
+
+        // CPT全体のタグクラウドにするなら category（cats空なので実質 post_types スコープ）
+        'tagcloud_mode' => 'category',
+      ]);
+    }
+
+    // ─────────────────────────────
+    // 4) タグアーカイブ（is_tag）
+    // ─────────────────────────────
+    if (is_tag() && $qo instanceof WP_Term) {
+      // post_tag が付与されてる post_type 群（CPTにも付けてるならここに入る）
+      $obj = get_taxonomy('post_tag');
+      $pts = !empty($obj->object_type) ? array_values((array)$obj->object_type) : ['post'];
+
+      return $merge([
+        'post_types' => $pts,
+        'cats' => [],
+
+        'tagcloud_mode' => 'tax',
+        'scope' => [
+          'post_id' => 0,
+          'tax' => [
+            'taxonomy' => 'post_tag',
+            'field'    => 'slug',
+            'terms'    => [$qo->slug],
+          ],
+        ],
+      ]);
+    }
+
+    // ─────────────────────────────
+    // 5) タクソノミーアーカイブ（is_tax）
+    // ─────────────────────────────
+    if (is_tax() && $qo instanceof WP_Term) {
+      $tax = (string)$qo->taxonomy;
+      $obj = get_taxonomy($tax);
+      $pts = (!empty($obj) && !empty($obj->object_type)) ? array_values((array)$obj->object_type) : ['post'];
+
+      return $merge([
+        'post_types' => $pts, // ★これで “genshin_updated の taxonomy でも CPT が消えない”
+        'cats' => [],
+
+        'tagcloud_mode' => 'tax',
+        'scope' => [
+          'post_id' => 0,
+          'tax' => [
+            'taxonomy' => $tax,
+            'field'    => 'slug',
+            'terms'    => [$qo->slug],
+          ],
+        ],
+      ]);
+    }
+
+    return $defaults;
+  }
+}
+
+
+
+
+
+/**
+ * GWC いいねAPI ＆ RESTレスポンス拡張
+ * 
+ * 役割：
+ *  - /wp-json/gwc/v1/like で「いいね」リクエストを受け取る
+ *  - 投稿メタに いいね数 / いいねしたユーザー一覧 を保存
+ *  - /wp-json/wp/v2/posts などのレスポンスに gwc_like_count を含める
+ */
+
+// ================================
+// ① GWC いいね API エンドポイント
+// ================================
+
+// WordPress の REST API が初期化されるタイミングで処理を追加
+add_action('rest_api_init', function () {
+
+    // /wp-json/gwc/v1/like というエンドポイントを登録
+    register_rest_route('gwc/v1', '/like', [
+        'methods'  => 'POST',              // HTTPメソッドは POST のみ許可
+        'callback' => 'gwc_handle_like',   // 実際の処理を行う関数名
+        'permission_callback' => '__return_true', 
+        // ↑ 誰でも叩けるようにする（必要なら認証に変更）
+    ]);
+
+});
+
+/**
+ * いいね API のコールバック関数
+ *
+ * @param WP_REST_Request $req  クライアント（Flutterアプリ）からのリクエスト
+ * @return array|WP_Error       レスポンス用の配列 or エラーオブジェクト
+ */
+function gwc_handle_like(WP_REST_Request $req) {
+
+    // リクエストパラメータから post_id（記事ID）を整数として取得
+    $post_id   = (int) $req['post_id'];
+
+    // device_id（端末ごとの一意なID）をサニタイズして取得
+    $device_id = sanitize_text_field($req['device_id']);
+
+    // post_id か device_id が渡されていなければエラーを返す
+    if (!$post_id || !$device_id) {
+        return new WP_Error(
+            'invalid',
+            'missing post_id or device_id',
+            ['status' => 400]
+        );
+    }
+
+    // ---------------------------------------
+    // すでに「いいね」したユーザー一覧を取得
+    // 投稿メタキー： gwc_like_users（配列想定）
+    // ---------------------------------------
+    $users = get_post_meta($post_id, 'gwc_like_users', true);
+
+    // まだ一度も保存されていない場合は空の配列にする
+    if (!is_array($users)) {
+        $users = [];
+    }
+
+    // ---------------------------------------
+    // 同じ device_id がすでに含まれているかチェック
+    // → 含まれていたら「二重カウントしない」
+    // ---------------------------------------
+    if (in_array($device_id, $users, true)) {
+
+        // すでに like 済みの場合：現在のカウントだけ返して終了
+        $count = (int) get_post_meta($post_id, 'gwc_like_count', true);
+
+        return [
+            'liked' => true,  // いいね済み
+            'count' => $count // 現在の合計いいね数
+        ];
+    }
+
+    // ---------------------------------------
+    // ここに来たということは「初めてのいいね」
+    // → device_id を一覧に追加して保存
+    // ---------------------------------------
+    $users[] = $device_id;
+
+    // 投稿メタ gwc_like_users を更新
+    update_post_meta($post_id, 'gwc_like_users', $users);
+
+    // ---------------------------------------
+    // いいね数 gwc_like_count を 1 増やして保存
+    // ---------------------------------------
+    $count = (int) get_post_meta($post_id, 'gwc_like_count', true);
+    $count++; // 1加算
+    update_post_meta($post_id, 'gwc_like_count', $count);
+
+    // クライアント（Flutterアプリ）に返すレスポンス
+    return [
+        'liked' => true,  // 今回の操作で「いいね済み」になった
+        'count' => $count // 更新後の合計いいね数
+    ];
+}
+
+
+
+// ==========================================
+// ② 投稿取得 API に gwc_like_count を含める
+// ==========================================
+
+// REST API 初期化時に、post にカスタムフィールドを追加
+add_action('rest_api_init', function () {
+
+    // 第1引数 'post' → 投稿タイプ post に対して
+    // gwc_like_count というフィールドを追加する
+    register_rest_field('post', 'gwc_like_count', [
+
+        // APIレスポンス用の値を返す関数
+        'get_callback' => function ($obj) {
+
+            // $obj['id'] は記事ID（REST用の配列オブジェクト）
+            $post_id = $obj['id'];
+
+            // 投稿メタ gwc_like_count の値を整数として返す
+            return (int) get_post_meta($post_id, 'gwc_like_count', true);
+        },
+
+        // スキーマ情報（任意だが書いておくと親切）
+        'schema' => [
+            'description' => 'Total like count', // 説明文
+            'type'        => 'integer',          // 整数型
+        ]
+
+    ]);
+
+});
+
+
+function register_tekken7_api() {
+    register_rest_route('gamewidth/v1', '/tekken7-characters', array(
+        'methods'             => 'GET',
+        'callback'            => 'get_tekken7_characters',
+        'permission_callback' => '__return_true', // ✅ 追加：公開APIならこれ
+    ));
+}
+add_action('rest_api_init', 'register_tekken7_api');
+
+function get_tekken7_characters() {
+    // キャラクター名と画像URLのペアを返す
+    $characters = array(
+        array("name" => "Akuma", "image" => get_template_directory_uri() . "/images/Akuma_thumbnail.png"),
+        array("name" => "Alisa", "image" => get_template_directory_uri() . "/images/Alisa_thumbnail.png"),
+        array("name" => "Anna", "image" => get_template_directory_uri() . "/images/Anna_thumbnail.png"),
+        array("name" => "Armorking", "image" => get_template_directory_uri() . "/images/Armorking_thumbnail.png"),
+        array("name" => "Asuka", "image" => get_template_directory_uri() . "/images/Asuka_thumbnail.png"),
+        array("name" => "Bob", "image" => get_template_directory_uri() . "/images/Bob_thumbnail.png"),
+        array("name" => "Bryan", "image" => get_template_directory_uri() . "/images/Bryan_thumbnail.png"),
+        array("name" => "Claudio", "image" => get_template_directory_uri() . "/images/Claudio_thumbnail.png"),
+        array("name" => "Deviljin", "image" => get_template_directory_uri() . "/images/Deviljin_thumbnail.png"),
+        array("name" => "Dragunov", "image" => get_template_directory_uri() . "/images/Dragunov_thumbnail.png"),
+        array("name" => "Eddy", "image" => get_template_directory_uri() . "/images/Eddy_thumbnail.png"),
+        array("name" => "Eliza", "image" => get_template_directory_uri() . "/images/Eliza_thumbnail.png"),
+        array("name" => "Fahkumram", "image" => get_template_directory_uri() . "/images/Fahkumram_thumbnail.png"),
+        array("name" => "Feng", "image" => get_template_directory_uri() . "/images/Feng_thumbnail.png"),
+        array("name" => "Ganryu", "image" => get_template_directory_uri() . "/images/Ganryu_thumbnail.png"),
+        array("name" => "Geese", "image" => get_template_directory_uri() . "/images/Geese_thumbnail.png"),
+        array("name" => "Gigas", "image" => get_template_directory_uri() . "/images/Gigas_thumbnail.png"),
+        array("name" => "Heihachi", "image" => get_template_directory_uri() . "/images/Heihachi_thumbnail.png"),
+        array("name" => "Hwoarang", "image" => get_template_directory_uri() . "/images/Hwoarang_thumbnail.png"),
+        array("name" => "Jack7", "image" => get_template_directory_uri() . "/images/Jack7_thumbnail.png"),
+        array("name" => "Jin", "image" => get_template_directory_uri() . "/images/Jin_thumbnail.png"),
+        array("name" => "Josie", "image" => get_template_directory_uri() . "/images/Josie_thumbnail.png"),
+        array("name" => "Julia", "image" => get_template_directory_uri() . "/images/Julia_thumbnail.png"),
+        array("name" => "Katarina", "image" => get_template_directory_uri() . "/images/Katarina_thumbnail.png"),
+        array("name" => "Kazumi", "image" => get_template_directory_uri() . "/images/Kazumi_thumbnail.png"),
+        array("name" => "Kazuya", "image" => get_template_directory_uri() . "/images/Kazuya_thumbnail.png"),
+        array("name" => "King", "image" => get_template_directory_uri() . "/images/King_thumbnail.png"),
+        array("name" => "Kuma", "image" => get_template_directory_uri() . "/images/Kuma_thumbnail.png"),
+        array("name" => "Kunimitsu", "image" => get_template_directory_uri() . "/images/Kunimitsu_thumbnail.png"),
+        array("name" => "Lars", "image" => get_template_directory_uri() . "/images/Lars_thumbnail.png"),
+        array("name" => "Law", "image" => get_template_directory_uri() . "/images/Law_thumbnail.png"),
+        array("name" => "Lee", "image" => get_template_directory_uri() . "/images/Lee_thumbnail.png"),
+        array("name" => "Lei", "image" => get_template_directory_uri() . "/images/Lei_thumbnail.png"),
+        array("name" => "Leo", "image" => get_template_directory_uri() . "/images/Leo_thumbnail.png"),
+        array("name" => "Leroy", "image" => get_template_directory_uri() . "/images/Leroy_thumbnail.png"),
+        array("name" => "Lili", "image" => get_template_directory_uri() . "/images/Lili_thumbnail.png"),
+        array("name" => "Lidia", "image" => get_template_directory_uri() . "/images/Lidia_thumbnail.png"),
+        array("name" => "Luckychloe", "image" => get_template_directory_uri() . "/images/Luckychloe_thumbnail.png"),
+        array("name" => "Marduk", "image" => get_template_directory_uri() . "/images/Marduk_thumbnail.png"),
+        array("name" => "Masterraven", "image" => get_template_directory_uri() . "/images/Masterraven_thumbnail.png"),
+        array("name" => "Nina", "image" => get_template_directory_uri() . "/images/Nina_thumbnail.png"),
+        array("name" => "Paul", "image" => get_template_directory_uri() . "/images/Paul_thumbnail.png"),
+        array("name" => "Raven", "image" => get_template_directory_uri() . "/images/Raven_thumbnail.png"),
+        array("name" => "Shaheen", "image" => get_template_directory_uri() . "/images/Shaheen_thumbnail.png"),
+        array("name" => "Steve", "image" => get_template_directory_uri() . "/images/Steve_thumbnail.png"),
+        array("name" => "Xiaoyu", "image" => get_template_directory_uri() . "/images/Xiaoyu_thumbnail.png"),
+        array("name" => "Yoshimitsu", "image" => get_template_directory_uri() . "/images/Yoshimitsu_thumbnail.png"),
+    );
+    
+    // キャラクター情報（名前と画像URL）をJSON形式で返す
+    return rest_ensure_response($characters);
+}
+
+
+
+// functions.php か GWCプラグイン内に追加
+add_action('rest_api_init', function () {
+  register_rest_route('gwc/v1', '/contact', [
+    'methods'  => 'POST',
+    'callback' => 'gwc_contact_submit',
+    'permission_callback' => '__return_true', // 誰でも送れる（＝スパム対策必須）
+  ]);
+});
+
+function gwc_contact_submit(WP_REST_Request $req) {
+  $name    = sanitize_text_field($req->get_param('name'));
+  $email   = sanitize_email($req->get_param('email'));
+  $message = sanitize_textarea_field($req->get_param('message'));
+  $device  = sanitize_text_field($req->get_param('device_id'));
+
+  // ✅ 必須チェック
+  if (!$name || !$email || !$message) {
+    return new WP_REST_Response(['ok'=>false, 'error'=>'missing_fields'], 400);
+  }
+  if (!is_email($email)) {
+    return new WP_REST_Response(['ok'=>false, 'error'=>'invalid_email'], 400);
+  }
+
+  // ✅ 超簡易レート制限（同device_idで60秒に1回）
+  if ($device) {
+    $key = 'gwc_contact_rl_' . md5($device);
+    if (get_transient($key)) {
+      return new WP_REST_Response(['ok'=>false, 'error'=>'rate_limited'], 429);
+    }
+    set_transient($key, 1, 60);
+  }
+  // ✅（推奨）Akismet / reCAPTCHA を入れるならここで検証
+  // ※ reCAPTCHAは「トークンを受け取ってサーバーでGoogleに照会」する。アプリに秘密鍵を入れない。
+
+  // ✅ メール送信（あなたの受信用アドレスに届く）
+  $to = get_option('admin_email'); // もしくは固定の受信アドレス
+  $subject = '[GameWidth Contact] ' . $name;
+  $body = "Name: $name\nEmail: $email\nDevice: $device\n\n$message\n";
+  $headers = ['Reply-To: ' . $email];
+
+  $sent = wp_mail($to, $subject, $body, $headers);
+
+  if (!$sent) {
+    return new WP_REST_Response(['ok'=>false, 'error'=>'mail_failed'], 500);
+  }
+
+  return new WP_REST_Response(['ok'=>true], 200);
+}
+
+
+
+
+
