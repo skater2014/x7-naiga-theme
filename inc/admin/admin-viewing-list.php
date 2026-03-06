@@ -133,6 +133,27 @@ if (!function_exists('naigai_format_time_range')) {
     }
 }
 
+if (!function_exists('naigai_get_property_price_value')) {
+    function naigai_get_property_price_value($post_id)
+    {
+        $candidates = [
+            '_naigai_property_price',
+            'Price',
+            'NewPrice',
+            'price',
+        ];
+
+        foreach ($candidates as $key) {
+            $value = (string) get_post_meta($post_id, $key, true);
+            if ($value !== '') {
+                return $value;
+            }
+        }
+
+        return '';
+    }
+}
+
 /* =========================================================
  * meta getter / setter
  * ========================================================= */
@@ -202,7 +223,7 @@ if (!function_exists('naigai_get_viewing_meta')) {
             'weekdays'    => $weekdays,
             'time_start'  => (string) get_post_meta($post_id, '_naigai_viewing_time_start', true),
             'time_end'    => (string) get_post_meta($post_id, '_naigai_viewing_time_end', true),
-            'price'       => (string) get_post_meta($post_id, '_naigai_property_price', true),
+            'price'       => naigai_get_property_price_value($post_id),
             'area'        => $area,
             'options'     => (string) get_post_meta($post_id, '_naigai_property_options', true),
         ];
@@ -468,6 +489,50 @@ add_action('admin_enqueue_scripts', function ($hook) {
     grid-template-columns: 1fr;
   }
 }
+
+/* ===== FullCalendar 種類別カラー ===== */
+#calendar .fc-event.naigai-type-land,
+#calendar .fc-h-event.naigai-type-land {
+  background: #2e8b57 !important;
+  border-color: #2e8b57 !important;
+  color: #fff !important;
+}
+
+#calendar .fc-event.naigai-type-used_house,
+#calendar .fc-h-event.naigai-type-used_house {
+  background: #2f6db3 !important;
+  border-color: #2f6db3 !important;
+  color: #fff !important;
+}
+
+#calendar .fc-event.naigai-type-new_house,
+#calendar .fc-h-event.naigai-type-new_house {
+  background: #2aa7c8 !important;
+  border-color: #2aa7c8 !important;
+  color: #fff !important;
+}
+
+#calendar .fc-event.naigai-type-rental,
+#calendar .fc-h-event.naigai-type-rental {
+  background: #7a4fc2 !important;
+  border-color: #7a4fc2 !important;
+  color: #fff !important;
+}
+
+#calendar .fc-event.naigai-type-commercial,
+#calendar .fc-h-event.naigai-type-commercial {
+  background: #d67a1f !important;
+  border-color: #d67a1f !important;
+  color: #fff !important;
+}
+
+#calendar .fc-event.naigai-type-renovation,
+#calendar .fc-h-event.naigai-type-renovation {
+  background: #b84d65 !important;
+  border-color: #b84d65 !important;
+  color: #fff !important;
+}
+
 CSS;
 
     wp_add_inline_style('naigai-viewing-admin-inline', $css);
@@ -1025,12 +1090,12 @@ if (!function_exists('naigai_render_property_list_html')) {
                 <article class="naigai-property-row" data-post-id="<?php echo (int) $row['post_id']; ?>">
                     <div class="naigai-property-row__main">
                         <div class="naigai-property-row__headline">
-                            <?php if (!empty($row['period_label'])) : ?>
-                                <span class="naigai-property-row__period-badge"><?php echo esc_html($row['period_label']); ?></span>
-                            <?php endif; ?>
-
                             <?php if (!empty($row['type_label'])) : ?>
                                 <span class="naigai-property-row__theme">物件種類：<?php echo esc_html($row['type_label']); ?></span>
+                            <?php endif; ?>
+
+                            <?php if (!empty($row['period_label'])) : ?>
+                                <span class="naigai-property-row__period-badge">見学会期間：<?php echo esc_html($row['period_label']); ?></span>
                             <?php endif; ?>
                         </div>
 
@@ -1041,20 +1106,16 @@ if (!function_exists('naigai_render_property_list_html')) {
                         </h3>
 
                         <div class="naigai-property-row__meta">
-                            <?php if (!empty($row['area_label'])) : ?>
-                                <span class="naigai-property-row__area">地域：<?php echo esc_html($row['area_label']); ?></span>
-                            <?php endif; ?>
-
-                            <?php if (!empty($row['period_label'])) : ?>
-                                <span class="naigai-property-row__period">見学会期間：<?php echo esc_html($row['period_label']); ?></span>
-                            <?php endif; ?>
-
                             <?php if (!empty($row['time_label'])) : ?>
                                 <span class="naigai-property-row__time">案内時間：<?php echo esc_html($row['time_label']); ?></span>
                             <?php endif; ?>
 
                             <?php if (!empty($row['staff'])) : ?>
                                 <span class="naigai-property-row__staff">担当者：<?php echo esc_html($row['staff']); ?></span>
+                            <?php endif; ?>
+
+                            <?php if (!empty($row['area_label'])) : ?>
+                                <span class="naigai-property-row__area">地域：<?php echo esc_html($row['area_label']); ?></span>
                             <?php endif; ?>
 
                             <?php if (!empty($row['price'])) : ?>

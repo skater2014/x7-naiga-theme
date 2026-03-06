@@ -43,7 +43,7 @@ if ($land_query->have_posts()) :
     <a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>">
         <h1><?php the_title(); ?></h1>
     </a>
-    <p>
+    <p class="post-meta-row">
         <svg class="icon icon-price-tags">
             <use href="#icon-price-tags"></use>
                                                     <?php

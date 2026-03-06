@@ -29,7 +29,7 @@ function custom_category_taxonomy_links() {
         // カテゴリー色を取得（設定がなければ青色に）
         $color = get_term_meta($category->term_id, 'category_color', true) ?: '#007BFF';
         // カテゴリーリンクを作成
-        $link = '<a href="' . esc_url(get_category_link($category->term_id)) . '" style="color:' . esc_attr($color) . '; text-decoration: none;" class="category-name">' . esc_html($category->name) . '</a>';
+        $link = '<a href="' . esc_url(get_category_link($category->term_id)) . '" style="color:' . esc_attr($color) . '; text-decoration: none;" class="category-name category-badge meta-badge">' . esc_html($category->name) . '</a>';
         
         // 親か子かで格納先を変える
         if ($category->parent == 0) {
@@ -44,7 +44,7 @@ function custom_category_taxonomy_links() {
     if ($terms_house_type && !is_wp_error($terms_house_type)) {
         foreach ($terms_house_type as $term) {
             $color = get_term_meta($term->term_id, 'taxonomy_color', true) ?: '#007BFF';
-            $category_links['house-type'][$term->term_id] = '<a href="' . esc_url(get_term_link($term)) . '" style="color:' . esc_attr($color) . '; text-decoration: none;" class="category-name">' . esc_html($term->name) . '</a>';
+            $category_links['house-type'][$term->term_id] = '<a href="' . esc_url(get_term_link($term)) . '" style="color:' . esc_attr($color) . '; text-decoration: none;" class="category-name category-badge meta-badge">' . esc_html($term->name) . '</a>';
         }
     }
 
@@ -53,7 +53,7 @@ function custom_category_taxonomy_links() {
     if ($terms_region && !is_wp_error($terms_region)) {
         foreach ($terms_region as $term) {
             $color = get_term_meta($term->term_id, 'taxonomy_color', true) ?: '#007BFF';
-            $category_links['region'][$term->term_id] = '<a href="' . esc_url(get_term_link($term)) . '" style="color:' . esc_attr($color) . '; text-decoration: none;" class="category-name">' . esc_html($term->name) . '</a>';
+            $category_links['region'][$term->term_id] = '<a href="' . esc_url(get_term_link($term)) . '" style="color:' . esc_attr($color) . '; text-decoration: none;" class="category-name category-badge meta-badge">' . esc_html($term->name) . '</a>';
         }
     }
 
@@ -64,7 +64,7 @@ function custom_category_taxonomy_links() {
     unset($links);
 
     // 順序：親 → 子 → house-type → region
-    return implode(', ', array_merge(
+    return implode(' ', array_merge(
         $category_links['parent'],
         $category_links['child'],
         $category_links['house-type'],
