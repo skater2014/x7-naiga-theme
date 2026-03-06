@@ -85,14 +85,6 @@
                 } else {
                     $active = ($image_html !== '') ? 'image-tab' : 'panorama-tab';
                 ?>
-                    <?php
-                    var_dump([
-                        'has_image' => isset($has_image) ? $has_image : 'UNDEFINED',
-                        'has_pano'  => isset($has_pano) ? $has_pano : 'UNDEFINED',
-                        'active_tab' => isset($active_tab) ? $active_tab : 'UNDEFINED',
-                    ]);
-                    ?>
-
                     <ul class="tab-links">
                         <?php if ($image_html !== ''): ?>
                             <li class="tab-link <?php echo ($active === 'image-tab') ? 'active' : ''; ?>" data-tab="image-tab">画像ビュー</li>
@@ -155,10 +147,13 @@
                 }
                 ?>
 
+                <h2 class="section-title">内見・イベント</h2>
                 <div id="calendar"></div>
 
+                <div id="naigai-property-list" class="naigai-property-list"></div>
+
                 <!--new pager-->
-                <?php require get_template_directory() . '/pager_genshin_build.php'; ?>
+                <?php require get_template_directory() . '/pager-post-navigation.php'; ?>
                 <!--end new pager-->
 
                 <p class="footer-post-meta">

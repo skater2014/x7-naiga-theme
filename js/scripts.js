@@ -1,81 +1,31 @@
-// ✅ すでに処理が実行されている場合は再実行しない
+// ダークモードの状態をローカルストレージから取得して適用
 if (!window.darkModeInitialized) {
-  window.darkModeInitialized = true; // フラグをセット
-
-  // **✅ ダークモードトグルボタンの取得**
+  window.darkModeInitialized = true;
   const darkModeBtn = document.querySelector('#btn-mode');
-
-  // **✅ ダークモードの状態をlocalStorageから取得**
   const darkModeState = localStorage.getItem('darkMode');
 
-  // **✅ ボタンが存在する場合のみ処理を実行**
   if (darkModeBtn) {
-    // **✅ ページロード時にダークモードの状態を設定**
-    if (darkModeState === 'true') {
-      activateDarkMode(darkModeBtn);
-    } else {
-      deactivateDarkMode(darkModeBtn);
-    }
+    darkModeBtn.checked = darkModeState === 'true';
+    toggleDarkMode(darkModeBtn.checked);
 
-    // **✅ ダークモード切り替え時の処理**
     darkModeBtn.addEventListener('change', () => {
-      if (darkModeBtn.checked) {
-        activateDarkMode(darkModeBtn);
-        localStorage.setItem('darkMode', 'true');
-      } else {
-        deactivateDarkMode(darkModeBtn);
-        localStorage.setItem('darkMode', 'false');
-      }
+      const isChecked = darkModeBtn.checked;
+      toggleDarkMode(isChecked);
+      localStorage.setItem('darkMode', isChecked ? 'true' : 'false');
     });
 
-    // **✅ OSのダークモード設定を監視**
-    const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    darkModeMediaQuery.addEventListener('change', (e) => {
-      if (e.matches) {
-        activateDarkMode(darkModeBtn);
-      } else {
-        deactivateDarkMode(darkModeBtn);
-      }
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+      toggleDarkMode(e.matches);
     });
   }
 }
 
-// **✅ ダークモードを適用**
-function activateDarkMode(darkModeBtn) {
-  if (darkModeBtn) darkModeBtn.checked = true;
-  document.body.classList.add('dark-theme');
-  document.body.classList.remove('light-theme');
-  document.documentElement.style.setProperty('--link-color-white', '#fff');
-  applyDarkModeStyles('.home-box');
+// ダークモードの適用/解除
+function toggleDarkMode(isDarkMode) {
+  document.body.classList.toggle('dark-theme', isDarkMode);
+  document.body.classList.toggle('light-theme', !isDarkMode);
+  document.documentElement.style.setProperty('--link-color-white', isDarkMode ? '#fff' : '');
 }
-
-// **✅ ダークモードを解除**
-function deactivateDarkMode(darkModeBtn) {
-  if (darkModeBtn) darkModeBtn.checked = false;
-  document.body.classList.add('light-theme');
-  document.body.classList.remove('dark-theme');
-  document.documentElement.style.setProperty('--link-color', '');
-  applyLightModeStyles('.home-box');
-}
-
-// **✅ .home-box にダークモードスタイルを適用**
-function applyDarkModeStyles(selector) {
-  const elements = document.querySelectorAll(selector);
-  elements.forEach((element) => {
-    element.classList.add('dark-mode');
-    element.classList.remove('light-mode');
-  });
-}
-
-// **✅ .home-box にライトモードスタイルを適用**
-function applyLightModeStyles(selector) {
-  const elements = document.querySelectorAll(selector);
-  elements.forEach((element) => {
-    element.classList.add('light-mode');
-    element.classList.remove('dark-mode');
-  });
-}
-
 // トップページに戻るボタン
 document.addEventListener('DOMContentLoaded', function () {
   console.log('✅ DOMContentLoaded: トップボタン処理開始');
@@ -210,13 +160,6 @@ function resetMobileMenuOnResize() {
   }
 }
 
-jQuery(document).ready(function () {
-  setupMobileMenu();
-  resetMobileMenuOnResize();
-});
-
-jQuery(window).on('resize', resetMobileMenuOnResize);
-
 /**
  * モバイルメニューを固定ヘッダーの下にぴったり配置するための高さ計算スクリプト
  *
@@ -287,137 +230,158 @@ function setupSidebarMenu() {
 }
 
 /**
- * 📌 ハンバーガーメニューの開閉処理
- * - トグルボタン:  #touch-menu
- * - サイドメニュー: .sidebar-navigation
- * - 付与/削除するクラス:
- *     * ボタン… .is-open（CSS側で「三本線→X」に変形）
- *     * メニュー… .visible（表示状態の切り替え）
- *     * body … .menu-open（背景スクロール抑止やオーバーレイ用に利用）
- * - アクセシビリティ:
- *     * aria-expanded / aria-label を状態に応じて更新
- *     * Enter / Space キーでもトグル可能
- *     * Escape で閉じる
- * - ふるまい:
- *     * 画面外クリックで閉じる
- *     * 左右スワイプでも開閉（50pxしきい値）
+ * サイドバー（drawer）全体の開閉
+ *
+ * 対象要素
+ * - 開くボタン   : #touch-menu
+ * - 閉じるボタン : .drawer-close
+ * - drawer本体   : .sidebar-navigation
+ *
+ * 役割
+ * - 開くボタンで drawer を表示
+ * - 閉じるボタンで drawer を非表示
+ * - body.menu-open を付け外し
+ * - aria-expanded / aria-label を更新
+ * - 外側クリック / Escape でも閉じる
+ * - スワイプで開閉
  */
 function setupHamburgerMenu() {
-  var $touch = jQuery('#touch-menu'); // トグルボタン
-  var $menu = jQuery('.sidebar-navigation'); // 開閉対象のメニュー
+  var $openBtn = jQuery('#touch-menu');
+  var $closeBtn = jQuery('.drawer-close');
+  var $drawer = jQuery('#sidebar-navigation');
+  var $body = jQuery('body');
 
-  // 要素がなければ処理しない（他ページ安全化）
-  if (!$touch.length || !$menu.length) return;
+  if (!$openBtn.length || !$drawer.length) return;
 
-  /**
-   * メニューを開く
-   * - ボタンに .is-open を付与（CSSでX表示）
-   * - メニューに .visible を付与（表示）
-   * - body に .menu-open を付与（スクロール抑止等に利用）
-   * - ARIA を「開いている」状態に更新
-   */
-  function openMenu() {
-    $touch.addClass('is-open').attr({
-      'aria-expanded': 'true',
-      'aria-label': 'メニューを閉じる',
-    });
-    $menu.addClass('visible');
-    jQuery('body').addClass('menu-open');
+  function setMenuState(open) {
+    $body.toggleClass('menu-open', open);
+    $drawer.toggleClass('visible', open);
+    $openBtn.toggleClass('is-open', open);
+    $openBtn.attr('aria-expanded', open ? 'true' : 'false');
+    $openBtn.attr('aria-label', open ? 'メニューを閉じる' : 'メニューを開く');
   }
 
-  /**
-   * メニューを閉じる
-   * - 上記の逆
-   */
-  function closeMenu() {
-    $touch.removeClass('is-open').attr({
-      'aria-expanded': 'false',
-      'aria-label': 'メニューを開く',
-    });
-    $menu.removeClass('visible');
-    jQuery('body').removeClass('menu-open');
-  }
-
-  /**
-   * トグル（現在の状態に応じて open/close を呼ぶ）
-   */
-  function toggleMenu() {
-    $menu.hasClass('visible') ? closeMenu() : openMenu();
-  }
-
-  // クリックで開閉
-  // いったん既存ハンドラを解除してから重複なくバインド
-  $touch.off('click').on('click', function (e) {
-    e.preventDefault(); // # などのデフォルト動作を抑止
-    toggleMenu();
-  });
-
-  // キーボード操作（Enter / Space）でも開閉
-  $touch.off('keydown').on('keydown', function (e) {
-    if (e.key === 'Enter' || e.key === ' ') {
+  function toggleFromEvent(e, open) {
+    if (e.type === 'keydown') {
+      if (e.key !== 'Enter' && e.key !== ' ') return;
       e.preventDefault();
-      toggleMenu();
     }
+    setMenuState(open);
+  }
+
+  $openBtn.off('.drawerToggle').on('click.drawerToggle keydown.drawerToggle', function (e) {
+    var isOpen = $body.hasClass('menu-open');
+    toggleFromEvent(e, !isOpen);
   });
 
-  // 画面外クリックで閉じる（メニューとボタン以外のクリック）
+  $closeBtn.off('.drawerToggle').on('click.drawerToggle keydown.drawerToggle', function (e) {
+    toggleFromEvent(e, false);
+  });
+
   jQuery(document)
-    .off('click.menuClose')
-    .on('click.menuClose', function (e) {
-      var $t = jQuery(e.target);
-      var clickedInside = $t.closest('.sidebar-navigation, #touch-menu').length > 0;
-      if (!clickedInside && $menu.hasClass('visible')) {
-        closeMenu();
-      }
+    .off('keydown.drawerToggleEsc')
+    .on('keydown.drawerToggleEsc', function (e) {
+      if (e.key === 'Escape') setMenuState(false);
     });
 
-  // ESC キーで閉じる
   jQuery(document)
-    .off('keydown.menuEsc')
-    .on('keydown.menuEsc', function (e) {
-      if (e.key === 'Escape' && $menu.hasClass('visible')) {
-        closeMenu();
-      }
+    .off('click.drawerToggleOutside')
+    .on('click.drawerToggleOutside', function (e) {
+      var $target = jQuery(e.target);
+      if (!$body.hasClass('menu-open')) return;
+      if ($target.closest('#sidebar-navigation, #touch-menu').length) return;
+      setMenuState(false);
     });
 
-  // スワイプで開閉（メニューエリア上の左右スワイプを検知）
-  var touchStartX = 0,
-    touchEndX = 0;
-  $menu.off('touchstart').on('touchstart', function (e) {
-    touchStartX = e.originalEvent.changedTouches[0].screenX;
-  });
-
-  $menu.off('touchend').on('touchend', function (e) {
-    touchEndX = e.originalEvent.changedTouches[0].screenX;
-    var delta = touchEndX - touchStartX;
-    if (delta > 50 && !$menu.hasClass('visible')) {
-      // 右へ 50px 以上のスワイプ → 開く
-      openMenu();
-    } else if (-delta > 50 && $menu.hasClass('visible')) {
-      // 左へ 50px 以上のスワイプ → 閉じる
-      closeMenu();
-    }
-  });
+  setMenuState(false);
 }
 
 /* 🔰（任意）DOM準備後に初期状態を明示的に「閉じる」にそろえる */
 jQuery(function ($) {
-  setupHamburgerMenu();
-  $('#touch-menu')
-    .removeClass('is-open')
-    .attr({ 'aria-expanded': 'false', 'aria-label': 'メニューを開く' });
-  $('.sidebar-navigation').removeClass('visible');
-  $('body').removeClass('menu-open');
+  function getLikedPosts() {
+    try {
+      return (JSON.parse(localStorage.getItem('likedPosts')) || []).map(String);
+    } catch (e) {
+      return [];
+    }
+  }
+
+  function setLikedPosts(arr) {
+    const uniq = Array.from(new Set(arr.map(String)));
+    localStorage.setItem('likedPosts', JSON.stringify(uniq));
+  }
+
+  function setUI(postId, isActive) {
+    const $wrap = $('.heart-icon[data-post-id="' + postId + '"]');
+    $wrap.toggleClass('active', !!isActive);
+    $wrap.find('svg').toggleClass('liked', !!isActive);
+  }
+
+  getLikedPosts().forEach(function (postId) {
+    setUI(postId, true);
+  });
+
+  $(document).on('click', '.heart-icon', function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const $this = $(this);
+    const postId = String($this.data('post-id'));
+    const prevActive = $this.hasClass('active');
+    const nextActive = !prevActive;
+
+    setUI(postId, nextActive);
+
+    let likedPosts = getLikedPosts();
+    if (nextActive) likedPosts.push(postId);
+    else likedPosts = likedPosts.filter((id) => id !== postId);
+    setLikedPosts(likedPosts);
+
+    $.ajax({
+      url: customAjax.ajaxurl,
+      type: 'POST',
+      dataType: 'json',
+      data: {
+        action: 'toggle_like',
+        post_id: postId,
+        liked: nextActive ? 1 : 0,
+        nonce: customAjax.nonce,
+      },
+    })
+      .done(function (res) {
+        if (!res || res.success !== true) {
+          rollback();
+        }
+      })
+      .fail(function () {
+        rollback();
+      });
+
+    function rollback() {
+      setUI(postId, prevActive);
+
+      let back = getLikedPosts();
+      if (prevActive) back.push(postId);
+      else back = back.filter((id) => id !== postId);
+      setLikedPosts(back);
+    }
+  });
 });
 
-/** 📌 スクリプト実行（すべての関数を `document.ready()` 内で実行） */
+/** 📌 ナビ系初期化（1回だけ実行） */
 jQuery(document).ready(function ($) {
-  console.log('🚀 スクリプト実行開始');
+  console.log('🚀 ナビ系初期化開始');
 
   if (typeof setupMobileMenu === 'function') {
     setupMobileMenu();
   } else {
     console.error('❌ setupMobileMenu が定義されていません！');
+  }
+
+  if (typeof resetMobileMenuOnResize === 'function') {
+    resetMobileMenuOnResize();
+  } else {
+    console.error('❌ resetMobileMenuOnResize が定義されていません！');
   }
 
   if (typeof setupSidebarMenu === 'function') {
@@ -431,92 +395,14 @@ jQuery(document).ready(function ($) {
   } else {
     console.error('❌ setupHamburgerMenu が定義されていません！');
   }
-});
 
-// Swiper ２種類
-document.addEventListener('DOMContentLoaded', function () {
-  // mega-thumbs の要素を取得
-  var megaThumbs = document.querySelector('.mega-thumbs');
-
-  if (megaThumbs) {
-    // mega-thumbs 内のすべての子要素のメニューアイテムを取得
-    var menuItems = megaThumbs.querySelectorAll('.menu-item');
-
-    // 各メニューアイテムに swiper-slide クラスを追加する
-    menuItems.forEach(function (menuItem) {
-      menuItem.classList.add('swiper-slide');
+  $(window)
+    .off('resize.resetMobileMenuOnResize')
+    .on('resize.resetMobileMenuOnResize', function () {
+      if (typeof resetMobileMenuOnResize === 'function') {
+        resetMobileMenuOnResize();
+      }
     });
-  }
-
-  // すべてのswiper-container要素を取得
-  var swipers = document.querySelectorAll('.swiper');
-
-  swipers.forEach(function (swiperContainer) {
-    // Swiperの初期化
-    const swiper = new Swiper(swiperContainer, {
-      // Swiperのオプション設定
-      slidesPerView: 3,
-      paginationClickable: true,
-      spaceBetween: 30,
-      loop: true,
-      allowTouchMove: true,
-      breakpoints: {
-        0: {
-          slidesPerView: 1,
-          spaceBetween: 10,
-        },
-        992: {
-          slidesPerView: 2,
-          spaceBetween: 30,
-        },
-        1080: {
-          slidesPerView: 3,
-          spaceBetween: 30,
-        },
-      },
-      navigation: {
-        nextEl: swiperContainer.querySelector('.swiper-button-next'),
-        prevEl: swiperContainer.querySelector('.swiper-button-prev'),
-      },
-      pagination: {
-        el: swiperContainer.querySelector('.swiper-pagination'),
-      },
-      // Swiperの初期化後に透明度を戻して表示
-      on: {
-        init: function () {
-          swiperContainer.style.opacity = 1;
-        },
-      },
-    });
-
-    // スライドが初期化されたときにボタンの位置を調整する
-    adjustButtonPosition(swiperContainer);
-
-    // スライドが変更されたときにボタンの位置を調整する
-    swiper.on('slideChange', function () {
-      adjustButtonPosition(swiperContainer);
-    });
-  });
-
-  // ボタンの位置を調整する関数
-  function adjustButtonPosition(swiperContainer) {
-    // ボタン要素を取得
-    var nextButton = swiperContainer.querySelector('.swiper-button-next');
-    var prevButton = swiperContainer.querySelector('.swiper-button-prev');
-
-    // スライダーのコンテナが mega-thumbs 内かどうかを確認
-    // swiperContainerが.mega-thumbs内にある場合、isMegaThumbsはtrueになる
-    var isMegaThumbs = swiperContainer.closest('.mega-thumbs') !== null;
-
-    // ボタンの位置を設定
-    if (isMegaThumbs) {
-      if (nextButton) nextButton.style.right = '-300px'; // 右に固定
-    } else {
-      if (nextButton) nextButton.style.right = '0px'; // 標準位置に
-    }
-
-    if (prevButton) prevButton.style.left = '0px'; // 左に固定
-  }
 });
 
 /*
@@ -604,34 +490,468 @@ document.addEventListener('DOMContentLoaded', function () {
   else mq.addListener(updateHeaderSpacer); // 古いブラウザ向け
 })(); // 読み込まれたらすぐ実行
 
-jQuery(function ($) {
-  // --- slick（ホームスライダー）
-  var $slider = $('#home-slider');
-  if ($slider.length) {
-    $slider.slick();
-    $('.home-slider').removeClass('invisibility');
+/* =========================================================
+   HOME SWIPER
+   - 順番どおりに左右移動
+   - 2枚以上なら無限ループ
+   - モバイル/タブレットは矢印をアイキャッチ中央へ
+   - モバイル/タブレットはページャーをアイキャッチ直下へ
+   - PCは高さ固定寄り / モバイルは autoHeight
+   - 役割ごとに関数分離
+   ========================================================= */
+
+var HOME_SWIPER_MQ = window.matchMedia('(max-width: 1199.98px)');
+var homeSwiperMqBound = false;
+var homeSwiperRafId = null;
+
+/* ---------------------------------------------------------
+   基本取得
+--------------------------------------------------------- */
+function getHomeSwiperElement() {
+  return document.getElementById('home-swiper');
+}
+
+function getHomeSwiperRoot() {
+  return document.querySelector('.swiper-home');
+}
+
+function getHomeSwiperWrapper(el) {
+  if (!el) return null;
+  return el.querySelector('.swiper-wrapper');
+}
+
+function getHomeSwiperParts(el) {
+  if (!el) {
+    return { prev: null, next: null, pagination: null };
   }
 
-  // --- Isotope（一覧グリッド）
-  var $grid = $('.home-posts');
-  if ($grid.length) {
-    $grid.imagesLoaded(function () {
-      $grid.isotope({
-        itemSelector: '.archive-post-box',
-        layoutMode: 'fitRows',
-        filter: '*',
-      });
-    });
+  return {
+    prev: el.querySelector('.swiper-button-prev, .home-swiper-prev'),
+    next: el.querySelector('.swiper-button-next, .home-swiper-next'),
+    pagination: el.querySelector('.swiper-pagination, .home-swiper-pagination'),
+  };
+}
 
-    // カテゴリフィルタ
-    $('.home-cats-selection').on('click', 'ul li a', function (e) {
+/* ---------------------------------------------------------
+   初期化前の掃除
+   - duplicate を消す
+   - 前回初期化の inline style を消す
+   - pagination の中身を空にする
+--------------------------------------------------------- */
+function cleanupHomeSwiperBeforeInit(el) {
+  var wrapper = getHomeSwiperWrapper(el);
+  if (!wrapper) return;
+
+  wrapper.querySelectorAll('.swiper-slide-duplicate').forEach(function (node) {
+    node.remove();
+  });
+
+  Array.prototype.forEach.call(wrapper.children, function (slide) {
+    slide.style.width = '';
+    slide.removeAttribute('aria-label');
+    slide.removeAttribute('role');
+    slide.removeAttribute('data-swiper-slide-index');
+  });
+
+  var parts = getHomeSwiperParts(el);
+
+  if (parts.pagination) {
+    parts.pagination.innerHTML = '';
+    parts.pagination.removeAttribute('style');
+  }
+
+  [parts.prev, parts.next].forEach(function (btn) {
+    if (!btn) return;
+    btn.removeAttribute('style');
+  });
+}
+
+/* ---------------------------------------------------------
+   実スライド数
+   - duplicate を含まない素の枚数を数える
+--------------------------------------------------------- */
+function getHomeSwiperRealSlideCount(el) {
+  var wrapper = getHomeSwiperWrapper(el);
+  if (!wrapper) return 0;
+
+  return wrapper.querySelectorAll('.swiper-slide').length;
+}
+
+/* ---------------------------------------------------------
+   現在のアクティブスライド取得
+--------------------------------------------------------- */
+function getHomeSwiperActiveSlide(swiper) {
+  if (!swiper || swiper.destroyed || !swiper.slides || typeof swiper.activeIndex !== 'number') {
+    return null;
+  }
+
+  return swiper.slides[swiper.activeIndex] || null;
+}
+
+/* ---------------------------------------------------------
+   JSで付けた矢印 / ページャー位置を解除
+   - PCでは基本的にCSS側へ戻す
+--------------------------------------------------------- */
+function clearHomeSwiperInlinePosition(swiper) {
+  if (!swiper || !swiper.el) return;
+
+  var parts = getHomeSwiperParts(swiper.el);
+
+  [parts.prev, parts.next].forEach(function (btn) {
+    if (!btn) return;
+
+    btn.style.top = '';
+    btn.style.bottom = '';
+    btn.style.left = '';
+    btn.style.right = '';
+    btn.style.transform = '';
+    btn.style.inset = '';
+  });
+
+  if (parts.pagination) {
+    parts.pagination.style.top = '';
+    parts.pagination.style.bottom = '';
+    parts.pagination.style.left = '';
+    parts.pagination.style.right = '';
+    parts.pagination.style.width = '';
+    parts.pagination.style.transform = '';
+    parts.pagination.style.inset = '';
+  }
+}
+
+/* ---------------------------------------------------------
+   高さ制御
+   - モバイル/タブレットだけ autoHeight を使う
+   - PCは wrapper の高さをJSで毎回変えない
+--------------------------------------------------------- */
+function updateHomeSwiperHeight(swiper) {
+  if (!swiper || swiper.destroyed) return;
+
+  if (HOME_SWIPER_MQ.matches) {
+    /* モバイル/タブレットはコンテンツに応じて高さ追従 */
+    swiper.updateAutoHeight(0);
+  } else {
+    /* PCは高さの暴れを避けるため autoHeight を実行しない */
+    if (swiper.wrapperEl) {
+      swiper.wrapperEl.style.height = '';
+    }
+  }
+}
+
+/* ---------------------------------------------------------
+   モバイル/タブレット時の矢印位置
+   - アクティブスライドのアイキャッチ中央に重ねる
+--------------------------------------------------------- */
+function updateHomeSwiperOverlayNav(swiper) {
+  if (!swiper || swiper.destroyed || !swiper.el) return;
+
+  var parts = getHomeSwiperParts(swiper.el);
+  var prev = parts.prev;
+  var next = parts.next;
+
+  if (!prev || !next) return;
+
+  if (!HOME_SWIPER_MQ.matches) {
+    [prev, next].forEach(function (btn) {
+      btn.style.top = '';
+      btn.style.bottom = '';
+      btn.style.left = '';
+      btn.style.right = '';
+      btn.style.transform = '';
+      btn.style.inset = '';
+    });
+    return;
+  }
+
+  var activeSlide = getHomeSwiperActiveSlide(swiper);
+  if (!activeSlide) return;
+
+  var feature = activeSlide.querySelector('.home-slide-feature');
+  if (!feature) return;
+
+  var centerY = Math.round(feature.offsetTop + feature.offsetHeight / 2);
+
+  prev.style.top = centerY + 'px';
+  next.style.top = centerY + 'px';
+
+  prev.style.bottom = 'auto';
+  next.style.bottom = 'auto';
+
+  prev.style.left = '12px';
+  next.style.right = '12px';
+
+  prev.style.right = 'auto';
+  next.style.left = 'auto';
+
+  prev.style.transform = 'translateY(-50%)';
+  next.style.transform = 'translateY(-50%)';
+}
+
+/* ---------------------------------------------------------
+   モバイル/タブレット時のページャー位置
+   - アイキャッチ直下へ置く
+--------------------------------------------------------- */
+function updateHomeSwiperPagination(swiper) {
+  if (!swiper || swiper.destroyed || !swiper.el) return;
+
+  var parts = getHomeSwiperParts(swiper.el);
+  var pagination = parts.pagination;
+
+  if (!pagination) return;
+
+  if (!HOME_SWIPER_MQ.matches) {
+    pagination.style.top = '';
+    pagination.style.bottom = '';
+    pagination.style.left = '';
+    pagination.style.right = '';
+    pagination.style.width = '';
+    pagination.style.transform = '';
+    pagination.style.inset = '';
+    return;
+  }
+
+  var activeSlide = getHomeSwiperActiveSlide(swiper);
+  if (!activeSlide) return;
+
+  var feature = activeSlide.querySelector('.home-slide-feature');
+  if (!feature) return;
+
+  var featureBottom = Math.round(feature.offsetTop + feature.offsetHeight + 8);
+
+  pagination.style.top = featureBottom + 'px';
+  pagination.style.bottom = 'auto';
+  pagination.style.left = '0';
+  pagination.style.right = '0';
+  pagination.style.width = '100%';
+  pagination.style.transform = 'translate3d(0, 0, 0)';
+}
+
+/* ---------------------------------------------------------
+   UI同期
+--------------------------------------------------------- */
+function syncHomeSwiperUI(swiper) {
+  if (!swiper || swiper.destroyed) return;
+
+  updateHomeSwiperHeight(swiper);
+  updateHomeSwiperOverlayNav(swiper);
+  updateHomeSwiperPagination(swiper);
+}
+
+function syncHomeSwiperUIRaf(swiper) {
+  if (!swiper || swiper.destroyed) return;
+
+  if (homeSwiperRafId) {
+    cancelAnimationFrame(homeSwiperRafId);
+  }
+
+  homeSwiperRafId = requestAnimationFrame(function () {
+    syncHomeSwiperUI(swiper);
+    homeSwiperRafId = null;
+  });
+}
+
+/* ---------------------------------------------------------
+   Swiperオプション生成
+   - mobile/tablet だけ autoHeight true
+   - PCは autoHeight false
+--------------------------------------------------------- */
+function buildHomeSwiperOptions(el) {
+  var slideCount = getHomeSwiperRealSlideCount(el);
+  var loopEnabled = slideCount > 1;
+  var parts = getHomeSwiperParts(el);
+
+  var options = {
+    slidesPerView: 1,
+    slidesPerGroup: 1,
+    spaceBetween: 0,
+    speed: 500,
+
+    /* ここが重要
+       PCでは高さ揺れを防ぐため false
+       mobile/tablet だけ true */
+    autoHeight: HOME_SWIPER_MQ.matches,
+
+    loop: loopEnabled,
+    rewind: false,
+    allowTouchMove: loopEnabled,
+    watchOverflow: !loopEnabled,
+
+    observer: true,
+    observeParents: true,
+    observeSlideChildren: true,
+
+    preloadImages: false,
+    updateOnImagesReady: true,
+
+    on: {
+      init: function () {
+        var sliderRoot = getHomeSwiperRoot();
+
+        if (sliderRoot) {
+          sliderRoot.classList.remove('invisibility');
+        }
+
+        syncHomeSwiperUIRaf(this);
+      },
+
+      imagesReady: function () {
+        var sliderRoot = getHomeSwiperRoot();
+
+        if (sliderRoot) {
+          sliderRoot.classList.remove('invisibility');
+        }
+
+        syncHomeSwiperUIRaf(this);
+      },
+
+      resize: function () {
+        syncHomeSwiperUIRaf(this);
+      },
+
+      slideChange: function () {
+        syncHomeSwiperUIRaf(this);
+      },
+
+      slideChangeTransitionEnd: function () {
+        syncHomeSwiperUIRaf(this);
+      },
+
+      observerUpdate: function () {
+        syncHomeSwiperUIRaf(this);
+      },
+
+      loopFix: function () {
+        syncHomeSwiperUIRaf(this);
+      },
+    },
+  };
+
+  if (parts.prev && parts.next) {
+    options.navigation = {
+      prevEl: parts.prev,
+      nextEl: parts.next,
+    };
+  }
+
+  if (parts.pagination) {
+    options.pagination = {
+      el: parts.pagination,
+      clickable: true,
+    };
+  }
+
+  return options;
+}
+
+/* ---------------------------------------------------------
+   初期化
+--------------------------------------------------------- */
+function initHomeSwiper() {
+  var el = getHomeSwiperElement();
+
+  if (!el || typeof Swiper === 'undefined') return;
+
+  if (el.swiper && !el.swiper.destroyed) {
+    el.swiper.destroy(true, true);
+  }
+
+  cleanupHomeSwiperBeforeInit(el);
+
+  var slideCount = getHomeSwiperRealSlideCount(el);
+  if (slideCount === 0) return;
+
+  new Swiper(el, buildHomeSwiperOptions(el));
+}
+
+/* ---------------------------------------------------------
+   再計算
+   - mq切替時に autoHeight モードが変わるので
+     必要なら作り直す
+--------------------------------------------------------- */
+function refreshHomeSwiper(forceReinit) {
+  var el = getHomeSwiperElement();
+  if (!el || !el.swiper || el.swiper.destroyed) return;
+
+  var shouldUseAutoHeight = HOME_SWIPER_MQ.matches;
+
+  if (forceReinit || el.swiper.params.autoHeight !== shouldUseAutoHeight) {
+    initHomeSwiper();
+    return;
+  }
+
+  el.swiper.updateSize();
+  el.swiper.updateSlides();
+  el.swiper.updateProgress();
+  el.swiper.updateSlidesClasses();
+
+  syncHomeSwiperUIRaf(el.swiper);
+}
+
+/* ---------------------------------------------------------
+   Isotope
+--------------------------------------------------------- */
+function initHomeIsotope($) {
+  var $grid = $('.home-posts');
+
+  if (!$grid.length || typeof $.fn.isotope === 'undefined') return;
+
+  $grid.imagesLoaded(function () {
+    $grid.isotope({
+      itemSelector: '.archive-post-box',
+      layoutMode: 'fitRows',
+      filter: '*',
+    });
+  });
+
+  $('.home-cats-selection')
+    .off('click.homeCats')
+    .on('click.homeCats', 'ul li a', function (e) {
       e.preventDefault();
+
       $('.home-cats-selection ul li a').removeClass('active');
       $(this).addClass('active');
+
       var target = $(this).attr('href');
       $grid.isotope({ filter: target });
     });
+}
+
+/* ---------------------------------------------------------
+   windowイベント
+--------------------------------------------------------- */
+function bindHomeSwiperWindowEvents($) {
+  $(window).off('resize.homeSwiper orientationchange.homeSwiper');
+  $(window).on('resize.homeSwiper orientationchange.homeSwiper', function () {
+    refreshHomeSwiper(false);
+  });
+
+  if (!homeSwiperMqBound) {
+    if (HOME_SWIPER_MQ.addEventListener) {
+      HOME_SWIPER_MQ.addEventListener('change', function () {
+        /* mobile ⇔ PC で autoHeight の設計が変わるので再初期化 */
+        refreshHomeSwiper(true);
+      });
+    } else if (HOME_SWIPER_MQ.addListener) {
+      HOME_SWIPER_MQ.addListener(function () {
+        refreshHomeSwiper(true);
+      });
+    }
+
+    homeSwiperMqBound = true;
   }
+}
+
+/* ---------------------------------------------------------
+   実行
+--------------------------------------------------------- */
+jQuery(function ($) {
+  initHomeSwiper();
+  initHomeIsotope($);
+  bindHomeSwiperWindowEvents($);
+});
+
+window.addEventListener('load', function () {
+  refreshHomeSwiper(false);
 });
 
 // ニュース ティカー slick slider
@@ -702,175 +1022,290 @@ jQuery(document).ready(function (jQuery) {
   });
 });
 
-//Bootstrap Table
-// jQuery.noConflict()を呼び出して$の競合を解消する
-jQuery.noConflict();
-
-// jQuery(document).readyの代わりにjQuery(function($))を使用し、$を利用できるようにする
-jQuery(function ($) {
-  $('#dataTable').DataTable();
-});
-
-// forEach() メソッドのコールバック関数の引数 item は、
-// イテレーション中に現在処理されている配列の要素を指します。
-// document.querySelectorAll('.sidebar-navigation .menu-item-has-children > a')
-// で選択されたすべての要素に対して、各要素が順番に item として渡されます。
-
-// サイドバーナビゲーションのトグルのロテーション(回転)の動き
-document
-  .querySelectorAll('.sidebar-navigation .menu-item-has-children > a')
-  .forEach(function (item) {
-    // 各メニューアイテムにクリックイベントリスナーを追加
-    item.addEventListener('click', function (event) {
-      event.preventDefault(); // デフォルトのクリック動作を無効化
-      // クリックされた要素の親ノード（メニューアイテム）に "rotated" クラスを追加
-      this.parentNode.classList.toggle('rotated');
-    });
-  });
-
 document.addEventListener('DOMContentLoaded', function () {
-  // キーワードを削除する関数
-  function removeKeywordsFromTitle(title) {
-    var keywords = ['Genshin Impact', 'Tekken7'];
-    var trimmedTitle = title;
+  var calendarEl = document.getElementById('calendar');
+  var listEl = document.getElementById('naigai-property-list');
+  if (!calendarEl) return;
 
-    keywords.forEach(function (keyword) {
-      // 正規表現を使ってキーワードを削除
-      var regex = new RegExp(keyword, 'gi');
-      trimmedTitle = trimmedTitle.replace(regex, '');
+  function getCurrentPostIdFromBody() {
+    var m = document.body.className.match(/\bpostid-(\d+)\b/);
+    return m ? String(m[1]) : '';
+  }
+
+  function isWeekView(viewType) {
+    return String(viewType || '') === 'timeGridWeek';
+  }
+
+  function openReservationModal(data) {
+    if (!data) return;
+
+    var $modal = jQuery('#store-reservation-modal');
+    if (!$modal.length) return;
+
+    $modal.find('#reservation-property-title').text(data.title || '物件情報');
+    $modal.find('#reservation-property-thumbnail').css({
+      'background-image': 'url(' + (data.thumbnail || '') + ')',
+      'background-size': 'cover',
+      'background-position': 'center',
     });
+    $modal.find('#reservation-header').text('来店予約');
+    $modal.find('#reservation-property-id').text(data.post_id || '');
+    $modal.find('#reservation-property-label').text('物件ID: ');
+    $modal.find('#reservation-property-price').text(data.price || '売却済');
 
-    return trimmedTitle.trim();
+    $modal
+      .attr('data-post-id', data.post_id || '')
+      .attr('data-post-type', data.post_type || '')
+      .attr('data-permalink', data.permalink || '')
+      .attr('data-staff', data.staff || '')
+      .attr('data-period-label', data.period_label || '')
+      .attr('data-time-label', data.time_label || '')
+      .attr('data-type', data.type || '')
+      .attr('data-area', data.area || '');
+
+    $modal.addClass('active').css({ display: 'flex', visibility: 'visible' }).fadeIn(300);
+    $modal.find('#step-input').show();
+    $modal.find('#step-confirm').hide();
+    $modal.find('#step-complete').hide();
   }
 
-  // HTMLデコード関数
-  function decodeHTMLEntities(str) {
-    var txt = document.createElement('textarea');
-    txt.innerHTML = str;
-    return txt.value;
-  }
+  function openReserveByPostId(postId) {
+    postId = String(postId || '').trim();
+    if (!postId) return;
 
-  // カレンダーからモーダルを表示（抜粋=右、詳細=下）
-  function showModal(title, detailsHtml, link, eyecatch, excerptHtml) {
-    // --- タイトル ---
-    const modalTitle = document.getElementById('eventModalLabel');
-    modalTitle.textContent = title || '';
+    var currentId = getCurrentPostIdFromBody();
+    var isSingle = document.body.classList.contains('single');
 
-    // クリック増殖を止める（addEventListenerやめる）
-    modalTitle.onclick = null;
-    if (link) {
-      modalTitle.style.cursor = 'pointer';
-      modalTitle.onclick = () => (window.location.href = link);
-    } else {
-      modalTitle.style.cursor = '';
-    }
-
-    // --- ✅ 右：抜粋 ---
-    const modalExcerpt = document.getElementById('eventExcerpt');
-    if (modalExcerpt) {
-      // HTMLで入れたいなら innerHTML（テキストだけなら textContent）
-      modalExcerpt.innerHTML = excerptHtml || '';
-    }
-
-    // --- ✅ 下：詳細 ---
-    const modalDetails = document.getElementById('eventDetails');
-    if (modalDetails) {
-      modalDetails.innerHTML = detailsHtml || '';
-    }
-
-    // --- 画像 ---
-    const modalEyecatch = document.getElementById('eventEyecatch');
-    if (modalEyecatch) {
-      modalEyecatch.onclick = null; // 増殖防止
-
-      if (eyecatch) {
-        modalEyecatch.src = eyecatch;
-        modalEyecatch.style.display = '';
-        if (link) {
-          modalEyecatch.style.cursor = 'pointer';
-          modalEyecatch.onclick = () => (window.location.href = link);
-        } else {
-          modalEyecatch.style.cursor = '';
-        }
-      } else {
-        modalEyecatch.removeAttribute('src');
-        modalEyecatch.style.display = 'none';
+    if (isSingle && currentId && currentId === postId) {
+      var $target = jQuery('#store-reservation');
+      if ($target.length) {
+        jQuery('html, body').animate({ scrollTop: Math.max($target.offset().top - 80, 0) }, 300);
+        return;
       }
     }
 
-    // Bootstrap モーダル表示
-    bootstrap.Modal.getOrCreateInstance(document.getElementById('eventModal')).show();
+    jQuery.ajax({
+      url: '/wp-admin/admin-ajax.php',
+      type: 'POST',
+      dataType: 'json',
+      data: {
+        action: 'naigai_get_reservation_modal_data',
+        post_id: postId,
+      },
+      success: function (response) {
+        if (!response || !response.success || !response.data) return;
+        openReservationModal(response.data);
+      },
+    });
   }
 
-  // WordPressから記事のタイトルを取得するAJAXリクエストを送信
+  function setMode(mode, calendar) {
+    var viewHarness = calendarEl.querySelector('.fc-view-harness');
+
+    if (mode === 'list') {
+      calendarEl.classList.add('naigai-mode-list');
+      if (viewHarness) viewHarness.style.display = 'none';
+      if (listEl) listEl.style.display = 'block';
+      return;
+    }
+
+    calendarEl.classList.remove('naigai-mode-list');
+    if (viewHarness) viewHarness.style.display = '';
+    if (listEl) listEl.style.display = 'none';
+
+    if (mode === 'week') {
+      calendar.changeView('timeGridWeek');
+    } else {
+      calendar.changeView('dayGridMonth');
+    }
+  }
+
+  function loadPropertyList(params) {
+    params = params || {};
+    params.action = 'naigai_get_property_list';
+
+    jQuery.ajax({
+      url: '/wp-admin/admin-ajax.php',
+      type: 'POST',
+      dataType: 'json',
+      data: params,
+      success: function (response) {
+        if (!response || !response.success || !listEl) return;
+        listEl.innerHTML = response.data.html;
+        if (calendarEl.classList.contains('naigai-mode-list')) {
+          listEl.style.display = 'block';
+        }
+      },
+    });
+  }
+
+  function getFormParams(form) {
+    var fd = new FormData(form);
+    var params = {};
+    fd.forEach(function (value, key) {
+      params[key] = value;
+    });
+    return params;
+  }
+
+  function buildMonthEventContent(arg) {
+    var p = arg.event.extendedProps || {};
+    var typeLabel = p.property_type_label || '';
+    var shortTitle = p.short_title || arg.event.title || '';
+    var staff = p.staff || '';
+
+    var wrap = document.createElement('div');
+    wrap.className = 'naigai-fc-event';
+
+    var line1 = document.createElement('div');
+    line1.className = 'naigai-fc-event__title';
+    line1.textContent = '● ' + (typeLabel ? typeLabel : '') + (shortTitle ? '｜' + shortTitle : '');
+    wrap.appendChild(line1);
+
+    if (staff) {
+      var line2 = document.createElement('div');
+      line2.className = 'naigai-fc-event__staff';
+      line2.textContent = '担当者：' + staff;
+      wrap.appendChild(line2);
+    }
+
+    return wrap;
+  }
+
+  function buildWeekEventContent(arg) {
+    var p = arg.event.extendedProps || {};
+    var typeLabel = p.property_type_label || '';
+    var shortTitle = p.short_title || arg.event.title || '';
+    var timeLabel = p.time_label || '';
+    var staff = p.staff || '';
+
+    var wrap = document.createElement('div');
+    wrap.className = 'naigai-fc-event naigai-fc-event--week';
+
+    var line1 = document.createElement('div');
+    line1.className = 'naigai-fc-event__title';
+    line1.textContent = '● ' + (typeLabel ? typeLabel : '') + (shortTitle ? '｜' + shortTitle : '');
+    wrap.appendChild(line1);
+
+    if (timeLabel) {
+      var line2 = document.createElement('div');
+      line2.className = 'naigai-fc-event__time';
+      line2.textContent = '案内 ' + timeLabel;
+      wrap.appendChild(line2);
+    }
+
+    if (staff) {
+      var line3 = document.createElement('div');
+      line3.className = 'naigai-fc-event__staff';
+      line3.textContent = '担当：' + staff;
+      wrap.appendChild(line3);
+    }
+
+    return wrap;
+  }
+
   jQuery.ajax({
     url: '/wp-admin/admin-ajax.php',
     type: 'POST',
     dataType: 'json',
-    data: {
-      action: 'get_post_titles',
-    },
-    success: function (response) {
-      console.log('AJAX Response:', response);
+    data: { action: 'naigai_get_calendar_events' },
+    success: function (events) {
+      if (!Array.isArray(events)) return;
 
-      // リンク要素を追加するコンテナ
-      var linksContainer = document.getElementById('linksContainer');
+      var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        locale: 'ja',
+        events: events,
+        buttonText: { today: '今日' },
+        customButtons: {
+          naigaiList: {
+            text: '一覧',
+            click: function () {
+              setMode('list', calendar);
+            },
+          },
+          naigaiWeek: {
+            text: '週',
+            click: function () {
+              setMode('week', calendar);
+            },
+          },
+          naigaiMonth: {
+            text: '月',
+            click: function () {
+              setMode('month', calendar);
+            },
+          },
+        },
+        headerToolbar: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'naigaiList,naigaiWeek,naigaiMonth',
+        },
+        allDaySlot: true,
+        slotMinTime: '09:00:00',
+        slotMaxTime: '19:00:00',
+        slotLabelFormat: {
+          hour: 'numeric',
+          minute: '2-digit',
+          hour12: false,
+        },
+        eventContent: function (arg) {
+          var viewType = arg.view && arg.view.type ? arg.view.type : '';
+          var node = isWeekView(viewType)
+            ? buildWeekEventContent(arg)
+            : buildMonthEventContent(arg);
 
-      // クリックイベントを追加
-      response.forEach(function (item) {
-        try {
-          console.log('Original title:', item.title);
-          console.log('Permalink:', item.pamalink); // パーマリンクをログに出力
-
-          // タイトルをHTMLデコードしてからキーワードを削除
-          var decodedTitle = decodeHTMLEntities(item.title);
-          var cleanedTitle = removeKeywordsFromTitle(decodedTitle);
-
-          // リンク要素を作成
-          var linkElement = document.createElement('a');
-          linkElement.textContent = cleanedTitle; // キーワードを削除したタイトルを表示
-          linkElement.href = item.pamalink; // 該当記事のリンクを設定
-          linkElement.classList.add('post-title');
-
-          // リンク要素をクリックしたときにモーダルウィンドウを表示
-          linkElement.addEventListener('click', function (event) {
-            event.preventDefault(); // デフォルトのリンク動作をキャンセル
-            const excerpt = item.excerpt || makeExcerptFromHtml(item.content, 120);
-            showModal(cleanedTitle, item.content, item.pamalink, item.eyecatch, excerpt);
-          });
-
-          // リンク要素をコンテナに追加
-          if (linksContainer) {
-            linksContainer.appendChild(linkElement);
-          }
-        } catch (error) {
-          //console.error('Error processing item:', item);
-          //console.error(error);
-        }
+          return { domNodes: [node] };
+        },
+        eventClick: function (info) {
+          info.jsEvent.preventDefault();
+          var p = info.event.extendedProps || {};
+          openReserveByPostId(p.post_id || info.event.id || '');
+        },
       });
 
-      // カレンダーの初期化などの処理を追加
-      var calendarEl = document.getElementById('calendar');
-      if (calendarEl) {
-        var calendar = new FullCalendar.Calendar(calendarEl, {
-          initialView: 'dayGridMonth',
-          events: response, // イベントを設定
-          eventClick: function (info) {
-            // クリックしたイベントの処理を記述
-            showModal(
-              info.event.title,
-              info.event.extendedProps.content,
-              info.event.extendedProps.pamalink,
-              info.event.extendedProps.eyecatch,
-            ); // クリックしたイベントのタイトルと内容、リンク先、サムネイル画像を渡す
-          },
-        });
-        calendar.render();
-      }
+      calendar.render();
+      setMode('list', calendar);
     },
-    error: function (xhr, status, error) {
-      //console.error('Error fetching post titles:', error);
-    },
+  });
+
+  loadPropertyList({});
+
+  document.addEventListener('submit', function (e) {
+    var form = e.target.closest('#naigai-property-filter-form');
+    if (!form) return;
+    e.preventDefault();
+
+    var params = getFormParams(form);
+    params.paged = 1;
+    loadPropertyList(params);
+  });
+
+  document.addEventListener('click', function (e) {
+    var resetBtn = e.target.closest('.naigai-filter-reset');
+    if (resetBtn) {
+      e.preventDefault();
+      loadPropertyList({});
+      return;
+    }
+
+    var pageBtn = e.target.closest('.naigai-page-btn');
+    if (pageBtn) {
+      e.preventDefault();
+      var wrap = document.getElementById('naigai-property-list');
+      var form = wrap ? wrap.querySelector('#naigai-property-filter-form') : null;
+      var params = form ? getFormParams(form) : {};
+      params.paged = pageBtn.getAttribute('data-page') || 1;
+      loadPropertyList(params);
+      return;
+    }
+
+    var btn = e.target.closest('.naigai-property-row__cta');
+    if (btn) {
+      e.preventDefault();
+      openReserveByPostId(btn.getAttribute('data-post-id'));
+    }
   });
 });
 
@@ -1217,53 +1652,65 @@ document.addEventListener('DOMContentLoaded', function () {
   let scrollLeft = 0;
   let isDragging = false;
 
-  subImageContainer.addEventListener('mousedown', (e) => {
-    isDragging = true;
-    startX = e.pageX - subImageContainer.offsetLeft;
-    scrollLeft = subImageContainer.scrollLeft;
-    subImageContainer.style.cursor = 'grabbing';
-  });
+  // ✅ subImageContainer があるページだけ実行（無いページで scripts.js を落とさない）
+  if (subImageContainer) {
+    subImageContainer.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      startX = e.pageX - subImageContainer.offsetLeft;
+      scrollLeft = subImageContainer.scrollLeft;
+      subImageContainer.style.cursor = 'grabbing';
+    });
 
-  subImageContainer.addEventListener('mouseleave', () => {
-    isDragging = false;
-    subImageContainer.style.cursor = 'grab';
-  });
+    subImageContainer.addEventListener('mouseleave', () => {
+      isDragging = false;
+      subImageContainer.style.cursor = 'grab';
+    });
 
-  subImageContainer.addEventListener('mouseup', () => {
-    isDragging = false;
-    subImageContainer.style.cursor = 'grab';
-  });
+    subImageContainer.addEventListener('mouseup', () => {
+      isDragging = false;
+      subImageContainer.style.cursor = 'grab';
+    });
 
-  subImageContainer.addEventListener('mousemove', (e) => {
-    if (!isDragging) return;
-    e.preventDefault();
-    const x = e.pageX - subImageContainer.offsetLeft;
-    const walk = (x - startX) * 1.5;
-    subImageContainer.scrollLeft = scrollLeft - walk;
-  });
+    subImageContainer.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      e.preventDefault();
+      const x = e.pageX - subImageContainer.offsetLeft;
+      const walk = (x - startX) * 1.5;
+      subImageContainer.scrollLeft = scrollLeft - walk;
+    });
 
-  subImageContainer.addEventListener('touchstart', (e) => {
-    startX = e.touches[0].clientX;
-    scrollLeft = subImageContainer.scrollLeft;
-    isDragging = true;
-  });
+    subImageContainer.addEventListener(
+      'touchstart',
+      (e) => {
+        startX = e.touches[0].clientX;
+        scrollLeft = subImageContainer.scrollLeft;
+        isDragging = true;
+      },
+      { passive: true },
+    );
 
-  subImageContainer.addEventListener('touchmove', (e) => {
-    if (!isDragging) return;
-    const x = e.touches[0].clientX;
-    const walk = (x - startX) * 1.5;
-    subImageContainer.scrollLeft = scrollLeft - walk;
-  });
+    subImageContainer.addEventListener(
+      'touchmove',
+      (e) => {
+        if (!isDragging) return;
+        const x = e.touches[0].clientX;
+        const walk = (x - startX) * 1.5;
+        subImageContainer.scrollLeft = scrollLeft - walk;
+      },
+      { passive: true },
+    );
 
-  subImageContainer.addEventListener('touchend', () => {
-    isDragging = false;
-  });
+    subImageContainer.addEventListener('touchend', () => {
+      isDragging = false;
+    });
+  }
 
   // **🔹 初期化**
   if (panoramaContainer && panoramaContainer.dataset.panoramaUrl) {
     initPannellum(panoramaContainer.dataset.panoramaUrl);
   } else {
     console.error('❌ 初期パノラマ画像が見つかりません');
+    return;
   }
 });
 
@@ -1651,37 +2098,36 @@ jQuery(function ($) {
     localStorage.setItem('likedPosts', JSON.stringify(uniq));
   }
 
-  // ★ div(active) と svg(liked) を両方同期（CSSがどっち見てても壊れない）
   function setUI(postId, isActive) {
     const $wrap = $('.heart-icon[data-post-id="' + postId + '"]');
     $wrap.toggleClass('active', !!isActive);
     $wrap.find('svg').toggleClass('liked', !!isActive);
+    $wrap.attr('aria-pressed', isActive ? 'true' : 'false');
   }
 
-  // restore
   getLikedPosts().forEach(function (postId) {
     setUI(postId, true);
   });
 
-  // click
   $(document).on('click', '.heart-icon', function (e) {
     e.preventDefault();
     e.stopPropagation();
 
-    const postId = String($(this).data('post-id'));
-    const currentlyActive = $(this).hasClass('active');
-    const nextActive = !currentlyActive;
+    const $this = $(this);
+    const postId = String($this.data('post-id'));
+    const prevActive = $this.hasClass('active');
+    const nextActive = !prevActive;
 
-    // 先にUI反映（体感）
     setUI(postId, nextActive);
 
-    // localStorage更新
     let likedPosts = getLikedPosts();
-    if (nextActive) likedPosts.push(postId);
-    else likedPosts = likedPosts.filter((id) => id !== postId);
+    if (nextActive) {
+      likedPosts.push(postId);
+    } else {
+      likedPosts = likedPosts.filter((id) => id !== postId);
+    }
     setLikedPosts(likedPosts);
 
-    // サーバー同期（★200でもsuccess:falseを必ず見る）
     $.ajax({
       url: customAjax.ajaxurl,
       type: 'POST',
@@ -1699,9 +2145,17 @@ jQuery(function ($) {
           console.error('toggle_like returned error:', res);
           return;
         }
-        // サーバーの確定値で合わせる（ここ重要）
+
         const likedVal = Number(res.data?.liked ?? (nextActive ? 1 : 0));
         setUI(postId, likedVal === 1);
+
+        let synced = getLikedPosts();
+        if (likedVal === 1) {
+          synced.push(postId);
+        } else {
+          synced = synced.filter((id) => id !== postId);
+        }
+        setLikedPosts(synced);
       })
       .fail(function (xhr) {
         rollback();
@@ -1709,12 +2163,14 @@ jQuery(function ($) {
       });
 
     function rollback() {
-      // クリック前に戻す
-      setUI(postId, currentlyActive);
+      setUI(postId, prevActive);
 
       let back = getLikedPosts();
-      if (currentlyActive) back.push(postId);
-      else back = back.filter((id) => id !== postId);
+      if (prevActive) {
+        back.push(postId);
+      } else {
+        back = back.filter((id) => id !== postId);
+      }
       setLikedPosts(back);
     }
   });
@@ -3126,13 +3582,15 @@ function showConfirmationScreen(formData, selector) {
 document.addEventListener('DOMContentLoaded', function () {
   const propertyStatus = document.getElementById('property_status'); // 現況の選択欄
   const dynamicFieldsContainer = document.getElementById('dynamic-fields-container'); // 追加フィールド表示エリア
+  if (!propertyStatus || !dynamicFieldsContainer) return;
 
   updateFields(); // ページ読み込み時に一度実行
-  propertyStatus.addEventListener('change', updateFields); // 現況が変更されたら実行
+  if (propertyStatus) if (propertyStatus) propertyStatus.addEventListener('change', updateFields); // 現況が変更されたら実行
 
   // ▼ 現況に応じてフォーム項目を切り替える関数
   function updateFields() {
-    dynamicFieldsContainer.innerHTML = ''; // 既存のフィールドをリセット
+    if (!propertyStatus || !dynamicFieldsContainer) return;
+    if (dynamicFieldsContainer) dynamicFieldsContainer.innerHTML = ''; // 既存のフィールドをリセット
 
     let selectedValue = propertyStatus.value;
     let fields = [];
@@ -3703,63 +4161,3 @@ jQuery(document).ready(function ($) {
 
   $('#last_name_kana, #first_name_kana').on('input', updateNameSlug);
 });
-
-/*モバイル高さの調整*/
-/*(function(){
-  const mq = window.matchMedia('(max-width: 767px)');
-  const root = document.documentElement;
-  const body = document.body;
-  const headTop = document.querySelector('.header__top');
-  const nav = document.querySelector('.navg_under');
-  const adminBar = document.getElementById('wpadminbar');
-
-  if(!headTop || !nav) return;
-
-  let raf = null;
-  function applyHeights(){
-    if (raf) cancelAnimationFrame(raf);
-    raf = requestAnimationFrame(() => {
-      if(!mq.matches){
-        body.classList.remove('mobile-fixed-active');
-        root.style.removeProperty('--header-top-height');
-        root.style.removeProperty('--nav-height');
-        root.style.removeProperty('--admin-offset');
-        return;
-      }
-
-      body.classList.add('mobile-fixed-active');
-
-      // 切り上げで誤差を潰す
-      const admin = adminBar ? Math.ceil(adminBar.getBoundingClientRect().height) : 0;
-      const hTop  = Math.ceil(headTop.getBoundingClientRect().height);
-      const nH    = Math.ceil(nav.getBoundingClientRect().height);
-
-      root.style.setProperty('--admin-offset', admin + 'px');
-      root.style.setProperty('--header-top-height', hTop + 'px');
-      root.style.setProperty('--nav-height', nH + 'px');
-    });
-  }
-
-  // 初回＆各種イベント
-  window.addEventListener('load', applyHeights);
-  window.addEventListener('resize', applyHeights, {passive:true});
-  window.addEventListener('orientationchange', applyHeights, {passive:true});
-  window.addEventListener('pageshow', applyHeights); // bfcache
-
-  if (window.visualViewport) visualViewport.addEventListener('resize', applyHeights, {passive:true});
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(applyHeights);
-
-  // 要素のサイズ変化監視
-  if ('ResizeObserver' in window) {
-    const ro = new ResizeObserver(applyHeights);
-    ro.observe(headTop);
-    ro.observe(nav);
-    if (adminBar) ro.observe(adminBar);
-  }
-
-  // パンくずなどDOM更新にも追従
-  const bc = document.getElementById('breadcrumb');
-  if (bc && 'MutationObserver' in window) {
-    new MutationObserver(applyHeights).observe(bc, {childList:true, subtree:true, characterData:true});
-  }
-})();*/

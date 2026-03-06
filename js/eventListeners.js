@@ -1,48 +1,71 @@
 // =====================================
-// Store Reservation: safe bind (二重実行防止)
+// Store Reservation: safe bind (二重実行防止 / デバッグしやすい版)
 // =====================================
 (function ($) {
   'use strict';
 
-  // ✅ このファイルが2回読み込まれても1回しかバインドしない
   if (window.__SR_BIND_DONE__) return;
   window.__SR_BIND_DONE__ = true;
 
-  // ✅ 既存の click/submit を強制的に剥がす（scripts.js側の古いバインド潰し）
+  // 既存ハンドラを剥がす（旧 scripts.js 対策）
   $('#to-confirm-modal, #to-confirm-page, #submit-reservation, #back-to-input').off('click');
   $('#store-reservation-form').off('submit');
 
-  // ✅ “委譲 + namespace” で再バインド（DOM差し替えにも強い）
+  // 共通: 例外を潰さず見える化
+  function safeRun(label, fn) {
+    try {
+      fn();
+    } catch (err) {
+      console.error(`[${label}]`, err);
+      if (err && err.stack) console.error(err.stack);
+
+      const msg = (err && (err.message || String(err))) || 'unknown error';
+      alert(`${label} でJSエラー: ${msg}`);
+    }
+  }
+
+  // ✅ 確認ボタン
   $(document)
     .off('click.srConfirm', '#to-confirm-modal, #to-confirm-page')
     .on('click.srConfirm', '#to-confirm-modal, #to-confirm-page', function (e) {
       e.preventDefault();
-      e.stopImmediatePropagation(); // ✅ 同一要素に別ハンドラが居ても止める
-      handleConfirmation(this);
+      // e.stopImmediatePropagation(); // ← まず外す（無反応化を防ぐ）
+      // e.stopPropagation();          // 必要ならこっちにする
+
+      console.log('[srConfirm] click', this);
+      safeRun('確認ボタン処理', () => handleConfirmation(this));
     });
 
+  // ✅ 戻るボタン
   $(document)
     .off('click.srBack', '#back-to-input')
     .on('click.srBack', '#back-to-input', function (e) {
       e.preventDefault();
-      e.stopImmediatePropagation();
-      handleBackToInput(this);
+      // e.stopImmediatePropagation(); // ← まず外す
+
+      console.log('[srBack] click', this);
+      safeRun('戻るボタン処理', () => handleBackToInput(this));
     });
 
+  // ✅ 送信ボタン
   $(document)
     .off('click.srSubmit', '#submit-reservation')
     .on('click.srSubmit', '#submit-reservation', function (e) {
       e.preventDefault();
-      e.stopImmediatePropagation();
-      handleFormSubmit(this);
+      // e.stopImmediatePropagation(); // ← まず外す
+
+      console.log('[srSubmit] click', this);
+      safeRun('送信ボタン処理', () => handleFormSubmit(this));
     });
 
-  // ✅ 何かが form.submit() しても admin-ajax を叩かせない（400の原因潰し）
+  // ✅ form の通常 submit を止める（AJAX運用時）
+  // ※ デバッグ中に submit 挙動を見たいなら、このブロックを一時コメントアウト
   $(document)
     .off('submit.srBlock', '#store-reservation-form')
     .on('submit.srBlock', '#store-reservation-form', function (e) {
       e.preventDefault();
-      e.stopImmediatePropagation();
+      // e.stopImmediatePropagation(); // ← まず外す
+      console.log('[srBlock] native submit blocked');
       return false;
     });
 })(jQuery);
@@ -54,28 +77,54 @@ function handleConfirmation(button) {
   const $btn = jQuery(button);
   const buttonId = $btn.attr('id');
 
-  const parent = $btn.closest('.store-reservation-modal-content, .store-reservation-page-content');
-  if (parent.length === 0) {
-    console.error('handleConfirmation: parentが見つからない');
-    return;
+  const $parent = $btn.closest('.store-reservation-modal-content, .store-reservation-page-content');
+  if (!$parent.length) {
+    throw new Error('handleConfirmation: parent not found');
   }
 
-  // ✅ バリデーション（validateFormは selector文字列のまま使う）
-  const selector = parent.hasClass('store-reservation-modal-content')
+  const selector = $parent.hasClass('store-reservation-modal-content')
     ? '.store-reservation-modal-content'
     : '.store-reservation-page-content';
 
-  if (!validateForm(selector)) return;
+  if (typeof validateForm !== 'function') throw new Error('validateForm is not defined');
+  if (typeof getFormData !== 'function') throw new Error('getFormData is not defined');
+  if (typeof updateConfirmationData !== 'function')
+    throw new Error('updateConfirmationData is not defined');
+  if (typeof showConfirmationScreen !== 'function')
+    throw new Error('showConfirmationScreen is not defined');
 
-  // フォームデータ取得＆確認画面更新
-  const formData = getFormData(parent);
+  if (!validateForm($parent)) return;
+  const formData = getFormData($parent);
+  console.log('[HC] formData =', formData);
+
   updateConfirmationData(formData);
 
-  // 表示
-  if (buttonId === 'to-confirm-modal') {
-    showConfirmationScreen(formData, '.store-reservation-modal-content');
-  } else {
-    showConfirmationScreen(formData, '.store-reservation-page-content');
+  try {
+    console.log('[HC] before showConfirmationScreen', {
+      buttonId,
+      selector,
+      parentLen: $parent.length,
+      stepInput: $parent.find('#step-input').length,
+      stepConfirm: $parent.find('#step-confirm').length,
+      formData,
+    });
+
+    if (buttonId === 'to-confirm-modal') {
+      showConfirmationScreen(formData, '.store-reservation-modal-content');
+    } else {
+      showConfirmationScreen(formData, '.store-reservation-page-content');
+    }
+
+    console.log('[HC] showConfirmationScreen OK');
+  } catch (e) {
+    console.error('[HC] showConfirmationScreen error', e);
+    if (e && e.stack) console.error(e.stack);
+
+    // デバッグ中フォールバック（画面だけ進める）
+    $parent.find('#step-input').hide();
+    $parent.find('#step-confirm').show();
+
+    throw e;
   }
 }
 
@@ -86,36 +135,15 @@ function handleBackToInput(button) {
   const parent = jQuery(button).closest(
     '.store-reservation-modal-content, .store-reservation-page-content',
   );
+
+  if (!parent.length) {
+    console.error('handleBackToInput: parentが見つからない');
+    return;
+  }
+
   parent.find('#step-confirm').hide();
   parent.find('#step-input').show();
+  console.log('handleBackToInput: OK');
 }
 
-/**
- * フォームをリセットする関数
- */
-function resetForm(parent) {
-  console.log('フォームをリセットします');
-
-  parent
-    .find(
-      'input[type="text"], input[type="email"], input[type="tel"], input[type="number"], textarea',
-    )
-    .val('');
-  parent.find('input[type="file"]').val('');
-  parent.find('input[type="checkbox"], input[type="radio"]').prop('checked', false);
-
-  parent.find('select').each(function () {
-    const defaultVal =
-      jQuery(this).find('option[selected]').val() || jQuery(this).find('option:first').val();
-    jQuery(this).val(defaultVal).trigger('change');
-  });
-
-  uploadedImages = [];
-  displayUploadedImages(uploadedImages, '.image-preview-container');
-  displayUploadedImages(uploadedImages, '#confirm-image-container');
-
-  const formData = getFormData(parent);
-  updateConfirmationData(formData);
-
-  console.log('フォームリセット完了');
-}
+// ⚠ resetForm は ajaxHandler.js 側を使う（このファイルでは定義しない）

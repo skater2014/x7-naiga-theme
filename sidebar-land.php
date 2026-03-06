@@ -1,90 +1,79 @@
-<?php
-/****************************************
-
-  sidebar-land.php
-
-  Popular Post for sidebar 
-  
-  Genshin Tekken カテゴリー別でサイドバーに表示。
-  該当するカテゴリーがないなら sidebar.php 表示。
-  サイドバーを表示するための
-  テンプレートファイルです。
-  カスタマイズしたサイドバーです。
-  /themes/your-theme/
-│
-├── /template-parts/
-│   ├── social-icons.php
-│   ├── material-post.php
-│   ├── popular-post.php
-│   ├── artifacts-post.php
-│   └── tag-cloud.php
-│
-├── sidebar.php
-└── functions.php
-
-single.php 配置
-<div id="single">
-    <?php if (in_category('genshin-impact')) : ?> <?//カスタム投稿タイプ「news」の場合?>
-        <?php get_template_part('sidebar-genshin'); ?>
-    <?php elseif (in_category('tekken7')) : ?> <?//*カテゴリー「trend」の場合?>
-        <?php get_template_part('sidebar-tekken'); ?>
-    <?php else : ?> <?//それ以外のページの場合?>
-        <?php get_template_part('sidebar'); ?><?//昔のサイドバーコードがやや違う?>
-    <?php endif; ?>
-</div>
-*****************************************/
-?>
-
 <div id="sidebar">
-<?php 
-    // 'price-range' サイドバーが有効であり、指定された条件を満たす場合にのみ表示
-    if ( is_active_sidebar( 'price-range' ) && 
-        // 'company' 固定ページと 'sample-page' 固定ページでは表示しない
-        !is_page(array('company', 'sample-page')) && 
-        // 投稿ページ（'single.php'）では表示しない
-        !is_single() && 
-        // 'single-house' カスタム投稿タイプの投稿ページでは表示しない
-        !is_singular('single-house') && 
-        // 'blog' カスタム投稿タイプのアーカイブページ（一覧）では表示しない ← ★今回の追加条件
-        !is_post_type_archive('blog')
+    <?php
+    // ==================================================
+    // 現在URLを取得
+    // ※ taxonomy名の判定ズレがあっても、URLでも止めるため
+    // ==================================================
+    $request_uri = isset($_SERVER['REQUEST_URI']) ? wp_unslash($_SERVER['REQUEST_URI']) : '';
+
+    // --------------------------------------------------
+    // price-range を非表示にしたい条件
+    // --------------------------------------------------
+
+    // category/travel を非表示
+    // 1) WordPress条件分岐
+    // 2) URL文字列でも判定
+    $hide_price_range_travel =
+        is_category('travel') ||
+        (strpos($request_uri, '/category/travel') !== false);
+
+    // blog taxonomy / blog-genre taxonomy を非表示
+    // taxonomy名が blog / blog-genre のどちらでも止める
+    // さらに URL が /blog-genre/ を含めば強制的に止める
+    $hide_price_range_blog_tax =
+        is_tax('blog') ||
+        is_tax('blog-genre') ||
+        (strpos($request_uri, '/blog-genre/') !== false);
+
+    // 最終的な非表示条件
+    $hide_price_range = (
+        $hide_price_range_travel ||
+        $hide_price_range_blog_tax
+    );
+
+    // ==================================================
+    // price-range サイドバー表示条件
+    // ==================================================
+    if (
+        is_active_sidebar('price-range') &&
+
+        // 固定ページ company / sample-page では非表示
+        !is_page(array('company', 'sample-page')) &&
+
+        // 通常投稿の詳細ページでは非表示
+        !is_single() &&
+
+        // single-house の詳細ページでは非表示
+        !is_singular('single-house') &&
+
+        // blog カスタム投稿タイプのアーカイブでは非表示
+        !is_post_type_archive('blog') &&
+
+        // 上で定義した非表示条件に当てはまる場合は出さない
+        !$hide_price_range
     ) :
-?>
-    <!-- 価格範囲サイドバーを表示 -->
-    <div id="price-range-sidebar" class="">
-        <?php dynamic_sidebar( 'price-range' ); ?>
-    </div>
-<?php endif; ?>
+    ?>
+        <!-- price-range サイドバー -->
+        <div id="price-range-sidebar" class="">
+            <?php dynamic_sidebar('price-range'); ?>
+        </div>
+    <?php endif; ?>
 
-
-
-
-
-    <!-- 既存のサイドバーコード -->
+    <!-- 既存のサイドバー -->
     <?php dynamic_sidebar('sidebar-2'); ?>
-    
+
     <?php get_template_part('template-sidebar-parts/social-icons'); ?>
-
     <?php get_template_part('template-sidebar-parts/material-post'); ?>
-
-   <?php get_template_part('template-sidebar-parts/popular-post'); ?>
-
+    <?php get_template_part('template-sidebar-parts/popular-post'); ?>
     <?php get_template_part('template-sidebar-parts/artifacts-post'); ?>
 
     <?php
-    if ( !is_mobile_device() ) :
+    // モバイル以外のみタグクラウド表示
+    if (!is_mobile_device()) :
         get_template_part('template-sidebar-parts/tag-cloud');
     endif;
     ?>
 
-    <!-- カスタムウィジェットを表示 -->
-    <?php //dynamic_sidebar('widget1'); ?>
-    <?php //dynamic_sidebar('widget'); ?>
-
-    <!-- 通常のサイドバーウィジェットのコード -->
-    <?php //dynamic_sidebar('Custom Ad Banner Widget Area'); ?>
     <?php dynamic_sidebar('sidebar-1'); ?>
-
-    <?php //dynamic_sidebar('weekly-farming-schedule'); //635行 function.php ?>
-
 </div>
-<!--End/Sidebar-->
+<!-- End / Sidebar -->

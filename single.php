@@ -182,7 +182,10 @@ get_header('77');
                 <h2 class="section-title">内見・イベント</h2>
                 <div id="calendar"></div>
 
-                <?php require get_template_directory() . '/single-template-parts/event-modal-template.php'; ?>
+                <div id="naigai-property-list" class="naigai-property-list"></div>
+
+                <?php //require get_template_directory() . '/single-template-parts/event-modal-template.php'; 
+                ?>
 
                 <?php
                 // =========================
@@ -198,7 +201,7 @@ get_header('77');
             </div><!-- /post -->
 
             <!-- pager（そのまま残す） -->
-            <?php require get_template_directory() . '/pager_genshin_build.php'; ?>
+            <?php require get_template_directory() . '/pager-post-navigation.php'; ?>
 
             <?php
             // =========================

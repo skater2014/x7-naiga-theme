@@ -351,8 +351,7 @@ register_nav_menu('footer-navi', 'フッターのナビゲーション');
 
 
 
-register_nav_menu('header-test-bootstrap', 'Header Test Bootstrap');
-
+register_nav_menu('header-test-bootstrap', 'Header Navigation');
 
 // HTML5 Blank navigation
 // https://github.com/wp-bootstrap/wp-bootstrap-navwalker
@@ -524,11 +523,6 @@ add_action('wp_enqueue_scripts', 'load_font_awesome_files');
 
 function themebs_enqueue_styles()
 {
-    // まず Bootstrap にも mtime を付与
-    $bs_rel = '/css/bootstrap.min.css';
-    $bs_path = get_template_directory() . $bs_rel;
-    $bs_ver  = file_exists($bs_path) ? filemtime($bs_path) : null;
-    wp_enqueue_style('bootstrap_min_css', get_template_directory_uri() . $bs_rel, [], $bs_ver);
 
     // その他のスタイル
     $style_files = [
@@ -550,13 +544,12 @@ function themebs_enqueue_styles()
     foreach ($style_files as $handle => $rel) {
         $path = get_template_directory() . $rel;
         $ver  = file_exists($path) ? filemtime($path) : null;
-        wp_enqueue_style($handle, get_template_directory_uri() . $rel, ['bootstrap_min_css'], $ver);
+        wp_enqueue_style($handle, get_template_directory_uri() . $rel, [], $ver);
     }
 }
 add_action('wp_enqueue_scripts', 'themebs_enqueue_styles');
 
 
-// ブラウザ側で更新したスクリプト見に行く。<script type="text/javascript" src="https://naigaicorp.net/wp-content/themes/Xiaoyu%20Tekken7/js/scripts.js?ver=1754491959" id="theme_scripts-js"></script>　など
 function themebs_enqueue_scripts()
 {
     // WP同梱の jQuery（ヘッダー読み込み）
@@ -575,30 +568,36 @@ function themebs_enqueue_scripts()
     $enqueue('event-listeners', '/js/eventListeners.js', ['jquery', 'image-handler']);
     $enqueue('ajaxHandler',     '/js/ajaxHandler.js');
 
-    // Popper / Bootstrap（順序・依存を固定）
-    $enqueue('popper_min_js',    '/js/popper.min.js', ['jquery']);
-    $enqueue('bootstrap_min_js', '/js/bootstrap.min.js', ['jquery', 'popper_min_js']);
+    // ✅ customAjax を ajaxHandler の前に出力（globalとして他JSでも使える）
+    wp_localize_script('ajaxHandler', 'customAjax', array(
+        'ajaxurl' => admin_url('admin-ajax.php'),
+        'nonce'   => wp_create_nonce('store_reservation_action'),
+    ));
 
     // DataTables / FullCalendar
     $enqueue('datatables_min_js',   '/js/datatables.min.js', ['jquery']);
     $enqueue('fullcalendar_min_js', '/js/index.global.min.js', []); // jQuery不要
 
     // ライブラリ類
-    $enqueue('swiper-slider',     '/js/swiper-bundle.min.js', []);         // jQuery不要
-    $enqueue('slicknav',          '/js/jquery.slicknav.min.js', ['jquery']);
-    $enqueue('slick-slider',      '/js/slick.min.js',          ['jquery']);
-    $enqueue('imagesloaded',      '/js/imagesloaded.pkgd.min.js', []);     // 単体でOK
-    $enqueue('isotope',           '/js/isotope.pkgd.min.js', ['imagesloaded']); // 画像読込後に
-    $enqueue('dotdot',            '/js/jquery.dotdotdot.min.js', ['jquery']);
-    $enqueue('lite-yt-embed',     '/js/lite-yt-embed.js', []);
-    $enqueue('lite-vimeo-embed',  '/js/lite-vimeo-embed.js', []);
-    $enqueue('lightbox',          '/js/lightbox.min.js', []);
-    $enqueue('clipboard',         '/js/clipboard.min.js', []);
+    $enqueue('swiper-slider',      '/js/swiper-bundle.min.js', []);
+    $enqueue('slicknav',           '/js/jquery.slicknav.min.js', ['jquery']);
+    $enqueue('slick-slider',       '/js/slick.min.js', ['jquery']);
+    $enqueue('imagesloaded',       '/js/imagesloaded.pkgd.min.js', []);
+    $enqueue('isotope',            '/js/isotope.pkgd.min.js', ['imagesloaded']);
+    $enqueue('dotdot',             '/js/jquery.dotdotdot.min.js', ['jquery']);
+    $enqueue('lite-yt-embed',      '/js/lite-yt-embed.js', []);
+    $enqueue('lite-vimeo-embed',   '/js/lite-vimeo-embed.js', []);
+
+    wp_enqueue_script('google-gsi-client', 'https://accounts.google.com/gsi/client', array(), null, false);
+    wp_enqueue_script('google-api-js', 'https://apis.google.com/js/api.js', array(), null, false);
+    $enqueue('lightbox',           '/js/lightbox.min.js', []);
+    $enqueue('clipboard',          '/js/clipboard.min.js', []);
     $enqueue('loan-simulation-js', '/js/loan-simulation.js', ['jquery']);
-    $enqueue('chatgpt',           '/js/chatgpt-modal.js', []);
+    $enqueue('chatgpt',            '/js/chatgpt-modal.js', []);
+
     // Pannellum は lib → 本体の順（依存で担保）
     $enqueue('libpannellum', '/js/libpannellum.js', []);
-    $enqueue('pannellum',    '/js/pannellum.js',    ['libpannellum']);
+    $enqueue('pannellum',    '/js/pannellum.js', ['libpannellum']);
 
     // 自作 scripts.js（存在チェック＋mtime）
     $scripts_path = get_template_directory() . '/js/scripts.js';
@@ -606,7 +605,7 @@ function themebs_enqueue_scripts()
     wp_enqueue_script(
         'theme_scripts',
         get_template_directory_uri() . '/js/scripts.js',
-        ['jquery', 'bootstrap_min_js'], // ここに他の依存があれば追加
+        ['jquery'], // 必要なら ajaxHandler を依存に追加
         $scripts_ver,
         true
     );
@@ -615,7 +614,6 @@ function themebs_enqueue_scripts()
     $enqueue('calendar_js', '/js/calendar.js', ['jquery']);
 }
 add_action('wp_enqueue_scripts', 'themebs_enqueue_scripts');
-
 
 
 
@@ -1438,7 +1436,8 @@ require get_template_directory() . '/inc/functions/bread2-comment.php';
 //Comment Forme //　　コメントフォームを送信した後に、ユーザーのmy_comment_list　が表示する仕組み
 require get_template_directory() . '/inc/functions/comment-forme.php';
 
-
+// カレンダーに反映させるための予約申し込みの管理画面ページ
+require_once get_template_directory() . '/inc/admin/admin-viewing-list.php';
 
 //カスタムメタボックスを通常の投稿タイプと指定のカスタム投稿タイプに追加し、そのメタボックス内に画像や動画などの設定を行うことができるようにしています。
 add_action('add_meta_boxes', 'dess_post_meta_box');
@@ -1721,12 +1720,6 @@ if (class_exists('WP_Customize_Control')) {
 }
 
 
-
-
-
-
-
-
 function dess_customize_register($wp_customize)
 {
 
@@ -1772,11 +1765,6 @@ function dess_customize_register($wp_customize)
         );
     }
 
-
-
-
-    // カスタマイズオプションを登録するアクションフック
-    add_action('customize_register', 'dess_customize_register');
 
     // Tekken7ロゴのカスタマイザーセクション追加
     $wp_customize->add_section(
@@ -2411,14 +2399,20 @@ function get_term_slug()
 
 function get_my_terms_array($taxonomy)
 {
-    global $post;
+    $post_id = get_the_ID();
+    if (!$post_id) {
+        return array();
+    }
+
     $terms_array = array();
-    $terms = get_the_terms($post->ID, $taxonomy);
+    $terms = get_the_terms($post_id, $taxonomy);
+
     if ($terms && !is_wp_error($terms)) {
         foreach ($terms as $term) {
             $terms_array[] = $term->slug;
         }
     }
+
     return $terms_array;
 }
 
@@ -2486,6 +2480,7 @@ function create_my_custom_post_types()
 
     ));
 
+
     // --- house-type カテゴリー形式 ---
     register_taxonomy('house-type', array('house', 'post'), array(
         'label' => 'House Type',
@@ -2530,22 +2525,210 @@ function create_my_custom_post_types()
 }
 add_action('init', 'create_my_custom_post_types');
 
-// "house" にカテゴリーを有効化
-function enable_categories_for_house()
-{
-    register_taxonomy_for_object_type('category', 'house');
+/**
+ * ------------------------------------------------------------
+ * house 投稿タイプで通常カテゴリーを使えるようにする
+ * ------------------------------------------------------------
+ */
+if (!function_exists('enable_categories_for_house')) {
+    function enable_categories_for_house()
+    {
+        register_taxonomy_for_object_type('category', 'house');
+    }
 }
 add_action('init', 'enable_categories_for_house');
 
-// パーマリンク再構築
-function flush_rewrite_rules_on_init()
-{
-    flush_rewrite_rules();
+
+/**
+ * ------------------------------------------------------------
+ * ブログジャンル（blog_genre）タクソノミー登録
+ * ------------------------------------------------------------
+ *
+ * 目的:
+ * - blog 投稿タイプに対して「ブログジャンル」という分類を追加する
+ * - 管理画面でチェック形式で選択できるようにする
+ * - 一覧や個別ページで badge 表示・ターム一覧リンクに使う
+ *
+ * 補足:
+ * - 内部名は blog_genre
+ * - URLスラッグは blog-genre
+ */
+if (!function_exists('register_blog_genre_taxonomy')) {
+    function register_blog_genre_taxonomy()
+    {
+        register_taxonomy('blog_genre', array('blog'), array(
+            'label' => 'ブログジャンル',
+            'labels' => array(
+                'name'              => 'ブログジャンル',
+                'singular_name'     => 'ブログジャンル',
+                'search_items'      => 'ブログジャンルを検索',
+                'all_items'         => 'ブログジャンル一覧',
+                'edit_item'         => 'ブログジャンルを編集',
+                'update_item'       => 'ブログジャンルを更新',
+                'add_new_item'      => '新規ブログジャンルを追加',
+                'new_item_name'     => '新しいブログジャンル名',
+                'menu_name'         => 'ブログジャンル',
+            ),
+            'public'            => true,
+            'hierarchical'      => true,
+            'show_ui'           => true,
+            'show_in_rest'      => true,
+            'show_admin_column' => true,
+            'query_var'         => true,
+            'rewrite'           => array(
+                'slug'       => 'blog-genre',
+                'with_front' => false,
+            ),
+        ));
+
+        register_taxonomy_for_object_type('blog_genre', 'blog');
+    }
 }
-add_action('init', 'flush_rewrite_rules_on_init');
+add_action('init', 'register_blog_genre_taxonomy', 11);
+
+
+/**
+ * ------------------------------------------------------------
+ * ブログジャンル初期ターム登録
+ * ------------------------------------------------------------
+ *
+ * 目的:
+ * - 管理画面の「ブログジャンル」に初期候補を自動登録する
+ * - 投稿編集時に毎回手入力しなくても、チェックで選べるようにする
+ *
+ * 補足:
+ * - すでに存在するタームは重複登録しない
+ */
+function register_default_blog_genre_terms()
+{
+    $terms = array(
+        '家庭菜園可',
+        'オール電化',
+        '水道完備',
+        '田舎暮らし向け',
+        '定住向け',
+        '二拠点生活向け',
+        'アクセス良好',
+        '高速ネット対応',
+        '短期滞在',
+        '分譲管理',
+        '人気レストランが近い',
+        '日帰り温泉施設が充実',
+        'ゴルフ場が近い',
+        'キャンプ場が近い',
+        '子育て環境が整っている',
+    );
+
+    foreach ($terms as $term_name) {
+        if (!term_exists($term_name, 'blog_genre')) {
+            wp_insert_term($term_name, 'blog_genre');
+        }
+    }
+}
+add_action('init', 'register_default_blog_genre_terms', 20);
 
 
 
+
+
+/**
+ * ------------------------------------------------------------
+ * 暮らしの特徴テーブル表示
+ * ------------------------------------------------------------
+ *
+ * 目的:
+ * - blog 投稿の詳細ページで、暮らし・設備・周辺環境などの特徴を
+ *   テーブル形式で見やすく表示する
+ *
+ * データ元:
+ * - 投稿メタ（get_post_meta）
+ *
+ * 表示ルール:
+ * - 入力がある項目だけ表示する
+ * - 左側に項目名（見出し）
+ * - 右側に入力された説明文
+ *
+ * 例:
+ * - 項目名: トレッキング・登山が楽しめる
+ * - 入力文: 四季の自然を体感する山歩きも魅力
+ */
+function display_blog_lifestyle_table()
+{
+    global $post;
+
+    // テーブル全体の見出し（未入力時はデフォルト文言を使用）
+    $heading = get_post_meta($post->ID, 'blog_lifestyle_heading', true);
+
+    /**
+     * キー = 投稿メタの保存名
+     * 値   = テーブル左側に表示する見出しラベル
+     */
+    $fields = array(
+        'blog_garden'              => '家庭菜園可',
+        'blog_all_electric'        => 'オール電化',
+        'blog_water_supply'        => '上下水道完備',
+        'blog_rural_life'          => '田舎暮らし向け',
+        'blog_permanent_residence' => '定住向け',
+        'blog_near_school'         => '学校が近い',
+        'blog_near_hospital'       => '病院が近い',
+        'blog_dual_life'           => '二拠点生活向け',
+        'blog_access_tokyo'        => 'アクセス良好（新幹線・車）',
+        'blog_wifi_ready'          => '高速ネット対応',
+        'blog_short_stay_ok'       => '短期滞在',
+        'blog_manage_support'      => '分譲管理',
+        'blog_silent_env'          => '自然環境でリフレッシュ',
+        'blog_easy_maintenance'    => '建物・敷地の柔軟性',
+        'blog_parking_ready'       => '駐車スペース有り',
+        'blog_family_use'          => '家族での敷地と間取り',
+        'blog_second_home_cost'    => '初期費用・維持費の低減',
+        'blog_near_restaurant'     => '人気レストランが近い',
+        'blog_near_resorts'        => 'リゾートホテルが多い',
+        'blog_near_golf'           => 'ゴルフ場が近い',
+        'blog_near_camp'           => 'キャンプ場が近い',
+        'blog_near_outlet'         => 'アウトレットモールが近い',
+        'blog_near_animal_kingdom' => '那須どうぶつ王国近く',
+        'blog_winter_sports'       => 'スキー場・雪遊びも可能',
+        'blog_near_onsen'          => '日帰り温泉施設が充実',
+        'blog_trekking_ok'         => 'トレッキング・登山が楽しめる',
+        'blog_child_friendly'      => '子育て環境が整っている',
+    );
+
+    $items = array();
+
+    // 入力があるメタだけをテーブル表示対象にする
+    foreach ($fields as $key => $label) {
+        $value = get_post_meta($post->ID, $key, true);
+
+        if (!empty($value)) {
+            $items[] = array(
+                'label' => $label, // 左列の見出し
+                'value' => $value, // 右列の説明文
+            );
+        }
+    }
+
+    // 1件も入力がなければ何も出さない
+    if (empty($items)) {
+        return;
+    }
+
+    echo '<section class="property-details blog-lifestyle-details">';
+    echo '<div class="property-details-info">';
+    echo '<h2 class="property-title">' . esc_html($heading ? $heading : '暮らしの特徴') . '</h2>';
+    echo '<table class="property-table blog-lifestyle-table"><tbody>';
+
+    // 1行につき「見出し + 説明文」を1セットずつ表示
+    foreach ($items as $item) {
+        echo '<tr>';
+        echo '<th>' . esc_html($item['label']) . '</th>';
+        echo '<td>' . esc_html($item['value']) . '</td>';
+        echo '</tr>';
+    }
+
+    echo '</tbody></table>';
+    echo '</div>';
+    echo '</section>';
+}
 
 
 function custom_search_filter($query)
@@ -2583,83 +2766,6 @@ function custom_search_filter($query)
 }
 add_action('pre_get_posts', 'custom_search_filter');
 
-
-
-
-
-
-
-
-
-
-//Wordpressサイト内検索を行った際に表示されるのは投稿記事のみ
-//function my_posy_search($search)
-//{
-//if (is_search()) {
-//$search .= " AND post_type = 'post'";
-//}
-//return $search;
-//}
-//add_filter('posts_search', 'my_posy_search');
-
-
-// 検索クエリに指定したタクソノミーを含める設定
-// function modify_search_query($query)
-// {
-//     // 管理画面ではなく、メインクエリの検索の場合に処理を適用
-//     if (!is_admin() && $query->is_search && $query->is_main_query()) {
-
-//         // 検索対象の投稿タイプを指定（'post' と 'house' の投稿タイプを検索対象に）
-//         $query->set('post_type', array('post', 'house')); 
-
-//         // 検索キーワードを取得
-//         $search_term = $query->query_vars['s'];
-
-//         // 検索キーワードが空でない場合に処理を実行
-//         if (!empty($search_term)) {
-
-//             // タクソノミー検索の設定
-//             // タクソノミーのどちらかに一致すれば検索結果に含める設定
-//             $tax_query = array(
-//                 'relation' => 'OR', // 'OR'で、いずれかの条件に一致すればOK
-//                 array(
-//                     'taxonomy' => 'house-type', // 'house-type' タクソノミー名
-//                     'field' => 'name',           // ターム名で検索
-//                     'terms' => $search_term,     // 検索キーワード
-//                     'operator' => 'LIKE',        // 部分一致検索
-//                 ),
-//                 array(
-//                     'taxonomy' => 'region',      // 'region' タクソノミー名
-//                     'field' => 'name',           // ターム名で検索
-//                     'terms' => $search_term,     // 検索キーワード
-//                     'operator' => 'LIKE',        // 部分一致検索
-//                 ),
-//             );
-
-//             // タクソノミー条件をクエリに設定
-//             $query->set('tax_query', $tax_query);
-//         }
-//     }
-// }
-// クエリが実行される前に 'modify_search_query' 関数を実行する
-// add_action('pre_get_posts', 'modify_search_query');
-
-
-// アーカイブページをカスタマイズするためのテンプレートファイルを指定
-//function custom_archive_template($archive_template) {
-//global $post;
-
-//if (is_post_type_archive('house')) {
-// house のアーカイブページ用のテンプレートファイル
-//$archive_template = locate_template(array('archive-house.php'));
-//}
-
-//return $archive_template;
-//}
-
-
-// アーカイブページ用のテンプレートファイルを読み込むフィルター
-//add_filter('archive_template', 'custom_archive_template');
 
 
 //  管理画面でのタクソノミー検索
@@ -2789,167 +2895,12 @@ add_action('init', 'create_artifact_parent_taxonomy');
 
 
 
-//固定ページの追加キャラクター　Template: character-build.php
-//function my_styles()  {
-// genshin-impact-ayaka-build　スラッグ　用のCSS
-//if ( is_page('genshin-impact-ayaka-build') ) {
-//wp_enqueue_style( 'sample', get_template_directory_uri() . '/css/sample.css', array(), '1.0.0' );
-//wp_enqueue_style( 'sample', get_template_directory_uri() . '/css/sample.css', array(), '1.0.0' );
-//更新・追加..
-//}
-//}
-//add_action( 'wp_enqueue_scripts', 'my_styles' );
-
-//function custom_page_styles() {
-// ページIDが9473の場合
-//if ( is_page( 9473 ) ) {
-//echo '<style>';
-//echo '.content{';
-//echo 'background-color: #1c1f46;';
-//echo '    background-image: url("path/to/your/background-image.jpg");';
-//echo '    background-size: cover;';
-// 他のスタイルプロパティを必要に応じて追加
-//echo '}';
-//echo '</style>';
-//}
-//}
-//add_action( 'wp_head', 'custom_page_styles' );
 
 
 
 
 
 
-// 原神のキャラクター情報の追加
-
-function get_genshin_characters()
-{
-    // 既存のキャラクター情報　page-genshin-character.php
-    $characters = array(
-        "Aloy" => array("element" => "cryo", "rarity" => "rarity-5", "weapon" => "Bow", "tier" => "A"),
-        "Albedo" => array("element" => "geo", "rarity" => "rarity-5", "weapon" => "Sword", "tier" => "B"),
-        "Alhaitham" => array("element" => "dendro", "rarity" => "rarity-5", "weapon" => "Sword", "tier" => "C"),
-        "Amber" => array("element" => "pyro", "rarity" => "rarity-4", "weapon" => "Bow", "tier" => "D"),
-        "Ayaka" => array("element" => "cryo", "rarity" => "rarity-5", "weapon" => "Sword", "tier" => "S"),
-        "Ayato" => array("element" => "hydro", "rarity" => "rarity-5", "weapon" => "Sword", "tier" => "B"),
-        "Barbara" => array("element" => "hydro", "rarity" => "rarity-4", "weapon" => "Catalyst", "tier" => "A"),
-        "Baizhu" => array("element" => "dendro", "rarity" => "rarity-5", "weapon" => "Catalyst", "tier" => "B"),
-        "Beidou" => array("element" => "electro", "rarity" => "rarity-4", "weapon" => "Claymore", "tier" => "S"),
-        "Bennett" => array("element" => "pyro", "rarity" => "rarity-4", "weapon" => "Sword", "tier" => "S"),
-        "Candace" => array("element" => "hydro", "rarity" => "rarity-4", "weapon" => "Polearm", "tier" => "A"),
-        "Childe" => array("element" => "hydro", "rarity" => "rarity-5", "weapon" => "Bow", "tier" => "A"),
-        "Chongyun" => array("element" => "cryo", "rarity" => "rarity-4", "weapon" => "Claymore", "tier" => "A"),
-        "Collei" => array("element" => "dendro", "rarity" => "rarity-4", "weapon" => "Bow", "tier" => "A"),
-        "Cyno" => array("element" => "electro", "rarity" => "rarity-5", "weapon" => "Polearm", "tier" => "B"),
-        "Dehya" => array("element" => "pyro", "rarity" => "rarity-5", "weapon" => "Claymore", "tier" => "A"),
-        "Diluc" => array("element" => "pyro", "rarity" => "rarity-5", "weapon" => "Claymore", "tier" => "A"),
-        "Diona" => array("element" => "cryo", "rarity" => "rarity-4", "weapon" => "Bow", "tier" => "A"),
-        "Dori" => array("element" => "electro", "rarity" => "rarity-4", "weapon" => "Claymore", "tier" => "A"),
-        "Eula" => array("element" => "cryo", "rarity" => "rarity-5", "weapon" => "Claymore", "tier" => "B"),
-        "Faruzan" => array("element" => "anemo", "rarity" => "rarity-4", "weapon" => "Bow", "tier" => "S"),
-        "Fischl" => array("element" => "electro", "rarity" => "rarity-4", "weapon" => "Bow", "tier" => "S"),
-        "Freminet" => array("element" => "cryo", "rarity" => "rarity-4", "weapon" => "Claymore", "tier" => "D"),
-        "Furina" => array("element" => "hydro", "rarity" => "rarity-5", "weapon" => "Sword", "tier" => "B"),
-        "Ganyu" => array("element" => "cryo", "rarity" => "rarity-5", "weapon" => "Bow", "tier" => "A"),
-        "Gorou" => array("element" => "geo", "rarity" => "rarity-5", "weapon" => "Bow", "tier" => "S"),
-        "Hu Tao" => array("element" => "pyro", "rarity" => "rarity-5", "weapon" => "Polearm", "tier" => "B"),
-        "Heizou" => array("element" => "anemo", "rarity" => "rarity-4", "weapon" => "Catalyst", "tier" => "A"),
-        "Itto" => array("element" => "geo", "rarity" => "rarity-5", "weapon" => "Claymore", "tier" => "A"),
-        "Jean" => array("element" => "anemo", "rarity" => "rarity-5", "weapon" => "Sword", "tier" => "A"),
-        "Kaveh" => array("element" => "dendro", "rarity" => "rarity-4", "weapon" => "Claymore", "tier" => "S"),
-        "Kaeya" => array("element" => "cryo", "rarity" => "rarity-4", "weapon" => "Sword", "tier" => "B"),
-        "Kazuha" => array("element" => "anemo", "rarity" => "rarity-5", "weapon" => "Sword", "tier" => "A"),
-        "Keqing" => array("element" => "electro", "rarity" => "rarity-5", "weapon" => "Sword", "tier" => "A"),
-        "Kirara" => array("element" => "dendro", "rarity" => "rarity-4", "weapon" => "Sword", "tier" => "A"),
-        "Klee" => array("element" => "pyro", "rarity" => "rarity-5", "weapon" => "Catalyst", "tier" => "A"),
-        "Kuki Shinobu" => array("element" => "electro", "rarity" => "rarity-4", "weapon" => "Sword", "tier" => "A"),
-        "Kokomi" => array("element" => "hydro", "rarity" => "rarity-5", "weapon" => "Catalyst", "tier" => "S"),
-        "Layla" => array("element" => "cryo", "rarity" => "rarity-4", "weapon" => "Sword", "tier" => "A"),
-        "Lisa" => array("element" => "electro", "rarity" => "rarity-4", "weapon" => "Catalyst", "tier" => "D"),
-        "Lynette" => array("element" => "anemo", "rarity" => "rarity-4", "weapon" => "Sword", "tier" => "A"),
-        "Lyney" => array("element" => "pyro", "rarity" => "rarity-5", "weapon" => "Bow", "tier" => "S"),
-        "Mika" => array("element" => "cryo", "rarity" => "rarity-4", "weapon" => "Polearm", "tier" => "D"),
-        "Mona" => array("element" => "hydro", "rarity" => "rarity-5", "weapon" => "Catalyst", "tier" => "A"),
-        "Nahida" => array("element" => "dendro", "rarity" => "rarity-5", "weapon" => "Catalyst", "tier" => "S"),
-        "Neuvillette" => array("element" => "hydro", "rarity" => "rarity-5", "weapon" => "Catalyst", "tier" => "S"),
-        "Nilou" => array("element" => "hydro", "rarity" => "rarity-5", "weapon" => "Sword", "tier" => "A"),
-        "Ningguang" => array("element" => "geo", "rarity" => "rarity-4", "weapon" => "Catalyst", "tier" => "C"),
-        "Noelle" => array("element" => "geo", "rarity" => "rarity-4", "weapon" => "Claymore", "tier" => "C"),
-        "Qiqi" => array("element" => "cryo", "rarity" => "rarity-5", "weapon" => "Sword", "tier" => "B"),
-        "Raiden" => array("element" => "electro", "rarity" => "rarity-5", "weapon" => "Polearm", "tier" => "S"),
-        "Razor" => array("element" => "electro", "rarity" => "rarity-4", "weapon" => "Claymore", "tier" => "A"),
-        "Rosaria" => array("element" => "cryo", "rarity" => "rarity-4", "weapon" => "Polearm", "tier" => "A"),
-        "Sara" => array("element" => "electro", "rarity" => "rarity-4", "weapon" => "Bow", "tier" => "A"),
-        "Sayu" => array("element" => "anemo", "rarity" => "rarity-4", "weapon" => "Claymore", "tier" => "C"),
-        "Sucrose" => array("element" => "anemo", "rarity" => "rarity-4", "weapon" => "Catalyst", "tier" => "S"),
-        "Thoma" => array("element" => "pyro", "rarity" => "rarity-4", "weapon" => "Polearm", "tier" => "C"),
-        "Xiangling" => array("element" => "pyro", "rarity" => "rarity-4", "weapon" => "Polearm", "tier" => "S"),
-        "Xingqiu" => array("element" => "hydro", "rarity" => "rarity-4", "weapon" => "Sword", "tier" => "S"),
-        "Xinyan" => array("element" => "pyro", "rarity" => "rarity-4", "weapon" => "Claymore", "tier" => "A"),
-        "Yae Miko" => array("element" => "electro", "rarity" => "rarity-5", "weapon" => "Catalyst", "tier" => "S"),
-        "Yanfei" => array("element" => "pyro", "rarity" => "rarity-4", "weapon" => "Catalyst", "tier" => "A"),
-        "Yaoyao" => array("element" => "dendro", "rarity" => "rarity-4", "weapon" => "Polearm", "tier" => "C"),
-        "Yelan" => array("element" => "hydro", "rarity" => "rarity-5", "weapon" => "Bow", "tier" => "S"),
-        "Yoimiya" => array("element" => "pyro", "rarity" => "rarity-5", "weapon" => "Bow", "tier" => "C"),
-        "Yun Jin" => array("element" => "geo", "rarity" => "rarity-4", "weapon" => "Polearm", "tier" => "S"),
-        "Zhongli" => array("element" => "geo", "rarity" => "rarity-5", "weapon" => "Polearm", "tier" => "S"),
-        "Wriothesley" => array("element" => "cryo", "rarity" => "rarity-5", "weapon" => "Catalyst", "tier" => "S"),
-        "Wanderer" => array("element" => "anemo", "rarity" => "rarity-5", "weapon" => "Catalyst", "tier" => "A"),
-        "Venti" => array("element" => "anemo", "rarity" => "rarity-5", "weapon" => "Bow", "tier" => "S"),
-        "Tighnari" => array("element" => "dendro", "rarity" => "rarity-5", "weapon" => "Bow", "tier" => "S"),
-        "Xiao" => array("element" => "anemo", "rarity" => "rarity-5", "weapon" => "Polearm", "tier" => "A"),
-        "Navia" => array("element" => "geo", "rarity" => "rarity-5", "weapon" => "Claymore", "tier" => "S"),
-        "Chevreuse" => array("element" => "pyro", "rarity" => "rarity-4", "weapon" => "Polearm", "tier" => "D"),
-        "Gaming" => array("element" => "pyro", "rarity" => "rarity-4", "weapon" => "Claymore", "tier" => "A"),
-        "Xianyun" => array("element" => "anemo", "rarity" => "rarity-5", "weapon" => "Catalyst", "tier" => "A"),
-        "Chiori" => array("element" => "geo", "rarity" => "rarity-5", "weapon" => "Sword", "tier" => "A"),
-        "Neuvillette" => array("element" => "hydro", "rarity" => "rarity-5", "weapon" => "Polearm", "tier" => "S", "Character" => ""),
-        "Arlecchino" => array("element" => "pyro", "rarity" => "rarity-5", "weapon" => "Polearm", "tier" => "S", "Character" => ""),
-        "Clorinde" => array("element" => "electro", "rarity" => "rarity-5", "weapon" => "Sword", "tier" => "S", "Character" => ""),
-        "Sethos" => array("element" => "electro", "rarity" => "rarity-4", "weapon" => "Bow", "tier" => "B", "Character" => ""),
-        // 新しいキャラクターを既存の配列に手動で移動
-
-        // 不足しているインデックスを追加
-
-    );
-
-    // 新しいキャラクターを追加して、手動で、$characters 配列に追加する。
-    $new_character = array(
-
-        "Sigewinne" => array("element" => "hydro", "rarity" => "rarity-5", "weapon" => "Bow", "tier" => "S", "Character" => "New"), // 新しいキャラクターを既存の配列に手動で移動
-
-
-    );
-
-
-    // 必要なだけキャラクターを追加してください
-
-
-    // 新しいキャラクター以外のキャラクターを$charactersから$sorted_charactersに移動
-    $sorted_characters = array(); // $sorted_characters 配列を初期化
-
-    // $characters 配列内の各要素に対してループ処理を行う
-    foreach ($characters as $name => $info) {
-        // もし現在のキャラクターが "Character" インデックスを持ち、その値が 'New' である場合
-        if (isset($info['Character']) && $info['Character'] === 'New') {
-            // 新しいキャラクターとして $new_character 配列に追加
-            $new_character[$name] = $info;
-        } else {
-            // それ以外の場合、現在のキャラクターを $sorted_characters 配列に追加
-            $sorted_characters[$name] = $info;
-        }
-    }
-
-    // 新しいキャラクターが先頭に来るように再構築
-    ksort($new_character);
-    ksort($sorted_characters);
-
-    // 新しいキャラクターを$charactersに追加
-    $characters = $new_character + $sorted_characters;
-
-    // 更新されたキャラクター配列を返す
-    return $characters;
-}
 
 
 
@@ -3581,18 +3532,67 @@ add_action('save_post', 'save_custom_fields_data', 10, 1);
 
 
 /**
- * ① functions.php に追加：
- * ブログ用の「暮らしの特徴」＋「画像（最大10枚）」のメタボックス定義と保存処理
+ * ============================================================
+ * ブログ投稿（blog）用
+ * 「暮らしの特徴」メタボックス + 画像スライダー用メタ
+ * ============================================================
+ *
+ * この一連のコードの役割
+ * ------------------------------------------------------------
+ * 1. blog 投稿タイプにコメント機能を追加する
+ * 2. 管理画面の blog 編集画面に
+ *    「暮らしの特徴（生活提案）＋画像」メタボックスを表示する
+ * 3. 投稿ごとの補足情報（暮らし・設備・周辺環境など）を保存する
+ * 4. 詳細ページで使う画像スライダー用の画像IDも保存する
+ *
+ * 想定する使い方
+ * ------------------------------------------------------------
+ * - 一覧ページ:
+ *   blog_genre タクソノミーを badge として表示
+ *
+ * - 詳細ページ:
+ *   このメタボックスで入力した内容を
+ *   「暮らしの特徴テーブル」や「暮らしのイメージスライダー」として表示
+ *
+ * つまり
+ * ------------------------------------------------------------
+ * - ターム = 一覧やバッジ向け
+ * - メタ = 詳細ページの補足説明向け
  */
 
-// コメント機能を blog 投稿タイプに追加（未設定の場合）
+
+/**
+ * ------------------------------------------------------------
+ * blog 投稿タイプにコメント機能を追加
+ * ------------------------------------------------------------
+ *
+ * 目的:
+ * - blog 投稿でも WordPress 標準のコメント機能を使えるようにする
+ *
+ * 補足:
+ * - すでに supports に comments が含まれていても害はない
+ */
 function add_blog_post_type_support_comments()
 {
     add_post_type_support('blog', 'comments');
 }
 add_action('init', 'add_blog_post_type_support_comments');
 
-// メタボックス追加
+
+/**
+ * ------------------------------------------------------------
+ * メタボックスを追加
+ * ------------------------------------------------------------
+ *
+ * 目的:
+ * - blog 投稿の編集画面に
+ *   「暮らしの特徴（生活提案）＋画像」入力欄を追加する
+ *
+ * 配置:
+ * - 投稿タイプ: blog
+ * - 表示位置: normal
+ * - 優先度: high
+ */
 function add_blog_lifestyle_meta_box()
 {
     add_meta_box(
@@ -3606,56 +3606,102 @@ function add_blog_lifestyle_meta_box()
 }
 add_action('add_meta_boxes', 'add_blog_lifestyle_meta_box');
 
-// メタボックス表示
+
+/**
+ * ------------------------------------------------------------
+ * メタボックスの表示
+ * ------------------------------------------------------------
+ *
+ * 目的:
+ * - blog 投稿ごとに「暮らしの特徴」の見出しと説明文を入力できるようにする
+ * - さらに、詳細ページ用の画像を最大10枚まで設定できるようにする
+ *
+ * 使い分け:
+ * - テキスト欄:
+ *   詳細ページの特徴テーブルで使う
+ *
+ * - 画像欄:
+ *   詳細ページの「暮らしのイメージ」スライダーで使う
+ *
+ * 入力値の考え方:
+ * - 各メタキーに説明文を入れる
+ * - たとえば
+ *   blog_trekking_ok = 「四季の自然を体感する山歩きも魅力」
+ *   のように保存する
+ */
 function render_blog_lifestyle_meta_box($post)
 {
-    // テキスト項目
+    /**
+     * テキスト入力項目
+     * --------------------------------------------------------
+     * キー   = 投稿メタの保存名
+     * 値     = 管理画面で表示する入力欄ラベル
+     *
+     * ここで入力した値は、詳細ページの
+     * 「暮らしの特徴テーブル」の右側説明文として利用する。
+     */
     $fields = [
-        'blog_lifestyle_heading' => '暮らしの特徴 見出しタイトル', // ← 新規追加
-        'blog_garden' => '家庭菜園可',
-        'blog_all_electric' => 'オール電化',
-        'blog_water_supply' => '上下水道完備',
-        'blog_rural_life' => '田舎暮らし向け',
-        'blog_permanent_residence' => '定住向け',
-        'blog_near_school' => '学校が近い',
-        'blog_near_hospital' => '病院が近い',
-        'blog_dual_life' => '二拠点生活向け',
-        'blog_access_tokyo' => 'アクセス良好（新幹線・車）',
-        'blog_wifi_ready' => '高速ネット対応',
-        'blog_short_stay_ok' => '短期滞在',
-        'blog_manage_support' => '分譲管理',
-        'blog_silent_env' => '自然環境でリフレッシュ',
-        'blog_easy_maintenance' => '建物・敷地の柔軟性',
-        'blog_parking_ready' => '駐車スペース有り',
-        'blog_family_use' => '家族での敷地と間取り',
-        'blog_second_home_cost' => '初期費用・維持費の低減',
-        // レジャー・観光系（新規追加）
-        'blog_near_restaurant' => '人気レストランが近い',
-        'blog_near_resorts' => 'リゾートホテルが多い',
-        'blog_near_golf' => 'ゴルフ場が近い',
-        'blog_near_camp' => 'キャンプ場が近い',
-        'blog_near_outlet' => 'アウトレットモールが近い',
-        'blog_near_animal_kingdom' => '那須どうぶつ王国近く',
-        'blog_winter_sports' => 'スキー場・雪遊びも可能',
-        'blog_near_onsen' => '日帰り温泉施設が充実',
-        'blog_trekking_ok' => 'トレッキング・登山が楽しめる',
-        'blog_child_friendly' => '子育て環境が整っている',
+        'blog_lifestyle_heading' => '暮らしの特徴 見出しタイトル',
 
+        // 暮らし・設備系
+        'blog_garden'              => '家庭菜園可',
+        'blog_all_electric'        => 'オール電化',
+        'blog_water_supply'        => '上下水道完備',
+        'blog_rural_life'          => '田舎暮らし向け',
+        'blog_permanent_residence' => '定住向け',
+        'blog_near_school'         => '学校が近い',
+        'blog_near_hospital'       => '病院が近い',
+        'blog_dual_life'           => '二拠点生活向け',
+        'blog_access_tokyo'        => 'アクセス良好（新幹線・車）',
+        'blog_wifi_ready'          => '高速ネット対応',
+        'blog_short_stay_ok'       => '短期滞在',
+        'blog_manage_support'      => '分譲管理',
+        'blog_silent_env'          => '自然環境でリフレッシュ',
+        'blog_easy_maintenance'    => '建物・敷地の柔軟性',
+        'blog_parking_ready'       => '駐車スペース有り',
+        'blog_family_use'          => '家族での敷地と間取り',
+        'blog_second_home_cost'    => '初期費用・維持費の低減',
+
+        // レジャー・観光系
+        'blog_near_restaurant'     => '人気レストランが近い',
+        'blog_near_resorts'        => 'リゾートホテルが多い',
+        'blog_near_golf'           => 'ゴルフ場が近い',
+        'blog_near_camp'           => 'キャンプ場が近い',
+        'blog_near_outlet'         => 'アウトレットモールが近い',
+        'blog_near_animal_kingdom' => '那須どうぶつ王国近く',
+        'blog_winter_sports'       => 'スキー場・雪遊びも可能',
+        'blog_near_onsen'          => '日帰り温泉施設が充実',
+        'blog_trekking_ok'         => 'トレッキング・登山が楽しめる',
+        'blog_child_friendly'      => '子育て環境が整っている',
     ];
 
-
     echo '<table class="form-table">';
+
     foreach ($fields as $key => $label) {
         $value = esc_attr(get_post_meta($post->ID, $key, true));
-        echo '<tr><th><label for="' . $key . '">' . $label . '</label></th>';
-        echo '<td><input type="text" name="' . $key . '" value="' . $value . '" class="regular-text"></td></tr>';
+
+        echo '<tr>';
+        echo '<th><label for="' . esc_attr($key) . '">' . esc_html($label) . '</label></th>';
+        echo '<td><input type="text" name="' . esc_attr($key) . '" value="' . $value . '" class="regular-text"></td>';
+        echo '</tr>';
     }
+
     echo '</table>';
 
+    /**
+     * 画像設定欄
+     * --------------------------------------------------------
+     * blog_image_1 ～ blog_image_10 までの画像IDを保存する
+     *
+     * 用途:
+     * - 詳細ページの「暮らしのイメージ」スライダー
+     */
     echo '<h4>画像（最大10枚まで）</h4>';
+
     for ($i = 1; $i <= 10; $i++) {
-        $image_id = get_post_meta($post->ID, 'blog_image_' . $i, true);
+        $image_id  = get_post_meta($post->ID, 'blog_image_' . $i, true);
         $image_url = $image_id ? wp_get_attachment_url($image_id) : '';
+
         echo '<div style="margin-bottom:10px;">';
         echo '<input type="hidden" name="blog_image_' . $i . '" id="blog_image_' . $i . '" value="' . esc_attr($image_id) . '">';
         echo '<img id="blog_image_preview_' . $i . '" src="' . esc_url($image_url) . '" style="max-width:150px;height:auto;"><br>';
@@ -3664,18 +3710,27 @@ function render_blog_lifestyle_meta_box($post)
         echo '</div>';
     }
 
-    // JS出力
+    /**
+     * 管理画面用の簡易JS
+     * --------------------------------------------------------
+     * - 「画像を選択」クリックで WP メディアライブラリを開く
+     * - 画像選択後、hidden input に attachment ID を入れる
+     * - サムネイルプレビューを更新する
+     * - 「削除」で hidden input とプレビューを空にする
+     */
     echo '<script>
     jQuery(document).ready(function($){
         $(".select-blog-image").click(function(e){
             e.preventDefault();
             var target = $(this).data("target");
             var frame = wp.media({ title: "画像を選択", multiple: false });
+
             frame.on("select", function(){
                 var attachment = frame.state().get("selection").first().toJSON();
                 $("#blog_image_" + target).val(attachment.id);
                 $("#blog_image_preview_" + target).attr("src", attachment.url);
             });
+
             frame.open();
         });
 
@@ -3689,14 +3744,38 @@ function render_blog_lifestyle_meta_box($post)
     </script>';
 }
 
-// 保存処理
+
+/**
+ * ------------------------------------------------------------
+ * メタボックス保存処理
+ * ------------------------------------------------------------
+ *
+ * 目的:
+ * - 管理画面で入力された「暮らしの特徴」テキストと画像IDを保存する
+ *
+ * 保存対象:
+ * - テキスト説明用メタ
+ * - 画像ID（blog_image_1 ～ blog_image_10）
+ */
 function save_blog_lifestyle_meta_box($post_id)
 {
-    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
-    if (get_post_type($post_id) != 'blog') return;
+    // 自動保存中は処理しない
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+        return;
+    }
 
+    // blog 投稿タイプ以外では処理しない
+    if (get_post_type($post_id) != 'blog') {
+        return;
+    }
+
+    /**
+     * 保存対象のメタキー一覧
+     * --------------------------------------------------------
+     * 各入力欄は sanitize_text_field() で保存する
+     */
     $keys = [
-        'blog_lifestyle_heading', // ← この行を先頭に追加！
+        'blog_lifestyle_heading',
         'blog_garden',
         'blog_all_electric',
         'blog_water_supply',
@@ -3714,7 +3793,6 @@ function save_blog_lifestyle_meta_box($post_id)
         'blog_parking_ready',
         'blog_family_use',
         'blog_second_home_cost',
-        // レジャー・観光系（新規追加）
         'blog_near_restaurant',
         'blog_near_resorts',
         'blog_near_golf',
@@ -3725,7 +3803,6 @@ function save_blog_lifestyle_meta_box($post_id)
         'blog_near_onsen',
         'blog_trekking_ok',
         'blog_child_friendly',
-
     ];
 
     foreach ($keys as $key) {
@@ -3734,30 +3811,51 @@ function save_blog_lifestyle_meta_box($post_id)
         }
     }
 
+    // 画像ID保存
     for ($i = 1; $i <= 10; $i++) {
         if (isset($_POST['blog_image_' . $i])) {
             update_post_meta($post_id, 'blog_image_' . $i, intval($_POST['blog_image_' . $i]));
         }
     }
 }
-
 add_action('save_post', 'save_blog_lifestyle_meta_box');
 
+
+/**
+ * ------------------------------------------------------------
+ * 暮らしのイメージスライダー表示
+ * ------------------------------------------------------------
+ *
+ * 目的:
+ * - 管理画面で設定した blog_image_1 ～ blog_image_10 を
+ *   詳細ページのスライダーとして表示する
+ *
+ * 用途:
+ * - blog 詳細ページの本文下などで利用
+ * - 「暮らしの雰囲気」「周辺イメージ」「季節感」などを視覚的に補足する
+ *
+ * 補足:
+ * - 画像が1枚もなければ何も出さない
+ * - 既存の Swiper / サムネイル連携スクリプトに合わせたHTML構造
+ */
 function display_blog_lifestyle_slider()
 {
     global $post;
 
     $image_urls = [];
+
     for ($i = 1; $i <= 10; $i++) {
         $image_id = get_post_meta($post->ID, 'blog_image_' . $i, true);
+
         if ($image_id) {
             $image_urls[] = wp_get_attachment_url($image_id);
         }
     }
 
+    // 画像が無ければ何も表示しない
     if ($image_urls) :
     ?>
-        <!-- ✅ ID変更で既存スクリプトに完全対応 -->
+        <!-- 既存の slider_3 用スクリプトと連携するため ID / class を合わせている -->
         <div id="slider_3-container" class="swiper-container slider-wrapper-3">
             <h2 class="slider-title">暮らしのイメージ</h2>
             <div id="slide-number" class="slide-number">1 / <?php echo count($image_urls); ?></div>
@@ -3791,7 +3889,6 @@ function display_blog_lifestyle_slider()
 
 
 
-
 // single.php single-house.php に読み込んでいる。
 function display_custom_fields_table_1()
 {
@@ -3816,9 +3913,42 @@ function display_custom_fields_table_1()
     $floor_area_ratio = get_post_meta($post->ID, 'FloorAreaRatio', true);
     $units_sold_area = get_post_meta($post->ID, 'UnitsSoldArea', true);
     $total_units_sold_area = get_post_meta($post->ID, 'TotalUnitsSoldArea', true);
-    $road_orientation = get_post_meta($post->ID, 'RoadOrientation', true); // 接道状況（道路の向き）
-    $sold_out = get_post_meta($post->ID, 'sold-out', true); // 売却済みの状態を取得
+    $road_orientation = get_post_meta($post->ID, 'RoadOrientation', true);
+    $sold_out = get_post_meta($post->ID, 'sold-out', true);
 
+    // 詳細テーブル用アイコンマップ
+    $property_icon_map = array(
+        '物件名'           => 'icon-home',
+        '所在地'           => 'icon-location',
+        '権利形態'         => 'icon-key',
+        '価格'             => 'icon-coin-yen',
+        '販売戸数'         => 'icon-stack',
+        '総戸数'           => 'icon-users',
+        '間取り'           => 'icon-table',
+        '建物面積'         => 'icon-office',
+        '土地面積'         => 'icon-map',
+        '地目'             => 'icon-leaf',
+        '用途地域'         => 'icon-compass',
+        '都市計画'         => 'icon-map2',
+        '交通'             => 'icon-road',
+        '接道状況'         => 'icon-road',
+        '備考'             => 'icon-file-text2',
+        '建ぺい率/容積率'   => 'icon-office',
+    );
+
+    $render_property_table_label = function ($label) use ($property_icon_map) {
+        $symbol_id = isset($property_icon_map[$label]) ? $property_icon_map[$label] : 'icon-file-text2';
+        $ref = '#' . $symbol_id;
+
+        return '<span class="property-label-inner">'
+            . '<span class="property-label-icon property-table-label-icon" aria-hidden="true">'
+            . '<svg class="property-icon-svg" aria-hidden="true" focusable="false">'
+            . '<use href="' . esc_attr($ref) . '" xlink:href="' . esc_attr($ref) . '"></use>'
+            . '</svg>'
+            . '</span>'
+            . '<span class="property-label-text">' . esc_html($label) . '</span>'
+            . '</span>';
+    };
 
     // Check if at least one custom field has a non-empty value
     $custom_fields = [
@@ -3844,7 +3974,6 @@ function display_custom_fields_table_1()
 
     $has_custom_field_value = !empty(array_filter($custom_fields));
 
-    // Display table if custom fields contain values
     if ($has_custom_field_value) {
     ?>
         <section class="property-details">
@@ -3853,9 +3982,9 @@ function display_custom_fields_table_1()
                 <table class="property-table">
                     <tbody>
                         <tr>
-                            <th>物件名</th>
+                            <th><?php echo $render_property_table_label('物件名'); ?></th>
                             <td><?php echo esc_html($property_name); ?></td>
-                            <th>所在地</th>
+                            <th><?php echo $render_property_table_label('所在地'); ?></th>
                             <td>
                                 <div>
                                     <?php echo esc_html($location); ?>
@@ -3870,14 +3999,12 @@ function display_custom_fields_table_1()
                                 </div>
 
                                 <?php
-                                // Googleマップの埋め込みコードがある場合に地図を表示
                                 $google_embed_code = get_post_meta($post->ID, 'GoogleEmbedcode', true);
                                 if ($google_embed_code) {
                                     $iframe_content = strpos($google_embed_code, '<iframe') !== false
                                         ? $google_embed_code
                                         : '<iframe id="googleMapIframe" src="' . esc_url($google_embed_code) . '" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>';
 
-                                    // モーダルのHTMLを修正
                                     echo '<div id="googleMapModal" class="google-map-modal" style="display: none;">
                                     <div class="google-map-modal-content">
                                         <span class="google-map-modal-close" id="closeModal">&times;</span>
@@ -3889,26 +4016,24 @@ function display_custom_fields_table_1()
                                 }
                                 ?>
                             </td>
+                        </tr>
+
                         <tr>
-                            <th>権利形態</th>
+                            <th><?php echo $render_property_table_label('権利形態'); ?></th>
                             <td><?php echo esc_html($ownership_type); ?></td>
-                            <th>価格</th>
+                            <th><?php echo $render_property_table_label('価格'); ?></th>
                             <td>
                                 <div class="cta-container">
                                     <?php
-                                    // 価格を取得
                                     $price = get_post_meta($post->ID, 'Price', true);
 
-                                    // 価格が設定されているか、0でない場合のみ価格を表示
                                     if (!empty($price) && (int)$price > 0) {
                                         echo esc_html(number_format((int)$price)) . '万円';
                                     } else {
                                         echo '<span class="sold-out">売却済</span>';
                                     }
 
-                                    // 売却済みの場合はローンシミュレーションを表示しない
                                     if (!empty($price) && (int)$price > 0) {
-                                        // URLをチェックして、特定のページでない場合にローンシミュレーションを表示
                                         $current_url = $_SERVER['REQUEST_URI'];
                                         if (strpos($current_url, 'naiga-tochi') === false && strpos($current_url, 'recommended-land') === false) {
                                             echo do_shortcode('[loan_simulation_modal price="' . esc_attr($price) . '"]');
@@ -3927,75 +4052,57 @@ function display_custom_fields_table_1()
                         ):
                         ?>
                             <tr>
-                                <th>販売戸数</th>
+                                <th><?php echo $render_property_table_label('販売戸数'); ?></th>
                                 <td><?php echo esc_html($units_sold); ?></td>
-                                <th>総戸数</th>
+                                <th><?php echo $render_property_table_label('総戸数'); ?></th>
                                 <td><?php echo esc_html($total_units); ?></td>
                             </tr>
                             <tr>
-                                <th>間取り</th>
+                                <th><?php echo $render_property_table_label('間取り'); ?></th>
                                 <td><?php echo esc_html($layout); ?></td>
-                                <th>建物面積</th>
+                                <th><?php echo $render_property_table_label('建物面積'); ?></th>
                                 <td>
                                     <?php
-                                    // カテゴリーが 'naigai-tochi' または 'recommended-land' の場合は表示しない
                                     if (!has_term(array('naigai-tochi', 'recommended-land'), 'category') && $building_area) {
-                                        // 「㎡」などの単位を取り除いて数値部分だけを取得
                                         $building_area_numeric = preg_replace('/[^0-9.]/', '', $building_area);
-
-                                        // 数値部分をフォーマットして「㎡」を追加
                                         echo esc_html(number_format((float)$building_area_numeric)) . '㎡';
                                     } else {
-                                        // 'naigai-tochi' または 'recommended-land' カテゴリーの場合、または建物面積情報が設定されていない場合
                                         echo '建物面積情報が設定されていません。';
                                     }
                                     ?>
                                 </td>
-
-
                             </tr>
                         <?php endif; ?>
 
-                        <!-- 土地面積と接道状況を隣り合わせにして表示 -->
                         <tr>
-                            <th>土地面積</th>
+                            <th><?php echo $render_property_table_label('土地面積'); ?></th>
                             <td>
                                 <?php
-                                // もし土地面積が設定されている場合
                                 if ($land_area) {
-                                    // 「㎡」などの単位を取り除いて数値部分だけを取得
                                     $land_area_numeric = preg_replace('/[^0-9.]/', '', $land_area);
-
-                                    // 数値部分をフォーマットして「㎡」を追加
                                     echo esc_html(number_format((float)$land_area_numeric)) . '㎡';
                                 } else {
-                                    // 土地面積情報が設定されていない場合
                                     echo '土地面積情報が設定されていません。';
                                 }
                                 ?>
                             </td>
-                            <th>接道状況</th>
+                            <th><?php echo $render_property_table_label('接道状況'); ?></th>
                             <td>
                                 <?php
-                                // 接道状況（道路の向き）を取得
                                 $road_orientation = get_post_meta($post->ID, 'RoadOrientation', true);
-
-                                // 数値部分のみ取得（例えば「5m」といった場合、「5」の部分を抽出）
                                 $road_orientation_numeric = preg_replace('/[^0-9.]/', '', $road_orientation);
 
-                                // 数値が取得できていれば、その数値に「m」を追加して表示
                                 if ($road_orientation_numeric !== '') {
-                                    echo esc_html($road_orientation_numeric) . 'm'; // 「m」を追加
+                                    echo esc_html($road_orientation_numeric) . 'm';
                                 } else {
-                                    echo '接道状況情報が設定されていません。'; // 情報がなければその旨を表示
+                                    echo '接道状況情報が設定されていません。';
                                 }
                                 ?>
                             </td>
                         </tr>
 
-                        <!-- 建ぺい率/容積率を後に表示 -->
                         <tr>
-                            <th>建ぺい率/容積率</th>
+                            <th><?php echo $render_property_table_label('建ぺい率/容積率'); ?></th>
                             <td>
                                 <?php
                                 if ($building_coverage_ratio && $floor_area_ratio) {
@@ -4005,20 +4112,20 @@ function display_custom_fields_table_1()
                                 }
                                 ?>
                             </td>
-                            <th>地目</th>
+                            <th><?php echo $render_property_table_label('地目'); ?></th>
                             <td><?php echo esc_html($land_category); ?></td>
                         </tr>
 
                         <tr>
-                            <th>用途地域</th>
+                            <th><?php echo $render_property_table_label('用途地域'); ?></th>
                             <td><?php echo esc_html($zoning); ?></td>
-                            <th>都市計画</th>
+                            <th><?php echo $render_property_table_label('都市計画'); ?></th>
                             <td><?php echo esc_html($urban_planning); ?></td>
                         </tr>
                         <tr>
-                            <th>交通</th>
+                            <th><?php echo $render_property_table_label('交通'); ?></th>
                             <td><?php echo esc_html($transport); ?></td>
-                            <th>備考</th>
+                            <th><?php echo $render_property_table_label('備考'); ?></th>
                             <td><?php echo esc_html($remarks); ?></td>
                         </tr>
                     </tbody>
@@ -4026,38 +4133,29 @@ function display_custom_fields_table_1()
             </div>
 
             <?php
-            // 画像のURLを格納する配列 
             $image_urls = [];
 
-            // 動画タイプを確認 
             $type = get_post_meta($post->ID, 'page_featured_type', true);
-            $video_id = get_post_meta($post->ID, 'page_video_id', true); // 動画IDを取得 
+            $video_id = get_post_meta($post->ID, 'page_video_id', true);
 
-            // 動画がメインの場合、サムネイル画像を取得して配列の先頭に追加
             if ($type === 'youtube' && !empty($video_id)) {
-                // maxresdefault.jpg 高解像度　のサムネイルを取得　
                 $video_thumbnail_url = 'https://img.youtube.com/vi/' . $video_id . '/maxresdefault.jpg';
 
-                // maxresdefault.jpg　中解像度　が存在しない場合にhqdefault.jpgを使用
                 if (!@getimagesize($video_thumbnail_url)) {
                     $video_thumbnail_url = 'https://i.ytimg.com/vi/' . $video_id . '/hqdefault.jpg';
                 }
 
-                // 取得したサムネイルURLを配列の先頭に追加　Vimeoのサムネイル画像のURLを直接取得
                 array_unshift($image_urls, $video_thumbnail_url);
             } elseif ($type === 'vimeo' && !empty($video_id)) {
-                // Vimeoの場合のサムネイル画像
                 $video_thumbnail_url = 'https://vumbnail.com/' . $video_id . '.jpg';
                 array_unshift($image_urls, $video_thumbnail_url);
             }
 
-            // アイキャッチ画像を追加（動画がない場合は最優先）
             if (has_post_thumbnail()) {
-                $thumbnail_url = get_the_post_thumbnail_url($post->ID, 'full'); // アイキャッチ画像のURLを取得 
+                $thumbnail_url = get_the_post_thumbnail_url($post->ID, 'full');
                 array_unshift($image_urls, $thumbnail_url);
             }
 
-            // 画像1から10までのカスタムフィールド画像を追加
             for ($i = 1; $i <= 10; $i++) {
                 $image_id = get_post_meta($post->ID, 'Image' . $i, true);
                 if (!empty($image_id)) {
@@ -4065,13 +4163,11 @@ function display_custom_fields_table_1()
                 }
             }
 
-            // メイン画像のスライダー表示
             if (!empty($image_urls)) {
             ?>
                 <div class="slider-container" data-slider="1">
                     <h2 class="slider-title">物件ギャラリー</h2>
 
-                    <!-- メインスライダー -->
                     <div class="slider" id="slider_1">
                         <?php foreach ($image_urls as $index => $image_url) { ?>
                             <div class="slide" style="display: <?php echo $index === 0 ? 'block' : 'none'; ?>;">
@@ -4086,23 +4182,19 @@ function display_custom_fields_table_1()
                         <?php } ?>
                     </div>
 
-                    <!-- ナビゲーションボタン -->
                     <div class="slider-nav">
                         <button class="prev" data-slider="1">&#10094;</button>
                         <button class="next" data-slider="1">&#10095;</button>
                     </div>
 
-                    <!-- スライド番号表示 -->
                     <div class="slide-number">
                         <span id="slide-count-1">1 / <?php echo count($image_urls); ?></span>
                     </div>
 
-                    <!-- サムネイルスライダー -->
                     <div class="thumbnail-container">
                         <div class="thumbnail-slider" id="thumbnail-slider-1">
                             <?php foreach ($image_urls as $index => $image_url) { ?>
-                                <?php if (!empty($image_url)) { // 画像URLが空でない場合のみ表示 
-                                ?>
+                                <?php if (!empty($image_url)) { ?>
                                     <img src="<?php echo esc_url($image_url); ?>" alt="Thumbnail <?php echo $index + 1; ?>"
                                         class="thumbnail"
                                         data-slider="1"
@@ -4126,6 +4218,7 @@ function display_custom_fields_table_1()
 
 
 
+// 管理画面の作成表示　テーブル2　投稿ページに読み込み → 投稿ページ　カスタム投稿ページ（house）に出力
 // 管理画面の作成表示　テーブル2　投稿ページに読み込み → 投稿ページ　カスタム投稿ページ（house）に出力
 function display_custom_fields_table_2()
 {
@@ -4153,7 +4246,41 @@ function display_custom_fields_table_2()
     $new_road_orientation = get_post_meta($post->ID, 'NewRoadOrientation', true); // 接道状況（道路の向き）
     $new_google_embed_code = get_post_meta($post->ID, 'NewGoogleEmbedcode', true);
 
+    // 詳細テーブル(NEW)用アイコンマップ（symbols新規追加は不要）
+    $property_icon_map = array(
+        '物件名'           => 'icon-home',
+        '所在地'           => 'icon-location',
+        '権利形態'         => 'icon-key',
+        '価格'             => 'icon-coin-yen',
+        '販売戸数'         => 'icon-stack',
+        '総戸数'           => 'icon-users',
+        '間取り'           => 'icon-table',
+        '建物面積'         => 'icon-office',
+        '土地面積'         => 'icon-map',
+        '接道状況'         => 'icon-road',
+        '建ぺい率/容積率'   => 'icon-office',
+        '地目'             => 'icon-leaf',
+        '用途地域'         => 'icon-compass',
+        '都市計画'         => 'icon-map2',
+        '交通'             => 'icon-road',
+        '備考'             => 'icon-file-text2',
+        '販売区画数'       => 'icon-stack',
+        '総販売区画数'     => 'icon-users',
+    );
 
+    $render_property_table_label = function ($label) use ($property_icon_map) {
+        $symbol_id = isset($property_icon_map[$label]) ? $property_icon_map[$label] : 'icon-file-text2';
+        $ref = '#' . $symbol_id;
+
+        return '<span class="property-label-inner">'
+            . '<span class="property-label-icon property-table-label-icon" aria-hidden="true">'
+            . '<svg class="property-icon-svg" aria-hidden="true" focusable="false">'
+            . '<use href="' . esc_attr($ref) . '" xlink:href="' . esc_attr($ref) . '"></use>'
+            . '</svg>'
+            . '</span>'
+            . '<span class="property-label-text">' . esc_html($label) . '</span>'
+            . '</span>';
+    };
 
     // Check if at least one custom field (including "New" fields) has a non-empty value
     $custom_fields = [
@@ -4179,10 +4306,8 @@ function display_custom_fields_table_2()
         $new_road_orientation
     ];
 
-    // Check if any custom field has a non-empty value
     $has_custom_field_value = !empty(array_filter($custom_fields));
 
-    // Display table if custom fields contain values
     if ($has_custom_field_value) {
     ?>
         <section class="property-details">
@@ -4191,9 +4316,9 @@ function display_custom_fields_table_2()
                 <table class="property-table">
                     <tbody>
                         <tr>
-                            <th>物件名</th>
+                            <th><?php echo $render_property_table_label('物件名'); ?></th>
                             <td><?php echo esc_html($new_property_name); ?></td>
-                            <th>所在地</th>
+                            <th><?php echo $render_property_table_label('所在地'); ?></th>
                             <td>
                                 <div>
                                     <?php echo esc_html($new_location); ?>
@@ -4208,7 +4333,9 @@ function display_custom_fields_table_2()
                                 </div>
 
                                 <?php
-                                $google_embed_code = get_post_meta($post->ID, 'GoogleEmbedcode', true);
+                                // NEWを優先、なければ旧をフォールバック（既存データ互換）
+                                $google_embed_code = $new_google_embed_code ? $new_google_embed_code : get_post_meta($post->ID, 'GoogleEmbedcode', true);
+
                                 if ($google_embed_code) {
                                     $iframe_content = strpos($google_embed_code, '<iframe') !== false
                                         ? $google_embed_code
@@ -4224,28 +4351,22 @@ function display_custom_fields_table_2()
                                 }
                                 ?>
                             </td>
-
                         </tr>
+
                         <tr>
-                            <th>権利形態</th>
+                            <th><?php echo $render_property_table_label('権利形態'); ?></th>
                             <td><?php echo esc_html($new_ownership_type); ?></td>
-                            <th>価格</th>
+                            <th><?php echo $render_property_table_label('価格'); ?></th>
                             <td>
                                 <div class="cta-container">
                                     <?php
-                                    // 価格を取得
-                                    $price = get_post_meta($post->ID, 'NewPrice', true);
-
-                                    // 価格が設定されているか、0でない場合のみ価格を表示
                                     if (!empty($new_price) && (int)$new_price > 0) {
                                         echo esc_html(number_format((int)$new_price)) . '万円';
                                     } else {
                                         echo '<span class="sold-out">売却済</span>';
                                     }
 
-                                    // 売却済みの場合はローンシミュレーションを表示しない
                                     if (!empty($new_price) && (int)$new_price > 0) {
-                                        // URLをチェックして、特定のページでない場合にローンシミュレーションを表示
                                         $current_url = $_SERVER['REQUEST_URI'];
                                         if (strpos($current_url, 'naiga-tochi') === false && strpos($current_url, 'recommended-land') === false) {
                                             echo do_shortcode('[loan_simulation_modal price="' . esc_attr($new_price) . '"]');
@@ -4264,31 +4385,25 @@ function display_custom_fields_table_2()
                         ):
                         ?>
                             <tr>
-                                <th>販売戸数</th>
+                                <th><?php echo $render_property_table_label('販売戸数'); ?></th>
                                 <td><?php echo esc_html($new_units_sold); ?></td>
-                                <th>総戸数</th>
+                                <th><?php echo $render_property_table_label('総戸数'); ?></th>
                                 <td><?php echo esc_html($new_total_units); ?></td>
                             </tr>
                             <tr>
-                                <th>間取り</th>
+                                <th><?php echo $render_property_table_label('間取り'); ?></th>
                                 <td><?php echo esc_html($new_layout); ?></td>
-                                <th>建物面積</th>
+                                <th><?php echo $render_property_table_label('建物面積'); ?></th>
                                 <td>
                                     <?php
-                                    // カテゴリーが 'naigai-tochi' または 'recommended-land' の場合は表示しない
                                     if (!has_term(array('naigai-tochi', 'recommended-land'), 'category') && $new_building_area) {
-                                        // 「㎡」などの単位を取り除いて数値部分だけを取得
                                         $building_area_numeric = preg_replace('/[^0-9.]/', '', $new_building_area);
-
-                                        // 数値部分をフォーマットして「㎡」を追加
                                         echo esc_html(number_format((float)$building_area_numeric)) . '㎡';
                                     } else {
-                                        // 'naigai-tochi' または 'recommended-land' カテゴリーの場合、または建物面積情報が設定されていない場合
                                         echo '建物面積情報が設定されていません。';
                                     }
                                     ?>
                                 </td>
-
                             </tr>
                         <?php endif; ?>
 
@@ -4301,15 +4416,15 @@ function display_custom_fields_table_2()
                         ):
                         ?>
                             <tr>
-                                <th>販売区画数</th>
+                                <th><?php echo $render_property_table_label('販売区画数'); ?></th>
                                 <td><?php echo esc_html($new_units_sold_area); ?></td>
-                                <th>総販売区画数</th>
+                                <th><?php echo $render_property_table_label('総販売区画数'); ?></th>
                                 <td><?php echo esc_html($new_total_units_sold_area); ?></td>
                             </tr>
                         <?php endif; ?>
 
                         <tr>
-                            <th>建ぺい率/容積率</th>
+                            <th><?php echo $render_property_table_label('建ぺい率/容積率'); ?></th>
                             <td>
                                 <?php
                                 if ($new_building_coverage_ratio && $new_floor_area_ratio) {
@@ -4319,47 +4434,39 @@ function display_custom_fields_table_2()
                                 }
                                 ?>
                             </td>
-                            <th>地目</th>
+                            <th><?php echo $render_property_table_label('地目'); ?></th>
                             <td><?php echo esc_html($new_land_category); ?></td>
                         </tr>
+
                         <tr>
-                            <th>用途地域</th>
+                            <th><?php echo $render_property_table_label('用途地域'); ?></th>
                             <td><?php echo esc_html($new_zoning); ?></td>
-                            <th>都市計画</th>
+                            <th><?php echo $render_property_table_label('都市計画'); ?></th>
                             <td><?php echo esc_html($new_urban_planning); ?></td>
                         </tr>
+
                         <tr>
-                            <th>交通</th>
+                            <th><?php echo $render_property_table_label('交通'); ?></th>
                             <td><?php echo esc_html($new_transport); ?></td>
-                            <th>備考</th>
+                            <th><?php echo $render_property_table_label('備考'); ?></th>
                             <td><?php echo esc_html($new_remarks); ?></td>
                         </tr>
 
-                        <!-- 土地面積と接道状況を隣り合わせにして表示 -->
                         <tr>
-                            <th>土地面積</th>
+                            <th><?php echo $render_property_table_label('土地面積'); ?></th>
                             <td>
                                 <?php
-                                // もし土地面積が設定されている場合
                                 if ($new_land_area) {
-                                    // 「㎡」などの単位を取り除いて数値部分だけを取得
                                     $land_area_numeric = preg_replace('/[^0-9.]/', '', $new_land_area);
-
-                                    // 数値部分をフォーマットして「㎡」を追加
                                     echo esc_html(number_format((float)$land_area_numeric)) . '㎡';
                                 } else {
-                                    // 土地面積情報が設定されていない場合
                                     echo '土地面積情報が設定されていません。';
                                 }
                                 ?>
                             </td>
-                            <th>接道状況</th>
+                            <th><?php echo $render_property_table_label('接道状況'); ?></th>
                             <td>
                                 <?php
-                                // 接道状況（道路の向き）を取得
-                                $new_road_orientation = get_post_meta($post->ID, 'NewRoadOrientation', true);
-
-                                // 接道状況が設定されていれば表示
                                 if ($new_road_orientation) {
                                     echo esc_html($new_road_orientation);
                                 } else {
@@ -4372,7 +4479,6 @@ function display_custom_fields_table_2()
                     </tbody>
                 </table>
             </div>
-
 
             <?php
             // Retrieve property image URLs
@@ -4822,7 +4928,7 @@ function my_custom_menu()
     );
 
     // モバイル検索フォームを表示
-    echo '<div class="mobile-search" style="padding-left: 60px">';
+    echo '<div class="mobile-search">';
     include(get_template_directory() . '/searchform30.php');
     echo '</div>';
 
@@ -4875,7 +4981,7 @@ class Latest_Posts_Widget extends WP_Widget
 
             while ($posts->have_posts()) {
                 $posts->the_post();
-                echo '<div class="custom-widget-item" style="width: 50%; float: left; height: 200px;">';
+                echo '<div class="custom-widget-item">';
 
                 if (has_post_thumbnail()) {
                     echo '<a href="' . get_permalink() . '" title="' . get_the_title() . '">';
@@ -4889,7 +4995,6 @@ class Latest_Posts_Widget extends WP_Widget
                 $count++;
 
                 if ($count % 2 === 0) {
-                    echo '<div style="clear: both;"></div>';
                 }
             }
 
@@ -4984,116 +5089,7 @@ add_action('rest_api_init', function () {
 });
 
 
-
-
-// WOSPRESS RESET API コントロール リクエストされた投稿のレスポンスをカスタマイズする
-//function customize_post_rest_response($data, $post, $request) {
-// リンク情報を削除してタイトルと詳細情報のみを残す
-//$data->data['link'] = null; // リンクを削除
-//$data->data['title'] = $data->data['title']['rendered']; // タイトルのみを残す
-//$data->data['content'] = $data->data['content']['rendered']; // 詳細情報のみを残す
-
-//return $data;
-//}
-//add_filter('rest_prepare_post', 'customize_post_rest_response', 10, 3);
-
-
-
-// functions.php もしくはカスタムプラグイン内で以下のコードを追加します。
-//JavaScriptのAjaxリクエストで指定したactionパラメーターの値は、WordPressのadd_action関数で定義されたAjaxアクションの名前と一致する必要
-//このコードは、Ajaxリクエストがget_post_titlesというアクション名で送信された場合に、custom_ajax_get_post_titlesという関数が実行されるように設定しています。wp_ajax_get_post_titlesは、管理画面からのAjaxリクエストを処理し、wp_ajax_nopriv_get_post_titlesは、非ログインユーザーからのAjaxリクエストを処理します。custom_ajax_get_post_titles関数は、WordPressのWP_Queryを使用して投稿を取得し、取得したデータをJSON形式で出力しています
-
-//したがって、JavaScriptのAjaxリクエストでaction: 'get_post_titles'と指定されている場合、WordPressはそれをwp_ajax_get_post_titlesまたはwp_ajax_nopriv_get_post_titlesのいずれかのフックと関連付け、それに対応する関数であるcustom_ajax_get_post_titlesを呼び出します。
-
 add_image_size('small', 150, 150, true); // 幅150px、高さ150pxのサムネイルサイズを追加
-
-// Ajaxアクションを定義
-add_action('wp_ajax_get_post_titles', 'custom_ajax_get_post_titles');
-add_action('wp_ajax_nopriv_get_post_titles', 'custom_ajax_get_post_titles');
-
-function custom_ajax_get_post_titles()
-{
-    $args = array(
-        "posts_per_page" => -1,
-        'post_type'      => array('post', 'house'), // 投稿タイプを指定
-        'post_status'    => 'publish' // 公開された投稿のみを取得する
-    );
-
-    $the_query = new WP_Query($args);
-
-    $cdContents = array();
-
-    if ($the_query->have_posts()) {
-        while ($the_query->have_posts()) {
-            $the_query->the_post();
-            $ID = get_the_ID();
-            // 記事の抜粋を取得し、20文字に制限する
-            $excerpt = wp_trim_words(get_the_excerpt(), 20, '...');
-            // 記事の内容を取得し、20文字に制限する
-            $content = wp_trim_words(get_the_content(), 20, '...');
-
-            // タイトルからキーワードを削除
-            $title = get_the_title(); // HTMLエンコードされた文字列をデコード
-            $title = htmlspecialchars_decode($title); // タイトルのHTMLエンコードをデコード
-            $title = removeKeywordsFromTitle($title); // キーワードを削除
-
-            $cdContents[] = array(
-                "pamalink" => get_permalink(),
-                "title"    => $title,
-                "start"    => get_the_date("Y-m-d"),
-                "allDay"   => true,
-                "eyecatch" => get_the_post_thumbnail_url($ID, 'small'), // 追加したサイズの識別子を指定
-                "eyecatch_alt" => get_post_meta($ID, '_wp_attachment_image_alt', true), // アイキャッチ画像のaltテキスト
-                "excerpt"  => $excerpt, // 記事の抜粋を取得
-                "content"  => $content, // 記事の内容を取得
-            );
-        }
-    }
-
-    wp_reset_postdata();
-
-    // JSON形式でデータを出力
-    header('Content-Type: application/json');
-    echo json_encode($cdContents);
-    // WordPressの処理を終了
-    wp_die();
-}
-
-// キーワードを削除する関数
-function removeKeywordsFromTitle($title)
-{
-    $keywords = array('Genshin Impact', 'Genshin-Impact', 'Tekken7');
-    $trimmedTitle = $title;
-
-    foreach ($keywords as $keyword) {
-        $regex = '/\b' . preg_quote($keyword, '/') . '\b/i'; // キーワードを正規表現のパターンに変換
-        $trimmedTitle = preg_replace($regex, '', $trimmedTitle); // タイトルからキーワードを削除
-    }
-
-    return trim($trimmedTitle);
-}
-
-
-// custom-nonce　を　customAjax.nonce として共通している。　
-function custom_enqueue_scripts()
-{
-    wp_enqueue_script(
-        'custom-ajax',
-        get_template_directory_uri() . '/js/scripts.js',
-        array('jquery'),
-        '1.0',
-        true
-    );
-
-    wp_localize_script('custom-ajax', 'customAjax', array(
-        'ajaxurl' => admin_url('admin-ajax.php'),
-        // 予約フォーム用に統一
-        'nonce'   => wp_create_nonce('store_reservation_action'),
-    ));
-}
-add_action('wp_enqueue_scripts', 'custom_enqueue_scripts');
-
-
 
 
 
@@ -5875,9 +5871,30 @@ function handle_store_reservation_submit()
     }
 
     $message .= "</body></html>";
-    $headers = array('Content-Type: text/html; charset=UTF-8');
-    wp_mail($to, $subject, $message, $headers);
+    // ===== 一時テスト: 来店予約メールだけに絞る（SMTP確認用） =====
+    $visit_date = !empty($form_data['visit-date']) ? sanitize_text_field($form_data['visit-date']) : '';
+    $time_slot  = !empty($form_data['time-slot']) ? sanitize_text_field($form_data['time-slot']) : '';
 
+    $subject = "【来店予約テスト】{$name} 様";
+
+    $message  = "<html><body>";
+    $message .= "<h3>" . esc_html($subject) . "</h3>";
+    $message .= "<p><strong>お名前:</strong> " . esc_html($name) . " 様</p>";
+    $message .= "<p><strong>メール:</strong> " . esc_html($email) . "</p>";
+    $message .= "<p><strong>電話:</strong> " . esc_html($phone) . "</p>";
+    if ($visit_date) $message .= "<p><strong>来店日:</strong> " . esc_html($visit_date) . "</p>";
+    if ($time_slot)  $message .= "<p><strong>時間帯:</strong> " . esc_html($time_slot) . "</p>";
+    $message .= "<p><strong>テスト送信元URL:</strong> " . esc_html($_SERVER['HTTP_REFERER'] ?? '') . "</p>";
+    $message .= "</body></html>";
+    // ===== /一時テスト =====
+
+    $headers = array('Content-Type: text/html; charset=UTF-8');
+
+    error_log('【MAIL送信前】to=' . $to . ' / subject=' . $subject);
+
+    $mail_ok = wp_mail($to, $subject, $message, $headers);
+
+    error_log('【MAIL結果】wp_mail=' . ($mail_ok ? 'SUCCESS' : 'FAILED'));
     global $wpdb;
     $type = $is_satei ? '査定' : ($is_recruitment ? '面接' : '来店');
 
@@ -6648,4 +6665,38 @@ add_action('admin_post_naiga_send_test_mail', function () {
         wp_safe_redirect(add_query_arg(['page' => 'naiga-mail-test', 'sent' => '0', 'msg' => 'wp_mail returned false'], admin_url('tools.php')));
     }
     exit;
+});
+
+// ===== SMTPデバッグ（一時）=====
+add_action('phpmailer_init', function ($phpmailer) {
+    error_log('SMTP DEBUG Host=' . (is_array($phpmailer->Host) ? implode(',', $phpmailer->Host) : $phpmailer->Host));
+    error_log('SMTP DEBUG Port=' . $phpmailer->Port);
+    error_log('SMTP DEBUG Secure=' . ($phpmailer->SMTPSecure ?: '(none)'));
+    error_log('SMTP DEBUG Auth=' . ($phpmailer->SMTPAuth ? 'on' : 'off'));
+    error_log('SMTP DEBUG User=' . $phpmailer->Username);
+    error_log('SMTP DEBUG From=' . $phpmailer->From);
+});
+
+add_action('wp_mail_failed', function ($wp_error) {
+    error_log('【MAIL失敗】wp_mail_failed: ' . $wp_error->get_error_message());
+    error_log('【MAIL失敗data】' . print_r($wp_error->get_error_data(), true));
+});
+
+add_action('wp_mail_succeeded', function ($mail_data) {
+    error_log('【MAIL成功】to=' . (is_array($mail_data['to']) ? implode(',', $mail_data['to']) : $mail_data['to']));
+    error_log('【MAIL成功】subject=' . ($mail_data['subject'] ?? ''));
+});
+
+/* =========================================================
+   Header banner widget
+   ========================================================= */
+add_action('widgets_init', function () {
+    register_sidebar(array(
+        'name'          => 'Header Banner',
+        'id'            => 'header-banner',
+        'before_widget' => '',
+        'after_widget'  => '',
+        'before_title'  => '',
+        'after_title'   => '',
+    ));
 });
