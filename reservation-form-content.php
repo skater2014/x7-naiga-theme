@@ -210,9 +210,7 @@
           </div>
         </div>
 
-        <!--<input type="hidden" name="action" value="store_reservation">-->
-        <input type="hidden" name="action" value="store_reservation_submit">
-
+        <input type="hidden" name="action" value="store_reservation">
         <button type="button" id="to-confirm-page" class="form-button">確認する</button>
 
         <!-- 利用規約とプライバシーポリシー -->
