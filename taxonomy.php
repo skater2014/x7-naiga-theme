@@ -1,8 +1,9 @@
 <?php
+
 /****************************************
   カスタム投稿にカテゴリーを追加したタクソノミーの一覧表示のページです。
   index.php を複製した taxonomy.php です。
-*****************************************/
+ *****************************************/
 
 get_header('77');
 ?>
@@ -52,7 +53,8 @@ $custom_query = new WP_Query($args);
 
 <!-- ぱんくずリストの追加 -->
 <div id="breadcrumbs">
-    <?php //breadcrumb2(); // カスタム投稿用のパンくず読み込み ?> 
+    <?php //breadcrumb2(); // カスタム投稿用のパンくず読み込み 
+    ?>
 </div>
 
 <div id="main">
@@ -67,16 +69,16 @@ $custom_query = new WP_Query($args);
                     <a href="<?php the_permalink(); ?>">
                         <h2><?php the_title(); ?></h2>
                     </a>
-                    
+
                     <svg class="icon icon-price-tags">
                         <use xlink:href="#icon-price-tags">
-                                                    <?php
-                                                    // ショートコードでカテゴリーとタクソノミーリンクを表示
-                                                    // このコードは inc/functions/custom-functions.php で定義されたカスタム関数を使用しています。
-                                                    ?>
-                                                    <span class="category">
-                                                        <?php echo do_shortcode('[category_taxonomy_links]'); ?>
-                                                    </span>
+                            <?php
+                            // ショートコードでカテゴリーとタクソノミーリンクを表示
+                            // このコードは inc/functions/custom-functions.php で定義されたカスタム関数を使用しています。
+                            ?>
+                            <span class="category">
+                                <?php echo do_shortcode('[category_taxonomy_links]'); ?>
+                            </span>
                         </use>
                     </svg>
 
@@ -85,69 +87,69 @@ $custom_query = new WP_Query($args);
                     </span>
                 </div>
 
-<div class="blog-thumbnail-box1">
-    <?php
-    // NEWマークを表示する
-    $days = 14;  // NEWマークを表示する日数
-    $now = date_i18n('U');  // 現在の時間
-    $entry = get_the_time('U');  // 投稿日時
-    $term = ($now - $entry) / 86400;
-    if ($days > $term) {
-        echo '<div class="box new-post">';  // ここで"new-post"クラスを追加
-        echo '<div class="ribbon ribbon-top-left">';
-        echo '<span>New</span>';
-        echo '</div>';
-        echo '</div>';
-    }
-    ?>
+                <div class="blog-thumbnail-box1">
+                    <?php
+                    // NEWマークを表示する
+                    $days = 14;  // NEWマークを表示する日数
+                    $now = date_i18n('U');  // 現在の時間
+                    $entry = get_the_time('U');  // 投稿日時
+                    $term = ($now - $entry) / 86400;
+                    if ($days > $term) {
+                        echo '<div class="box new-post">';  // ここで"new-post"クラスを追加
+                        echo '<div class="ribbon ribbon-top-left">';
+                        echo '<span>New</span>';
+                        echo '</div>';
+                        echo '</div>';
+                    }
+                    ?>
 
-    <?php
-    // 追加情報の表示
-    $type = get_post_meta($post->ID, 'page_featured_type', true);
-    switch ($type) {
-        case 'youtube':
-            echo '<lite-youtube videoid="' . esc_attr(get_post_meta($post->ID, 'page_video_id', true)) . '" playlabel="Play: ' . esc_html(get_the_title()) . '" style="max-width:100%; height:auto;"></lite-youtube>';
-            break;
-        case 'vimeo':
-            echo '<lite-vimeo videoid="' . esc_attr(get_post_meta($post->ID, 'page_video_id', true)) . '">
+                    <?php
+                    // 追加情報の表示
+                    $type = get_post_meta($post->ID, 'page_featured_type', true);
+                    switch ($type) {
+                        case 'youtube':
+                            echo '<lite-youtube videoid="' . esc_attr(get_post_meta($post->ID, 'page_video_id', true)) . '" playlabel="Play: ' . esc_html(get_the_title()) . '" style="max-width:100%; height:auto;"></lite-youtube>';
+                            break;
+                        case 'vimeo':
+                            echo '<lite-vimeo videoid="' . esc_attr(get_post_meta($post->ID, 'page_video_id', true)) . '">
                 <div class="ltv-playbtn"></div>
             </lite-vimeo>';
-            break;
-        default:
-            if (has_post_thumbnail()) :
-                // サムネイル画像がある場合
-                $blog_thumbnail = wp_get_attachment_image_src(get_post_thumbnail_id($post->ID), array(600, 600));
-                echo '<a href="' . esc_url(get_permalink()) . '" class="thumbnail-link">';
-                echo '<div class="blog-post-image" style="background-image:url(' . esc_url($blog_thumbnail[0]) . '); aspect-ratio: 16 / 9;">';
-                
-                // オーバーレイとタイトルを追加
-                echo '<div class="thumbnail-overlay">';
-                echo '<h3>' . esc_html(get_the_title()) . '</h3>';
-                echo '</div>';
+                            break;
+                        default:
+                            if (has_post_thumbnail()) :
+                                // サムネイル画像がある場合
+                                $blog_thumbnail = wp_get_attachment_image_src(get_post_thumbnail_id($post->ID), array(600, 600));
+                                echo '<a href="' . esc_url(get_permalink()) . '" class="thumbnail-link">';
+                                echo '<div class="blog-post-image" style="background-image:url(' . esc_url($blog_thumbnail[0]) . '); aspect-ratio: 16 / 9;">';
 
-                // ハートアイコン（いいね）
-                echo '<div class="heart-icon" data-post-id="' . get_the_ID() . '">
+                                // オーバーレイとタイトルを追加
+                                echo '<div class="thumbnail-overlay">';
+                                echo '<h3>' . esc_html(get_the_title()) . '</h3>';
+                                echo '</div>';
+
+                                // ハートアイコン（いいね）
+                                echo '<div class="heart-icon" data-post-id="' . get_the_ID() . '">
                         <svg class="icon icon-heart ' . (get_post_meta(get_the_ID(), 'liked', true) ? 'liked' : '') . '" data-post-id="' . get_the_ID() . '">
                             <use xlink:href="#icon-heart"></use>
                         </svg>
                       </div>';
-                echo '</div>';
-                echo '</a>'; // リンク終了
-            else :
-                // サムネイルがない場合、「noimage」を表示
-                $noimage = get_template_directory_uri() . '/images/noimage.gif';
-                echo '<a href="' . esc_url(get_permalink()) . '" class="thumbnail-link">';
-                echo '<div class="blog-post-image" style="background-image:url(' . esc_url($noimage) . '); aspect-ratio: 16 / 9;">';
-                echo '<div class="thumbnail-overlay">';
-                echo '<h3>' . esc_html(get_the_title()) . '</h3>';
-                echo '</div>';
-                echo '</div>';
-                echo '</a>'; // リンク終了
-            endif;
-            break;
-    }
-    ?>
-</div> <!-- End blog-thumbnail-box -->
+                                echo '</div>';
+                                echo '</a>'; // リンク終了
+                            else :
+                                // サムネイルがない場合、「noimage」を表示
+                                $noimage = get_template_directory_uri() . '/images/noimage.gif';
+                                echo '<a href="' . esc_url(get_permalink()) . '" class="thumbnail-link">';
+                                echo '<div class="blog-post-image" style="background-image:url(' . esc_url($noimage) . '); aspect-ratio: 16 / 9;">';
+                                echo '<div class="thumbnail-overlay">';
+                                echo '<h3>' . esc_html(get_the_title()) . '</h3>';
+                                echo '</div>';
+                                echo '</div>';
+                                echo '</a>'; // リンク終了
+                            endif;
+                            break;
+                    }
+                    ?>
+                </div> <!-- End blog-thumbnail-box -->
 
 
                 <div class="content-box1">
@@ -156,22 +158,24 @@ $custom_query = new WP_Query($args);
                     <!-- More Link -->
                     <div class="more-link-wrapper">
                         <a href="<?php the_permalink(); ?>" title="Read more" class="more-link">この物件の詳細を見る &raquo;</a>
-                        <a href="#store-reservation" 
-                           title="来店予約に進む" 
-                           class="store-reserve-link" 
-                           data-post-id="<?php echo get_the_ID(); ?>">
-                           来店予約に進む &raquo;
+                        <a href="#store-reservation"
+                            title="来店予約に進む"
+                            class="store-reserve-link"
+                            data-post-id="<?php echo get_the_ID(); ?>">
+                            来店予約に進む &raquo;
                         </a>
                     </div>
                 </div>
             </div>
-    <?php endwhile; else : ?>
+        <?php endwhile;
+    else : ?>
         <!-- 記事がない場合のメッセージ -->
         <div class="no-posts-message">
             <p>記事が見つかりませんでした。</p>
         </div>
-    <?php endif; wp_reset_postdata(); ?>
-    
+    <?php endif;
+    wp_reset_postdata(); ?>
+
     <div class="blog-pagination">
         <?php
         $big = 999999999; // need an unlikely integer

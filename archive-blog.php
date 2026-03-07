@@ -29,13 +29,42 @@ get_header('77');
                         <h2><?php the_title(); ?></h2>
                     </a>
 
-                    <svg class="icon icon-price-tags">
-                        <use xlink:href="#icon-price-tags"></use>
-                    </svg>
+                    <p class="post-meta-row">
+                        <svg class="icon icon-price-tags">
+                            <use xlink:href="#icon-price-tags"></use>
+                        </svg>
 
-                    <span class="sidebar-comment-num">
-                        <?php comments_popup_link('<i class="far fa-comments"></i> : 0', '<i class="far fa-comments"></i> : 1', '<i class="far fa-comments"></i> : %'); ?>
-                    </span>
+                        <span class="category">
+                            <?php
+                            $parts = array();
+
+                            // カテゴリー（先頭1件だけ）
+                            $categories = get_the_category();
+                            if (!empty($categories)) {
+                                $first_cat = $categories[0];
+                                $parts[] = '<a href="' . esc_url(get_category_link($first_cat->term_id)) . '" class="category-name category-link category-badge meta-badge">' . esc_html($first_cat->name) . '</a>';
+                            }
+
+                            // ブログジャンル（最大6件）
+                            $genre_terms = get_the_terms(get_the_ID(), 'blog_genre');
+                            if ($genre_terms && !is_wp_error($genre_terms)) {
+                                $genre_links = array();
+                                foreach (array_slice($genre_terms, 0, 6) as $genre_term) {
+                                    $genre_links[] = '<a href="' . esc_url(get_term_link($genre_term)) . '" class="category-name genre-badge category-badge meta-badge">' . esc_html($genre_term->name) . '</a>';
+                                }
+                                if (!empty($genre_links)) {
+                                    $parts[] = implode(' ', $genre_links);
+                                }
+                            }
+
+                            echo implode(' <span class="meta-separator">|</span> ', $parts);
+                            ?>
+                        </span>
+
+                        <span class="sidebar-comment-num">
+                            <?php comments_popup_link('<i class="far fa-comments"></i> : 0', '<i class="far fa-comments"></i> : 1', '<i class="far fa-comments"></i> : %'); ?>
+                        </span>
+                    </p>
                 </div> <!-- /.post-meta -->
 
                 <div class="blog-thumbnail-box1"> <!-- /.blog-thumbnail-box1 -->
@@ -83,13 +112,9 @@ get_header('77');
                 </div> <!-- /.blog-thumbnail-box1 -->
 
                 <div class="content-box1"> <!-- /.content-box1 -->
-                    <?php
-                    // 暮らしの特徴テーブル出力
-                    include(locate_template('inaka-info-table.php'));
-                    ?>
                 </div> <!-- /.content-box1 -->
 
-                <p class="custom-excerpt"><?php echo dess_get_excerpt(80); ?></p> <!-- /.custom-excerpt -->
+                <p class="custom-excerpt"><?php echo dess_get_excerpt(180); ?></p> <!-- /.custom-excerpt -->
 
                 <div class="more-link-wrapper"> <!-- /.more-link-wrapper -->
                     <a href="<?php the_permalink(); ?>" title="続きを読む" class="more-link">続きを読む &raquo;</a>

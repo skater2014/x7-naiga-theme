@@ -88,11 +88,15 @@ $post_id = get_queried_object_id();
                 if (function_exists('display_blog_lifestyle_slider')) {
                     display_blog_lifestyle_slider();
                 }
+
+                if (function_exists('display_blog_lifestyle_table')) {
+                    display_blog_lifestyle_table();
+                }
                 ?>
 
                 <div id="calendar"></div>
 
-                <?php require get_template_directory() . '/pager_genshin_build.php'; ?>
+                <?php require get_template_directory() . '/pager-post-navigation.php'; ?>
 
                 <p class="footer-post-meta">
                     <?php the_tags('Tag : ', ', '); ?>

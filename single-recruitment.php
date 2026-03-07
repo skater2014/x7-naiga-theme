@@ -180,7 +180,7 @@
                 <div id="calendar"></div>
 
                 <!--new pager-->
-                <?php require get_template_directory() . '/pager_genshin_build.php'; ?>
+                <?php require get_template_directory() . '/pager-post-navigation.php'; ?>
                 <!--end new pager-->
 
                 <p class="footer-post-meta">

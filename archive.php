@@ -81,7 +81,7 @@ display_view_toggle_buttons();  // この関数が定義されていない場合
             <a href="<?php the_permalink(); ?>">
                 <h2><?php the_title(); ?></h2>
             </a>
-            <p>
+            <p class="post-meta-row">
                 <svg class="icon icon-price-tags">
                     <use xlink:href="#icon-price-tags"></use>
                                                     <?php
