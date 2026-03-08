@@ -491,405 +491,158 @@ jQuery(document).ready(function ($) {
 })(); // 読み込まれたらすぐ実行
 
 /* =========================================================
-   HOME SWIPER
-   - 順番どおりに左右移動
-   - 2枚以上なら無限ループ
-   - モバイル/タブレットは矢印をアイキャッチ中央へ
-   - モバイル/タブレットはページャーをアイキャッチ直下へ
-   - PCは高さ固定寄り / モバイルは autoHeight
-   - 役割ごとに関数分離
+   HOME SWIPER - SIMPLE + OVERLAY
+   動画:
+   - 再生 or × で隠す
+   - 外へ出たら再表示
+   画像:
+   - 基本表示のまま
    ========================================================= */
 
-var HOME_SWIPER_MQ = window.matchMedia('(max-width: 1199.98px)');
-var homeSwiperMqBound = false;
-var homeSwiperRafId = null;
-
-/* ---------------------------------------------------------
-   基本取得
---------------------------------------------------------- */
-function getHomeSwiperElement() {
-  return document.getElementById('home-swiper');
+function showHomeSlideOverlay(feature) {
+  if (!feature) return;
+  feature.classList.remove('is-overlay-hidden');
 }
 
-function getHomeSwiperRoot() {
-  return document.querySelector('.swiper-home');
+function hideHomeSlideOverlay(feature) {
+  if (!feature) return;
+  feature.classList.add('is-overlay-hidden');
 }
 
-function getHomeSwiperWrapper(el) {
-  if (!el) return null;
-  return el.querySelector('.swiper-wrapper');
-}
+function resetHomeSlideOverlayState(root) {
+  if (!root) return;
 
-function getHomeSwiperParts(el) {
-  if (!el) {
-    return { prev: null, next: null, pagination: null };
-  }
-
-  return {
-    prev: el.querySelector('.swiper-button-prev, .home-swiper-prev'),
-    next: el.querySelector('.swiper-button-next, .home-swiper-next'),
-    pagination: el.querySelector('.swiper-pagination, .home-swiper-pagination'),
-  };
-}
-
-/* ---------------------------------------------------------
-   初期化前の掃除
-   - duplicate を消す
-   - 前回初期化の inline style を消す
-   - pagination の中身を空にする
---------------------------------------------------------- */
-function cleanupHomeSwiperBeforeInit(el) {
-  var wrapper = getHomeSwiperWrapper(el);
-  if (!wrapper) return;
-
-  wrapper.querySelectorAll('.swiper-slide-duplicate').forEach(function (node) {
-    node.remove();
-  });
-
-  Array.prototype.forEach.call(wrapper.children, function (slide) {
-    slide.style.width = '';
-    slide.removeAttribute('aria-label');
-    slide.removeAttribute('role');
-    slide.removeAttribute('data-swiper-slide-index');
-  });
-
-  var parts = getHomeSwiperParts(el);
-
-  if (parts.pagination) {
-    parts.pagination.innerHTML = '';
-    parts.pagination.removeAttribute('style');
-  }
-
-  [parts.prev, parts.next].forEach(function (btn) {
-    if (!btn) return;
-    btn.removeAttribute('style');
+  root.querySelectorAll('.home-slide-feature').forEach(function (feature) {
+    feature.classList.remove('is-overlay-hidden');
   });
 }
 
-/* ---------------------------------------------------------
-   実スライド数
-   - duplicate を含まない素の枚数を数える
---------------------------------------------------------- */
-function getHomeSwiperRealSlideCount(el) {
-  var wrapper = getHomeSwiperWrapper(el);
-  if (!wrapper) return 0;
+function bindHomeSlideOverlay(root) {
+  if (!root || root.dataset.homeOverlayBound === '1') return;
+  root.dataset.homeOverlayBound = '1';
 
-  return wrapper.querySelectorAll('.swiper-slide').length;
-}
-
-/* ---------------------------------------------------------
-   現在のアクティブスライド取得
---------------------------------------------------------- */
-function getHomeSwiperActiveSlide(swiper) {
-  if (!swiper || swiper.destroyed || !swiper.slides || typeof swiper.activeIndex !== 'number') {
-    return null;
-  }
-
-  return swiper.slides[swiper.activeIndex] || null;
-}
-
-/* ---------------------------------------------------------
-   JSで付けた矢印 / ページャー位置を解除
-   - PCでは基本的にCSS側へ戻す
---------------------------------------------------------- */
-function clearHomeSwiperInlinePosition(swiper) {
-  if (!swiper || !swiper.el) return;
-
-  var parts = getHomeSwiperParts(swiper.el);
-
-  [parts.prev, parts.next].forEach(function (btn) {
-    if (!btn) return;
-
-    btn.style.top = '';
-    btn.style.bottom = '';
-    btn.style.left = '';
-    btn.style.right = '';
-    btn.style.transform = '';
-    btn.style.inset = '';
-  });
-
-  if (parts.pagination) {
-    parts.pagination.style.top = '';
-    parts.pagination.style.bottom = '';
-    parts.pagination.style.left = '';
-    parts.pagination.style.right = '';
-    parts.pagination.style.width = '';
-    parts.pagination.style.transform = '';
-    parts.pagination.style.inset = '';
-  }
-}
-
-/* ---------------------------------------------------------
-   高さ制御
-   - モバイル/タブレットだけ autoHeight を使う
-   - PCは wrapper の高さをJSで毎回変えない
---------------------------------------------------------- */
-function updateHomeSwiperHeight(swiper) {
-  if (!swiper || swiper.destroyed) return;
-
-  if (HOME_SWIPER_MQ.matches) {
-    /* モバイル/タブレットはコンテンツに応じて高さ追従 */
-    swiper.updateAutoHeight(0);
-  } else {
-    /* PCは高さの暴れを避けるため autoHeight を実行しない */
-    if (swiper.wrapperEl) {
-      swiper.wrapperEl.style.height = '';
-    }
-  }
-}
-
-/* ---------------------------------------------------------
-   モバイル/タブレット時の矢印位置
-   - アクティブスライドのアイキャッチ中央に重ねる
---------------------------------------------------------- */
-function updateHomeSwiperOverlayNav(swiper) {
-  if (!swiper || swiper.destroyed || !swiper.el) return;
-
-  var parts = getHomeSwiperParts(swiper.el);
-  var prev = parts.prev;
-  var next = parts.next;
-
-  if (!prev || !next) return;
-
-  if (!HOME_SWIPER_MQ.matches) {
-    [prev, next].forEach(function (btn) {
-      btn.style.top = '';
-      btn.style.bottom = '';
-      btn.style.left = '';
-      btn.style.right = '';
-      btn.style.transform = '';
-      btn.style.inset = '';
+  root.querySelectorAll('.home-slide-feature.has-video').forEach(function (feature) {
+    feature.addEventListener('mouseleave', function () {
+      showHomeSlideOverlay(feature);
     });
-    return;
-  }
 
-  var activeSlide = getHomeSwiperActiveSlide(swiper);
-  if (!activeSlide) return;
+    feature.addEventListener('focusout', function () {
+      setTimeout(function () {
+        if (!feature.contains(document.activeElement)) {
+          showHomeSlideOverlay(feature);
+        }
+      }, 0);
+    });
+  });
 
-  var feature = activeSlide.querySelector('.home-slide-feature');
-  if (!feature) return;
+  root.addEventListener('click', function (e) {
+    var closeBtn = e.target.closest('.home-slide-overlay__close');
+    if (closeBtn) {
+      e.preventDefault();
+      e.stopPropagation();
 
-  var centerY = Math.round(feature.offsetTop + feature.offsetHeight / 2);
+      var closeFeature = closeBtn.closest('.home-slide-feature.has-video');
+      hideHomeSlideOverlay(closeFeature);
+      return;
+    }
 
-  prev.style.top = centerY + 'px';
-  next.style.top = centerY + 'px';
+    if (e.target.closest('.home-slide-overlay__title a')) {
+      return;
+    }
 
-  prev.style.bottom = 'auto';
-  next.style.bottom = 'auto';
+    var videoFeature = e.target.closest('.home-slide-feature.has-video');
+    if (!videoFeature) return;
 
-  prev.style.left = '12px';
-  next.style.right = '12px';
+    hideHomeSlideOverlay(videoFeature);
 
-  prev.style.right = 'auto';
-  next.style.left = 'auto';
+    var liteYouTube = videoFeature.querySelector('lite-youtube');
+    var liteVimeo = videoFeature.querySelector('lite-vimeo');
 
-  prev.style.transform = 'translateY(-50%)';
-  next.style.transform = 'translateY(-50%)';
-}
+    if (liteYouTube) {
+      requestAnimationFrame(function () {
+        liteYouTube.click();
+      });
+      return;
+    }
 
-/* ---------------------------------------------------------
-   モバイル/タブレット時のページャー位置
-   - アイキャッチ直下へ置く
---------------------------------------------------------- */
-function updateHomeSwiperPagination(swiper) {
-  if (!swiper || swiper.destroyed || !swiper.el) return;
-
-  var parts = getHomeSwiperParts(swiper.el);
-  var pagination = parts.pagination;
-
-  if (!pagination) return;
-
-  if (!HOME_SWIPER_MQ.matches) {
-    pagination.style.top = '';
-    pagination.style.bottom = '';
-    pagination.style.left = '';
-    pagination.style.right = '';
-    pagination.style.width = '';
-    pagination.style.transform = '';
-    pagination.style.inset = '';
-    return;
-  }
-
-  var activeSlide = getHomeSwiperActiveSlide(swiper);
-  if (!activeSlide) return;
-
-  var feature = activeSlide.querySelector('.home-slide-feature');
-  if (!feature) return;
-
-  var featureBottom = Math.round(feature.offsetTop + feature.offsetHeight + 8);
-
-  pagination.style.top = featureBottom + 'px';
-  pagination.style.bottom = 'auto';
-  pagination.style.left = '0';
-  pagination.style.right = '0';
-  pagination.style.width = '100%';
-  pagination.style.transform = 'translate3d(0, 0, 0)';
-}
-
-/* ---------------------------------------------------------
-   UI同期
---------------------------------------------------------- */
-function syncHomeSwiperUI(swiper) {
-  if (!swiper || swiper.destroyed) return;
-
-  updateHomeSwiperHeight(swiper);
-  updateHomeSwiperOverlayNav(swiper);
-  updateHomeSwiperPagination(swiper);
-}
-
-function syncHomeSwiperUIRaf(swiper) {
-  if (!swiper || swiper.destroyed) return;
-
-  if (homeSwiperRafId) {
-    cancelAnimationFrame(homeSwiperRafId);
-  }
-
-  homeSwiperRafId = requestAnimationFrame(function () {
-    syncHomeSwiperUI(swiper);
-    homeSwiperRafId = null;
+    if (liteVimeo) {
+      requestAnimationFrame(function () {
+        liteVimeo.click();
+      });
+    }
   });
 }
 
-/* ---------------------------------------------------------
-   Swiperオプション生成
-   - mobile/tablet だけ autoHeight true
-   - PCは autoHeight false
---------------------------------------------------------- */
-function buildHomeSwiperOptions(el) {
-  var slideCount = getHomeSwiperRealSlideCount(el);
-  var loopEnabled = slideCount > 1;
-  var parts = getHomeSwiperParts(el);
-
-  var options = {
-    slidesPerView: 1,
-    slidesPerGroup: 1,
-    spaceBetween: 0,
-    speed: 500,
-
-    /* ここが重要
-       PCでは高さ揺れを防ぐため false
-       mobile/tablet だけ true */
-    autoHeight: HOME_SWIPER_MQ.matches,
-
-    loop: loopEnabled,
-    rewind: false,
-    allowTouchMove: loopEnabled,
-    watchOverflow: !loopEnabled,
-
-    observer: true,
-    observeParents: true,
-    observeSlideChildren: true,
-
-    preloadImages: false,
-    updateOnImagesReady: true,
-
-    on: {
-      init: function () {
-        var sliderRoot = getHomeSwiperRoot();
-
-        if (sliderRoot) {
-          sliderRoot.classList.remove('invisibility');
-        }
-
-        syncHomeSwiperUIRaf(this);
-      },
-
-      imagesReady: function () {
-        var sliderRoot = getHomeSwiperRoot();
-
-        if (sliderRoot) {
-          sliderRoot.classList.remove('invisibility');
-        }
-
-        syncHomeSwiperUIRaf(this);
-      },
-
-      resize: function () {
-        syncHomeSwiperUIRaf(this);
-      },
-
-      slideChange: function () {
-        syncHomeSwiperUIRaf(this);
-      },
-
-      slideChangeTransitionEnd: function () {
-        syncHomeSwiperUIRaf(this);
-      },
-
-      observerUpdate: function () {
-        syncHomeSwiperUIRaf(this);
-      },
-
-      loopFix: function () {
-        syncHomeSwiperUIRaf(this);
-      },
-    },
-  };
-
-  if (parts.prev && parts.next) {
-    options.navigation = {
-      prevEl: parts.prev,
-      nextEl: parts.next,
-    };
-  }
-
-  if (parts.pagination) {
-    options.pagination = {
-      el: parts.pagination,
-      clickable: true,
-    };
-  }
-
-  return options;
+function initHomeSlideOverlay(swiper) {
+  if (!swiper || swiper.destroyed || !swiper.el) return;
+  bindHomeSlideOverlay(swiper.el);
+  resetHomeSlideOverlayState(swiper.el);
 }
 
-/* ---------------------------------------------------------
-   初期化
---------------------------------------------------------- */
 function initHomeSwiper() {
-  var el = getHomeSwiperElement();
-
+  var el = document.getElementById('home-swiper');
   if (!el || typeof Swiper === 'undefined') return;
 
   if (el.swiper && !el.swiper.destroyed) {
     el.swiper.destroy(true, true);
   }
 
-  cleanupHomeSwiperBeforeInit(el);
+  var slides = el.querySelectorAll('.swiper-wrapper > .swiper-slide');
+  var slideCount = slides.length;
+  if (!slideCount) return;
 
-  var slideCount = getHomeSwiperRealSlideCount(el);
-  if (slideCount === 0) return;
+  new Swiper(el, {
+    slidesPerView: 1,
+    slidesPerGroup: 1,
+    spaceBetween: 0,
+    speed: 500,
+    autoHeight: false,
+    loop: slideCount > 1,
+    rewind: slideCount <= 1,
+    allowTouchMove: slideCount > 1,
+    watchOverflow: true,
+    preloadImages: false,
+    updateOnImagesReady: true,
+    observer: true,
+    observeParents: true,
+    observeSlideChildren: true,
 
-  new Swiper(el, buildHomeSwiperOptions(el));
+    navigation: {
+      prevEl: el.querySelector('.swiper-button-prev'),
+      nextEl: el.querySelector('.swiper-button-next'),
+    },
+
+    pagination: {
+      el: el.querySelector('.swiper-pagination'),
+      clickable: true,
+    },
+
+    on: {
+      init: function () {
+        var root = document.querySelector('.swiper-home');
+        if (root) root.classList.remove('invisibility');
+        initHomeSlideOverlay(this);
+      },
+
+      imagesReady: function () {
+        this.update();
+      },
+
+      resize: function () {
+        this.update();
+      },
+
+      slideChange: function () {
+        resetHomeSlideOverlayState(this.el);
+      },
+
+      loopFix: function () {
+        resetHomeSlideOverlayState(this.el);
+      },
+    },
+  });
 }
 
-/* ---------------------------------------------------------
-   再計算
-   - mq切替時に autoHeight モードが変わるので
-     必要なら作り直す
---------------------------------------------------------- */
-function refreshHomeSwiper(forceReinit) {
-  var el = getHomeSwiperElement();
-  if (!el || !el.swiper || el.swiper.destroyed) return;
-
-  var shouldUseAutoHeight = HOME_SWIPER_MQ.matches;
-
-  if (forceReinit || el.swiper.params.autoHeight !== shouldUseAutoHeight) {
-    initHomeSwiper();
-    return;
-  }
-
-  el.swiper.updateSize();
-  el.swiper.updateSlides();
-  el.swiper.updateProgress();
-  el.swiper.updateSlidesClasses();
-
-  syncHomeSwiperUIRaf(el.swiper);
-}
-
-/* ---------------------------------------------------------
-   Isotope
---------------------------------------------------------- */
 function initHomeIsotope($) {
   var $grid = $('.home-posts');
 
@@ -907,52 +660,382 @@ function initHomeIsotope($) {
     .off('click.homeCats')
     .on('click.homeCats', 'ul li a', function (e) {
       e.preventDefault();
-
       $('.home-cats-selection ul li a').removeClass('active');
       $(this).addClass('active');
-
-      var target = $(this).attr('href');
-      $grid.isotope({ filter: target });
+      $grid.isotope({ filter: $(this).attr('href') });
     });
 }
 
-/* ---------------------------------------------------------
-   windowイベント
---------------------------------------------------------- */
-function bindHomeSwiperWindowEvents($) {
-  $(window).off('resize.homeSwiper orientationchange.homeSwiper');
-  $(window).on('resize.homeSwiper orientationchange.homeSwiper', function () {
-    refreshHomeSwiper(false);
-  });
+/* =========================================================
+   HOME SWIPER - FIXED FULL VERSION
+   - 動画オーバーレイの安定化
+   - ×で閉じても即再表示しない
+   - メディア領域を一度出て戻った時だけ再表示
+   - スライド移動時は非アクティブ動画を停止して初期化
+   ========================================================= */
+(function ($) {
+  'use strict';
 
-  if (!homeSwiperMqBound) {
-    if (HOME_SWIPER_MQ.addEventListener) {
-      HOME_SWIPER_MQ.addEventListener('change', function () {
-        /* mobile ⇔ PC で autoHeight の設計が変わるので再初期化 */
-        refreshHomeSwiper(true);
+  /* -----------------------------------------
+     共通
+  ----------------------------------------- */
+  function getHomeSwiperEl() {
+    return document.getElementById('home-swiper');
+  }
+
+  function getVideoFeatureFromNode(node) {
+    if (!node || !node.closest) return null;
+    return node.closest('.home-slide-feature.has-video');
+  }
+
+  function getMediaColumnFromNode(node) {
+    if (!node || !node.closest) return null;
+    return node.closest('.home-slide-media-column');
+  }
+
+  function getVideoElement(feature) {
+    if (!feature) return null;
+    return feature.querySelector('lite-youtube, lite-vimeo, iframe');
+  }
+
+  function ensureOriginalVideoMarkup(feature) {
+    if (!feature || feature.__homeOriginalVideoMarkupSaved) return;
+
+    var media = feature.querySelector('lite-youtube, lite-vimeo');
+    if (media) {
+      feature.__homeOriginalVideoMarkup = media.outerHTML;
+      feature.__homeOriginalVideoMarkupSaved = true;
+    }
+  }
+
+  function showHomeSlideOverlay(feature) {
+    if (!feature) return;
+    feature.classList.remove('is-overlay-hidden');
+    feature.dataset.overlayCanRestore = '0';
+  }
+
+  function hideHomeSlideOverlay(feature) {
+    if (!feature) return;
+    feature.classList.add('is-overlay-hidden');
+    feature.dataset.overlayCanRestore = '0';
+  }
+
+  function armHomeSlideOverlayRestore(feature) {
+    if (!feature) return;
+    if (!feature.classList.contains('is-overlay-hidden')) return;
+    feature.dataset.overlayCanRestore = '1';
+  }
+
+  function resetHomeSlideOverlayState(root) {
+    if (!root) return;
+
+    root.querySelectorAll('.home-slide-feature.has-video').forEach(function (feature) {
+      showHomeSlideOverlay(feature);
+      ensureOriginalVideoMarkup(feature);
+    });
+  }
+
+  /* -----------------------------------------
+     動画停止 / 初期化
+  ----------------------------------------- */
+  function restoreOriginalVideoElement(feature) {
+    if (!feature) return;
+
+    ensureOriginalVideoMarkup(feature);
+
+    var originalMarkup = feature.__homeOriginalVideoMarkup;
+    if (!originalMarkup) return;
+
+    var currentMedia = getVideoElement(feature);
+    var overlay = feature.querySelector('.home-slide-overlay');
+
+    var wrap = document.createElement('div');
+    wrap.innerHTML = originalMarkup.trim();
+    var freshMedia = wrap.firstElementChild;
+
+    if (!freshMedia) return;
+
+    if (currentMedia) {
+      currentMedia.replaceWith(freshMedia);
+    } else if (overlay) {
+      feature.insertBefore(freshMedia, overlay);
+    } else {
+      feature.appendChild(freshMedia);
+    }
+  }
+
+  function stopAndResetVideoFeature(feature) {
+    if (!feature) return;
+
+    restoreOriginalVideoElement(feature);
+    showHomeSlideOverlay(feature);
+  }
+
+  function stopInactiveSlideVideos(swiper) {
+    if (!swiper || !swiper.slides || !swiper.slides.length) return;
+
+    swiper.slides.forEach(function (slide, index) {
+      if (index === swiper.activeIndex) return;
+
+      slide.querySelectorAll('.home-slide-feature.has-video').forEach(function (feature) {
+        stopAndResetVideoFeature(feature);
       });
-    } else if (HOME_SWIPER_MQ.addListener) {
-      HOME_SWIPER_MQ.addListener(function () {
-        refreshHomeSwiper(true);
+    });
+  }
+
+  /* -----------------------------------------
+     オーバーレイバインド
+  ----------------------------------------- */
+  function bindHomeSlideOverlay(root) {
+    if (!root || root.dataset.homeOverlayBound === '1') return;
+    root.dataset.homeOverlayBound = '1';
+
+    root.querySelectorAll('.home-slide-feature.has-video').forEach(function (feature) {
+      ensureOriginalVideoMarkup(feature);
+    });
+
+    root.querySelectorAll('.home-slide-media-column').forEach(function (mediaColumn) {
+      if (mediaColumn.dataset.homeMediaColumnBound === '1') return;
+      mediaColumn.dataset.homeMediaColumnBound = '1';
+
+      mediaColumn.addEventListener('pointerleave', function () {
+        var hiddenFeature = mediaColumn.querySelector(
+          '.home-slide-feature.has-video.is-overlay-hidden',
+        );
+        if (hiddenFeature) {
+          armHomeSlideOverlayRestore(hiddenFeature);
+        }
       });
+
+      mediaColumn.addEventListener('pointerenter', function () {
+        var hiddenFeature = mediaColumn.querySelector(
+          '.home-slide-feature.has-video.is-overlay-hidden',
+        );
+        if (!hiddenFeature) return;
+
+        if (hiddenFeature.dataset.overlayCanRestore === '1') {
+          showHomeSlideOverlay(hiddenFeature);
+        }
+      });
+    });
+
+    root.addEventListener('click', function (e) {
+      var closeBtn = e.target.closest('.home-slide-overlay__close');
+      if (closeBtn) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        var closeFeature = getVideoFeatureFromNode(closeBtn);
+        hideHomeSlideOverlay(closeFeature);
+        return;
+      }
+
+      if (e.target.closest('.home-slide-overlay__title a')) {
+        return;
+      }
+
+      var feature = getVideoFeatureFromNode(e.target);
+      if (!feature) return;
+
+      if (feature.classList.contains('is-overlay-hidden')) {
+        return;
+      }
+
+      hideHomeSlideOverlay(feature);
+
+      var liteYouTube = feature.querySelector('lite-youtube');
+      var liteVimeo = feature.querySelector('lite-vimeo');
+
+      if (liteYouTube) {
+        requestAnimationFrame(function () {
+          liteYouTube.click();
+        });
+        return;
+      }
+
+      if (liteVimeo) {
+        requestAnimationFrame(function () {
+          liteVimeo.click();
+        });
+      }
+    });
+
+    root.addEventListener('focusout', function (e) {
+      var mediaColumn = getMediaColumnFromNode(e.target);
+      if (!mediaColumn) return;
+
+      if (e.relatedTarget && mediaColumn.contains(e.relatedTarget)) {
+        return;
+      }
+
+      var hiddenFeature = mediaColumn.querySelector(
+        '.home-slide-feature.has-video.is-overlay-hidden',
+      );
+      if (hiddenFeature) {
+        armHomeSlideOverlayRestore(hiddenFeature);
+      }
+    });
+
+    root.addEventListener('focusin', function (e) {
+      var mediaColumn = getMediaColumnFromNode(e.target);
+      if (!mediaColumn) return;
+
+      if (e.relatedTarget && mediaColumn.contains(e.relatedTarget)) {
+        return;
+      }
+
+      var hiddenFeature = mediaColumn.querySelector(
+        '.home-slide-feature.has-video.is-overlay-hidden',
+      );
+      if (!hiddenFeature) return;
+
+      if (hiddenFeature.dataset.overlayCanRestore === '1') {
+        showHomeSlideOverlay(hiddenFeature);
+      }
+    });
+  }
+
+  function initHomeSlideOverlay(swiper) {
+    if (!swiper || swiper.destroyed || !swiper.el) return;
+    bindHomeSlideOverlay(swiper.el);
+    resetHomeSlideOverlayState(swiper.el);
+  }
+
+  /* -----------------------------------------
+     Swiper
+  ----------------------------------------- */
+  function initHomeSwiper() {
+    var el = getHomeSwiperEl();
+    if (!el || typeof Swiper === 'undefined') return;
+
+    if (el.__homeSwiperInitialized === '1' && el.swiper && !el.swiper.destroyed) {
+      return el.swiper;
     }
 
-    homeSwiperMqBound = true;
+    var slides = el.querySelectorAll('.swiper-wrapper > .swiper-slide');
+    var slideCount = slides.length;
+    if (!slideCount) return;
+
+    var swiper = new Swiper(el, {
+      slidesPerView: 1,
+      slidesPerGroup: 1,
+      spaceBetween: 0,
+      speed: 500,
+      autoHeight: false,
+      loop: slideCount > 1,
+      rewind: slideCount <= 1,
+      allowTouchMove: slideCount > 1,
+      watchOverflow: true,
+      preloadImages: false,
+      updateOnImagesReady: true,
+
+      /* 再初期化暴発を防ぐため observer 系は外す */
+      observer: false,
+      observeParents: false,
+      observeSlideChildren: false,
+
+      navigation: {
+        prevEl: el.querySelector('.swiper-button-prev'),
+        nextEl: el.querySelector('.swiper-button-next'),
+      },
+
+      pagination: {
+        el: el.querySelector('.swiper-pagination'),
+        clickable: true,
+      },
+
+      on: {
+        init: function () {
+          el.__homeSwiperInitialized = '1';
+
+          var root = document.querySelector('.swiper-home');
+          if (root) {
+            root.classList.remove('invisibility');
+          }
+
+          initHomeSlideOverlay(this);
+          stopInactiveSlideVideos(this);
+          this.update();
+        },
+
+        imagesReady: function () {
+          this.update();
+        },
+
+        resize: function () {
+          this.update();
+        },
+
+        slideChangeTransitionStart: function () {
+          stopInactiveSlideVideos(this);
+        },
+
+        slideChangeTransitionEnd: function () {
+          stopInactiveSlideVideos(this);
+        },
+
+        loopFix: function () {
+          stopInactiveSlideVideos(this);
+        },
+      },
+    });
+
+    return swiper;
   }
-}
 
-/* ---------------------------------------------------------
-   実行
---------------------------------------------------------- */
-jQuery(function ($) {
-  initHomeSwiper();
-  initHomeIsotope($);
-  bindHomeSwiperWindowEvents($);
-});
+  /* -----------------------------------------
+     Isotope
+  ----------------------------------------- */
+  function initHomeIsotope() {
+    var $grid = $('.home-posts');
 
-window.addEventListener('load', function () {
-  refreshHomeSwiper(false);
-});
+    if (!$grid.length || typeof $.fn.isotope === 'undefined') return;
+
+    $grid.imagesLoaded(function () {
+      $grid.isotope({
+        itemSelector: '.archive-post-box',
+        layoutMode: 'fitRows',
+        filter: '*',
+      });
+    });
+
+    $('.home-cats-selection')
+      .off('click.homeCats')
+      .on('click.homeCats', 'ul li a', function (e) {
+        e.preventDefault();
+        $('.home-cats-selection ul li a').removeClass('active');
+        $(this).addClass('active');
+        $grid.isotope({
+          filter: $(this).attr('href'),
+        });
+      });
+  }
+
+  /* -----------------------------------------
+     起動
+  ----------------------------------------- */
+  $(function () {
+    initHomeSwiper();
+    initHomeIsotope();
+
+    $(window)
+      .off('resize.homeSwiperSimple orientationchange.homeSwiperSimple')
+      .on('resize.homeSwiperSimple orientationchange.homeSwiperSimple', function () {
+        var el = getHomeSwiperEl();
+        if (el && el.swiper && !el.swiper.destroyed) {
+          el.swiper.update();
+        }
+      });
+  });
+
+  window.addEventListener('load', function () {
+    var el = getHomeSwiperEl();
+    if (el && el.swiper && !el.swiper.destroyed) {
+      el.swiper.update();
+      stopInactiveSlideVideos(el.swiper);
+    }
+  });
+})(jQuery);
 
 // ニュース ティカー slick slider
 jQuery(document).ready(function ($) {

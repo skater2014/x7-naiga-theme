@@ -742,19 +742,25 @@ body.dark-theme .header__top > .search-form-container .search-form-30 input::pla
 }
 
 /* =========================================
-   Home slider overrides
-   モバイル/タブレット=1カラム
-   PC=2カラム
+   HOME SLIDER OVERRIDES
+   左：画像/動画 + オーバーレイ
+   右：物件テーブル + CTA
 ========================================= */
 
-/* 器 */
 .home-slider {
+  --gap: 16px;
+  --slide-pad-pc: 16px;
+  --slide-pad-sp: 12px;
+  --media-h-pc: 360px;
+  --media-h-tb: 300px;
+  --media-h-sp: 220px;
+
   background: #464e54;
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
   box-sizing: border-box;
-  --gap: 16px;
+  position: relative;
 }
 
 #home-swiper,
@@ -762,51 +768,81 @@ body.dark-theme .header__top > .search-form-container .search-form-30 input::pla
   margin: 0;
 }
 
-/* スライド本体 */
+#home-swiper {
+  position: relative;
+  overflow: hidden;
+}
+
+#home-swiper .swiper-wrapper,
+#home-swiper .swiper-slide {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+#home-swiper .swiper-slide {
+  height: auto;
+}
+
 .home-slide {
   display: flex;
   flex-direction: column;
   gap: var(--gap);
-  padding: 12px;
+  padding: var(--slide-pad-sp);
   box-sizing: border-box;
   width: 100%;
+  min-height: 0;
 }
 
-/* PCだけ2カラム */
 @media (min-width: 1200px) {
   .home-slide {
     flex-direction: row;
-    align-items: stretch;
-    padding: 16px;
+    align-items: flex-start;
+    padding: var(--slide-pad-pc);
   }
 }
 
-/* 左右カラム共通 */
-.home-slide-feature,
+.home-slide-media-column,
 .home-slide-info {
   width: 100%;
   min-width: 0;
   box-sizing: border-box;
-  float: none !important;
-  clear: none !important;
 }
 
-/* PCだけ左右50% */
 @media (min-width: 1200px) {
-  .home-slide-feature,
+  .home-slide-media-column,
   .home-slide-info {
     flex: 0 0 calc((100% - var(--gap)) / 2);
     width: calc((100% - var(--gap)) / 2);
   }
 }
 
-/* メディア枠（画像/動画） */
+.home-slide-media-column {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
 .home-slide-feature {
   position: relative;
-  aspect-ratio: 16 / 9;
   overflow: hidden;
   background: #000;
-  border-radius: 8px;
+  border-radius: 10px;
+  height: var(--media-h-sp);
+  min-height: var(--media-h-sp);
+}
+
+@media (min-width: 768px) and (max-width: 1199.98px) {
+  .home-slide-feature {
+    height: var(--media-h-tb);
+    min-height: var(--media-h-tb);
+  }
+}
+
+@media (min-width: 1200px) {
+  .home-slide-feature {
+    height: var(--media-h-pc);
+    min-height: var(--media-h-pc);
+  }
 }
 
 .home-slide-image,
@@ -828,69 +864,108 @@ body.dark-theme .header__top > .search-form-container .search-form-30 input::pla
   height: 100%;
 }
 
-.home-slide-image > a img {
+.home-slide-image > a img,
+.home-slide-feature img {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center;
-  transform: none;
   display: block;
 }
 
-/* テキスト側 */
+/* =========================
+   オーバーレイ
+========================= */
+
+.home-slide-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  display: flex;
+  align-items: flex-end;
+  transition:
+    opacity 0.2s ease,
+    visibility 0.2s ease;
+}
+
+.home-slide-overlay__panel {
+  position: relative;
+  width: 100%;
+  padding: 54px 18px 18px;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.78) 0%,
+    rgba(0, 0, 0, 0.48) 48%,
+    rgba(0, 0, 0, 0) 100%
+  );
+}
+
+.home-slide-overlay__close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 38px;
+  height: 38px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.62);
+  color: #fff;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.home-slide-overlay__title {
+  margin: 0 0 10px;
+  line-height: 1.35;
+}
+
+.home-slide-overlay__title a {
+  color: #fff;
+  text-decoration: none;
+  font-size: clamp(18px, 2vw, 28px);
+  font-weight: 700;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  text-align: left;
+}
+
+.home-slide-overlay__text {
+  color: rgba(255, 255, 255, 0.94);
+  font-size: 14px;
+  line-height: 1.7;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  text-align: left;
+}
+
+.home-slide-feature.is-overlay-hidden .home-slide-overlay {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* =========================
+   右カラム
+========================= */
+
 .home-slide-info {
   display: flex;
   flex-direction: column;
   min-width: 0;
   color: #fff;
-  padding: 8px 10px 0 4px;
+  padding: 0;
+  max-height: none;
+  overflow: visible;
 }
 
-.home-slide-info > h3 {
-  margin: 0 0 12px;
-  line-height: 1.35;
-}
-
-.home-slide-info > h3 a {
-  color: #12c8ff;
-  text-decoration: none;
-  font-size: clamp(18px, 2.2vw, 24px);
-  line-height: 1.3;
-  transition:
-    color 0.3s ease,
-    border-bottom 0.3s ease;
-
-  /* タイトル高さの暴れを軽減 */
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
-  overflow: hidden;
-}
-
-.dark-theme .home-slide-info > h3 a {
-  color: var(--link-color-blue, #4da3ff);
-}
-
-.home-slide-text {
-  color: #fff;
-  font-size: 15px;
-  line-height: 1.7;
-  margin-bottom: 16px;
-  min-height: calc(1.7em * 3);
-
-  /* 抜粋高さの暴れを軽減 */
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
-  overflow: hidden;
-}
-
-/* =========================================
-   PROPERTY TABLE ICON COMMON
-   PHPで追加した icon / label 構造の共通見た目
-========================================= */
 .property-label-inner {
   display: inline-flex;
   align-items: center;
@@ -923,60 +998,12 @@ body.dark-theme .header__top > .search-form-container .search-form-30 input::pla
   line-height: 1.35;
 }
 
-/* =========================================
-   HOME SLIDER HEIGHT STABILIZE
-========================================= */
-.home-slide-info .property-info-table {
-  margin-top: 18px;
-}
-
-@media (min-width: 1200px) {
-  .home-slide {
-    min-height: 400px;
-    align-items: flex-start;
-  }
-
-  .home-slide-feature,
-  .home-slide-info {
-    align-self: stretch;
-  }
-
-  .home-slide-feature {
-    min-height: 300px;
-  }
-
-  .home-slide-info .property-info-table {
-    margin-top: auto;
-    padding-top: 18px;
-  }
-}
-
-@media (max-width: 1199.98px) {
-  .home-slide {
-    min-height: 0;
-  }
-
-  .home-slide-info .property-info-table {
-    margin-top: 18px;
-    padding-top: 0;
-  }
-
-  #home-swiper {
-    padding-bottom: 24px;
-  }
-}
-
-/* =========================================
-   HOME SLIDE: property info table
-   ホームスライダー専用
-   モバイルも2カラム維持
-========================================= */
 .home-slide-info .property-info-table {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 0;
   width: 100%;
-  margin: 18px 0 0;
+  margin: 0;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   border-left: 1px solid rgba(255, 255, 255, 0.08);
   background: transparent;
@@ -1027,40 +1054,110 @@ body.dark-theme .header__top > .search-form-container .search-form-30 input::pla
   flex-wrap: wrap;
 }
 
-/* タブレット以下は2カラム */
+/* CTA */
+.home-slide-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+.home-slide-actions .home-slide-cta,
+.home-slide-actions .home-slide-link {
+  flex: 1 1 180px;
+  min-height: 48px;
+  border-radius: 10px;
+  box-sizing: border-box;
+}
+
+.home-slide-actions .home-slide-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 18px;
+  border: 0;
+  cursor: pointer;
+  background: #2383f5;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.home-slide-actions .home-slide-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 18px;
+  border: 1px solid rgba(18, 200, 255, 0.45);
+  background: transparent;
+  color: #12c8ff;
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.home-slide-actions .home-slide-cta:hover,
+.home-slide-actions .home-slide-link:hover {
+  opacity: 0.92;
+}
+
 @media (max-width: 1199.98px) {
   .home-slide-info .property-info-table {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-top: 8px;
   }
 
   .home-slide-info .property-info-table .property-row {
     min-height: 88px;
   }
+
+  #home-swiper {
+    padding-bottom: 24px;
+  }
 }
 
-/* スマホも2カラム維持 */
 @media (max-width: 767.98px) {
+  .home-slide-overlay__panel {
+    padding: 48px 14px 14px;
+  }
+
+  .home-slide-overlay__title a {
+    font-size: 20px;
+  }
+
+  .home-slide-overlay__text {
+    font-size: 13px;
+    line-height: 1.65;
+    -webkit-line-clamp: 2;
+  }
+
   .home-slide-info .property-info-table {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   }
 
   .home-slide-info .property-info-table .property-row {
+    flex-direction: row !important;
+    align-items: flex-start;
+    gap: 10px;
     min-height: auto;
   }
 
-  .home-slide-info .property-info-table .property-label,
-  .home-slide-info .property-info-table .property-value {
+  .home-slide-info .property-info-table .property-label {
+    flex: 0 0 42%;
+    padding: 10px;
     text-align: left;
   }
 
-  .home-slide-info .property-info-table .property-label {
-    padding: 10px 10px 6px;
-  }
-
   .home-slide-info .property-info-table .property-value {
-    padding: 0 10px 10px;
+    flex: 1 1 auto;
+    padding: 10px;
+    text-align: left;
     font-size: 14px;
     line-height: 1.55;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-word;
   }
 
   .home-slide-info .property-info-table .property-label-inner {
@@ -1082,58 +1179,58 @@ body.dark-theme .header__top > .search-form-container .search-form-30 input::pla
     height: 15px;
   }
 
-  .home-slide-info .property-info-table .property-label-text,
-  .home-slide-info .property-info-table .property-value {
-    overflow-wrap: anywhere;
-    word-break: break-word;
-  }
-}
-
-/* =========================================
-   HOME SLIDE: property info table (MOBILE FIX)
-   モバイルだけ label と value を横並び / value は折り返し
-   ※PC/タブレットは現状維持
-========================================= */
-@media (max-width: 767.98px) {
-  /* 2カラムは維持（他で 1fr にされても勝つ） */
-  .home-slide-info .property-info-table {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  .home-slide-actions {
+    flex-direction: column;
   }
 
-  /* 1セル内：label/value を横並び */
-  .home-slide-info .property-info-table .property-row {
-    flex-direction: row !important;
-    align-items: flex-start;
-    gap: 10px;
-  }
-
-  /* label を左、value を右 */
-  .home-slide-info .property-info-table .property-label {
-    flex: 0 0 42%;
-    padding: 10px;
-    text-align: left;
-  }
-
-  .home-slide-info .property-info-table .property-value {
+  .home-slide-actions .home-slide-cta,
+  .home-slide-actions .home-slide-link {
+    width: 100%;
     flex: 1 1 auto;
-    padding: 10px;
-    text-align: left;
-
-    /* 折り返し（住所など） */
-    white-space: normal;
-    overflow-wrap: anywhere;
-    word-break: break-word;
-  }
-
-  /* label 内（アイコン+文字）の並びは現状維持 */
-  .home-slide-info .property-info-table .property-label-inner {
-    justify-content: flex-start;
-    align-items: flex-start;
-    gap: 6px;
-    flex-wrap: nowrap;
   }
 }
 
+/* 矢印 */
+#home-swiper .swiper-button-prev,
+#home-swiper .swiper-button-next {
+  margin-top: 0 !important;
+  transform: translateY(-50%);
+  z-index: 20;
+}
+
+#home-swiper .swiper-button-prev {
+  left: 12px;
+}
+
+#home-swiper .swiper-button-next {
+  right: 12px;
+}
+
+#home-swiper .swiper-button-prev,
+#home-swiper .swiper-button-next {
+  top: calc(var(--slide-pad-sp) + (var(--media-h-sp) / 2));
+}
+
+@media (min-width: 768px) and (max-width: 1199.98px) {
+  #home-swiper .swiper-button-prev,
+  #home-swiper .swiper-button-next {
+    top: calc(var(--slide-pad-sp) + (var(--media-h-tb) / 2));
+  }
+}
+
+@media (min-width: 1200px) {
+  #home-swiper .swiper-button-prev,
+  #home-swiper .swiper-button-next {
+    top: calc(var(--slide-pad-pc) + (var(--media-h-pc) / 2));
+  }
+}
+
+#home-swiper .swiper-pagination {
+  left: 0;
+  right: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
 /* =========================================
    CATEGORY LIST: property info table
    通常カテゴリ（.content-box）専用
