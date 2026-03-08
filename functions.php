@@ -568,7 +568,7 @@ function themebs_enqueue_scripts()
     $enqueue('event-listeners', '/js/eventListeners.js', ['jquery', 'image-handler']);
     $enqueue('ajaxHandler',     '/js/ajaxHandler.js');
 
-    // ✅ customAjax を ajaxHandler の前に出力（globalとして他JSでも使える）
+    // 予約用 customAjax
     wp_localize_script('ajaxHandler', 'customAjax', array(
         'ajaxurl' => admin_url('admin-ajax.php'),
         'nonce'   => wp_create_nonce('store_reservation_action'),
@@ -576,7 +576,7 @@ function themebs_enqueue_scripts()
 
     // DataTables / FullCalendar
     $enqueue('datatables_min_js',   '/js/datatables.min.js', ['jquery']);
-    $enqueue('fullcalendar_min_js', '/js/index.global.min.js', []); // jQuery不要
+    $enqueue('fullcalendar_min_js', '/js/index.global.min.js', []);
 
     // ライブラリ類
     $enqueue('swiper-slider',      '/js/swiper-bundle.min.js', []);
@@ -593,24 +593,31 @@ function themebs_enqueue_scripts()
     $enqueue('lightbox',           '/js/lightbox.min.js', []);
     $enqueue('clipboard',          '/js/clipboard.min.js', []);
     $enqueue('loan-simulation-js', '/js/loan-simulation.js', ['jquery']);
-    $enqueue('chatgpt',            '/js/chatgpt-modal.js', []);
 
-    // Pannellum は lib → 本体の順（依存で担保）
+    // ChatGPT モーダル
+    $enqueue('chatgpt', '/js/chatgpt-modal.js', ['jquery']);
+
+    wp_localize_script('chatgpt', 'chatgptAjax', array(
+        'ajaxurl' => admin_url('admin-ajax.php'),
+        'nonce'   => wp_create_nonce('custom-nonce'),
+    ));
+
+    // Pannellum は lib → 本体の順
     $enqueue('libpannellum', '/js/libpannellum.js', []);
     $enqueue('pannellum',    '/js/pannellum.js', ['libpannellum']);
 
-    // 自作 scripts.js（存在チェック＋mtime）
+    // 自作 scripts.js
     $scripts_path = get_template_directory() . '/js/scripts.js';
     $scripts_ver  = file_exists($scripts_path) ? filemtime($scripts_path) : null;
     wp_enqueue_script(
         'theme_scripts',
         get_template_directory_uri() . '/js/scripts.js',
-        ['jquery'], // 必要なら ajaxHandler を依存に追加
+        ['jquery'],
         $scripts_ver,
         true
     );
 
-    // calendar.js（任意）
+    // calendar.js
     $enqueue('calendar_js', '/js/calendar.js', ['jquery']);
 }
 add_action('wp_enqueue_scripts', 'themebs_enqueue_scripts');
@@ -1307,88 +1314,82 @@ add_action('admin_head', 'add_custom_admin_css');
 // OpenAI API 呼び出し関数
 function call_openai_api($user_message)
 {
+    if (!defined('OPENAI_API_KEY') || !OPENAI_API_KEY) {
+        error_log('OPENAI_API_KEY is missing');
+        return 'エラー: APIキーが未設定です。';
+    }
+
     $api_key = OPENAI_API_KEY;
     $url = 'https://api.openai.com/v1/chat/completions';
 
-    $body = json_encode([
+    $body = wp_json_encode([
         'model' => 'gpt-4',
         'messages' => [
-            // 事前メッセージを設定
-            ['role' => 'system', 'content' => 'こんにちは。内外土地開発（株）です。那須の不動産の物件でしたらご案内ができます。以下のリンクをご参照ください。'],
-            ['role' => 'system', 'content' => '土地の案内ページ: https://naigaicorp.net/naigai-tochi'],
-            ['role' => 'system', 'content' => '建物の案内ページ: https://naigaicorp.net/naigai-construction'],
-            ['role' => 'system', 'content' => 'ほかに何かわからないことがございましたら何でも聞いてくださいね！よろしくお願い申し上げます。'],
-            // ユーザーのメッセージを受け取る
-            ['role' => 'user', 'content' => $user_message],
+            [
+                'role' => 'system',
+                'content' => 'あなたは内外土地開発株式会社のWebサイト用アシスタントです。日本語で簡潔かつ丁寧に回答してください。不明なことは断定しないでください。必要に応じて土地ページ https://naigaicorp.net/naigai-tochi と建物ページ https://naigaicorp.net/naigai-construction を案内してください。'
+            ],
+            [
+                'role' => 'user',
+                'content' => $user_message
+            ],
         ],
-    ]);
+        'temperature' => 0.7,
+    ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 
-    // APIリクエスト送信
     $response = wp_remote_post($url, [
-        'method'    => 'POST',
-        'body'      => $body,
-        'headers'   => [
+        'method'  => 'POST',
+        'timeout' => 30,
+        'headers' => [
             'Content-Type'  => 'application/json',
             'Authorization' => 'Bearer ' . $api_key,
         ],
+        'body' => $body,
     ]);
 
-    // エラーチェック
     if (is_wp_error($response)) {
-        error_log('APIリクエストエラー: ' . $response->get_error_message());
+        error_log('API request WP_Error: ' . $response->get_error_message());
         return 'エラー: APIリクエストに失敗しました。';
     }
 
-    // レスポンス処理
-    $data = wp_remote_retrieve_body($response);
-    $result = json_decode($data, true);
+    $status = wp_remote_retrieve_response_code($response);
+    $raw    = wp_remote_retrieve_body($response);
+    $result = json_decode($raw, true);
 
-    // OpenAI APIからのエラーハンドリング
-    if (isset($result['error'])) {
-        error_log('APIエラー: ' . $result['error']['message']);
-        return 'エラー: ' . $result['error']['message'];
+    if ($status < 200 || $status >= 300) {
+        $message = !empty($result['error']['message']) ? $result['error']['message'] : 'OpenAI APIエラー';
+        error_log('OpenAI API error: ' . $message);
+        return 'エラー: ' . $message;
     }
 
-    // 正常なレスポンスがある場合に返す
-    if (isset($result['choices'][0]['message']['content'])) {
-        return $result['choices'][0]['message']['content'];
+    if (!empty($result['choices'][0]['message']['content'])) {
+        return wp_kses_post(nl2br($result['choices'][0]['message']['content']));
     }
 
-    // 予期しないレスポンスの場合
-    error_log('予期しないAPIレスポンス: ' . print_r($result, true));
+    error_log('Unexpected API response: ' . print_r($result, true));
     return 'エラー: 予期しないレスポンスです。';
 }
-
-
 
 // Ajax ハンドラ
 function chatgpt_request_handler()
 {
-    // Nonceの検証
     if (!isset($_POST['security']) || !wp_verify_nonce($_POST['security'], 'custom-nonce')) {
-        wp_send_json_error('不正なリクエストです。');
+        wp_send_json_error(['message' => '不正なリクエストです。'], 403);
     }
 
-    // ユーザーのメッセージを取得
-    $user_message = isset($_POST['user_message']) ? sanitize_text_field($_POST['user_message']) : '';
-    if (empty($user_message)) {
-        wp_send_json_error('メッセージが空です。');
+    $user_message = isset($_POST['user_message']) ? sanitize_textarea_field(wp_unslash($_POST['user_message'])) : '';
+
+    if ($user_message === '') {
+        wp_send_json_error(['message' => 'メッセージが空です。'], 400);
     }
 
-    // OpenAI APIを呼び出してレスポンスを取得
     $response = call_openai_api($user_message);
 
-    // レスポンスを送信
     wp_send_json_success(['message' => $response]);
 }
 
 add_action('wp_ajax_chatgpt_request', 'chatgpt_request_handler');
 add_action('wp_ajax_nopriv_chatgpt_request', 'chatgpt_request_handler');
-
-
-
-
-
 
 
 
