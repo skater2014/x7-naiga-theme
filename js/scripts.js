@@ -4326,3 +4326,103 @@ jQuery(document).ready(function ($) {
     }
   });
 });
+
+
+/* =========================================================
+   SWIPER RESERVATION CTA OVERRIDE
+   - Swiper の「来店予約」は予約モーダルを直接開く
+   - ChatGPT モーダルと干渉しない
+   ========================================================= */
+(function ($) {
+  'use strict';
+
+  function ensureReservationModalOpen(postId, permalink) {
+    var $modal = $('#store-reservation-modal');
+    if (!$modal.length) return;
+
+    $modal
+      .attr('data-post-id', postId || '')
+      .attr('data-permalink', permalink || '');
+
+    $modal.find('input[name="post_id"], input[name="property_id"], input[name="postId"]').first().val(postId || '');
+    $modal.find('input[name="permalink"], input[name="property_permalink"]').first().val(permalink || '');
+
+    $('body').addClass('store-reservation-modal-open');
+    $modal.stop(true, true).fadeIn(200).addClass('active');
+
+    $(document).trigger('storeReservationModal:open');
+  }
+
+  function openSwiperReservation(btn) {
+    var postId = btn.getAttribute('data-post-id') || '';
+    var permalink = btn.getAttribute('data-permalink') || '';
+
+    $(document).trigger('storeReservationModal:open');
+
+    if (typeof window.openReserveByPostId === 'function') {
+      try {
+        window.openReserveByPostId(postId, permalink);
+      } catch (err) {
+        console.error('openReserveByPostId failed:', err);
+      }
+    }
+
+    setTimeout(function () {
+      var $modal = $('#store-reservation-modal');
+      if (!$modal.length) return;
+
+      if (!$modal.is(':visible') && !$modal.hasClass('active')) {
+        ensureReservationModalOpen(postId, permalink);
+      }
+    }, 30);
+  }
+
+  document.addEventListener('click', function (e) {
+    var btn = e.target.closest('.home-slide-cta.naigai-property-row__cta');
+    if (!btn) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+    if (typeof e.stopImmediatePropagation === 'function') {
+      e.stopImmediatePropagation();
+    }
+
+    openSwiperReservation(btn);
+  }, true);
+
+  $(document).on('click', '#store-reservation-modal .close-btn, #store-reservation-modal [data-modal-close="1"]', function (e) {
+    e.preventDefault();
+    var $modal = $('#store-reservation-modal');
+    $modal.stop(true, true).fadeOut(200, function () {
+      $modal.removeClass('active');
+      $('body').removeClass('store-reservation-modal-open');
+      $(document).trigger('storeReservationModal:close');
+    });
+  });
+
+  $(document).on('click', '#store-reservation-modal', function (e) {
+    if ($(e.target).is('#store-reservation-modal')) {
+      var $modal = $('#store-reservation-modal');
+      $modal.stop(true, true).fadeOut(200, function () {
+        $modal.removeClass('active');
+        $('body').removeClass('store-reservation-modal-open');
+        $(document).trigger('storeReservationModal:close');
+      });
+    }
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Escape') return;
+
+    var $modal = $('#store-reservation-modal');
+    if (!$modal.length) return;
+    if (!$modal.is(':visible') && !$modal.hasClass('active')) return;
+
+    $modal.stop(true, true).fadeOut(200, function () {
+      $modal.removeClass('active');
+      $('body').removeClass('store-reservation-modal-open');
+      $(document).trigger('storeReservationModal:close');
+    });
+  });
+})(jQuery);
+

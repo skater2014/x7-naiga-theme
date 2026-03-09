@@ -3,10 +3,17 @@ jQuery(function ($) {
   var modalClosed = false;
   var isSending = false;
 
+  function reservationModalIsOpen() {
+    var $modal = $('#store-reservation-modal');
+    return $modal.length && ($modal.is(':visible') || $modal.hasClass('active'));
+  }
+
+  function canOpenChatgptModal() {
+    return !window.__disableChatgptModalAutoOpen && !reservationModalIsOpen();
+  }
+
   function escapeHtml(text) {
-    return $('<div>')
-      .text(text || '')
-      .html();
+    return $('<div>').text(text || '').html();
   }
 
   function scrollMessagesToBottom() {
@@ -29,9 +36,10 @@ jQuery(function ($) {
 
   function openModal() {
     if (modalOpen || modalClosed) return;
+    if (!canOpenChatgptModal()) return;
 
     modalOpen = true;
-    $('#chatgpt-modal').fadeIn(250);
+    $('#chatgpt-modal').stop(true, true).fadeIn(250);
 
     var welcomeMessage = `
       <div class="gpt-response">
@@ -48,10 +56,12 @@ jQuery(function ($) {
     scrollMessagesToBottom();
   }
 
-  function closeModal() {
-    $('#chatgpt-modal').fadeOut(250);
+  function closeModal(markClosed) {
+    $('#chatgpt-modal').stop(true, true).fadeOut(250);
     modalOpen = false;
-    modalClosed = true;
+    if (markClosed !== false) {
+      modalClosed = true;
+    }
   }
 
   function sendMessage() {
@@ -70,9 +80,9 @@ jQuery(function ($) {
       dataType: 'json',
       data: {
         action: 'chatgpt_request',
-        security: customAjax.nonce,
-        user_message: userMessage,
-      },
+        security: chatgptAjax.nonce,
+        user_message: userMessage
+      }
     })
       .done(function (response) {
         if (response && response.success && response.data && response.data.message) {
@@ -83,8 +93,12 @@ jQuery(function ($) {
           appendMessage('gpt-response', 'エラー: 応答を取得できませんでした。');
         }
       })
-      .fail(function () {
-        appendMessage('gpt-response', 'エラーが発生しました。');
+      .fail(function (xhr) {
+        var msg = 'エラーが発生しました。';
+        if (xhr.responseJSON && xhr.responseJSON.data && xhr.responseJSON.data.message) {
+          msg = 'エラー: ' + escapeHtml(xhr.responseJSON.data.message);
+        }
+        appendMessage('gpt-response', msg);
       })
       .always(function () {
         setSendingState(false);
@@ -94,7 +108,7 @@ jQuery(function ($) {
 
   $('.close-btn').on('click', function (e) {
     e.preventDefault();
-    closeModal();
+    closeModal(true);
   });
 
   $('#send_message').on('click', function (e) {
@@ -110,14 +124,23 @@ jQuery(function ($) {
   });
 
   $(window).on('scroll.chatgptModal', function () {
-    if ($(window).scrollTop() > 100 && !modalOpen && !modalClosed) {
+    if ($(window).scrollTop() > 100 && !modalOpen && !modalClosed && canOpenChatgptModal()) {
       openModal();
     }
   });
 
   $('#chatgpt-modal').on('click', function (event) {
     if ($(event.target).is('#chatgpt-modal')) {
-      closeModal();
+      closeModal(true);
     }
+  });
+
+  $(document).on('storeReservationModal:open', function () {
+    window.__disableChatgptModalAutoOpen = true;
+    closeModal(false);
+  });
+
+  $(document).on('storeReservationModal:close', function () {
+    window.__disableChatgptModalAutoOpen = false;
   });
 });
