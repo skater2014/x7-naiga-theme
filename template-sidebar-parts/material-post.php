@@ -71,7 +71,7 @@ if ($my_query->have_posts()) : // 投稿がある場合
                             <a href="<?php the_permalink(); ?>"><?php echo esc_html($title_excerpt); ?></a> <!-- タイトルにリンクを追加 -->
                         </h3>
                         <div class="post-meta">
-                            <span class="post-category"><?php the_category(', '); ?></span>
+                            <span class="post-category category"><?php the_category(', '); ?></span>
                             <span class="sidebar-comment-num">
                                 <a href="<?php the_permalink(); ?>#respond"><i class="far fa-comments"></i> : <?php echo get_comments_number(); ?></a>
                             </span>
