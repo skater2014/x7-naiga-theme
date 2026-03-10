@@ -88,8 +88,6 @@ function handleConfirmation(button) {
 
   if (typeof validateForm !== 'function') throw new Error('validateForm is not defined');
   if (typeof getFormData !== 'function') throw new Error('getFormData is not defined');
-  if (typeof updateConfirmationData !== 'function')
-    throw new Error('updateConfirmationData is not defined');
   if (typeof showConfirmationScreen !== 'function')
     throw new Error('showConfirmationScreen is not defined');
 
@@ -97,7 +95,6 @@ function handleConfirmation(button) {
   const formData = getFormData($parent);
   console.log('[HC] formData =', formData);
 
-  updateConfirmationData(formData);
 
   try {
     console.log('[HC] before showConfirmationScreen', {

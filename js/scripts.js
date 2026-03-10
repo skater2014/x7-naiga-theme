@@ -2767,70 +2767,9 @@ document.addEventListener('DOMContentLoaded', () => {
 // **script 側でのフォームの送信・リセット　リックの動作**
 /*jQuery(document).ready(function () {
     // **確認画面を表示**
-    jQuery('#to-confirm-modal, #to-confirm-page').on('click', function () {
-        const buttonId = jQuery(this).attr('id');
-        const parent = jQuery(this).closest('.store-reservation-modal-content, .store-reservation-page-content');
-
-        // **バリデーションチェック**
-        if ((buttonId === 'to-confirm-modal' && !validateForm('.store-reservation-modal-content')) || 
-            (buttonId === 'to-confirm-page' && !validateForm('.store-reservation-page-content'))) {
-            return;  // バリデーションが失敗した場合、処理を中止
-        }
-
-        // **フォームデータ取得＆確認画面更新**
-        const formData = getFormData(parent);
-        updateConfirmationData(formData);
-
-        // **モーダル or 固定ページの処理**
-        if (buttonId === 'to-confirm-modal') {
-            showConfirmationScreen(formData, '.store-reservation-modal-content');
-        } else if (buttonId === 'to-confirm-page') {
-            showConfirmationScreen(formData, '.store-reservation-page-content');
-        }
-    });
-
-    // **戻るボタンの処理**
-    jQuery('.store-reservation-modal-content, .store-reservation-page-content').on('click', '#back-to-input', function () {
-        const parent = jQuery(this).closest('.store-reservation-modal-content, .store-reservation-page-content');
-        parent.find('#step-confirm').hide();  // 確認画面を非表示
-        parent.find('#step-input').show();  // 入力フォームを表示
-    });
-
-    // **モーダルと固定ページの両方に対応（完了フォームのリセット処理）**
-    jQuery('.store-reservation-modal-content, .store-reservation-page-content').on('click', '#submit-reservation', function () {
-        const parent = jQuery(this).closest('.store-reservation-modal-content, .store-reservation-page-content');
-
-        if (parent.length === 0) {
-            console.error("親要素が取得できませんでした");
-            return;
-        }
-
-        parent.find('#step-input, #step-confirm').hide();
-        parent.find('#step-complete').show();
-
-        const formData = getFormData(parent);
-        sendReservationData(formData, parent);
-
-        setTimeout(function () {
-            console.log("フォームリセット処理開始");
-
-            // **フォームをリセット**
-            resetForm(parent);
-
-            // **固定ページの場合のみリセット後に再表示**
-            if (parent.hasClass('store-reservation-page-content')) {
-                console.log("固定ページのフォームをリセット後、再表示");
-                parent.find('#step-complete').hide();
-                parent.find('#step-input').css({ 'display': 'block', 'visibility': 'visible' }).show();
-            } 
-            
-            // **モーダルの場合は閉じる**
-            if (parent.hasClass('store-reservation-modal-content')) {
-                console.log("モーダルを閉じる");
-                parent.closest('.store-reservation-modal').fadeOut(300, function () {
-                    jQuery(this).removeClass('active');
-                });
-            }
+// **戻るボタンの処理**
+// **モーダルと固定ページの両方に対応（完了フォームのリセット処理）**
+}
 
             console.log("フォームリセット処理完了");
         }, 5000);
@@ -3310,12 +3249,40 @@ function validateForm(parent) {
   // ✅ その後に checkValidity（順番これが正解）
   if (form.checkValidity()) return true;
 
-  // ✅ 「見えてる invalid」だけを狙ってフォーカス（not focusable回避）
-  // const $invalid = parent.find(':input:invalid').filter(':visible').first();
+  const invalidElements = Array.from(form.elements || []).filter(function (el) {
+    if (!el) return false;
+    if (el.disabled) return false;
+    if (el.type === 'hidden') return false;
+    if (typeof el.checkValidity !== 'function') return false;
 
-  if ($invalid.length) {
-    const el = $invalid[0];
-    el.focus();
+    const $el = jQuery(el);
+    if (!$el.is(':visible')) return false;
+
+    return !el.checkValidity();
+  });
+
+  const el = invalidElements.length ? invalidElements[0] : null;
+
+  if (el) {
+    if (el.validity && el.validity.valueMissing) {
+      const labelText = parent
+        .find('label[for="' + el.id + '"]')
+        .first()
+        .text()
+        .replace(/[:：].*$/, '')
+        .replace(/\s*＊必須\s*/, '')
+        .trim() || el.name || 'この項目';
+
+      el.setCustomValidity(labelText + 'を入力してください。');
+    } else if (el.validity && el.validity.typeMismatch && el.type === 'email') {
+      el.setCustomValidity('メールアドレスの形式で入力してください。');
+    } else if (el.validity && el.validity.patternMismatch) {
+      el.setCustomValidity('入力形式が正しくありません。');
+    } else {
+      el.setCustomValidity('');
+    }
+
+    if (typeof el.focus === 'function') el.focus();
     if (typeof el.reportValidity === 'function') el.reportValidity();
   } else {
     console.error('invalidはあるが、見えてるinvalidが無い（hidden required / 重複の可能性）');
@@ -3533,8 +3500,7 @@ function getFormData(parent) {
     // ▼ 売却査定フィールド
     // ----------------------------
     property_status: parent.find('#property_status').val() || '未選択',
-    sale_price: parent.find('#sale_price').val(),
-    sale_price: parent.find('#sale_price').val() || '未設定',
+    sale_price: parent.find('#sale_price').val() || '',
     sale_period: parent.find('#sale_period').val() || '未選択',
     valuation_method: parent.find('#valuation_method').val() || '未選択',
     property_postcode: parent.find('#postcode_2').val() || '',
@@ -3565,116 +3531,9 @@ function getFormData(parent) {
 // ▼ 確認画面にデータを反映する関数
 //    （Step 2 などで呼び出される想定）html のIDを参照に取得
 // ----------------------------------------------------------------------
-function updateConfirmationData(formData) {
-  var isRecruitmentPage = window.location.href.includes('/recruitment');
-
-  // H3タイトル切り替え（採用 or 物件）
-  jQuery('#confirm-info-title').text(isRecruitmentPage ? '採用情報' : '物件情報');
-
-  // formData から結合して表示
-  const fullName = (formData.last_name || '') + ' ' + (formData.first_name || '');
-  const fullKana = (formData.last_name_kana || '') + ' ' + (formData.first_name_kana || '');
-
-  // ----------------------------
-  // ▼ 基本情報をセット
-  // ----------------------------
-  jQuery('#confirm-名前').text(fullName); // ← 修正済み
-  jQuery('#confirm-カタカナ').text(fullKana); // ← 修正済み
-  jQuery('#confirm-メールアドレス').text(formData.email);
-  jQuery('#confirm-電話番号').text(formData.phone);
-  jQuery('#confirm-郵便番号').text(formData.postcode);
-  jQuery('#confirm-住所').text(formData.address);
-  jQuery('#confirm-訪問日').text(formData['visit-date']);
-  jQuery('#confirm-時間帯').text(formData['time-slot']);
-
-  // 物件ID
-  jQuery('#confirm-property-label').text(isRecruitmentPage ? '採用ID: ' : '物件ID: ');
-  jQuery('#confirm-物件ID').text(formData.property_id);
-
-  // ----------------------------
-  // ▼ タイトルと価格（給与）
-  // ----------------------------
-  jQuery(
-    '#confirm-採用タイトル, #confirm-採用給与, #confirm-物件タイトル, #confirm-物件価格',
-  ).hide();
-
-  if (isRecruitmentPage) {
-    jQuery('#confirm-採用タイトル-text').text(formData.property_title);
-    jQuery('#confirm-採用タイトル').show();
-    jQuery('#confirm-採用給与-text').text(
-      formData.property_price === '応相談' ? '応相談' : formData.property_price + '円',
-    );
-    jQuery('#confirm-採用給与').show();
-  } else {
-    jQuery('#confirm-物件タイトル-text').text(formData.property_title);
-    jQuery('#confirm-物件タイトル').show();
-    let priceText = formData.property_price;
-
-    if (priceText === '売却済') {
-      priceText = '売却済';
-    } else if (!priceText.includes('万円')) {
-      priceText += '万円';
-    }
-
-    jQuery('#confirm-物件価格-text').text(priceText);
-    jQuery('#confirm-物件価格').show();
-  }
-
-  // ----------------------------
-  // ▼ 売却査定情報をセット（🔹 `getMappedValue()` 適用）
-  // ----------------------------
-  jQuery('#confirm-物件状況').text(getMappedValue(propertyStatusMap, formData['property_status']));
-  jQuery('#confirm-査定理由').text(formData['sale_reason_text'] || '');
-  jQuery('#confirm-売却価格').text(
-    formData['sale_price'] !== '未設定' ? formData['sale_price'] + '万円' : '未設定',
-  );
-  jQuery('#confirm-売却時期').text(getMappedValue(salePeriodMap, formData['sale_period']));
-  jQuery('#confirm-査定方法').text(
-    getMappedValue(valuationMethodMap, formData['valuation_method']),
-  );
-  jQuery('#confirm-査定物件郵便番号').text(formData['property_postcode']);
-  jQuery('#confirm-査定物件住所').text(formData['property_address']);
-
-  // ----------------------------
-  // ▼ 売却査定情報（動的フィールド）
-  // ----------------------------
-  const confirmDynamicFieldsContainer = jQuery('#confirm-dynamic-fields-container');
-  confirmDynamicFieldsContainer.empty(); // 既存のフィールドをクリア
-
-  const fields = [];
-  if (formData.land_area !== '未設定') {
-    fields.push(`<p><strong>土地面積:</strong> ${formData.land_area}㎡</p>`);
-  }
-  if (formData.building_area !== '未設定') {
-    fields.push(`<p><strong>建物面積:</strong> ${formData.building_area}㎡</p>`);
-  }
-  if (formData.year_built !== '未設定') {
-    fields.push(`<p><strong>築年数:</strong> ${formData.year_built}年</p>`);
-  }
-  if (formData.floor_plan !== '未設定') {
-    fields.push(
-      `<p><strong>間取り:</strong> ${getMappedValue(floorPlanMap, formData.floor_plan)}</p>`,
-    );
-  }
-  if (formData.rental_income !== '未設定') {
-    fields.push(`<p><strong>賃料収入:</strong> ${formData.rental_income}万円/月</p>`);
-  }
-
-  // 確認画面に挿入
-  if (fields.length > 0) {
-    confirmDynamicFieldsContainer.append(fields.join('')).show();
-  } else {
-    confirmDynamicFieldsContainer.hide();
-  }
-
-  // ----------------------------
-  // ▼ アップロード画像の表示
-  // ----------------------------
-  displayUploadedImages(formData['uploaded_images'], '#confirm-image-container');
-}
 
 // ----------------------------------------------------------------------
-// ▼ 別の確認画面表示用（showConfirmationScreen）の例　html のIDを参照に取得
+// ▼ 予約フォームの確認画面へ反映して表示する（モーダル版 / ページ版 共通）
 // ----------------------------------------------------------------------
 function showConfirmationScreen(formData, selector) {
   const parent = jQuery(selector);
