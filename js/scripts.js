@@ -1392,6 +1392,71 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 });
 
+function openHomeReservationModal(data) {
+  if (!data) return;
+
+  var $modal = jQuery('#store-reservation-modal');
+  if (!$modal.length) return;
+
+  $modal.find('#reservation-property-title').text(data.title || '物件情報');
+  $modal.find('#reservation-property-thumbnail').css({
+    'background-image': 'url(' + (data.thumbnail || '') + ')',
+    'background-size': 'cover',
+    'background-position': 'center',
+  });
+  $modal.find('#reservation-header').text('来店予約');
+  $modal.find('#reservation-property-id').text(data.post_id || '');
+  $modal.find('#reservation-property-label').text('物件ID: ');
+  $modal.find('#reservation-property-price').text(data.price || '売却済');
+
+  $modal
+    .attr('data-post-id', data.post_id || '')
+    .attr('data-post-type', data.post_type || '')
+    .attr('data-permalink', data.permalink || '')
+    .attr('data-staff', data.staff || '')
+    .attr('data-period-label', data.period_label || '')
+    .attr('data-time-label', data.time_label || '')
+    .attr('data-type', data.type || '')
+    .attr('data-area', data.area || '');
+
+  $modal.addClass('active').css({ display: 'flex', visibility: 'visible' }).fadeIn(300);
+  $modal.find('#step-input').show();
+  $modal.find('#step-confirm').hide();
+  $modal.find('#step-complete').hide();
+  jQuery('body').addClass('store-reservation-modal-open');
+}
+
+function openHomeReserveByPostId(postId) {
+  postId = String(postId || '').trim();
+  if (!postId) return;
+
+  jQuery.ajax({
+    url: '/wp-admin/admin-ajax.php',
+    type: 'POST',
+    dataType: 'json',
+    data: {
+      action: 'naigai_get_reservation_modal_data',
+      post_id: postId,
+    },
+    success: function (response) {
+      if (!response || !response.success || !response.data) return;
+      openHomeReservationModal(response.data);
+    },
+    error: function (xhr, status, err) {
+      console.error('home reservation ajax error:', status, err, xhr && xhr.responseText);
+    },
+  });
+}
+
+jQuery(document)
+  .off('click.naigaiHomeReservation', '.js-home-reservation-cta')
+  .on('click.naigaiHomeReservation', '.js-home-reservation-cta', function (e) {
+    e.preventDefault();
+    var postId = String(jQuery(this).attr('data-post-id') || '').trim();
+    if (!postId) return;
+    openHomeReserveByPostId(postId);
+  });
+
 /*フッター帯 スクロールで表示される固定メニューを制御するJavaScript*/
 window.onload = function () {
   const footerFixed = document.getElementById('js-footer-fixed'); // フッター要素
@@ -3246,7 +3311,7 @@ function validateForm(parent) {
   if (form.checkValidity()) return true;
 
   // ✅ 「見えてる invalid」だけを狙ってフォーカス（not focusable回避）
-  const $invalid = parent.find(':input:invalid').filter(':visible').first();
+  // const $invalid = parent.find(':input:invalid').filter(':visible').first();
 
   if ($invalid.length) {
     const el = $invalid[0];
@@ -4327,7 +4392,6 @@ jQuery(document).ready(function ($) {
   });
 });
 
-
 /* =========================================================
    SWIPER RESERVATION CTA OVERRIDE
    - Swiper の「来店予約」は予約モーダルを直接開く
@@ -4340,12 +4404,16 @@ jQuery(document).ready(function ($) {
     var $modal = $('#store-reservation-modal');
     if (!$modal.length) return;
 
-    $modal
-      .attr('data-post-id', postId || '')
-      .attr('data-permalink', permalink || '');
+    $modal.attr('data-post-id', postId || '').attr('data-permalink', permalink || '');
 
-    $modal.find('input[name="post_id"], input[name="property_id"], input[name="postId"]').first().val(postId || '');
-    $modal.find('input[name="permalink"], input[name="property_permalink"]').first().val(permalink || '');
+    $modal
+      .find('input[name="post_id"], input[name="property_id"], input[name="postId"]')
+      .first()
+      .val(postId || '');
+    $modal
+      .find('input[name="permalink"], input[name="property_permalink"]')
+      .first()
+      .val(permalink || '');
 
     $('body').addClass('store-reservation-modal-open');
     $modal.stop(true, true).fadeIn(200).addClass('active');
@@ -4377,28 +4445,36 @@ jQuery(document).ready(function ($) {
     }, 30);
   }
 
-  document.addEventListener('click', function (e) {
-    var btn = e.target.closest('.home-slide-cta.naigai-property-row__cta');
-    if (!btn) return;
+  document.addEventListener(
+    'click',
+    function (e) {
+      var btn = e.target.closest('.home-slide-cta.naigai-property-row__cta');
+      if (!btn) return;
 
-    e.preventDefault();
-    e.stopPropagation();
-    if (typeof e.stopImmediatePropagation === 'function') {
-      e.stopImmediatePropagation();
-    }
+      e.preventDefault();
+      e.stopPropagation();
+      if (typeof e.stopImmediatePropagation === 'function') {
+        e.stopImmediatePropagation();
+      }
 
-    openSwiperReservation(btn);
-  }, true);
+      openSwiperReservation(btn);
+    },
+    true,
+  );
 
-  $(document).on('click', '#store-reservation-modal .close-btn, #store-reservation-modal [data-modal-close="1"]', function (e) {
-    e.preventDefault();
-    var $modal = $('#store-reservation-modal');
-    $modal.stop(true, true).fadeOut(200, function () {
-      $modal.removeClass('active');
-      $('body').removeClass('store-reservation-modal-open');
-      $(document).trigger('storeReservationModal:close');
-    });
-  });
+  $(document).on(
+    'click',
+    '#store-reservation-modal .close-btn, #store-reservation-modal [data-modal-close="1"]',
+    function (e) {
+      e.preventDefault();
+      var $modal = $('#store-reservation-modal');
+      $modal.stop(true, true).fadeOut(200, function () {
+        $modal.removeClass('active');
+        $('body').removeClass('store-reservation-modal-open');
+        $(document).trigger('storeReservationModal:close');
+      });
+    },
+  );
 
   $(document).on('click', '#store-reservation-modal', function (e) {
     if ($(e.target).is('#store-reservation-modal')) {
@@ -4425,4 +4501,3 @@ jQuery(document).ready(function ($) {
     });
   });
 })(jQuery);
-

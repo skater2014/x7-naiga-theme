@@ -1,20 +1,22 @@
 <?php if (is_home()) : ?>
-    </div><!-- End/Page Wrapper -->
+  </div><!-- End/Page Wrapper -->
 <?php endif; ?>
 
 <?php
 // アーカイブページの場合にのみ、divタグを閉じる
 if (is_archive()) : ?>
-    </div><!-- End/Page Wrapper -->
+  </div><!-- End/Page Wrapper -->
 <?php endif; ?>
 
 
-<?php if (is_singular('land') || is_page()) : //ok?>
-    </div><!-- End/Page Wrapper -->
+<?php if (is_singular('land') || is_page()) : //ok
+?>
+  </div><!-- End/Page Wrapper -->
 <?php endif; ?>
 
-<?php if (is_singular('house') || is_page()) : //pk?>
-    </div><!-- End/Page Wrapper -->
+<?php if (is_singular('house') || is_page()) : //pk
+?>
+  </div><!-- End/Page Wrapper -->
 <?php endif; ?>
 
 
@@ -23,13 +25,13 @@ if (is_archive()) : ?>
   <div class="section">
     <div class="top-foot">
       <div class="foot-col">
-        <?php dynamic_sidebar('footer-1'); ?> 
+        <?php dynamic_sidebar('footer-1'); ?>
       </div>
       <div class="foot-col">
-        <?php dynamic_sidebar('footer-2'); ?> 
+        <?php dynamic_sidebar('footer-2'); ?>
       </div>
       <div class="foot-col">
-        <?php dynamic_sidebar('footer-3'); ?> 
+        <?php dynamic_sidebar('footer-3'); ?>
       </div>
       <div class="clear"></div>
     </div><!-- top-foot -->
@@ -42,14 +44,14 @@ if (is_archive()) : ?>
     <div class="bottom-foot">
       <div class="copyright">
         <p id="copyright">
-          &copy; <?php bloginfo('name'); ?> © 2020 All Rights Reserved. 
+          &copy; <?php bloginfo('name'); ?> © 2020 All Rights Reserved.
           | <a href="<?php echo home_url('/privacypolicy'); ?>">Privacy Policy</a>
         </p>
       </div>
       <div class="foot-socials">
         <ul>
           <?php
-          $socials = array('twitter', 'facebook', 'google-plus', 'instagram', 'pinterest', 'vimeo', 'youtube', 'linkedin','phone');
+          $socials = array('twitter', 'facebook', 'google-plus', 'instagram', 'pinterest', 'vimeo', 'youtube', 'linkedin', 'phone');
           $iconSize = 24; // Adjust the image size as needed
 
           for ($i = 0; $i < count($socials); $i++) {
@@ -73,26 +75,26 @@ if (is_archive()) : ?>
 
 
 <?php if (is_home()) : ?>
-    <!-- ホームページ用の div タグ -->
-    </div><!-- End/Wrapper -->
+  <!-- ホームページ用の div タグ -->
+  </div><!-- End/Wrapper -->
 <?php endif; ?>
 
 <?php if (is_singular('land') || is_category('land') || is_page('land')) : ?>
 
-    </div><!-- End/Wrapper Tekken-->
+  </div><!-- End/Wrapper Tekken-->
 <?php endif; ?>
 
 <?php if (is_singular('naigai-construction') || is_category('naigai-construction') || is_page('genshin-impact')) : ?>
-    </div><!-- End/Wrapper Genshin-->
+  </div><!-- End/Wrapper Genshin-->
 <?php endif; ?>
 
 
 <?php
 // ページのテンプレートが "予約フォームページ" かどうかを確認
-//if (!is_page_template('page-store-reservation.php')) :
-    // store-reservation-modalテンプレートを表示
-    //get_template_part('templates/store-reservation-modal');
-//endif;
+if (!is_page_template('page-store-reservation.php')) :
+  // store-reservation-modalテンプレートを表示
+  get_template_part('templates/store-reservation-modal');
+endif;
 ?>
 
 <?php wp_footer(); ?>
@@ -102,4 +104,5 @@ if (is_archive()) : ?>
 <!-- SVG FILE End -->
 
 </body>
+
 </html>

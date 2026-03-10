@@ -72,7 +72,7 @@ $is_video = in_array($type, array('youtube', 'vimeo'), true);
 
                 <button
                     type="button"
-                    class="home-slide-cta naigai-property-row__cta"
+                    class="home-slide-cta js-home-reservation-cta"
                     data-post-id="<?php echo (int) get_the_ID(); ?>"
                     data-permalink="<?php echo esc_url(get_permalink()); ?>">
                     来店予約
