@@ -6129,27 +6129,29 @@ footer {
   clear: both;
 }
 
-/* 上部フッター領域 */
+/* 上部フッター領域
+   - 3カラムを横並び
+   - 各カラムの高さを揃える */
 .top-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
   padding: 0;
   margin: 0;
 }
 
-/* フッターコラム */
+/* フッターコラム
+   - float をやめて flex 子要素にする
+   - 各カラム内を縦積み
+   - 本文量が違っても画像を下に揃えやすくする */
 .foot-col {
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
-  float: left;
+  float: none;
+  width: 33.3333%;
   padding: 5px;
-  width: 33%;
-}
-
-/* レスポンシブル時のフッターコラム幅 */
-@media only screen and (max-width: 767px) {
-  .foot-col {
-    width: 100%;
-    float: left;
-  }
+  display: flex;
+  flex-direction: column;
 }
 
 /* 最初のフッターコラムの余白調整 */
@@ -6157,12 +6159,13 @@ footer {
   padding: 5px;
 }
 
-/* 最後のフッターコラムの余白調整 */
+/* 最後のフッターコラムの余白調整
+   - 右だけ詰めすぎると見た目が崩れやすいので 5px に統一 */
 .foot-col:last-child {
-  padding: 0px;
+  padding: 5px;
 }
 
-/* footer内：h3.wp-block-heading 専用（上下ボーダーで挟む） */
+/* 見出し */
 #foot .top-foot .foot-col h3.wp-block-heading {
   margin: 0 0 12px;
   padding: 10px 0;
@@ -6172,45 +6175,90 @@ footer {
   line-height: 1.25;
 }
 
+/* 本文ブロック
+   - ここが伸びて高さ差を吸収する */
+#foot .top-foot .foot-col .widget_text {
+  flex: 1 1 auto;
+}
+
+/* 画像ウィジェットを下側へ寄せる */
+#foot .top-foot .foot-col .widget_media_image,
+#foot .top-foot .foot-col .wp-block-image {
+  margin-top: auto;
+}
+
+/* 画像の高さを揃える
+   - object-fit: cover で枠に合わせて自然にトリミング */
+#foot .top-foot .foot-col .wp-block-image img {
+  display: block;
+  width: 100%;
+  height: 280px;
+  max-width: 100%;
+  object-fit: cover;
+  vertical-align: bottom;
+}
+
+/* レスポンシブ */
+@media only screen and (max-width: 767px) {
+  .top-foot {
+    display: block;
+  }
+
+  .foot-col {
+    width: 100%;
+    float: left;
+    display: block;
+    padding: 5px;
+  }
+
+  .foot-col:last-child {
+    padding: 5px;
+  }
+
+  #foot .top-foot .foot-col .wp-block-image img {
+    height: auto;
+  }
+}
+
 /* 下部フッター領域のスタイル設定 */
 .bottom-foot {
-  border-top: 1px solid #ddd; /* 上部に1pxの境界線を追加 */
+  border-top: 1px solid #ddd;
   display: -webkit-box;
   display: -ms-flexbox;
-  display: flex; /* フレックスボックスレイアウトを使用 */
+  display: flex;
   -webkit-box-pack: justify;
   -ms-flex-pack: justify;
-  justify-content: space-between; /* 子要素間に均等なスペースを配置 */
+  justify-content: space-between;
   -webkit-box-align: center;
   -ms-flex-align: center;
-  align-items: center; /* 子要素を垂直方向に中央揃え */
-  margin: 0 auto; /* 上下の余白を0に設定し、左右を自動で中央揃え */
-  width: 100%; /* 幅を100%に設定 */
-  font-size: 16px; /* フォントサイズを16pxに設定 */
-  padding: 3px; /* 内側の余白を3pxに設定 */
+  align-items: center;
+  margin: 0 auto;
+  width: 100%;
+  font-size: 16px;
+  padding: 3px;
 }
 
 /* 著作権情報の配置設定 */
 .copyright {
   -webkit-box-ordinal-group: 3;
   -ms-flex-order: 2;
-  order: 2; /* フレックスコンテナ内での順序を2に設定（後に配置） */
-  margin-left: auto; /* 左のマージンを自動で設定して、右側に寄せる */
+  order: 2;
+  margin-left: auto;
 }
 
 /* 下部フッター内のテキストとリンクのスタイル設定 */
 .bottom-foot p,
 .bottom-foot a {
-  margin: 0; /* 外側の余白を0に設定 */
-  font-size: 12px; /* フォントサイズを12pxに設定 */
+  margin: 0;
+  font-size: 12px;
 }
 
 /* ソーシャルメディアアイコンの配置設定 */
 .foot-socials {
   -webkit-box-ordinal-group: 2;
   -ms-flex-order: 1;
-  order: 1; /* フレックスコンテナ内での順序を1に設定（前に配置） */
-  margin-right: auto; /* 右のマージンを自動で設定して、左側に寄せる */
+  order: 1;
+  margin-right: auto;
 }
 
 /* モバイルビュー用のメディアクエリ */
@@ -6219,17 +6267,17 @@ footer {
     -webkit-box-orient: vertical;
     -webkit-box-direction: normal;
     -ms-flex-direction: column;
-    flex-direction: column; /* 子要素を縦方向に配置 */
-    text-align: center; /* テキストを中央揃え */
+    flex-direction: column;
+    text-align: center;
   }
 
   .copyright,
   .foot-socials {
     -webkit-box-ordinal-group: unset;
     -ms-flex-order: unset;
-    order: unset; /* フレックスコンテナ内での順序をデフォルトに戻す */
-    margin: 0; /* 外側の余白を0に設定 */
-    padding: 3px; /* 内側の余白を3pxに設定 */
+    order: unset;
+    margin: 0;
+    padding: 3px;
   }
 }
 
