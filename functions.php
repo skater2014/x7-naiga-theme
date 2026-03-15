@@ -594,13 +594,19 @@ function themebs_enqueue_scripts()
     $enqueue('clipboard',          '/js/clipboard.min.js', []);
     $enqueue('loan-simulation-js', '/js/loan-simulation.js', ['jquery']);
 
-    // ChatGPT モーダル
-    $enqueue('chatgpt', '/js/chatgpt-modal.js', ['jquery']);
+    /**
+     * AIチャット用JSを読み込む
+     * - トップページだけでAIチャットJSを読み込む
+     * - Ajax URL と nonce を JSへ渡す
+     */
+    if (is_front_page()) {
+        $enqueue('naigai-ai-chat', '/js/openai-chat-modal.js', ['jquery']);
 
-    wp_localize_script('chatgpt', 'chatgptAjax', array(
-        'ajaxurl' => admin_url('admin-ajax.php'),
-        'nonce'   => wp_create_nonce('custom-nonce'),
-    ));
+        wp_localize_script('naigai-ai-chat', 'naigaiAiChatAjax', [
+            'ajaxurl' => admin_url('admin-ajax.php'),
+            'nonce'   => wp_create_nonce('openai-chatmodal_nonce'),
+        ]);
+    }
 
     // Pannellum は lib → 本体の順
     $enqueue('libpannellum', '/js/libpannellum.js', []);
@@ -804,38 +810,306 @@ function dess_get_excerpt($num_chars)
 
 
 
+/* =========================================================
+ * AIチャットUI出力
+ * ========================================================= */
+if (!function_exists('naigai_render_chatgpt_modal')) {
+    function naigai_render_chatgpt_modal()
+    {
+        if (!is_front_page()) {
+            return;
+        }
+
+        get_template_part('templates/chatgpt-modal');
+    }
+}
 
 
+/* =========================================================
+ * ページコンテキスト sanitizing
+ * ========================================================= */
+if (!function_exists('naigai_sanitize_page_context')) {
+    function naigai_sanitize_page_context($context)
+    {
+        if (!is_array($context)) {
+            return [];
+        }
+
+        return [
+            'url'        => isset($context['url']) ? esc_url_raw((string) $context['url']) : '',
+            'title'      => isset($context['title']) ? sanitize_text_field((string) $context['title']) : '',
+            'page_title' => isset($context['page_title']) ? sanitize_text_field((string) $context['page_title']) : '',
+            'breadcrumb' => isset($context['breadcrumb']) ? sanitize_text_field((string) $context['breadcrumb']) : '',
+            'body_class' => isset($context['body_class']) ? sanitize_text_field((string) $context['body_class']) : '',
+            'post_id'    => isset($context['post_id']) ? sanitize_text_field((string) $context['post_id']) : '',
+            'post_type'  => isset($context['post_type']) ? sanitize_text_field((string) $context['post_type']) : '',
+            'is_single'  => !empty($context['is_single']) ? 1 : 0,
+            'is_page'    => !empty($context['is_page']) ? 1 : 0,
+            'is_home'    => !empty($context['is_home']) ? 1 : 0,
+            'is_archive' => !empty($context['is_archive']) ? 1 : 0,
+        ];
+    }
+}
 
 
-/* 管理画面に「サムネイル」「ID」「文字数」を追加 */
+/* =========================================================
+ * OpenAI 呼び出し
+ * Responses API + Prompt Template 版
+ * ========================================================= */
+if (!function_exists('naigai_call_openai_api')) {
+    function naigai_call_openai_api($user_message, $page_context = [], $user_intent = '')
+    {
+        $api_key = defined('OPENAI_API_KEY') && OPENAI_API_KEY
+            ? OPENAI_API_KEY
+            : getenv('OPENAI_API_KEY');
+
+        if (!$api_key) {
+            return new WP_Error('missing_api_key', 'OPENAI_API_KEY が未設定です。');
+        }
+
+        $model = defined('OPENAI_MODEL') && OPENAI_MODEL
+            ? OPENAI_MODEL
+            : getenv('OPENAI_MODEL');
+
+        if (!$model) {
+            return new WP_Error('missing_model', 'OPENAI_MODEL が未設定です。');
+        }
+
+        $prompt_id = defined('OPENAI_PROMPT_ID') && OPENAI_PROMPT_ID
+            ? OPENAI_PROMPT_ID
+            : getenv('OPENAI_PROMPT_ID');
+
+        $prompt_version = defined('OPENAI_PROMPT_VERSION') && OPENAI_PROMPT_VERSION
+            ? OPENAI_PROMPT_VERSION
+            : getenv('OPENAI_PROMPT_VERSION');
+
+        if (!$prompt_id) {
+            return new WP_Error('missing_prompt_id', 'OPENAI_PROMPT_ID が未設定です。');
+        }
+
+        $user_message = is_string($user_message) ? trim($user_message) : '';
+        $user_intent  = is_string($user_intent) ? sanitize_text_field($user_intent) : '';
+
+        if ($user_message === '') {
+            return new WP_Error('empty_user_message', 'ご質問が空です。');
+        }
+
+        $page_context_text = '';
+        if (!empty($page_context) && is_array($page_context)) {
+            $page_context_text = wp_json_encode(
+                $page_context,
+                JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+            );
+        }
+
+        $site_base   = home_url();
+        $land_url    = trailingslashit($site_base) . 'naigai-tochi';
+        $gallery_url = trailingslashit($site_base) . 'room-gallary';
+        $satei_url   = trailingslashit($site_base) . 'satei';
+
+        $prompt = [
+            'id' => (string) $prompt_id,
+            'variables' => [
+                'user_message' => (string) $user_message,
+                'user_intent'  => (string) $user_intent,
+                'page_context' => (string) $page_context_text,
+                'land_url'     => (string) $land_url,
+                'gallery_url'  => (string) $gallery_url,
+                'satei_url'    => (string) $satei_url,
+            ],
+        ];
+
+        if (!empty($prompt_version)) {
+            $prompt['version'] = (string) $prompt_version;
+        }
+
+        $body = [
+            'model'  => (string) $model,
+            'prompt' => $prompt,
+        ];
+
+        $response = wp_remote_post('https://api.openai.com/v1/responses', [
+            'timeout' => 45,
+            'headers' => [
+                'Content-Type'  => 'application/json',
+                'Authorization' => 'Bearer ' . $api_key,
+            ],
+            'body' => wp_json_encode($body),
+        ]);
+
+        if (is_wp_error($response)) {
+            return new WP_Error('openai_request_failed', $response->get_error_message());
+        }
+
+        $code       = wp_remote_retrieve_response_code($response);
+        $raw_body   = wp_remote_retrieve_body($response);
+        $json       = json_decode($raw_body, true);
+        $request_id = wp_remote_retrieve_header($response, 'x-request-id');
+
+        if ($code < 200 || $code >= 300) {
+            $message = 'AI応答の取得に失敗しました。';
+
+            if (!empty($json['error']['message']) && is_string($json['error']['message'])) {
+                $message = sanitize_text_field($json['error']['message']);
+            }
+
+            if (!empty($request_id)) {
+                $message .= ' [request_id: ' . sanitize_text_field($request_id) . ']';
+            }
+
+            return new WP_Error('openai_bad_response', $message);
+        }
+
+        $message = '';
+
+        if (!empty($json['output_text']) && is_string($json['output_text'])) {
+            $message = trim($json['output_text']);
+        }
+
+        if ($message === '' && !empty($json['output']) && is_array($json['output'])) {
+            foreach ($json['output'] as $output_item) {
+                if (empty($output_item['content']) || !is_array($output_item['content'])) {
+                    continue;
+                }
+
+                foreach ($output_item['content'] as $content_item) {
+                    if (isset($content_item['text']) && is_string($content_item['text'])) {
+                        $message .= $content_item['text'];
+                    }
+                }
+            }
+            $message = trim($message);
+        }
+
+        if ($message === '') {
+            return new WP_Error('empty_ai_message', 'AIの応答が空でした。');
+        }
+
+        return wp_kses_post(nl2br($message));
+    }
+}
+
+
+/* =========================================================
+ * Ajax ハンドラ
+ * ========================================================= */
+if (!function_exists('naigai_ai_chat_request')) {
+    function naigai_ai_chat_request()
+    {
+        check_ajax_referer('openai-chatmodal_nonce', 'security');
+
+        $user_message = isset($_POST['user_message'])
+            ? sanitize_textarea_field(wp_unslash($_POST['user_message']))
+            : '';
+
+        $user_intent = isset($_POST['user_intent'])
+            ? sanitize_text_field(wp_unslash($_POST['user_intent']))
+            : '';
+
+        if ($user_message === '') {
+            wp_send_json_error([
+                'message' => 'ご質問を入力してください。'
+            ], 400);
+        }
+
+        $page_context_raw = [];
+
+        if (isset($_POST['page_context'])) {
+            $decoded = json_decode(wp_unslash($_POST['page_context']), true);
+            if (is_array($decoded)) {
+                $page_context_raw = $decoded;
+            }
+        }
+
+        $page_context = naigai_sanitize_page_context($page_context_raw);
+        $result = naigai_call_openai_api($user_message, $page_context, $user_intent);
+
+        if (is_wp_error($result)) {
+            wp_send_json_error([
+                'message' => $result->get_error_message()
+            ], 500);
+        }
+
+        wp_send_json_success([
+            'message' => $result
+        ]);
+    }
+}
+add_action('wp_ajax_naigai_ai_chat_request', 'naigai_ai_chat_request');
+add_action('wp_ajax_nopriv_naigai_ai_chat_request', 'naigai_ai_chat_request');
+
+
+/* =========================================================
+ * 管理画面の投稿一覧カスタマイズ
+ * ========================================================= */
+
+/**
+ * 投稿一覧テーブルの列を追加
+ *
+ * 役割:
+ * ---------------------------------------------------------
+ * - 管理画面の投稿一覧に
+ *   「サムネイル」「ID」「文字数」を追加する
+ *
+ * 注意:
+ * ---------------------------------------------------------
+ * - この関数は一覧テーブルの見出しを追加する役割
+ * - 実際の中身表示は add_posts_columns_row() 側で行う
+ */
 function add_posts_columns($columns)
 {
     $columns['thumbnail'] = 'サムネイル';
-    $columns['postid'] = 'ID';
-    $columns['count'] = '文字数';
-
-    echo '';
+    $columns['postid']    = 'ID';
+    $columns['count']     = '文字数';
 
     return $columns;
 }
 
-//投稿一覧管理画にサブネイル投稿一覧を表示
+/**
+ * 追加した列の中身を表示
+ *
+ * 役割:
+ * ---------------------------------------------------------
+ * - thumbnail 列:
+ *   アイキャッチ画像を表示
+ * - postid 列:
+ *   投稿IDを表示
+ * - count 列:
+ *   本文の文字数を表示
+ *
+ * 補足:
+ * ---------------------------------------------------------
+ * - 本文文字数は HTML タグを除外したうえで数える
+ * - 日本語文字数のため mb_strlen() を使う
+ */
 function add_posts_columns_row($column_name, $post_id)
 {
-    if ('thumbnail' == $column_name) {
-        $thumb = get_the_post_thumbnail($post_id, array(100, 100), 'thumbnail');
-        echo ($thumb) ? $thumb : '－';
-    } elseif ('postid' == $column_name) {
-        echo $post_id;
-    } elseif ('count' == $column_name) {
+    if ('thumbnail' === $column_name) {
+        $thumb = get_the_post_thumbnail($post_id, [100, 100], 'thumbnail');
+        echo $thumb ? $thumb : '－';
+    } elseif ('postid' === $column_name) {
+        echo (int) $post_id;
+    } elseif ('count' === $column_name) {
         $count = mb_strlen(strip_tags(get_post_field('post_content', $post_id)));
-        echo $count;
+        echo (int) $count;
     }
 }
-add_filter('manage_posts_columns', 'add_posts_columns');
-add_action('manage_posts_custom_column', 'add_posts_columns_row', 10, 2);
 
+/**
+ * 投稿一覧の列追加フック登録
+ *
+ * 役割:
+ * - 管理画面の投稿一覧に見出し列を追加する
+ */
+add_filter('manage_posts_columns', 'add_posts_columns');
+
+/**
+ * 投稿一覧の列内容表示フック登録
+ *
+ * 役割:
+ * - 各投稿行ごとに列の中身を出力する
+ */
+add_action('manage_posts_custom_column', 'add_posts_columns_row', 10, 2);
 
 //固定ページ一覧画面でサムネイル表示
 function add_page_columns($columns)
@@ -1311,85 +1585,8 @@ add_action('admin_head', 'add_custom_admin_css');
 
 
 
-// OpenAI API 呼び出し関数
-function call_openai_api($user_message)
-{
-    if (!defined('OPENAI_API_KEY') || !OPENAI_API_KEY) {
-        error_log('OPENAI_API_KEY is missing');
-        return 'エラー: APIキーが未設定です。';
-    }
 
-    $api_key = OPENAI_API_KEY;
-    $url = 'https://api.openai.com/v1/chat/completions';
 
-    $body = wp_json_encode([
-        'model' => 'gpt-4',
-        'messages' => [
-            [
-                'role' => 'system',
-                'content' => 'あなたは内外土地開発株式会社のWebサイト用アシスタントです。日本語で簡潔かつ丁寧に回答してください。不明なことは断定しないでください。必要に応じて土地ページ https://naigaicorp.net/naigai-tochi と建物ページ https://naigaicorp.net/naigai-construction を案内してください。'
-            ],
-            [
-                'role' => 'user',
-                'content' => $user_message
-            ],
-        ],
-        'temperature' => 0.7,
-    ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-
-    $response = wp_remote_post($url, [
-        'method'  => 'POST',
-        'timeout' => 30,
-        'headers' => [
-            'Content-Type'  => 'application/json',
-            'Authorization' => 'Bearer ' . $api_key,
-        ],
-        'body' => $body,
-    ]);
-
-    if (is_wp_error($response)) {
-        error_log('API request WP_Error: ' . $response->get_error_message());
-        return 'エラー: APIリクエストに失敗しました。';
-    }
-
-    $status = wp_remote_retrieve_response_code($response);
-    $raw    = wp_remote_retrieve_body($response);
-    $result = json_decode($raw, true);
-
-    if ($status < 200 || $status >= 300) {
-        $message = !empty($result['error']['message']) ? $result['error']['message'] : 'OpenAI APIエラー';
-        error_log('OpenAI API error: ' . $message);
-        return 'エラー: ' . $message;
-    }
-
-    if (!empty($result['choices'][0]['message']['content'])) {
-        return wp_kses_post(nl2br($result['choices'][0]['message']['content']));
-    }
-
-    error_log('Unexpected API response: ' . print_r($result, true));
-    return 'エラー: 予期しないレスポンスです。';
-}
-
-// Ajax ハンドラ
-function chatgpt_request_handler()
-{
-    if (!isset($_POST['security']) || !wp_verify_nonce($_POST['security'], 'custom-nonce')) {
-        wp_send_json_error(['message' => '不正なリクエストです。'], 403);
-    }
-
-    $user_message = isset($_POST['user_message']) ? sanitize_textarea_field(wp_unslash($_POST['user_message'])) : '';
-
-    if ($user_message === '') {
-        wp_send_json_error(['message' => 'メッセージが空です。'], 400);
-    }
-
-    $response = call_openai_api($user_message);
-
-    wp_send_json_success(['message' => $response]);
-}
-
-add_action('wp_ajax_chatgpt_request', 'chatgpt_request_handler');
-add_action('wp_ajax_nopriv_chatgpt_request', 'chatgpt_request_handler');
 
 
 
