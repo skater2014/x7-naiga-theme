@@ -742,11 +742,14 @@ body.dark-theme .header__top > .search-form-container .search-form-30 input::pla
 }
 
 /* =========================================
-   HOME SLIDER OVERRIDES
-   左：画像/動画 + オーバーレイ
+   HOME SLIDER
+   左：画像 / 動画 + オーバーレイ
    右：物件テーブル + CTA
 ========================================= */
 
+/* -----------------------------------------
+   変数 / 土台
+----------------------------------------- */
 .home-slider {
   --gap: 16px;
   --slide-pad-pc: 16px;
@@ -759,8 +762,8 @@ body.dark-theme .header__top > .search-form-container .search-form-30 input::pla
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  box-sizing: border-box;
   position: relative;
+  box-sizing: border-box;
 }
 
 #home-swiper,
@@ -783,22 +786,18 @@ body.dark-theme .header__top > .search-form-container .search-form-30 input::pla
   height: auto;
 }
 
+/* -----------------------------------------
+   スライド全体レイアウト
+----------------------------------------- */
 .home-slide {
   display: flex;
   flex-direction: column;
   gap: var(--gap);
+  width: 100%;
+  height: 100%;
+  min-height: 0;
   padding: var(--slide-pad-sp);
   box-sizing: border-box;
-  width: 100%;
-  min-height: 0;
-}
-
-@media (min-width: 1200px) {
-  .home-slide {
-    flex-direction: row;
-    align-items: flex-start;
-    padding: var(--slide-pad-pc);
-  }
 }
 
 .home-slide-media-column,
@@ -808,7 +807,19 @@ body.dark-theme .header__top > .search-form-container .search-form-30 input::pla
   box-sizing: border-box;
 }
 
+.home-slide-media-column {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
 @media (min-width: 1200px) {
+  .home-slide {
+    flex-direction: row;
+    align-items: flex-start;
+    padding: var(--slide-pad-pc);
+  }
+
   .home-slide-media-column,
   .home-slide-info {
     flex: 0 0 calc((100% - var(--gap)) / 2);
@@ -816,12 +827,9 @@ body.dark-theme .header__top > .search-form-container .search-form-30 input::pla
   }
 }
 
-.home-slide-media-column {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-}
-
+/* -----------------------------------------
+   左カラム：画像 / 動画
+----------------------------------------- */
 .home-slide-feature {
   position: relative;
   overflow: hidden;
@@ -856,9 +864,9 @@ body.dark-theme .header__top > .search-form-container .search-form-30 input::pla
 }
 
 .home-slide-image > a,
+.home-slide-feature iframe,
 .home-slide-feature lite-youtube,
-.home-slide-feature lite-vimeo,
-.home-slide-feature iframe {
+.home-slide-feature lite-vimeo {
   display: block;
   width: 100%;
   height: 100%;
@@ -868,17 +876,16 @@ body.dark-theme .header__top > .search-form-container .search-form-30 input::pla
 .home-slide-feature img {
   position: absolute;
   inset: 0;
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center;
-  display: block;
 }
 
-/* =========================
+/* -----------------------------------------
    オーバーレイ
-========================= */
-
+----------------------------------------- */
 .home-slide-overlay {
   position: absolute;
   inset: 0;
@@ -923,27 +930,27 @@ body.dark-theme .header__top > .search-form-container .search-form-30 input::pla
 }
 
 .home-slide-overlay__title a {
+  display: -webkit-box;
+  overflow: hidden;
   color: #fff;
+  text-align: left;
   text-decoration: none;
   font-size: clamp(18px, 2vw, 28px);
   font-weight: 700;
   line-height: 1.3;
-  display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
-  overflow: hidden;
-  text-align: left;
 }
 
 .home-slide-overlay__text {
+  display: -webkit-box;
+  overflow: hidden;
   color: rgba(255, 255, 255, 0.94);
+  text-align: left;
   font-size: 14px;
   line-height: 1.7;
-  display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
-  overflow: hidden;
-  text-align: left;
 }
 
 .home-slide-feature.is-overlay-hidden .home-slide-overlay {
@@ -952,20 +959,20 @@ body.dark-theme .header__top > .search-form-container .search-form-30 input::pla
   pointer-events: none;
 }
 
-/* =========================
-   右カラム
-========================= */
-
+/* -----------------------------------------
+   右カラム：物件情報
+----------------------------------------- */
 .home-slide-info {
   display: flex;
   flex-direction: column;
   min-width: 0;
-  color: #fff;
-  padding: 0;
   max-height: none;
   overflow: visible;
+  padding: 0;
+  color: #fff;
 }
 
+/* ラベル共通 */
 .property-label-inner {
   display: inline-flex;
   align-items: center;
@@ -993,11 +1000,12 @@ body.dark-theme .header__top > .search-form-container .search-form-30 input::pla
 
 .property-label-text {
   min-width: 0;
-  overflow-wrap: anywhere;
-  word-break: break-word;
   line-height: 1.35;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
+/* テーブル本体 */
 .home-slide-info .property-info-table {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -1020,33 +1028,33 @@ body.dark-theme .header__top > .search-form-container .search-form-30 input::pla
   background: transparent;
 }
 
-.home-slide-info .property-info-table .property-label {
+.home-slide-info .property-info-table .property-label,
+.home-slide-info .property-info-table .property-value {
   width: 100%;
-  padding: 12px 12px 6px;
+  min-width: 0;
   margin: 0;
-  background: transparent;
-  color: #ffffff;
-  font-weight: 700;
-  font-size: 14px;
-  line-height: 1.4;
-  text-align: center;
   box-sizing: border-box;
+  color: #fff;
+}
+
+.home-slide-info .property-info-table .property-label {
+  padding: 12px 12px 6px;
+  background: transparent;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.4;
 }
 
 .home-slide-info .property-info-table .property-value {
   flex: 1 1 auto;
-  width: 100%;
-  min-width: 0;
   padding: 0 12px 12px;
-  margin: 0;
-  color: #ffffff;
+  text-align: center;
   font-size: 15px;
   line-height: 1.6;
-  text-align: center;
+  white-space: normal;
   word-break: break-word;
   overflow-wrap: anywhere;
-  white-space: normal;
-  box-sizing: border-box;
 }
 
 .home-slide-info .property-info-table .property-label-inner {
@@ -1054,47 +1062,42 @@ body.dark-theme .header__top > .search-form-container .search-form-30 input::pla
   flex-wrap: wrap;
 }
 
-/* CTA */
+/* -----------------------------------------
+   CTA
+----------------------------------------- */
 .home-slide-actions {
   display: flex;
-  gap: 12px;
   flex-wrap: wrap;
+  gap: 12px;
   margin-top: 16px;
 }
 
 .home-slide-actions .home-slide-cta,
 .home-slide-actions .home-slide-link {
-  flex: 1 1 180px;
-  min-height: 48px;
-  border-radius: 10px;
-  box-sizing: border-box;
-}
-
-.home-slide-actions .home-slide-cta {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  flex: 1 1 180px;
+  min-height: 48px;
   padding: 0 18px;
+  border-radius: 10px;
+  box-sizing: border-box;
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.home-slide-actions .home-slide-cta {
   border: 0;
   cursor: pointer;
   background: #2383f5;
   color: #fff;
-  font-size: 15px;
-  font-weight: 700;
-  text-decoration: none;
 }
 
 .home-slide-actions .home-slide-link {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 18px;
   border: 1px solid rgba(18, 200, 255, 0.45);
   background: transparent;
   color: #12c8ff;
-  font-size: 15px;
-  font-weight: 700;
-  text-decoration: none;
 }
 
 .home-slide-actions .home-slide-cta:hover,
@@ -1102,6 +1105,9 @@ body.dark-theme .header__top > .search-form-container .search-form-30 input::pla
   opacity: 0.92;
 }
 
+/* -----------------------------------------
+   タブレット以下
+----------------------------------------- */
 @media (max-width: 1199.98px) {
   .home-slide-info .property-info-table {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1117,6 +1123,9 @@ body.dark-theme .header__top > .search-form-container .search-form-30 input::pla
   }
 }
 
+/* -----------------------------------------
+   スマホ
+----------------------------------------- */
 @media (max-width: 767.98px) {
   .home-slide-overlay__panel {
     padding: 48px 14px 14px;
@@ -1155,9 +1164,6 @@ body.dark-theme .header__top > .search-form-container .search-form-30 input::pla
     text-align: left;
     font-size: 14px;
     line-height: 1.55;
-    white-space: normal;
-    overflow-wrap: anywhere;
-    word-break: break-word;
   }
 
   .home-slide-info .property-info-table .property-label-inner {
@@ -1190,12 +1196,15 @@ body.dark-theme .header__top > .search-form-container .search-form-30 input::pla
   }
 }
 
-/* 矢印 */
+/* -----------------------------------------
+   Swiper 矢印 / ページネーション
+----------------------------------------- */
 #home-swiper .swiper-button-prev,
 #home-swiper .swiper-button-next {
+  top: calc(var(--slide-pad-sp) + (var(--media-h-sp) / 2));
+  z-index: 20;
   margin-top: 0 !important;
   transform: translateY(-50%);
-  z-index: 20;
 }
 
 #home-swiper .swiper-button-prev {
@@ -1204,11 +1213,6 @@ body.dark-theme .header__top > .search-form-container .search-form-30 input::pla
 
 #home-swiper .swiper-button-next {
   right: 12px;
-}
-
-#home-swiper .swiper-button-prev,
-#home-swiper .swiper-button-next {
-  top: calc(var(--slide-pad-sp) + (var(--media-h-sp) / 2));
 }
 
 @media (min-width: 768px) and (max-width: 1199.98px) {
