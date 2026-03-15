@@ -1,0 +1,135 @@
+164:  border-block: 3px #004bba solid;
+177:  background-color: #ffe6e6;
+221:  background-color: #fff; /* 通常時の背景色 */
+225:  background-color: #f0f0f0; /* ホバー時の背景色 */
+252:  background-color: #0056b3;
+257:  background-color: #007bff;
+278:  background-color: #0056b3;
+288:  background-color: #007bff;
+310:  background-color: #ccc;
+437:    background-color: #0d0b47;
+451:    background-color: #1a1a8c;
+465:    background-color: #0d0b47;
+479:    background-color: #1a1a8c;
+486:  background-color: #ff69b4; /* ピンク色 */
+499:  background-color: #ff1493; /* ホバー時の濃いピンク */
+512:    background-color: #ff1493; /* ホバー時の濃いピンク */
+525:    background-color: #ff1493; /* ホバー時の濃いピンク */
+615:  background-color: #4caf50; /* ボタンの背景色 */
+629:  background-color: #ff9933; /* ホバー時の背景色 */
+662:  background-color: #4caf50; /* ダークモードボタン背景色 */
+667:  background-color: #45a049; /* ダークモードホバー時の背景色 */
+735:  background-color: #ffffff;
+765:  --nav-bg: #004bba;
+786:  --nav-bg: #083a8e;
+853:  background: #bdbdbd;  /* 初期状態の背景色 */
+867:  background: #fff;  /* スライダー部分の背景色 */
+874:  background: #bdbdbd;  /* 背景色は変更なし */
+884:  background-color: #111827;  /* ダークモード背景色 */
+1025:      background: #004bba;
+1075:      background: #004bba;
+1125:        background: #004bba;
+1173:        background: #004bba;
+1223:        background: #000;
+1244:        background: #f8f8f8;
+1253:        color: #004bba;
+1309:        background: #004bba;
+1683:  background-color: #3498db;
+1822:  background: #333 none repeat scroll 0 0;
+1834:  background: #333 none repeat scroll 0 0;
+1864:    background: #333 none repeat scroll 0 0;
+2249:  /* background-color: #fff; */
+2365:  background: #fff; /* 背景色 */
+2662:  background-color: #55acee; /* Twitter color */
+2702:  /*background: #ffff;*/
+3037:  background-color: #ff9933; /* オレンジ色に変更 */
+3048:  background-color: #007bff; /* 青色 */
+3070:  background-color: #4caf50; /* 緑色 */
+3077:  background-color: #0056b3; /* 濃い青色 */
+3206:  background-color: #fff;
+3308:  background-color: #f0f0f0; /* 背景色を追加して見やすくする */
+3319:  background-color: #ff4c4c; /* ボタンの色 */
+3357:  background-color: #ff1f1f; /* ホバー時の色 */
+3481:  background: #fff;
+3554:  background-color: #f2faff; /* 薄いブルー */
+3588:  background-color: #e6f2ff; /* 少し明るくする */
+3595:  background-color: #4a90e2; /* 青色 */
+3607:  background-color: #357ab7; /* ホバー時に少し暗く */
+3613:  background-color: #4a90e2;
+3623:  background-color: #357ab7;
+3628:  background-color: #4a90e2;
+3641:  background-color: #357ab7; /* ホバー時に濃い色 */
+3646:  background-color: #4a90e2; /* ボタンの青色 */
+3662:  background-color: #357ab7; /* 少し濃い青に変化 */
+3668:  background-color: #fff;
+3692:  background-color: #fff;
+3713:  background-color: #4caf50; /* 緑色 */
+3728:  background-color: #45a049; /* ホバー時に少し濃い緑色 */
+3743:  background-color: #dcdcdc; /* グレーに変える */
+3827:  background-color: #f0f0f0;
+3922:  background-color: #007bff; /* 背景色を青に設定 */
+3940:  background-color: #ff7f00; /* ホバー時の背景色をオレンジに設定 */
+3958:  background-color: #007bff; /* 背景色を青に設定 */
+3976:  background-color: #ff7f00; /* ホバー時の背景色をオレンジに設定 */
+3987:  background-color: #2196f3; /* ボタン色を変更 */
+3995:  background-color: #1976d2;
+4007:    background-color: #ffc107; /* モバイル時の色 */
+4082:  background: #ddd;
+4087:  background: #fff;
+4097:  background: #ffeff7;
+4247:  background-color: #4caf50;
+4260:  background-color: #45a049;
+4366:  background: #eee;
+4377:  background: #f9f9f9;
+4384:  background: #f9f9f9;
+4391:  background: #f9f9f9;
+4398:  background: #f9f9f9;
+4405:  background: #f9f9f9;
+4417:  background: #fff; /* 背景色 */
+4433:  background: #0d6efd;
+4446:  /*background: #0056b3;*/
+4472:  background-color: #f3f3f3;
+4574:  background: #464e54;
+4622:  background: #000;
+4709:  background: #004bba;
+4757:  /*background: #f9f9f9 none repeat scroll 0 0;*/
+4784:  background-color: #222;
+4794:  background-color: #444; /* 背景色を少し明るくする */
+4810:  background-color: #222;
+4815:  background-color: #666;
+5015:  /*background: #eaeaea none repeat scroll 0 0;*/
+5092:  background: #f5f5f5;
+5100:  background: #f5f5f5;
+5112:  background: #333 none repeat scroll 0 0;
+5172:  background-color: #f0f0f0; /* ホバー時の背景色 */
+5565:  background-color: #333;
+5627:  background-color: #000;
+5638:  background: #333 none repeat scroll 0 0;
+5720:  background: #0056b3; /* 濃いブルー */
+5739:  background: #00bcd4; /* シアン系の背景 */
+5757:    background: #0056b3; /* 濃いブルー */
+5774:    background: #00bcd4; /* シアン系の背景 */
+5834:  background-color: #f2c1be; /* 背景色を変更 */
+5840:  background-color: #eeb3b9; /* 背景色を変更 */
+6251:    background-color: #f2c1be !important; /* ドロップダウンメニューの背景色 */
+6266:  background: #fff;
+6293:  background: #303b7a;
+6351:  background-color: #2931aa;
+6382:  background-color: #fff;
+6855:  background: #ddd;
+6867:  background: #007bff;
+6875:  background: #007bff;
+7033:  background-color: #ff4c4c; /* ボタンの色 */
+7070:  background-color: #ff1f1f; /* ホバー時の色 */
+7337:  background: #f3f6f8;
+7393:  background: #fff;
+7413:  background: #fff;
+7433:  background: #2589d0;
+7447:  background: #111827;
+7452:  background: #111827;
+7607:    background: #fff;
+7616:    background: #fff;
+7645:    background: #2b8fe8 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='10.5' cy='10.5' r='5.75' fill='none' stroke='%23ffffff' stroke-width='2.25'/%3E%3Cpath d='M15 15l5 5' fill='none' stroke='%23ffffff' stroke-width='2.25' stroke-linecap='round'/%3E%3C/svg%3E") center center / 18px 18px no-repeat;
+7782:  background: #eef6ff;
+7825:  --nav-bg: #0b57d0;
+7852:  --nav-bg: #083a8e;

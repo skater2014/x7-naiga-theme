@@ -1,0 +1,43 @@
+1040-1043: 同一selector+同一宣言の重複削除候補: :root
+1043-1046: 同一selector+同一宣言の重複削除候補: .dark-theme
+1099-1102: 同一selector+同一宣言の重複削除候補: .navg__list>li>a
+1264-1277: 同一selector+同一宣言の重複削除候補: .navg__list ul.sub-menu:not(.mega-sub-menu)
+1289-1295: 同一selector+同一宣言の重複削除候補: .navg__list ul.sub-menu:not(.mega-sub-menu) a
+1337-1340: 同一selector+同一宣言の重複削除候補: .swiper
+1370-1380: 同一selector+同一宣言の重複削除候補: body
+1411-1412: 同一selector+同一宣言の重複削除候補: .my-link-black
+1412-1417: 同一selector+同一宣言の重複削除候補: :root
+1643-1648: 同一selector+同一宣言の重複削除候補: #sidebar-recent-posts
+2178-2187: 同一selector+同一宣言の重複削除候補: .foot-socials ul
+2187-2189: 同一selector+同一宣言の重複削除候補: .foot-socials li
+2374-2378: 同一selector+同一宣言の重複削除候補: .popular-post-slider
+2394-2395: 同一selector+同一宣言の重複削除候補: .sidebar-thumbnail-box
+2947-2967: 同一selector+同一宣言の重複削除候補: .form-button
+2967-2969: 同一selector+同一宣言の重複削除候補: .form-button:hover
+3164-3169: 同一selector+同一宣言の重複削除候補: .blog-thumbnail-box
+3169-3170: 同一selector+同一宣言の重複削除候補: .thumbnail-overlay
+3216-3248: 同一selector+同一宣言の重複削除候補: .more-link2
+3249-3255: 同一selector+同一宣言の重複削除候補: .more-link2:hover
+3443-3448: 同一selector+同一宣言の重複削除候補: #comment-area
+3630-3631: 同一selector+同一宣言の重複削除候補: .alignright
+3631-3631: 同一selector+同一宣言の重複削除候補: .alignleft
+3893-3897: 同一selector+同一宣言の重複削除候補: .archive-post-info > h3 a:hover
+3897-3903: 同一selector+同一宣言の重複削除候補: .archive-post-info .the-categories a
+4483-4492: 同一selector+同一宣言の重複削除候補: .feature-text-area h3
+4696-4700: 同一selector+同一宣言の重複削除候補: .content-box a h2
+4720-4726: 同一selector+同一宣言の重複削除候補: .recent-big-content-box h3 a
+4755-4757: 同一selector+同一宣言の重複削除候補: .social-nav a
+4795-4798: 同一selector+同一宣言の重複削除候補: .navigation a
+4798-4800: 同一selector+同一宣言の重複削除候補: .tagcloud a
+4800-4802: 同一selector+同一宣言の重複削除候補: .tagcloud a
+4805-4808: 同一selector+同一宣言の重複削除候補: .port-body a
+4828-4834: 同一selector+同一宣言の重複削除候補: :root
+4918-4920: 同一selector+同一宣言の重複削除候補: .page-link
+4998-5002: 同一selector+同一宣言の重複削除候補: .slider-container
+5117-5127: 同一selector+同一宣言の重複削除候補: .thumbnail-container
+5127-5134: 同一selector+同一宣言の重複削除候補: .thumbnail-slider
+5245-5248: 同一selector+同一宣言の重複削除候補: p
+5370-5370: 同一selector+同一宣言の重複削除候補: #main.list-view .custom-post
+5516-5521: 同一selector+同一宣言の重複削除候補: .panorama-container
+5539-5547: 同一selector+同一宣言の重複削除候補: .main-image-container
+5589-5595: 同一selector+同一宣言の重複削除候補: .main-image-slider

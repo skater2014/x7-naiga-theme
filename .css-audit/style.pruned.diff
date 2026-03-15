@@ -1,0 +1,624 @@
+--- style.css
++++ style.css.pruned
+@@ -1038,12 +1038,10 @@
+       left: 0;
+       min-width: 200px;
+       box-sizing: border-box;
+-      padding: 0;
+-      /* li にボーダーを付けるのでここは 0 */
+-      background: #004bba;
+-      border: 2px solid #fff;
+-      /* ← 白い角なし枠 */
+-      border-radius: 0;
++/* removed duplicate block lines 1040-1043 */
++ound: 
++/* removed duplicate block lines 1043-1046 */
++dius: 0;
+       /* ← 角丸なし */
+       z-index: 9999;
+     }
+@@ -1096,10 +1094,9 @@
+ 
+       /* UL は基準にしない（= .navg_under を基準にする） */
+       .navg__list {
+-        max-width: 1200px;
+-        margin: 0 auto;
+-        padding: 0;
+-        display: flex;
++        max
++/* removed duplicate block lines 1099-1102 */
++ay: flex;
+         justify-content: center;
+         position: static;
+         overflow: visible;
+@@ -1261,20 +1258,9 @@
+       }
+ 
+       .header-menu-pc {
+-        display: none !important;
+-      }
+-
+-      .navg__list {
+-        display: flex;
+-        width: 100%;
+-        margin: 0;
+-        padding: 0;
+-        justify-content: center;
+-        /* ← 中央寄せ */
+-        align-items: stretch;
+-        gap: 6px;
+-        /* 均等すぎを防ぐ隙間 */
+-        background: #004bba;
++        display: none !im
++/* removed duplicate block lines 1264-1277 */
++#004bba;
+         overflow: visible;
+       }
+ 
+@@ -1286,13 +1272,9 @@
+       /* ← 伸びない */
+       .navg__list>li>a {
+         line-height: var(--nav-height, 48px);
+-        padding: 0 12px;
+-      }
+-
+-      /* クリック展開（.open / .show をJSや既存コードが付与） */
+-      .navg__list .menu-item-has-children.open>.sub-menu,
+-      .navg__list .menu-item-has-children.show>.sub-menu {
+-        display: block !important;
++  
++/* removed duplicate block lines 1289-1295 */
++ay: block !important;
+       }
+ 
+       /* タッチ幅では hover 色を無効化（誤反応防止） */
+@@ -1334,9 +1316,8 @@
+     /* モバイルだけ横並び（～767.98px） */
+     @media (max-width:767.98px) {}
+ 
+-    /* 3) モバイル以外は固定を解除（念のため） */
+-    @media (min-width:768px) {
+-      .header__top {
++    /* 3) モバイル以外は固
++/* removed duplicate block lines 1337-1340 */
+         position: static;
+         left: auto;
+         transform: none;
+@@ -1367,17 +1348,9 @@
+ 
+   /* ③ 本文の先頭に「固定ヘッダーの高さぶんの余白」を入れる
+         値は JS が --hdr-spacer に自動で入れてくれる */
+-    /*header.l-header + :is(.home-view, .home-slider, .page-wrapper, .full-width-page){
+-    padding-top: var(--hdr-spacer, 0px) !important;
+-    margin-top: 0 !important;
+-  }
+-}
+-
+-/* モバイル〜タブレットは親ひとつだけ fixed（子の fixed は無効化） */
+-    /* スマホ〜タブレット（〜1199.98px）で、親ひとつだけ fixed */
+-    /* =========================================================
+-  目的（スマホ〜タブレットだけ）
+-  ---------------------------------------------------------
++    /*header.l
++/* removed duplicate block lines 1370-1380 */
++-----------------
+   1) ヘッダー全体（.header-wrapper）を画面上に固定する
+   2) 固定したぶん本文が上に重ならないよう、「ヘッダーの高さ」だけ
+      本文の上に余白（padding-top）を自動で入れる
+@@ -1408,13 +1381,11 @@
+         /* 子の上マージン食い込み防止（BFCを作る） */
+       }
+ 
+-      /* ② 子側の fixed/sticky を無効化
+-        親を固定にしたので、子の固定はオフにして高さズレを防ぐ */
+-      .header__top,
+-      .header__top_under,
+-      .navg_under {
+-        position: static !important;
+-        /* “普通の配置”に戻す（top/left等は効かない） */
++      /* ② 子側の
++/* removed duplicate block lines 1411-1412 */
++防ぐ 
++/* removed duplicate block lines 1412-1417 */
++戻す（top/left等は効かない） */
+       }
+ 
+       /* ③ 本文側を“ヘッダーの高さぶん”だけ下げる
+@@ -1640,12 +1611,9 @@
+   .navg__list > .mega-menu-item > .mega-sub-menu {
+     display: none;
+     position: absolute;
+-    top: 100%;
+-    left: 50% !important;
+-    transform: translateX(-50%) !important;
+-    width: 1180px !important;
+-    max-width: calc(100vw - 40px);
+-    background: #004bba;
++    top: 100%
++/* removed duplicate block lines 1643-1648 */
++ background: #004bba;
+     padding: 10px;
+     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+     z-index: 10000;
+@@ -2175,18 +2143,11 @@
+   overflow: hidden;
+   position: relative;
+   transition: transform 0.3s ease-in-out;
+-  transform: scale(1); /* デフォルトのスケールを明示 */
+-}
+-
+-.blog-thumbnail-box1:hover > .blog-post-image {
+-  transform: scale(1.1); /* ホバー時のスケール */
+-}
+-
+-@media only screen and (max-width: 768px) {
+-  .blog-thumbnail-box1 {
+-    background: #333 none repeat scroll 0 0;
+-    float: left;
+-    margin: 0px;
++  transform: scale(1); /
++/* removed duplicate block lines 2178-2187 */
++at
++/* removed duplicate block lines 2187-2189 */
++0px;
+     overflow: hidden;
+     width: 100%;
+     /*height: 200px;*/
+@@ -2341,9 +2302,9 @@
+ /* 1024px以下のタブレット画面に対応（幅を100%に変更し、高さを250pxに変更） */
+ @media (max-width: 1024px) {
+   .recent-thumbnail-small-box {
+-    width: 50%; /* 横幅を100%に変更 */
+-    height: 250px; /* 高さを変更 */
+-  }
++  width: 50%;
++  /* 横幅を100%に変更 */
++    height: 250px;
+ }
+ 
+ /* 768px以下のモバイル画面に対応（幅を100%に変更し、高さを200pxに変更） */
+@@ -2371,11 +2332,9 @@
+ /* サムネイル画像にホバー時のアニメーション（統一） */
+ .recent-thumbnail-small-box:hover,
+ .recent-thumbnail-box-big-box:hover {
+-  transform: scale(1.05); /* ズームイン効果 */
+-  opacity: 0.8; /* 画像の透明度を少し下げる */
+-}
+-
+-/* タイトルのオーバーレイ */
++  transform: scale(1.05); /* ズームイ
++/* removed duplicate block lines 2374-2378 */
++ タイトルのオーバーレイ */
+ .recent-title-overlay {
+   position: absolute;
+   top: 50%; /* 画像の中央に配置 */
+@@ -2391,8 +2350,9 @@
+   height: 100%; /* 画像の高さ全体を使う */
+   display: flex;
+   align-items: center; /* 垂直方向に中央揃え */
+-  justify-content: center; /* 水平方向に中央揃え */
+-  font-family: 'Arial', sans-serif; /* フォントを追加 */
++  justi
++/* removed duplicate block lines 2394-2395 */
++: 'Arial', sans-serif; /* フォントを追加 */
+   box-sizing: border-box; /* パディングが幅に影響しないように */
+   overflow: hidden; /* テキストが画像の外に出ないように */
+   word-wrap: break-word; /* 長いテキストが折り返される */
+@@ -2944,29 +2904,11 @@
+   display: flex;
+   -webkit-box-pack: center;
+   -ms-flex-pack: center;
+-  justify-content: center; /* 中央配置 */
+-}
+-
+-.foot-socials li {
+-  margin-right: 10px;
+-}
+-
+-/*.icon {
+-  width: 24px;
+-  height: 24px;
+-  fill: #007bff;
+-}*/
+-
+-.form-submit {
+-  text-align: center;
+-  padding-top: 0px;
+-  overflow: hidden;
+-  display: -webkit-box;
+-  display: -ms-flexbox;
+-  display: flex;
+-  -webkit-box-pack: center;
+-  -ms-flex-pack: center;
+-  justify-content: center;
++  j
++/* removed duplicate block lines 2947-2967 */
++-b
++/* removed duplicate block lines 2967-2969 */
++content: center;
+ }
+ 
+ /* PCの場合のスタイル */
+@@ -3127,9 +3069,10 @@
+ /* 1080px以上1200px以下のデスクトップサイズの場合 */
+ @media only screen and (min-width: 1080px) and (max-width: 1200px) {
+   #single {
+-    display: flex; /* フレックスボックス */
+-    justify-content: space-between; /* メインコンテンツとサイドバーの間隔を調整 */
+-  }
++    display: flex;
++  /* フレックスボックス */
++    justify-content: space-between;
++}
+ 
+   #main {
+     width: calc(100% - 330px); /* サイドバー幅を引く */
+@@ -3161,13 +3104,11 @@
+ 
+   #sidebar {
+     width: 100%; /* サイドバーも幅100% */
+-    margin-top: 20px;
+-  }
+-}
+-
+-/* ウィジェットのスタイル */
+-@media only screen and (min-width: 651px) {
+-  .widget,
++    marg
++/* removed duplicate block lines 3164-3169 */
++ 
++/* removed duplicate block lines 3169-3170 */
++,
+   .popular-post,
+   .artifacts-post {
+     width: 100%; /* ウィジェットは100%幅 */
+@@ -3213,46 +3154,12 @@
+ 
+ .popular-post-slider .slick-slide {
+   display: inline-block;
+-  width: 100%;
+-  -webkit-box-sizing: border-box;
+-  box-sizing: border-box;
+-}
+-
+-#popular-post-slider {
+-  position: relative;
+-}
+-
+-/* 左右ボタンの配置 */
+-.popular-post-slider {
+-  position: relative; /* スライダー全体に相対位置を設定 */
+-}
+-
+-.sidebar-thumbnail-box {
+-  position: relative; /* 画像の親要素に相対位置を設定 */
+-}
+-
+-.slider-buttons {
+-  position: absolute;
+-  top: 40%;
+-  left: 0px;
+-  right: 0px;
+-  transform: translateY(-50%);
+-  display: flex;
+-  justify-content: space-between;
+-  width: 100%;
+-  z-index: 10;
+-}
+-
+-.popular-slider-prev,
+-.popular-slider-next {
+-  background: rgba(0, 0, 0, 0.5);
+-  color: #fff;
+-  border: none;
+-  padding: 10px;
+-  cursor: pointer;
+-}
+-
+-.popular-slider-prev:hover,
++  widt
++/* removed duplicate block lines 3216-3248 */
++;
++
++/* removed duplicate block lines 3249-3255 */
++ver,
+ .popular-slider-next:hover {
+   background: rgba(0, 0, 0, 0.7);
+ }
+@@ -3440,12 +3347,9 @@
+ .more-link-wrapper .more-link:hover {
+   background-color: #4caf50; /* 緑色 */
+   color: #fff;
+-  border-color: #4caf50;
+-}
+-
+-/* 予約リンクホバー時のスタイル（濃い青） */
+-.store-reserve-link:hover {
+-  background-color: #0056b3; /* 濃い青色 */
++  border-color: #4caf5
++/* removed duplicate block lines 3443-3448 */
++056b3; /* 濃い青色 */
+   border-color: #0056b3;
+ }
+ 
+@@ -3627,8 +3531,11 @@
+   opacity: 0.5;
+ }
+ 
+-/* サムネイル画像とタイトルを横並びにするためのコンテナ */
+-.store-reservation-modal-content .property-info {
++/* サムネイル画像とタイトルを横
++/* removed duplicate block lines 3630-3631 */
++io
++/* removed duplicate block lines 3631-3631 */
++o {
+   display: -webkit-box;
+   display: -ms-flexbox;
+   display: flex;
+@@ -3890,17 +3797,11 @@
+ /* レスポンシブ対応: デスクトップ（1024px以上） */
+ @media (min-width: 1024px) {
+   .property-info-left h3 {
+-    font-size: 18px; /* デスクトップでのフォントサイズ */
+-  }
+-
+-  .property-info-row h3 {
+-    font-size: 18px; /* デスクトップでのフォントサイズ */
+-  }
+-}
+-
+-/* レスポンシブ対応: モバイル（480px以下） */
+-@media (max-width: 480px) {
+-  .property-info-left h3 {
++    font-size: 18px; /
++/* removed duplicate block lines 3893-3897 */
++: 
++/* removed duplicate block lines 3897-3903 */
++y-info-left h3 {
+     font-size: 12px; /* モバイルでのフォントサイズ */
+   }
+ 
+@@ -4480,16 +4381,9 @@
+   margin-bottom: 10px; /* 情報とリンクの間に余白を設ける */
+ }
+ 
+-/*100動画比率*/
+-.youtube {
+-  position: relative;
+-  width: 100%;
+-  /*padding-top: 56.25%;*/
+-}
+-.youtube iframe {
+-  /*position: absolute;*/
+-  top: 0;
+-  right: 0;
++/*100動
++/* removed duplicate block lines 4483-4492 */
++ right: 0;
+   width: 100% !important;
+   /*height: 300px !important;*/
+   /*height: 100% !important;*/
+@@ -4693,11 +4587,9 @@
+ #custom-comments .comment-body,
+ #custom-trackback .trackback-body {
+   float: right;
+-  margin-bottom: 20px;
+-  width: 100%;
+-}
+-
+-#custom-comments .comment-body {
++  margin-bottom: 
++/* removed duplicate block lines 4696-4700 */
++{
+   background: url(images/quote.png) no-repeat 0 0;
+ }
+ 
+@@ -4717,13 +4609,9 @@
+   clear: both;
+ }
+ 
+-/****************************************
+-
+-Form
+-
+-*****************************************/
+-
+-/* 共通スタイルをリセット */
++/***********************************
++/* removed duplicate block lines 4720-4726 */
++ 共通スタイルをリセット */
+ input[type='text'],
+ input[type='password'],
+ input[type='email'],
+@@ -4752,9 +4640,9 @@
+ 
+ /* パスワードフィールド */
+ input[type='password'] {
+-  background: #f9f9f9;
+-  border-color: #ccc;
+-  font-size: 14px;
++  bac
++/* removed duplicate block lines 4755-4757 */
++: 14px;
+ }
+ 
+ /* メールフィールド */
+@@ -4792,20 +4680,18 @@
+ 
+ /* ボタンのスタイル */
+ .button,
+-button,
+-input[type='submit'],
+-input[type='reset'],
+-input[type='button'] {
+-  display: inline-block;
+-  padding: 7px 10px;
+-  border: 1px solid #0f183c;
+-  border-radius: 3px;
++b
++/* removed duplicate block lines 4795-4798 */
++inp
++/* removed duplicate block lines 4798-4800 */
++ddi
++/* removed duplicate block lines 4800-4802 */
++der-radius: 3px;
+   color: #fff;
+   background: #0d6efd;
+-  font-weight: bold;
+-  font-size: 12px;
+-  cursor: pointer;
+-  text-decoration: none;
++ 
++/* removed duplicate block lines 4805-4808 */
++n: none;
+ }
+ 
+ /* ボタンホバー時 */
+@@ -4825,12 +4711,8 @@
+ input[type='reset']:active,
+ input[type='button']:active {
+   /*-webkit-transform: translateY(2px);*/
+-  -ms-transform: translateY(2px);
+-  /*transform: translateY(2px);*/
+-}
+-
+-/****************************************
+-
++  -ms-transfo
++/* removed duplicate block lines 4828-4834 */
+           WordPress Misc
+ 
+ *****************************************/
+@@ -4915,9 +4797,9 @@
+   clear: both; /*footer*/
+ }
+ 
+-/*HEADER #menu-additional-menu 利用未定*/
+-
+-#menu-additional-menu .dropdown-menu {
++/*HEA
++/* removed duplicate block lines 4918-4920 */
++ {
+   position: absolute;
+   z-index: 1150;
+   width: 180px;
+@@ -4995,11 +4877,9 @@
+ }
+ .home-slide-image,
+ .home-slide-feature iframe,
+-.home-slide-feature lite-youtube {
+-  position: absolute;
+-  inset: 0;
+-  width: 100%;
+-  height: 100%;
++.home-slide-feature lite-youtube 
++/* removed duplicate block lines 4998-5002 */
++00%;
+ }
+ .home-slide-image > a,
+ .home-slide-feature lite-youtube,
+@@ -5114,24 +4994,11 @@
+ @media (max-width: 767.98px) {
+   .slick-prev,
+   .slick-next {
+-    display: block !important;
+-  }
+-}
+-
+-/* タイトルの余白が詰まる場合（微調整） */
+-/*
+-.home-slide-info > h3{ margin-bottom:12px; }
+-.home-slide-text{ margin-top:6px; }
+-*/
+-
+-.home-box {
+-  /*background: #f9f9f9 none repeat scroll 0 0;*/
+-  padding: 35px 0 45px;
+-}
+-
+-.home-cats-selection {
+-  margin: 0 0 35px;
+-  text-align: center;
++    display: block !importa
++/* removed duplicate block lines 5117-5127 */
++ox
++/* removed duplicate block lines 5127-5134 */
++er;
+ }
+ 
+ .home-cats-selection ul {
+@@ -5242,10 +5109,9 @@
+ /* ============== サムネ枠（16:9・共通） ============== */
+ .archive-post-feature {
+   position: relative;
+-  aspect-ratio: 16 / 9; /* 比率固定（JS不要） */
+-  width: 100%;
+-  height: auto;
+-  overflow: hidden;
++
++/* removed duplicate block lines 5245-5248 */
++low: hidden;
+ }
+ 
+ /* コンテンツを枠いっぱいにフィット */
+@@ -5367,7 +5233,9 @@
+   transition: opacity 0.3s ease-in-out;
+ }
+ 
+-.archive-post-box:hover .archive-post-image .thumbnail-overlay {
++.archiv
++/* removed duplicate block lines 5370-5370 */
++rlay {
+   opacity: 1;
+ }
+ 
+@@ -5513,12 +5381,9 @@
+ }
+ 
+ .tagcloud {
+-  display: -webkit-box;
+-  display: -ms-flexbox;
+-  display: flex; /* 横並びに配置 */
+-  -ms-flex-wrap: wrap;
+-  flex-wrap: wrap; /* 横幅を超えた場合に改行 */
+-  gap: 10px; /* 各要素間の隙間 */
++  display: -w
++/* removed duplicate block lines 5516-5521 */
++ gap: 10px; /* 各要素間の隙間 */
+   list-style: none; /* リストマーカーを非表示 */
+   padding: 0;
+   margin-bottom: 20px;
+@@ -5537,14 +5402,8 @@
+   -webkit-transition: background-color 0.3s ease;
+   -o-transition: background-color 0.3s ease;
+   transition: background-color 0.3s ease; /* ホバー時のスムーズな変化 */
+-}
+-
+-.tagcloud a:hover {
+-  background-color: #f0f0f0; /* ホバー時の背景色 */
+-}
+-
+-.tag-widget {
+-  width: 100%;
++/* removed duplicate block lines 5539-5547 */
++width: 100%;
+ }
+ 
+ /**FOOTER**/
+@@ -5586,13 +5445,9 @@
+ }
+ 
+ /* 最後のフッターコラムの余白調整 */
+-.foot-col:last-child {
+-  padding: 0px;
+-}
+-
+-/* 下部フッター領域のスタイル設定 */
+-.bottom-foot {
+-  border-top: 1px solid #ddd; /* 上部に1pxの境界線を追加 */
++.foot-col:la
++/* removed duplicate block lines 5589-5595 */
++ /* 上部に1pxの境界線を追加 */
+   display: -webkit-box;
+   display: -ms-flexbox;
+   display: flex; /* フレックスボックスレイアウトを使用 */

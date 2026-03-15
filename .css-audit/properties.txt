@@ -1,0 +1,862 @@
+41:  padding: 10px 0 8px 25px;
+53:  background-color: #ffe6e6;
+81:  padding: 5px;
+83:  display: flex; /* ボタンを横並びにする */
+84:  gap: 10px; /* ボタン同士の間隔を調整 */
+89:  display: inline-flex; /* コンテンツのサイズに合わせて幅を調整 */
+93:  padding: 5px 10px; /* 内側の余白 */
+97:  background-color: #fff; /* 通常時の背景色 */
+101:  background-color: #f0f0f0; /* ホバー時の背景色 */
+110:  display: none; /* 初期状態では全て非表示 */
+115:  display: block; /* activeなタブだけを表示 */
+119:  display: flex;
+121:  padding: 0;
+127:  padding: 10px;
+128:  background-color: #0056b3;
+133:  background-color: #007bff;
+143:  display: flex;
+145:  padding: 0;
+146:  margin: 0;
+153:  padding: 10px 20px;
+154:  background-color: #0056b3;
+164:  background-color: #007bff;
+175:  display: none; /* 初期状態では全て非表示 */
+180:  display: block; /* activeなタブだけを表示 */
+186:  background-color: #ccc;
+190:  margin: 0;
+212:  display: flex;
+213:  flex-wrap: wrap;
+214:  gap: 10px; /* 初期状態のgapを10pxに変更 */
+215:  padding: 3px;
+219:  display: flex;
+220:  gap: 10px;
+232:    gap: 10px; /* モバイル時にgapを10pxに変更 */
+237:    flex-direction: column; /* ラベルと値を縦並びにする */
+238:    gap: 10px; /* 間隔を調整 */
+245:    gap: 10px; /* タブレットでもgapを10pxに変更 */
+250:    flex-direction: column; /* ラベルと値を縦並びにする */
+251:    gap: 10px; /* 間隔を調整 */
+258:    gap: 10px; /* パソコンでもgapを10pxに変更 */
+263:    flex-direction: column; /* ラベルと値を縦並びにする */
+264:    gap: 0px; /* 間隔を調整 */
+290:  padding: 8px 10px;
+291:  background-color: rgba(51, 51, 51, 0.8);
+292:  display: flex;
+302:  gap: 15px; /* リンク間のスペース */
+313:    background-color: #0d0b47;
+315:    padding: 12px 20px;
+321:    display: block;
+327:    background-color: #1a1a8c;
+337:    padding: 10px 20px;
+341:    background-color: #0d0b47;
+343:    padding: 12px 20px;
+349:    display: block;
+355:    background-color: #1a1a8c;
+362:  background-color: #ff69b4; /* ピンク色 */
+364:  padding: 10px 15px; /* 内側の余白 */
+367:  display: inline-block; /* インラインブロック要素にする */
+375:  background-color: #ff1493; /* ホバー時の濃いピンク */
+382:    padding: 12px 20px; /* ボタンの高さと幅を調整 */
+388:    background-color: #ff1493; /* ホバー時の濃いピンク */
+395:    padding: 12px 20px; /* ボタンの高さと幅を調整 */
+401:    background-color: #ff1493; /* ホバー時の濃いピンク */
+408:  margin: 0 auto; /* 中央寄せ */
+409:  padding: 30px; /* 内側の余白を増やす */
+412:  background-color: var(--main-bg); /* 背景色 */
+425:  display: block; /* 各ラベルをブロック要素として配置 */
+438:  padding: 12px; /* 内側の余白を増やす */
+442:  background-color: var(--sub-grey); /* 背景色 */
+461:  display: -webkit-box;
+462:  display: -ms-flexbox;
+463:  display: flex; /* Flexboxを使用 */
+470:  display: -webkit-box;
+471:  display: -ms-flexbox;
+472:  display: flex; /* ラベル内の要素をFlexboxで配置 */
+491:  background-color: #4caf50; /* ボタンの背景色 */
+494:  padding: 12px 24px; /* 内側の余白を増やす */
+505:  background-color: #ff9933; /* ホバー時の背景色 */
+516:  background-color: var(--sub-grey); /* ダークモード背景色 */
+532:  background-color: var(--grey); /* ダークモードの入力フィールド背景色 */
+538:  background-color: #4caf50; /* ダークモードボタン背景色 */
+543:  background-color: #45a049; /* ダークモードホバー時の背景色 */
+549:    padding: 15px; /* スマートフォンでの余白を調整 */
+564:    padding: 25px; /* タブレットでの余白を調整 */
+578:    padding: 30px; /* PCでの余白を調整 */
+611:  background-color: #ffffff;
+651:  --burger-gap: 9px; /* 中央から上下線の距離 */
+667:  background: var(--header-bg);
+672:/*.navg_under{ background:var(--nav-bg) !important; }*/
+678:  margin: 0 auto;
+686:  background: none !important;
+694:  display: inline-flex;
+711:  display: block !important;
+717:  background: currentColor;
+735:  background: currentColor;
+749:  background: transparent; /* 中央線を消す */
+768:  margin: 0;
+769:  padding: 0;
+773:  display: inline;
+790:  margin: 0 0.45em;
+810:  background: #bdbdbd;
+812:  display: inline-block;
+823:  background: #fff;
+828:  background: #0bd;
+842:  display: inline-block;
+868:    display: flex;
+870:    gap: 8px;
+871:    flex-wrap: wrap;
+872:    row-gap: 6px;
+873:    padding: 6px 12px 8px 56px; /* タッチ分の左余白 */
+874:    background: var(--header-bg);
+885:    display: flex;
+888:    gap: 8px;
+894:    display: flex;
+901:    display: flex;
+902:    flex-direction: column;
+907:    gap: 2px;
+909:    background: rgba(0, 0, 0, 0.04);
+920:    background: rgba(255, 255, 255, 0.06);
+930:    display: block;
+949:    display: flex;
+950:    flex-wrap: wrap;
+952:    gap: 6px;
+953:    margin: 0;
+954:    padding: 0;
+960:    display: none !important;
+967:      background: #004bba;
+975:      margin: 0 auto;
+976:      display: flex;
+977:      padding: 0;
+990:      display: block;
+991:      padding: 15px 10px;
+1001:      background: rgba(255, 255, 255, .12);
+1008:      display: none !important;
+1009:      /* WPが inline で出す display:block を潰す */
+1015:      padding: 0;
+1017:      background: #004bba;
+1027:      margin: 0;
+1028:      padding: 0;
+1037:      display: block;
+1038:      padding: 10px 12px;
+1047:      background: rgba(255, 255, 255, .15);
+1055:        display: none !important;
+1059:        display: flex !important;
+1061:        margin: 0 auto;
+1067:        background: #004bba;
+1074:        margin: 0 auto;
+1075:        padding: 0;
+1076:        display: flex;
+1088:        display: block !important;
+1102:        display: none;
+1115:        background: #004bba;
+1116:        padding: 10px;
+1123:        display: flex !important;
+1124:        flex-wrap: nowrap;
+1142:        display: none;
+1145:        gap: 20px;
+1153:        display: flex;
+1154:        flex-direction: column;
+1165:        background: #000;
+1166:        display: flex;
+1179:        display: block;
+1183:        display: block;
+1185:        padding: 10px;
+1186:        background: #f8f8f8;
+1204:        display: none !important;
+1208:        display: flex !important;
+1210:        margin: 0 auto;
+1215:        display: block !important;
+1224:        display: flex !important;
+1225:        flex-wrap: nowrap;
+1234:        display: flex !important;
+1238:        display: none !important;
+1242:        display: flex;
+1244:        margin: 0;
+1245:        padding: 0;
+1249:        gap: 6px;
+1251:        background: #004bba;
+1263:        padding: 0 12px;
+1269:        display: block !important;
+1277:          background: transparent !important;
+1285:        display: block !important;
+1317:        background: var(--header-bg);
+1333:    background: var(--header-bg);
+1375:        background: var(--header-bg);
+1381:        display: flow-root;
+1450:    background: var(--header-bg); /* ← 透け防止 */
+1469:    display: flex !important;
+1471:    gap: 8px;
+1472:    flex-wrap: wrap;
+1473:    row-gap: 6px;
+1475:    margin: 0 auto;
+1476:    padding: 6px 12px 8px 56px;
+1477:    background: var(--header-bg);
+1482:    display: contents;
+1488:    display: flex;
+1491:    gap: 8px;
+1498:    display: block !important;
+1502:    display: none !important;
+1507:    margin: 0;
+1509:    display: flex;
+1510:    flex-wrap: wrap;
+1512:    gap: 6px;
+1513:    padding: 0;
+1516:    display: none !important;
+1519:    display: flex !important;
+1527:    display: none !important;
+1535:    display: flex !important;
+1537:    gap: 12px;
+1538:    flex-wrap: nowrap;
+1540:    margin: 0 auto;
+1541:    padding: 0 12px;
+1542:    background: var(--header-bg);
+1547:    display: contents;
+1553:    margin: 0;
+1554:    padding: 0;
+1560:    margin: 0;
+1567:    display: block !important;
+1572:    display: none !important;
+1576:    display: none !important;
+1579:    display: flex !important;
+1591:    margin: 0 auto;
+1592:    padding: 0;
+1593:    display: flex;
+1602:    display: block !important;
+1607:    background: #004bba;
+1615:    display: none;
+1622:    background: #004bba;
+1623:    padding: 10px;
+1629:    display: flex !important;
+1630:    flex-wrap: nowrap;
+1644:  display: none !important;
+1649:  padding: 0;
+1650:  background: #004bba;
+1658:  margin: 0;
+1659:  padding: 0;
+1666:  display: block;
+1667:  padding: 10px 12px;
+1676:  background: rgba(255, 255, 255, 0.15);
+1688:  margin: 0 auto; /* 追加 */
+1696:  display: -webkit-box;
+1697:  display: -ms-flexbox;
+1698:  display: flex;
+1717:  display: flex; /* ⬅ アイコン中央寄せしたければ flex に */
+1720:  background: rgba(0, 0, 0, 0.5);
+1747:  margin: 0 auto;
+1754:  padding: 0;
+1755:  margin: 0;
+1756:  display: -webkit-box;
+1757:  display: -ms-flexbox;
+1758:  display: flex;
+1811:  background-color: var(--main-bg);
+1812:  padding: 0;
+1813:  margin: 0 auto;
+1914:  padding: 3px; /* 内側の余白 */
+1915:  margin: 0px; /* 下の余白を少し加える */
+1917:  display: -webkit-box;
+1918:  display: -ms-flexbox;
+1919:  display: flex;
+1971:  display: block;
+1977:  display: block;
+1979:  padding: 5px 0;
+1980:  background-color: #3498db;
+2029:  /*display: none; /* 初期状態では非表示 */
+2030:  display: block; /* ← `none` を削除 */
+2035:        display: none;
+2040:  display: block;
+2041:  background: url(images/social-sprite.jpeg) no-repeat;
+2081:  display: none;
+2087:  margin: 0;
+2088:  padding: 0;
+2119:  background: #333 none repeat scroll 0 0;
+2122:  /*margin: 5px;*/
+2127:  background: center;
+2131:  background: #333 none repeat scroll 0 0;
+2134:  /*margin: 5px;*/
+2146:  display: block;
+2161:    background: #333 none repeat scroll 0 0;
+2163:    margin: 0px;
+2176:  display: block;
+2191:  display: flex;
+2194:  background-color: rgba(0, 0, 0, 0.5);
+2197:  padding: 10px;
+2206:  margin: 0;
+2256:  display: flex;
+2257:  flex-wrap: wrap;
+2258:  gap: 10px; /* アイテム間のスペース */
+2259:  margin: 0; /* サイドバー内の余白を調整 */
+2271:  display: flex; /* Flexboxで横並び */
+2273:  gap: 10px; /* 画像と内容の間隔 */
+2358:  background: rgba(0, 0, 0, 0.5); /* 半透明の背景 */
+2360:  padding: 20px;
+2366:  display: flex;
+2386:  margin: 0;
+2411:  padding: 10px;
+2412:  display: flex;
+2413:  flex-direction: column;
+2419:  margin: 0;
+2438:  display: block;
+2457:  display: flex;
+2460:  background-color: rgba(0, 0, 0, 0.5); /* 背景色の透明度を設定 */
+2463:  padding: 10px; /* テキストの周りに余白を追加 */
+2498:  margin: 0; /* 上下の余白をリセット */
+2499:  padding: 0; /* 内部の余白をリセット */
+2546:  /* background-color: #fff; */
+2632:  margin: 0px 0px;
+2638:  margin: 0px 5px;
+2647:  padding: 0px 0px;
+2658:    padding: 0px 0px;
+2664:  display: block;
+2665:  padding: 10px 20px;
+2682:  display: inline-flex;
+2684:  gap: 4px;
+2691:  display: inline-flex;
+2693:  gap: 4px;
+2700:  background: #fff; /* 背景色 */
+2701:  display: block;
+2725:  background-color: var(--main-bg); /* ダークテーマ用の背景色 */
+2736:  display: inline-block;
+2790:    display: none; /* 初期状態では非表示 */
+2800:    display: block; /* サブメニューを表示 */
+2819:  margin: 0;
+2820:  padding: 0;
+2825:  margin: 0;
+2826:  padding: 0;
+2832:  display: block;
+2835:  padding: 0px 5px; /* 上下左右のパディング */
+2877:    padding: 0px 5px;
+2883:  padding: 0;
+2884:  margin: 0;
+2894:  padding: 0px;
+2895:  margin: 0px;
+2901:    display: none;
+2912:  padding: 0;
+2913:  margin: 0;
+2914:  display: -webkit-box;
+2915:  display: -ms-flexbox;
+2916:  display: flex;
+2936:  display: -webkit-box;
+2937:  display: -ms-flexbox;
+2938:  display: flex;
+2969:  display: inline-block;
+2978:  display: -webkit-box;
+2979:  display: -ms-flexbox;
+2980:  display: flex;
+2986:  display: -webkit-box;
+2987:  display: -ms-flexbox;
+2988:  display: flex;
+2996:  padding: 5px;
+3005:  background-color: #55acee; /* Twitter color */
+3015:  background: -o-radial-gradient(
+3024:  background: radial-gradient(
+3044:  display: block;
+3045:  /*background: #ffff;*/
+3072:    margin: 5px auto; /* 左右中央寄せ */
+3079:  display: flex; /* フレックスボックスを使用 */
+3080:  flex-wrap: wrap; /* 子要素が折り返すように設定 */
+3081:  margin: 5px;
+3090:  padding: 0;
+3102:    display: flex; /* フレックスボックス */
+3108:    margin: 5px; /* 上下左右にマージン */
+3109:    padding: 0;
+3125:    display: block; /* サイドバーとメインコンテンツをブロック表示 */
+3130:    margin: 5px auto;
+3131:    padding: 5px;
+3146:    display: block;
+3147:    margin: 0 auto; /* 余白 */
+3157:    margin: 0 auto;
+3164:  margin: 0 auto;
+3170:  display: block;
+3174:  display: -webkit-box;
+3175:  display: -ms-flexbox;
+3176:  display: flex;
+3187:  display: inline-block;
+3212:  display: flex;
+3220:  background: rgba(0, 0, 0, 0.5);
+3223:  padding: 10px;
+3229:  background: rgba(0, 0, 0, 0.7);
+3245:  background-color: rgba(0, 0, 0, 0.6); /* 半透明の背景 */
+3249:  padding: 10px;
+3266:  background-color: rgba(0, 0, 0, 0.8);
+3282:  margin: 0 auto;
+3283:  display: block;
+3287:  margin: 0 auto;
+3290:  display: block;
+3292:  padding: 0px 0px; /* スマホ時の余白を確保 */
+3298:    padding: 0px 0px; /* 余白を少し小さく */
+3313:  padding: 0 0.6em;
+3318:  padding: 0;
+3341:  padding: 5px;
+3345:  display: block;
+3347:  margin: 0px auto;
+3349:  padding: 5px;
+3366:  display: -webkit-box;
+3367:  display: -ms-flexbox;
+3368:  display: flex;
+3373:  padding: 10px 4px;
+3378:  /*display: inline-block; /* PCでは元のデザイン */
+3379:  padding: 10px 20px;
+3380:  background-color: #ff9933; /* オレンジ色に変更 */
+3389:  /*display: inline-block;*/
+3390:  padding: 10px 20px;
+3391:  background-color: #007bff; /* 青色 */
+3413:  background-color: #4caf50; /* 緑色 */
+3420:  background-color: #0056b3; /* 濃い青色 */
+3432:        -ms-flex-direction: column;
+3433:        flex-direction: column;
+3441:    -ms-flex-direction: column;
+3442:    flex-direction: column; /* 縦に並べる */
+3447:    display: block; /* ボタンをブロック要素に */
+3449:    padding: 10px 0; /* 上下の余白を調整 */
+3465:    display: flex;
+3467:    flex-direction: row; /* 横並び */
+3472:    /*display: inline-block; /* 横並び */
+3474:    padding: 10px 20px;
+3491:    display: flex;
+3497:    /*display: inline-block; /* 横並び */
+3499:    padding: 10px 10px;
+3506:  display: flex; /* display: none; を削除 */
+3514:  background-color: rgba(0, 0, 0, 0.5);
+3521:  padding: 40px 10px;
+3542:  background-color: white; /* モーダルの内容の背景 */
+3543:  padding: 20px; /* モーダル内の余白 */
+3549:  background-color: #fff;
+3550:  padding: 20px;
+3604:  display: -webkit-box;
+3605:  display: -ms-flexbox;
+3606:  display: flex;
+3610:  gap: 20px; /* 画像とタイトルの間にスペースを追加 */
+3618:  margin: 0; /* 上下の余白を削除 */
+3644:  margin: 0; /* サムネイル画像の余白を削除 */
+3651:  background-color: #f0f0f0; /* 背景色を追加して見やすくする */
+3662:  background-color: #ff4c4c; /* ボタンの色 */
+3666:  display: -webkit-box;
+3667:  display: -ms-flexbox;
+3668:  display: flex;
+3700:  background-color: #ff1f1f; /* ホバー時の色 */
+3708:  padding: 8px;
+3710:  background-color: white;
+3719:    padding: 10px; /* モバイルでは少しパディングを広げる */
+3728:  padding: 20px;
+3735:    padding: 0; /* モバイルではpaddingを無効化 */
+3815:  padding: 20px; /* デフォルトの余白 */
+3824:  background: #fff;
+3830:    padding: 5px; /* モバイルサイズ用の余白 */
+3840:  margin: 5px 0; /* 上下の余白を指定 */
+3848:  margin: 5px 0; /* 上下の余白を指定 */
+3893:  margin: 0px 0;
+3894:  padding: 10px;
+3897:  background-color: #f2faff; /* 薄いブルー */
+3915:    margin: 0; /* モバイルでマージン0 */
+3916:    padding: 3px; /* パディング小さめ */
+3931:  background-color: #e6f2ff; /* 少し明るくする */
+3937:  padding: 10px 20px;
+3938:  background-color: #4a90e2; /* 青色 */
+3950:  background-color: #357ab7; /* ホバー時に少し暗く */
+3955:  padding: 10px 20px;
+3956:  background-color: #4a90e2;
+3962:  margin: 10px;
+3966:  background-color: #357ab7;
+3971:  background-color: #4a90e2;
+3973:  padding: 10px 15px;
+3984:  background-color: #357ab7; /* ホバー時に濃い色 */
+3989:  background-color: #4a90e2; /* ボタンの青色 */
+3991:  padding: 10px 15px;
+4005:  background-color: #357ab7; /* 少し濃い青に変化 */
+4010:  display: none; /* 初期状態では非表示 */
+4011:  background-color: #fff;
+4012:  padding: 20px;
+4034:  display: none; /* 初期状態では非表示 */
+4035:  background-color: #fff;
+4036:  padding: 20px;
+4056:  background-color: #4caf50; /* 緑色 */
+4058:  padding: 10px 20px;
+4071:  background-color: #45a049; /* ホバー時に少し濃い緑色 */
+4086:  background-color: #dcdcdc; /* グレーに変える */
+4102:  display: flex;
+4103:  flex-wrap: wrap;
+4104:  gap: 20px; /* PCでは 20px */
+4112:    gap: 10px; /* モバイルでは 10px に変更 */
+4118:  display: flex;
+4119:  flex-wrap: wrap;
+4120:  gap: 20px; /* ✅ PCと統一 */
+4133:  display: flex;
+4134:  flex-wrap: wrap;
+4135:  gap: 16px;
+4147:    flex-direction: column;
+4158:  display: flex;
+4160:  gap: 20px; /* 画像とテキストの間にスペースを追加 */
+4170:  background-color: #f0f0f0;
+4176:  display: flex;
+4177:  flex-direction: column; /* 縦並びに設定 */
+4179:  gap: 10px; /* 各情報間にスペースを追加 */
+4185:  display: flex; /* 横並びにする */
+4186:  gap: 20px; /* 要素間の間隔 */
+4205:  display: block;
+4207:  padding: 3px;
+4213:  padding: 8px;
+4247:  display: block;
+4261:  display: inline-block;
+4262:  padding: 4px 8px; /* ボタン風の間隔を小さく */
+4265:  background-color: #007bff; /* 背景色を青に設定 */
+4283:  background-color: #ff7f00; /* ホバー時の背景色をオレンジに設定 */
+4297:  display: inline-block;
+4298:  padding: 4px 8px; /* ボタン風の間隔を小さく */
+4301:  background-color: #007bff; /* 背景色を青に設定 */
+4315:  display: flex;
+4319:  background-color: #ff7f00; /* ホバー時の背景色をオレンジに設定 */
+4330:  background-color: #2196f3; /* ボタン色を変更 */
+4338:  background-color: #1976d2;
+4350:    background-color: #ffc107; /* モバイル時の色 */
+4357:  margin: 5px;
+4360:  background: url(images/gray.gif) repeat-y 50% 0;
+4362:  display: block;
+4368:  display: inline-block;
+4373:  display: block;
+4380:  display: inline-block;
+4391:  display: block;
+4392:  padding: 1em;
+4411:  margin: 3em 0;
+4415:  margin: 0 0 3em;
+4421:  display: inline-block;
+4423:  padding: 5px 8px;
+4425:  background: #ddd;
+4430:  background: #fff;
+4440:  background: #ffeff7;
+4475:  margin: 0px;
+4476:  padding: 0px;
+4480:  margin: 0; /* 必要なら */
+4490:  display: inline;
+4522:  display: none;
+4535:  padding: 5px 0 0;
+4543:  padding: 5px;
+4564:  padding: 0 10px;
+4569:  padding: 20px;
+4579:  padding: 10px;
+4590:  background-color: #4caf50;
+4593:  padding: 10px 20px;
+4603:  background-color: #45a049;
+4621:    padding: 10px;
+4629:    padding: 8px;
+4673:  background: url(images/quote.png) no-repeat 0 0;
+4704:  margin: 0;
+4705:  padding: 0px 0px;
+4709:  background: #eee;
+4712:  display: block;
+4720:  background: #f9f9f9;
+4727:  background: #f9f9f9;
+4734:  background: #f9f9f9;
+4741:  background: #f9f9f9;
+4748:  background: #f9f9f9;
+4760:  background: #fff; /* 背景色 */
+4771:  display: inline-block;
+4772:  padding: 7px 10px;
+4776:  background: #0d6efd;
+4789:  /*background: #0056b3;*/
+4811:  margin: 10px;
+4815:  background-color: #f3f3f3;
+4826:  margin: 0;
+4827:  padding: 0;
+4832:  margin: 0;
+4833:  padding: 0 4px 5px;
+4839:    display: block;
+4845:  display: inline-block;
+4846:  margin: 0 0 1em 1.5em;
+4850:  display: inline-block;
+4851:  margin: 0 1.5em 1em 0;
+4872:  display: block;
+4886:  display: block;
+4898:  padding: 0px;
+4917:  background: #464e54;
+4919:  margin: 0 auto;
+4921:  --gap: 16px;
+4924:  margin: 0;
+4934:  display: flex;
+4935:  flex-wrap: wrap;
+4937:  gap: var(--gap);
+4938:  padding: 12px;
+4951:    padding: 16px;
+4965:  background: #000;
+4979:  display: block;
+4996:  padding: 8px 4px;
+4999:  margin: 0 0 8px;
+5023:  display: block !important; /* contents を禁止 */
+5033:  background: transparent;
+5034:  padding: 0;
+5046:  display: block;
+5052:  background: #004bba;
+5089:    display: block !important;
+5100:  /*background: #f9f9f9 none repeat scroll 0 0;*/
+5101:  padding: 35px 0 45px;
+5105:  margin: 0 0 35px;
+5112:  margin: 0;
+5113:  padding: 0;
+5117:  display: inline-block;
+5118:  margin: 0 10px;
+5122:  display: block;
+5125:  padding: 15px;
+5127:  background-color: #222;
+5137:  background-color: #444; /* 背景色を少し明るくする */
+5148:  display: inline-block;
+5151:  padding: 15px;
+5153:  background-color: #222;
+5158:  background-color: #666;
+5169:  margin: 0 -8px;
+5173:  display: block;
+5180:  margin: 0 8px 16px;
+5240:  display: block;
+5245:  display: block;
+5256:  padding: 0;
+5259:  margin: 0 auto;
+5293:  margin: 0 auto;
+5317:  margin: 0;
+5336:  background-color: rgba(0, 0, 0, 0.6);
+5337:  padding: 10px;
+5347:  display: block;
+5350:  margin: 0;
+5351:  padding: 0;
+5358:  /*background: #eaeaea none repeat scroll 0 0;*/
+5359:  padding: 15px 0 50px;
+5394:  margin: 5px 0 25px;
+5401:  margin: 0 0 25px;
+5411:  margin: 0 0 25px;
+5420:  margin: 0 0 10px;
+5435:  background: #f5f5f5;
+5438:  padding: 5px 10px;
+5439:  margin: 0 0 5px;
+5443:  background: #f5f5f5;
+5455:  background: #333 none repeat scroll 0 0;
+5458:  display: inline-block;
+5468:  display: block;
+5477:  padding: 45px 0;
+5482:  margin: 0 0 25px;
+5488:  display: -webkit-box;
+5489:  display: -ms-flexbox;
+5490:  display: flex; /* 横並びに配置 */
+5491:  -ms-flex-wrap: wrap;
+5492:  flex-wrap: wrap; /* 横幅を超えた場合に改行 */
+5493:  gap: 10px; /* 各要素間の隙間 */
+5495:  padding: 0;
+5500:  margin: 0;
+5506:  padding: 5px 10px;
+5515:  background-color: #f0f0f0; /* ホバー時の背景色 */
+5527:  margin: 0 auto;
+5528:  display: block;
+5534:  padding: 0;
+5535:  margin: 0;
+5543:  padding: 5px;
+5557:  padding: 5px;
+5562:  padding: 0px;
+5568:  display: -webkit-box;
+5569:  display: -ms-flexbox;
+5570:  display: flex; /* フレックスボックスレイアウトを使用 */
+5577:  margin: 0 auto; /* 上下の余白を0に設定し、左右を自動で中央揃え */
+5580:  padding: 3px; /* 内側の余白を3pxに設定 */
+5594:  margin: 0; /* 外側の余白を0に設定 */
+5611:    -ms-flex-direction: column;
+5612:    flex-direction: column; /* 子要素を縦方向に配置 */
+5621:    margin: 0; /* 外側の余白を0に設定 */
+5622:    padding: 3px; /* 内側の余白を3pxに設定 */
+5631:  margin: 0;
+5632:  padding: 0;
+5649:    display: none;
+5654:    margin: 0;
+5659:    display: block;
+5676:    margin: 0 5px 20px;
+5688:    display: none;
+5743:    margin: 0 0 10px;
+5756:    margin: 0;
+5762:    display: none;
+5776:    padding: 5px;
+5824:    padding: 30px 0;
+5829:    display: block;
+5834:    display: inline-block;
+5871:    padding: 5px;
+5886:    margin: 5px;
+5896:    margin: 5px;
+5908:  background-color: #333;
+5934:  padding: 0px 3px;
+5939:  margin: 0;
+5945:  padding: 0px 0px;
+5957:  margin: 0 0 25px;
+5964:  display: inline-block;
+5970:  background-color: #000;
+5971:  padding: 10px;
+5974:  margin: 0 0 80px;
+5978:  display: contents; /*トップバックグランド画像の表示が必要*/
+5981:  background: #333 none repeat scroll 0 0;
+5984:  margin: 0 1.7% 25px 0;
+6025:  display: block;
+6028:  margin: 0;
+6029:  padding: 0;
+6039:  display: block;
+6050:    padding: 10px; /* パディングを追加してスペースを調整 */
+6063:  background: #0056b3; /* 濃いブルー */
+6071:  display: inline-block;
+6073:  padding: 10px 15px;
+6074:  margin: 0 5px; /* ボタン間のスペース */
+6082:  background: #00bcd4; /* シアン系の背景 */
+6095:    padding: 8px 12px; /* タッチ操作しやすいサイズに調整 */
+6100:    background: #0056b3; /* 濃いブルー */
+6109:    padding: 8px 12px; /* ボタンのサイズ */
+6110:    margin: 0 5px; /* ボタン間のスペースを調整 */
+6117:    background: #00bcd4; /* シアン系の背景 */
+6126:  padding: 25px 0;
+6132:  margin: 0 auto;
+6138:  padding: 25px 0 50px;
+6139:  display: contents; /*トップバックグランド画像の表示が必要*/
+6145:    display: block;
+6177:  background-color: #f2c1be; /* 背景色を変更 */
+6183:  background-color: #eeb3b9; /* 背景色を変更 */
+6197:  /*display: table;
+6198:    /*padding: 20px 0;*/
+6212:  /*display: table-cell;*/
+6215:  padding: 5px 3px;
+6237:  padding: 0px 0px;
+6244:  padding: 10px 5px;
+6292:    /* display: table-cell; */
+6295:    padding: 0 1px;
+6350:    padding: 0px 0px;
+6351:    display: inline-block;
+6366:    display: block; /* ブロック要素として表示 */
+6367:    padding: 15px 0; /* 上下のパディングを調整 */
+6381:    padding: 0px 0px; /* パディングをより小さくする */
+6578:    background-color: #f2c1be !important; /* ドロップダウンメニューの背景色 */
+6593:  background: #fff;
+6612:  margin: 20px auto;
+6614:  /*background-color: var(--bs-table-bg);*/
+6619:  /*background-color: var(--bs-body-bg);*/
+6620:  background: #303b7a;
+6625:    display: block;
+6631:    display: block;
+6645:    margin: 10px 5px;
+6650:  padding: 5px;
+6654:  padding: 5px;
+6678:  background-color: #2931aa;
+6704:  background-color: transparent; /* 背景色を透明にする例 */
+6709:  background-color: #fff;
+6714:  display: flex;
+6715:  flex-direction: column; /* モバイルファースト: 縦並び */
+6746:  padding: 10px;
+6754:  background: none;
+6761:    display: flex;
+6762:    flex-wrap: wrap; /* セルを折り返して2カラムに */
+6767:    display: inline-block;
+6770:    padding: 8px 10px;
+6792:    display: table-cell; /* 通常のテーブル表示に戻す */
+6796:    display: table-row;
+6808:    display: table-cell; /* 通常のテーブル表示に戻す */
+6812:    display: table-row;
+6837:  display: none;
+6856:  background-color: rgba(0, 0, 0, 0.5);
+6860:  padding: 10px;
+6886:  display: flex;
+6896:  display: flex;
+6897:  gap: 8px;
+6934:  display: flex;
+6966:  display: flex;
+6975:  display: flex;
+6976:  gap: 8px;
+6983:  display: flex;
+6984:  flex-direction: column;
+7017:  margin: 0 auto;
+7029:  display: -webkit-box;
+7030:  display: -ms-flexbox;
+7031:  display: flex;
+7051:  margin: 0 auto;
+7057:  display: -webkit-box;
+7058:  display: -ms-flexbox;
+7059:  display: flex;
+7079:  background-color: rgba(0, 0, 0, 0.5); /* 半透明の黒背景 */
+7080:  padding: 8px 12px; /* 内側の余白 */
+7103:  margin: 0; /* 全てのマージンをゼロに設定 */
+7115:  display: block; /* 明示的にblockに設定 */
+7116:  margin: 0; /* 上下マージンをリセット */
+7117:  padding: 0; /* パディングもリセット */
+7141:  /*background-color: transparent; /* 背景色なし */
+7143:  padding: 15px 15px;
+7150:  /*background-color: rgba(0, 0, 0, 0.8); /* ホバー時の背景色 */
+7166:  padding: 15px;
+7172:  display: block;
+7182:  background: #ddd;
+7185:  margin: 10px 0;
+7194:  background: #007bff;
+7202:  background: #007bff;
+7224:    display: flex;
+7225:    flex-direction: column;
+7234:    display: flex;
+7235:    flex-direction: column;
+7241:    /* display: block; コメントアウト */
+7242:    display: flex; /* フレックスボックスを使用 */
+7243:    flex-wrap: wrap; /* 子要素を折り返し可能に */
+7244:    gap: 10px; /* 要素間の隙間を設定 */
+7252:    display: block; /* ここを display: block にして、2カラム表示を強制 */
+7253:    margin: 0;
+7254:    padding: 5px;
+7268:  /*display: flex; 背景画像がdisplay blockに影響がでるから*/
+7276:  /*display: flex;
+7277:    flex-direction: column;
+7283:    display: none;
+7328:  display: none; /* 初期状態では非表示 */
+7335:  background-color: rgba(0, 0, 0, 0.7); /* 背景を暗く */
+7346:  background-color: white;
+7347:  padding: 20px;
+7360:  background-color: #ff4c4c; /* ボタンの色 */
+7364:  display: -webkit-box;
+7365:  display: -ms-flexbox;
+7366:  display: flex;
+7397:  background-color: #ff1f1f; /* ホバー時の色 */
+7415:  background-color: transparent; /* 初期状態で背景色が表示されないように */
+7436:  margin: 0; /* 余白をゼロに */
+7440:  display: flex;
+7457:  display: inline-block;
+7466:  background: rgba(0, 0, 0, 0.6);
+7469:  padding: 8px 12px;
+7484:  background-color: rgba(0, 0, 0, 0.5);
+7489:  padding: 10px;
+7513:  display: block;
+7514:  margin: 0 auto;
+7537:  display: inline-block;
+7538:  margin: 10px;
+7576:  margin: 10 auto;
+7577:  padding: 0;
+7583:  margin: 0;
+7584:  padding: 0;
+7587:  display: block;
+7588:  margin: 0 auto;
+7591:  display: none;
+7596:  display: block;
+7599:  display: block;
+7613:  display: flex !important;
+7616:  padding: 0 6px;
+7642:    padding: 0 4px;
+7655:  display: block;
+7661:  margin: 0;
+7666:  display: flex;
+7668:  flex-wrap: wrap;
+7669:  column-gap: 8px;
+7670:  row-gap: 8px;
+7671:  margin: 0 0 8px;
+7675:  display: inline-flex;
+7681:  margin: 0;
+7685:  display: contents;
+7695:  display: inline-flex;
+7707:  padding: 3px 8px;
+7710:  background: #f7f8fa;
+7720:  background: #eef4ff;
+7727:  background: #fff7ed;
+7734:  margin: 0 2px;
+7743:  display: inline-flex;
+7750:    column-gap: 10px;
+7764:    padding: 4px 10px;
+7778:  background: #1f232b;
+7784:  background: #1d2a44;
+7791:  background: #3a2a1f;
+7815:  background: transparent;
+7829:  /*background-color: #f6f2ea;*/
+7867:  background-color: #ece6da;
+7872:  background: transparent;
+7881:  background: transparent;
+7894:  background-color: #161b22;
+7929:  background-color: #0f172a;
+7933:  background: transparent;

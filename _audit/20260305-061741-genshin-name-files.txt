@@ -1,0 +1,3 @@
+./my-genshin-build.php
+./pager_genshin_build.php
+./single-my-genshin-builds.php

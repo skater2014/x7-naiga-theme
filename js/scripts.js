@@ -3265,13 +3265,16 @@ function validateForm(parent) {
 
   if (el) {
     if (el.validity && el.validity.valueMissing) {
-      const labelText = parent
-        .find('label[for="' + el.id + '"]')
-        .first()
-        .text()
-        .replace(/[:：].*$/, '')
-        .replace(/\s*＊必須\s*/, '')
-        .trim() || el.name || 'この項目';
+      const labelText =
+        parent
+          .find('label[for="' + el.id + '"]')
+          .first()
+          .text()
+          .replace(/[:：].*$/, '')
+          .replace(/\s*＊必須\s*/, '')
+          .trim() ||
+        el.name ||
+        'この項目';
 
       el.setCustomValidity(labelText + 'を入力してください。');
     } else if (el.validity && el.validity.typeMismatch && el.type === 'email') {
@@ -4167,88 +4170,6 @@ jQuery(document).ready(function ($) {
   }
 
   $('#last_name_kana, #first_name_kana').on('input', updateNameSlug);
-});
-
-jQuery(document).ready(function ($) {
-  var modalOpen = false;
-  var modalClosed = false;
-
-  function openModal() {
-    if (modalOpen || modalClosed) return;
-    $('#chatgpt-modal').fadeIn(1000);
-    modalOpen = true;
-
-    var welcomeMessage = `
-      <div class="gpt-response">
-        こんにちは。内外土地開発（株）です。那須の不動産の物件でしたらご案内ができます。以下のリンクをご参照ください。
-        <br>土地の案内ページ: <a href="https://naigaicorp.net/naigai-tochi" target="_blank">リンク</a>
-        <br>建物の案内ページ: <a href="https://naigaicorp.net/naigai-construction" target="_blank">リンク</a>
-        <br>ほかに何かわからないことがございましたら何でも聞いてくださいね！よろしくお願い申し上げます。
-      </div>
-    `;
-
-    $('#chatgpt-messages').html(welcomeMessage);
-  }
-
-  function closeModal() {
-    $('#chatgpt-modal').fadeOut(1000);
-    modalOpen = false;
-    modalClosed = true;
-  }
-
-  $('.close-btn').click(function () {
-    closeModal();
-  });
-
-  $('#send_message').click(function () {
-    var userMessage = $('#user_message').val();
-    if (userMessage) {
-      $.ajax({
-        url: customAjax.ajaxurl,
-        type: 'POST',
-        data: {
-          action: 'chatgpt_request',
-          security: customAjax.nonce,
-          user_message: userMessage,
-        },
-        success: function (response) {
-          if (response.success) {
-            $('#chatgpt-messages').append('<div class="user-message">' + userMessage + '</div>');
-            $('#chatgpt-messages').append(
-              '<div class="gpt-response">' + response.data.message + '</div>',
-            );
-          } else {
-            $('#chatgpt-messages').append(
-              '<div class="gpt-response">エラー: ' + response.data.message + '</div>',
-            );
-          }
-          $('#user_message').val('');
-        },
-        error: function () {
-          $('#chatgpt-messages').append('<div class="gpt-response">エラーが発生しました。</div>');
-        },
-      });
-    }
-  });
-
-  $('#user_message').on('keypress', function (event) {
-    if (event.keyCode === 13) {
-      event.preventDefault();
-      $('#send_message').click();
-    }
-  });
-
-  $(window).scroll(function () {
-    if ($(window).scrollTop() > 100 && !modalOpen && !modalClosed) {
-      openModal();
-    }
-  });
-
-  $('#chatgpt-modal').click(function (event) {
-    if ($(event.target).is('#chatgpt-modal')) {
-      closeModal();
-    }
-  });
 });
 
 /* =========================================================

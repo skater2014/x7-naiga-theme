@@ -1,0 +1,314 @@
+SVG/SYMBOLS AUDIT REPORT
+============================================================
+symbols(<symbol id=...>) 定義ファイル数: 1
+symbols 定義ID数: 494
+
+svg が書かれている PHP:
+  38 files
+  - functions.php
+  - category-naigai-construction.php
+  - taxonomy.php
+  - category.php
+  - category-travel.php
+  - house-category.php
+  - recruit-info-table.php
+  - index.php
+  - archive.php
+  - footer-home1.php
+  - archive-recruitment.php
+  - category-sold-out.php
+  - single-recruitment.php
+  - property-info-table.php
+  - header-77.php
+  - single-blog.php
+  - pager-post-navigation.php
+  - category-recommended-land-and-house.php
+  - search.php
+  - archive-house.php
+  - single-default.php
+  - single-house.php
+  - page-gallary-room.php
+  - archive-blog.php
+  - single.php
+  - Land-category.php
+  - category-new-house.php
+  - category-naigai-tochi.php
+  - taxonomy-blog_genre.php
+  - template-sidebar-parts/material-post.php
+  - template-sidebar-parts/social-icons.php
+  - template-sidebar-parts/popular-post.php
+  - template-sidebar-parts/material1-post.php
+  - template-sidebar-parts/artifacts-post.php
+  - templates/template-widget-area.php
+  - inc/functions/slick-vertical-slider.php
+  - inc/functions/custom-functions.php
+  - _bak_nested_wp-content_20260216_204314/themes/x7-naigaicorp/header-77.php
+
+参照されている icon-id（ファイル/行）:
+  29 ids
+
+[icon-arrow-left2]  hits=10
+  - single-recruitment.php:34  <use xlink:href="#icon-arrow-left2"></use>
+  - single-recruitment.php:34  <use xlink:href="#icon-arrow-left2"></use>
+  - single-blog.php:25  <use xlink:href="#icon-arrow-left2"></use>
+  - single-blog.php:25  <use xlink:href="#icon-arrow-left2"></use>
+  - pager-post-navigation.php:71  <svg class="icon icon-arrow-left2"><use xlink:href="#icon-arrow-left2"></use></svg>
+  - pager-post-navigation.php:71  <svg class="icon icon-arrow-left2"><use xlink:href="#icon-arrow-left2"></use></svg>
+  - single-house.php:34  <use xlink:href="#icon-arrow-left2"></use>
+  - single-house.php:34  <use xlink:href="#icon-arrow-left2"></use>
+  - single.php:31  <use xlink:href="#icon-arrow-left2"></use>
+  - single.php:31  <use xlink:href="#icon-arrow-left2"></use>
+
+[icon-arrow-right2]  hits=2
+  - pager-post-navigation.php:55  <svg class="icon icon-arrow-right2"><use xlink:href="#icon-arrow-right2"></use></svg>
+  - pager-post-navigation.php:55  <svg class="icon icon-arrow-right2"><use xlink:href="#icon-arrow-right2"></use></svg>
+
+[icon-circle-left]  hits=2
+  - page-gallary-room.php:662  <use xlink:href="#icon-circle-left"></use>
+  - page-gallary-room.php:662  <use xlink:href="#icon-circle-left"></use>
+
+[icon-circle-right]  hits=2
+  - page-gallary-room.php:667  <use xlink:href="#icon-circle-right"></use>
+  - page-gallary-room.php:667  <use xlink:href="#icon-circle-right"></use>
+
+[icon-clock]  hits=8
+  - single-default.php:29  <use xlink:href="#icon-clock">
+  - single-default.php:29  <use xlink:href="#icon-clock">
+  - single-default.php:97  <use xlink:href="#icon-clock">
+  - single-default.php:97  <use xlink:href="#icon-clock">
+  - templates/template-widget-area.php:92  <use xlink:href="#icon-clock">
+  - templates/template-widget-area.php:92  <use xlink:href="#icon-clock">
+  - templates/template-widget-area.php:198  <use xlink:href="#icon-clock">
+  - templates/template-widget-area.php:198  <use xlink:href="#icon-clock">
+
+[icon-coin-yen]  hits=1
+  - property-info-table.php:40  '価格'     => 'icon-coin-yen',
+
+[icon-compass]  hits=1
+  - property-info-table.php:47  '用途地域' => 'icon-compass',
+
+[icon-container]  hits=1
+  - template-sidebar-parts/social-icons.php:35  <div class="icon-container">
+
+[icon-facebook2-fill]  hits=1
+  - template-sidebar-parts/social-icons.php:12  'class' => 'icon-facebook2-fill',
+
+[icon-file-text2]  hits=2
+  - property-info-table.php:51  '備考'     => 'icon-file-text2',
+  - property-info-table.php:59  $symbol_id = isset($property_icon_map[$label]) ? $property_icon_map[$label] : 'icon-file-text2';
+
+[icon-heart]  hits=52
+  - category-naigai-construction.php:110  <use xlink:href="#icon-heart"></use>
+  - category-naigai-construction.php:110  <use xlink:href="#icon-heart"></use>
+  - taxonomy.php:133  <use xlink:href="#icon-heart"></use>
+  - taxonomy.php:133  <use xlink:href="#icon-heart"></use>
+  - category.php:105  <use xlink:href="#icon-heart"></use>
+  - category.php:105  <use xlink:href="#icon-heart"></use>
+  - house-category.php:122  <use xlink:href="#icon-heart"></use>
+  - house-category.php:122  <use xlink:href="#icon-heart"></use>
+  - index.php:148  <use xlink:href="#icon-heart"></use>
+  - index.php:148  <use xlink:href="#icon-heart"></use>
+  - archive.php:140  <use xlink:href="#icon-heart"></use>
+  - archive.php:140  <use xlink:href="#icon-heart"></use>
+  - archive-recruitment.php:154  <use xlink:href="#icon-heart"></use>
+  - archive-recruitment.php:154  <use xlink:href="#icon-heart"></use>
+  - category-sold-out.php:106  <use xlink:href="#icon-heart"></use>
+  - category-sold-out.php:106  <use xlink:href="#icon-heart"></use>
+  - single-recruitment.php:306  <use xlink:href="#icon-heart"></use>
+  - single-recruitment.php:306  <use xlink:href="#icon-heart"></use>
+  - single-blog.php:210  <use xlink:href="#icon-heart"></use>
+  - single-blog.php:210  <use xlink:href="#icon-heart"></use>
+  - category-recommended-land-and-house.php:116  <use xlink:href="#icon-heart"></use>
+  - category-recommended-land-and-house.php:116  <use xlink:href="#icon-heart"></use>
+  - search.php:153  <use xlink:href="#icon-heart"></use>
+  - search.php:153  <use xlink:href="#icon-heart"></use>
+  - archive-house.php:155  <use xlink:href="#icon-heart"></use>
+  ... (+27 more)
+
+[icon-home]  hits=1
+  - property-info-table.php:37  '物件名'   => 'icon-home',
+
+[icon-instagram-fill]  hits=1
+  - template-sidebar-parts/social-icons.php:17  'class' => 'icon-instagram-fill',
+
+[icon-key]  hits=1
+  - property-info-table.php:39  '権利形態' => 'icon-key',
+
+[icon-leaf]  hits=1
+  - property-info-table.php:46  '地目'     => 'icon-leaf',
+
+[icon-location]  hits=12
+  - functions.php:3881  <svg class="icon-location" style="cursor:pointer; width: 20px; height: 20px;" id="iconLocation">
+  - functions.php:3882  <use xlink:href="#icon-location"></use>
+  - functions.php:3882  <use xlink:href="#icon-location"></use>
+  - functions.php:4220  <use xlink:href="#icon-location"></use>
+  - functions.php:4220  <use xlink:href="#icon-location"></use>
+  - recruit-info-table.php:230  echo '<svg class="icon-location" style="cursor:pointer; width: 20px; height: 20px;" id="iconLocation">';
+  - recruit-info-table.php:231  echo '<use xlink:href="#icon-location"></use>';
+  - recruit-info-table.php:231  echo '<use xlink:href="#icon-location"></use>';
+  - property-info-table.php:38  '所在地'   => 'icon-location',
+  - inc/functions/custom-functions.php:432  <svg class="icon-location" style="cursor:pointer; width: 20px; height: 20px;" id="iconLocation">
+  - inc/functions/custom-functions.php:433  <use xlink:href="#icon-location"></use>
+  - inc/functions/custom-functions.php:433  <use xlink:href="#icon-location"></use>
+
+[icon-map]  hits=1
+  - property-info-table.php:45  '土地面積' => 'icon-map',
+
+[icon-map2]  hits=1
+  - property-info-table.php:48  '都市計画' => 'icon-map2',
+
+[icon-newspaper]  hits=2
+  - inc/functions/slick-vertical-slider.php:16  <div>Breaking News<svg class="icon icon-newspaper"><use xlink:href="#icon-newspaper"></use></svg></div>
+  - inc/functions/slick-vertical-slider.php:16  <div>Breaking News<svg class="icon icon-newspaper"><use xlink:href="#icon-newspaper"></use></svg></div>
+
+[icon-office]  hits=1
+  - property-info-table.php:44  '建物面積' => 'icon-office',
+
+[icon-phone]  hits=4
+  - header-77.php:165  <use xlink:href="#icon-phone"></use>
+  - header-77.php:165  <use xlink:href="#icon-phone"></use>
+  - _bak_nested_wp-content_20260216_204314/themes/x7-naigaicorp/header-77.php:496  <svg class="icon icon-phone" width="24" height="24"><use xlink:href="#icon-phone"></use></svg>
+  - _bak_nested_wp-content_20260216_204314/themes/x7-naigaicorp/header-77.php:496  <svg class="icon icon-phone" width="24" height="24"><use xlink:href="#icon-phone"></use></svg>
+
+[icon-price-tags]  hits=58
+  - category-naigai-construction.php:55  <use href="#icon-price-tags"></use>
+  - category-naigai-construction.php:55  <use href="#icon-price-tags"></use>
+  - taxonomy.php:74  <use xlink:href="#icon-price-tags">
+  - taxonomy.php:74  <use xlink:href="#icon-price-tags">
+  - category.php:50  <use href="#icon-price-tags"></use>
+  - category.php:50  <use href="#icon-price-tags"></use>
+  - category-travel.php:42  <use href="#icon-price-tags"></use>
+  - category-travel.php:42  <use href="#icon-price-tags"></use>
+  - house-category.php:61  <use href="#icon-price-tags"></use>
+  - house-category.php:61  <use href="#icon-price-tags"></use>
+  - index.php:86  <use xlink:href="#icon-price-tags"></use>
+  - index.php:86  <use xlink:href="#icon-price-tags"></use>
+  - archive.php:86  <use xlink:href="#icon-price-tags"></use>
+  - archive.php:86  <use xlink:href="#icon-price-tags"></use>
+  - archive-recruitment.php:76  <use xlink:href="#icon-price-tags">
+  - archive-recruitment.php:76  <use xlink:href="#icon-price-tags">
+  - category-sold-out.php:46  <use href="#icon-price-tags"></use>
+  - category-sold-out.php:46  <use href="#icon-price-tags"></use>
+  - single-recruitment.php:50  <use xlink:href="#icon-price-tags"></use>
+  - single-recruitment.php:50  <use xlink:href="#icon-price-tags"></use>
+  - single-recruitment.php:234  <use xlink:href="#icon-price-tags">
+  - single-recruitment.php:234  <use xlink:href="#icon-price-tags">
+  - single-blog.php:35  <use xlink:href="#icon-price-tags"></use>
+  - single-blog.php:35  <use xlink:href="#icon-price-tags"></use>
+  - single-blog.php:170  <use xlink:href="#icon-price-tags"></use>
+  ... (+33 more)
+
+[icon-road]  hits=2
+  - property-info-table.php:49  '交通'     => 'icon-road',
+  - property-info-table.php:50  '接道状況' => 'icon-road',
+
+[icon-rss2-fill]  hits=1
+  - template-sidebar-parts/social-icons.php:27  'class' => 'icon-rss2-fill',
+
+[icon-stack]  hits=1
+  - property-info-table.php:41  '販売戸数' => 'icon-stack',
+
+[icon-table]  hits=1
+  - property-info-table.php:43  '間取り'   => 'icon-table',
+
+[icon-twitter-fill]  hits=1
+  - template-sidebar-parts/social-icons.php:7  'class' => 'icon-twitter-fill',
+
+[icon-users]  hits=1
+  - property-info-table.php:42  '総戸数'   => 'icon-users',
+
+[icon-youtube-fill]  hits=1
+  - template-sidebar-parts/social-icons.php:22  'class' => 'icon-youtube-fill',
+
+============================================================
+整合性チェック（定義 vs 参照）
+参照されてるが定義が見つからないID: 6
+  - icon-container
+  - icon-facebook2-fill
+  - icon-instagram-fill
+  - icon-rss2-fill
+  - icon-twitter-fill
+  - icon-youtube-fill
+
+定義されてるが参照が見つからないID: 471
+  - icon-500px
+  - icon-IE
+  - icon-IcoMoon
+  - icon-accessibility
+  - icon-address-book
+  - icon-aid-kit
+  - icon-airplane
+  - icon-alarm
+  - icon-amazon
+  - icon-android
+  - icon-angry
+  - icon-angry2
+  - icon-appleinc
+  - icon-arrow-down
+  - icon-arrow-down-left
+  - icon-arrow-down-left2
+  - icon-arrow-down-right
+  - icon-arrow-down-right2
+  - icon-arrow-down2
+  - icon-arrow-left
+  - icon-arrow-right
+  - icon-arrow-up
+  - icon-arrow-up-left
+  - icon-arrow-up-left2
+  - icon-arrow-up-right
+  - icon-arrow-up-right2
+  - icon-arrow-up2
+  - icon-attachment
+  - icon-backward
+  - icon-backward2
+  - icon-baffled
+  - icon-baffled2
+  - icon-barcode
+  - icon-basecamp
+  - icon-behance
+  - icon-behance2
+  - icon-bell
+  - icon-bin
+  - icon-bin2
+  - icon-binoculars
+  - icon-blocked
+  - icon-blog
+  - icon-blogger
+  - icon-blogger2
+  - icon-bold
+  - icon-book
+  - icon-bookmark
+  - icon-bookmarks
+  - icon-books
+  - icon-box-add
+  - icon-box-remove
+  - icon-briefcase
+  - icon-brightness-contrast
+  - icon-bubble
+  - icon-bubble2
+  - icon-bubbles
+  - icon-bubbles2
+  - icon-bubbles3
+  - icon-bubbles4
+  - icon-bug
+  - icon-bullhorn
+  - icon-calculator
+  - icon-calendar
+  - icon-camera
+  - icon-cancel-circle
+  - icon-cart
+  - icon-checkbox-checked
+  - icon-checkbox-unchecked
+  - icon-checkmark
+  - icon-checkmark2
+  - icon-chrome
+  - icon-circle-down
+  - icon-circle-up
+  - icon-clear-formatting
+  - icon-clipboard
+  - icon-clock2
+  - icon-cloud
+  - icon-cloud-check
+  - icon-cloud-download
+  - icon-cloud-upload
+  ... (+391 more)

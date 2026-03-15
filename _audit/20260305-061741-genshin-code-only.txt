@@ -1,0 +1,867 @@
+./functions.php:1430:// genshin_build.php　パンクズ　カスタム投稿ページ　対応
+./functions.php:1628:// Genshin-Impact ロゴセクション用のカスタマイズー
+./functions.php:1630:    class DESS_Customize_Control_Genshin_Logo extends WP_Customize_Control
+./functions.php:1632:        public $type = 'genshin_logo';
+./functions.php:1660:                        $logo_link = get_theme_mod('logo_link_genshin_select', '');
+./functions.php:1877:    // Genshin Impactカスタマイザーのロゴセクション追加
+./functions.php:1879:        'genshin_logo_section', // セクションID
+./functions.php:1881:            'title' => __('Genshin Impact Logo', 'text-domain'), // セクションのタイトル
+./functions.php:1883:            'description' => __('Allows you to update your theme\'s Genshin Impact logo.', 'text-domain'), // セクションの説明
+./functions.php:1887:    // 原神ロゴのサニタイズ
+./functions.php:1888:    $wp_customize->add_setting('dess_logo_genshin', array(
+./functions.php:1894:    // 原神ロゴ画像を取得
+./functions.php:1897:        'dess_logo_genshin',
+./functions.php:1899:            'label' => __('Upload Genshin Logo', 'text-domain'),
+./functions.php:1900:            'section' => 'genshin_logo_section', // ロゴセクションに追加
+./functions.php:1901:            'settings' => 'dess_logo_genshin',
+./functions.php:1905:    // 原神ロゴの幅と高さの設定
+./functions.php:1906:    $wp_customize->add_setting('logo_width_genshin', array(
+./functions.php:1912:    $wp_customize->add_setting('logo_height_genshin', array(
+./functions.php:1918:    // 原神ロゴの幅と高さの調整コントロールを追加
+./functions.php:1919:    $wp_customize->add_control('logo_width_genshin', array(
+./functions.php:1920:        'label' => __('Genshin Logo Width', 'text-domain'),
+./functions.php:1921:        'section' => 'genshin_logo_section', // ロゴセクションに追加
+./functions.php:1929:    // 原神ロゴの高さの調整コントロールを追加
+./functions.php:1930:    $wp_customize->add_control('logo_height_genshin', array(
+./functions.php:1931:        'label' => __('Genshin Logo Height', 'text-domain'),
+./functions.php:1932:        'section' => 'genshin_logo_section', // ロゴセクションに追加
+./functions.php:1940:    // 原神ロゴのリンク先URL設定
+./functions.php:1941:    $wp_customize->add_setting('logo_link_genshin', array(
+./functions.php:1948:    $wp_customize->add_setting('logo_link_genshin_select', array(
+./functions.php:1954:    // Genshin Impactに関連するページの一覧を取得
+./functions.php:1955:    $genshin_page_slugs = array();
+./functions.php:1957:    $genshin_category = get_category_by_slug('naigai-tochi');
+./functions.php:1958:    if ($genshin_category) {
+./functions.php:1962:            'category' => $genshin_category->term_id,
+./functions.php:1966:            $genshin_page_slugs[get_permalink($page->ID)] = $page->post_title;
+./functions.php:1970:    // 原神ロゴのリンク先URL セレクトボックス機能
+./functions.php:1971:    $wp_customize->add_control('logo_link_genshin_select', array(
+./functions.php:1972:        'label' => __('Genshin Logo Link (Select)', 'text-domain'), // ラベルを変更
+./functions.php:1973:        'section' => 'genshin_logo_section', // ロゴセクションに追加
+./functions.php:1975:        'choices' => $genshin_page_slugs, // ページのスラッグを選択肢として使用
+./functions.php:2947:    $post_types = array('post', 'genshin', 'house', 'artifacts'); // 使用するすべての投稿タイプ　別にこのように必ず記載
+./functions.php:4883:    // URLに "genshin-impact" が含まれている場合
+./functions.php:5056:        $theme_dir . '/templates/character/genshin',
+./functions.php:5172:    $keywords = array('Genshin Impact', 'Genshin-Impact', 'Tekken7');
+./header-77.php:54:  $logo_url    = get_theme_mod('dess_logo_genshin', '');
+./header-77.php:55:  $logo_link   = get_theme_mod('logo_link_genshin_select', '');
+./header-77.php:56:  $logo_width  = get_theme_mod('logo_width_genshin', '');
+./header-77.php:57:  $logo_height = get_theme_mod('logo_height_genshin', '');
+./header-77.php:251:    is_page_template('genshin-impact-characters.php')
+./archive-recruitment.php:6:  例えば、カスタム投稿タイプが "genshin_update" の場合、archive-genshin_updated.php という名前のファイルを作成すると、
+./archive-recruitment.php:7:  WordPressはそのファイルを "genshin_update" カスタム投稿タイプのアーカイブページとして認識します。
+./archive-recruitment.php:8:　作成したファイル内で、アーカイブの表示方法をカスタマイズできます。これには、ループや表示するコンテンツの制御、ぱんくずリストの追加などが含まれます。先ほど提供した archive-genshin_update.php の例もその一例です。
+./footer-home1.php:85:<?php if (is_singular('naigai-construction') || is_category('naigai-construction') || is_page('genshin-impact')) : ?>
+./footer-home1.php:86:    </div><!-- End/Wrapper Genshin-->
+./single-recruitment.php:183:                <?php require get_template_directory() . '/pager_genshin_build.php'; ?>
+./inc/functions/swiper-slider.php:3:<?php if ( is_page('genshin-impact-characters') || is_page('tekken7-character') || is_page('tekken-gallery') ) : ?>
+./inc/functions/swiper-slider.php:26:        } elseif (is_page('genshin-impact-characters')) {
+./inc/functions/swiper-slider.php:27:            $category_name = 'genshin-impact';
+./inc/functions/category-slider-construction.php:9:    'category_name' => 'naigai-construction', // genshin-impact カテゴリの投稿を取得
+./sidebar-house.php:8:  Genshin Tekken カテゴリー別でサイドバーに表示。
+./single-house.php:153:                <?php require get_template_directory() . '/pager_genshin_build.php'; ?>
+./single.php:201:            <?php require get_template_directory() . '/pager_genshin_build.php'; ?>
+./inc/functions/bread2-comment.php:89:        // カスタム投稿タイプ「genshin_updated」のアーカイブページ
+./inc/functions/bread2-comment.php:96:        // カスタム投稿タイプ「genshin_updated」のアーカイブページ
+./inc/functions/bread2-comment.php:186:    //genshin_updated カスタム投稿　リダイレクト対応　genshin-impact/genshin_updated/　変更
+./inc/functions/bread2-comment.php:213:    } elseif (is_singular('genshin-character')) {
+./inc/functions/bread2-comment.php:214:        // カスタム投稿タイプ「genshin-character」の個別投稿ページ
+./inc/functions/bread2-comment.php:272:        // タクソノミーアーカイブページ　リダイレクト対応　genshin-impact/genshin_updated/ 変更
+./character-build.php:3: * Template Name: Genshin Impact Character Build
+./character-build.php:4: * Description: Template for displaying Genshin Impact character builds AYAKA.
+./character-build.php:24:                $image_url = 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin.png';
+./character-build.php:33:                <h1 class="character-name">Genshin Impact Ayaka Build</h1> <img class="character-element" src="https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Elements/Element_Cryo.png" alt="Cryo"> </div>
+./character-build.php:34:              <div class="character-path"> <img class="character-path-icon" src="https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/weapon_sword.png" alt="Sword">Sword </div>
+./character-build.php:40:              $image_base_path = 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/';
+./character-build.php:68:                            array('Mistsplitter Reforged', 'https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Mistsplitter_Reforged.png'),
+./character-build.php:69:                            array('Haran Geppaku Futsu', 'https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Haran_Geppaku_Futsu.png'),
+./character-build.php:70:                            array('Light of Foliar Incision', 'https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Light_of_Foliar_Incision.png'),
+./character-build.php:71:                            array('Summit Shaper', 'https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Summit_Shaper.png'),
+./character-build.php:72:                            array('Amenoma Kageuchi', 'https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Amenoma_Kageuchi.png')
+./character-build.php:88:                            array('Blizzard Strayer', 'https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/blizzard_strayer.png', 4),
+./character-build.php:89:                            array('Blizzard Strayer', 'https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/blizzard_strayer.png', 2),
+./character-build.php:90:                            array("Shimenawa's Reminiscence", 'https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/shimenawa\'s_reminiscence.png', 2),
+./character-build.php:115:            <!-- Character Credit Link --><a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vRq-sQxkvdbvaJtQAGG6iVz2q2UN9FCKZ8Mkyis87QHFptcOU3ViLh0_PJyMxFSgwJZrd10kbYpQFl1/pubhtml#" target="_blank" class="character-credit">Character Builds by Genshin Impact Helper →</a> </div>
+./character-build.php:118:            <div id="google_ads_iframe_6928793,21828116410/Genshin.GG-60892aa72813e/Genshin.GG-LB1-60892d2613552_1__container__" style="border: 0pt none; display: inline-block; width: 970px; height: 90px;"><iframe frameborder="0" src="https://df6d9c8fd84dae25b30d85f52fa1b953.safeframe.googlesyndication.com/safeframe/1-0-40/html/container.html" id="google_ads_iframe_6928793,21828116410/Genshin.GG-60892aa72813e/Genshin.GG-LB1-60892d2613552_1" title="3rd party ad content" name="" scrolling="no" marginwidth="0" marginheight="0" width="970" height="90" data-is-safeframe="true" sandbox="allow-forms allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-top-navigation-by-user-activation" allow="attribution-reporting" role="region" aria-label="Advertisement" tabindex="0" data-google-container-id="2" style="border: 0px; vertical-align: bottom;" data-load-complete="true"></iframe></div>
+./character-build.php:136:                                //$characters = get_genshin_characters();
+./character-build.php:148:                  <div class="character-portrait character-teams"> <a href="https://kaztokyo.sakura.ne.jp/genshin-impact-blog-<?php echo strtolower($name); ?>-best-build">
+./character-build.php:149:                                            <img class="character-icon <?php echo $info['rarity']; ?>" src="<?php echo get_template_directory_uri(); ?>/images/genshin/<?php echo $name; ?>.png" width="70px" height="70px" alt="<?php echo $name; ?>">
+./character-build.php:150:                                            <img class="character-type" src="<?php echo get_template_directory_uri(); ?>/images/genshin/element_<?php echo $info['element']; ?>.png" width="24px" height="24px" alt="<?php echo $info['element']; ?>">
+./character-build.php:163:                                //$characters = get_genshin_characters();
+./character-build.php:175:                  <div class="character-portrait"> <a href="https://kaztokyo.sakura.ne.jp/genshin-impact-blog-<?php echo strtolower($name); ?>-best-build">
+./character-build.php:176:                                            <img class="character-icon <?php echo $info['rarity']; ?>" src="<?php echo get_template_directory_uri(); ?>/images/genshin/<?php echo $name; ?>.png" width="70px" height="70px" alt="<?php echo $name; ?>">
+./character-build.php:177:                                            <img class="character-type" src="<?php echo get_template_directory_uri(); ?>/images/genshin/element_<?php echo $info['element']; ?>.png" width="24px" height="24px" alt="<?php echo $info['element']; ?>">
+./character-build.php:191:                            //$characters = get_genshin_characters();
+./character-build.php:203:                  <div class="character-portrait"> <a href="https://kaztokyo.sakura.ne.jp/genshin-impact-blog-<?php echo strtolower($name); ?>-best-build">
+./character-build.php:204:                                        <img class="character-icon <?php echo $info['rarity']; ?>" src="<?php echo get_template_directory_uri(); ?>/images/genshin/<?php echo $name; ?>.png" width="70px" height="70px" alt="<?php echo $name; ?>">
+./character-build.php:205:                                        <img class="character-type" src="<?php echo get_template_directory_uri(); ?>/images/genshin/element_<?php echo $info['element']; ?>.png" width="24px" height="24px" alt="<?php echo $info['element']; ?>">
+./character-build.php:217:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/UI_GachaTypeIcon_Sword.png",
+./character-build.php:223:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/talent_2.png",
+./character-build.php:229:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/talent_3.png",
+./character-build.php:235:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/talent_4.png",
+./character-build.php:248:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/talent_4.png",
+./character-build.php:254:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/talent_5.png",
+./character-build.php:260:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/talent_6.png",
+./character-build.php:270:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/constellation_1.png",
+./character-build.php:276:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/constellation_2.png",
+./character-build.php:282:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/constellation_3.png",
+./character-build.php:288:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/constellation_4.png",
+./character-build.php:294:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/constellation_5.png",
+./character-build.php:300:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/constellation_6.png",
+./character-build.php:315:                            'icon' => 'https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/UI_GachaTypeIcon_Sword.png',
+./character-build.php:321:                            'icon' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/talent_2.png',
+./character-build.php:327:                            'icon' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/talent_3.png',
+./character-build.php:333:                            'icon' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/talent_4.png',
+./single-my-genshin-builds.php:3: * Template Name: My Genshin Builds
+./single-my-genshin-builds.php:4: * Template Post Type: single-my-genshin-builds
+./single-my-genshin-builds.php:21:                get_template_part( 'template-parts/content', 'single-genshin_build' );
+./inc/functions/Weekly_Material_Schedule_Widget.php:176:            echo "        <img alt='{$set['name']}' class='farming-icon' src='https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Farming/{$set['name']}.png'>";
+./inc/functions/Weekly_Material_Schedule_Widget.php:182:                echo "<a href='https://gamewidth.net/genshin-impact-" . lcfirst(str_replace(' ', '-', $character['name'])) . "-best-build' class='tierlist-portrait' style='order:-{$character['rarity']}'>";
+./inc/functions/Weekly_Material_Schedule_Widget.php:184:                echo "            <img alt='{$character['element']}' class='tierlist-type' src='https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Characters/Element_{$character['element']}.png'>";
+./inc/functions/Weekly_Material_Schedule_Widget.php:206:        ['name' => 'Branch', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Farming/Branch.png'],
+./inc/functions/Weekly_Material_Schedule_Widget.php:207:        ['name' => 'Decarabian', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Farming/Decarabian.png'],
+./inc/functions/Weekly_Material_Schedule_Widget.php:208:        ['name' => 'Guyun', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Farming/Guyun.png'],
+./inc/functions/Weekly_Material_Schedule_Widget.php:209:        ['name' => 'Talisman of the Forest Dew', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Farming/Talisman_of_the_Forest_Dew.png'],
+./inc/functions/Weekly_Material_Schedule_Widget.php:210:        ['name' => 'Boreal Wolf', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Farming/Boreal_Wolf.png'],
+./inc/functions/Weekly_Material_Schedule_Widget.php:211:        ['name' => 'Mist Veiled Elixir', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Farming/Mist_Veiled_Elixir.png'],
+./inc/functions/Weekly_Material_Schedule_Widget.php:212:        ['name' => 'Narukami', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Farming/Narukami.png'],
+./inc/functions/Weekly_Material_Schedule_Widget.php:213:        ['name' => 'Oasis Garden', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Farming/Oasis_Garden.png'],
+./inc/functions/Weekly_Material_Schedule_Widget.php:214:        ['name' => 'Aerosiderite', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Farming/Aerosiderite.png'],
+./inc/functions/Weekly_Material_Schedule_Widget.php:215:        ['name' => 'Dandelion Gladiator', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Farming/Dandelion_Gladiator.png'],
+./inc/functions/Weekly_Material_Schedule_Widget.php:216:        ['name' => 'Mask', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Farming/Mask.png'],
+./inc/functions/Weekly_Material_Schedule_Widget.php:217:        ['name' => 'Scorching Might', 'image' => 'https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Farming/Scorching_Might.png'],
+./searchform10.php:5:    <form id="search-form" class="search-form_2" role="search" method="get" action="https://gamewidth.net/">
+./inc/functions/category-slider-tochi.php:9:    'category_name' => 'naigai-tochi', // genshin-impact カテゴリの投稿を取得
+./single-default.php:159:	// tekken genshin ブログ記事別・カテゴリー でサイドバー表示 分岐
+./archive-house.php:7:  例えば、カスタム投稿タイプが "genshin_update" の場合、archive-genshin_updated.php という名前のファイルを作成すると、
+./archive-house.php:8:  WordPressはそのファイルを "genshin_update" カスタム投稿タイプのアーカイブページとして認識します。
+./archive-house.php:9:　作成したファイル内で、アーカイブの表示方法をカスタマイズできます。これには、ループや表示するコンテンツの制御、ぱんくずリストの追加などが含まれます。先ほど提供した archive-genshin_update.php の例もその一例です。
+./single-blog.php:99:                <?php require get_template_directory() . '/pager_genshin_build.php'; ?>
+./style.css:3209:/* sidebar.php sidebar-genshin.php tekken-7.php
+./templates/character/genshin/Miko-build.php:4: * Description: Template for displaying Genshin Impact character builds Miko.
+./templates/character/genshin/Miko-build.php:40:                $image_url = 'https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Yae Miko.png';
+./templates/character/genshin/Miko-build.php:49:                        <h1 class="character-name">Genshin Impact Yae Miko Build</h1> <img class="character-element"
+./templates/character/genshin/Miko-build.php:50:                            src="https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/element_electro.png"
+./templates/character/genshin/Miko-build.php:54:                            src="https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/weapon_catalyst.png"
+./templates/character/genshin/Miko-build.php:61:                    $image_base_path = 'https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/farming/';
+./templates/character/genshin/Miko-build.php:108:                                        src="https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Nahida/<?php echo urlencode(str_replace(' ', '_', $weaponName)); ?>.png"
+./templates/character/genshin/Miko-build.php:154:                                    $imageUrl = "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/" . str_replace(' ', '_', strtolower($artifactName)) . ".png";
+./templates/character/genshin/Miko-build.php:242:                                    //$characters = get_genshin_characters();
+./templates/character/genshin/Miko-build.php:253:                                                href="https://kaztokyo.sakura.ne.jp/genshin-impact-blog-<?php echo strtolower($name); ?>-best-build">
+./templates/character/genshin/Miko-build.php:255:                                                    src="<?php echo get_template_directory_uri(); ?>/images/genshin/<?php echo $name; ?>.png"
+./templates/character/genshin/Miko-build.php:258:                                                    src="<?php echo get_template_directory_uri(); ?>/images/genshin/element_<?php echo $info['element']; ?>.png"
+./templates/character/genshin/Miko-build.php:285:                                        $imageNameForURL = file_exists("https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/{$imageNameWithUnderscore}.png") ? $imageNameWithUnderscore : $name;
+./templates/character/genshin/Miko-build.php:288:                                        $imageUrl = get_template_directory_uri() . "/images/genshin/" . str_replace(' ', '%20', rawurlencode($imageNameForURL)) . ".png";
+./templates/character/genshin/Miko-build.php:293:                                                href="https://kaztokyo.sakura.ne.jp/genshin-impact-blog-<?php echo strtolower($name); ?>-best-build">
+./templates/character/genshin/Miko-build.php:298:                                                    src="<?php echo get_template_directory_uri(); ?>/images/genshin/element_<?php echo $info['element']; ?>.png"
+./templates/character/genshin/Miko-build.php:315:                                    //$characters = get_genshin_characters();
+./templates/character/genshin/Miko-build.php:327:                                                href="https://kaztokyo.sakura.ne.jp/genshin-impact-blog-<?php echo strtolower($name); ?>-best-build">
+./templates/character/genshin/Miko-build.php:329:                                                    src="<?php echo get_template_directory_uri(); ?>/images/genshin/<?php echo $name; ?>.png"
+./templates/character/genshin/Miko-build.php:332:                                                    src="<?php echo get_template_directory_uri(); ?>/images/genshin/element_<?php echo $info['element']; ?>.png"
+./templates/character/genshin/Miko-build.php:379:                                    "icon" => 'https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/UI_GachaTypeIcon_Catalyst.png',
+./templates/character/genshin/Miko-build.php:392:                                    "icon" => 'https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Miko/talent_2.png',
+./templates/character/genshin/Miko-build.php:398:                                    "icon" => 'https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Miko/talent_3.png',
+./templates/character/genshin/Miko-build.php:446:                                    "icon" => 'https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Miko/talent_4.png',
+./templates/character/genshin/Miko-build.php:452:                                    "icon" => 'https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Miko/talent_5.png',
+./templates/character/genshin/Miko-build.php:458:                                    "icon" => 'https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Miko/talent_6.png',
+./templates/character/genshin/Miko-build.php:505:                                    "icon" => 'https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Miko/constellation_1.png',
+./templates/character/genshin/Miko-build.php:511:                                    "icon" => 'https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Miko/constellation_2.png',
+./templates/character/genshin/Miko-build.php:517:                                    "icon" => 'https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Miko/constellation_3.png',
+./templates/character/genshin/Miko-build.php:523:                                    "icon" => 'https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Miko/constellation_4.png',
+./templates/character/genshin/Miko-build.php:529:                                    "icon" => 'https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Miko/constellation_5.png',
+./templates/character/genshin/Miko-build.php:535:                                    "icon" => 'https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Miko/constellation_6.png',
+./templates/character/genshin/Miko-build.php:644:                                                        $materialUrl = "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Miko/" . ucfirst(str_replace(" ", "_", $material)) . ".png";
+./templates/character/genshin/Sethos-build.php:4: * Description: Template for displaying Genshin Impact character builds AYAKA.
+./templates/character/genshin/Sethos-build.php:40:                $image_url = 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Sethos/Sethos.png';
+./templates/character/genshin/Sethos-build.php:49:                        <h1 class="character-name">Genshin Impact Sethos Build</h1> <img class="character-element"
+./templates/character/genshin/Sethos-build.php:50:                            src="https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/element_electro.png"
+./templates/character/genshin/Sethos-build.php:54:                            src="https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/weapon_sword.png"
+./templates/character/genshin/Sethos-build.php:61:                    $image_base_path = 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/farming/';
+./templates/character/genshin/Sethos-build.php:109:                                            src="https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/weapons/<?php echo urlencode(str_replace(' ', '_', $weaponName)); ?>.png"
+./templates/character/genshin/Sethos-build.php:138:                                $imageUrl = "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/" . str_replace(' ', '_', strtolower($artifactName)) . ".png";
+./templates/character/genshin/Sethos-build.php:179:                        target="_blank" class="character-credit">Character Builds by Genshin Impact Helper →</a>
+./templates/character/genshin/Sethos-build.php:240:                                //$characters = get_genshin_characters();
+./templates/character/genshin/Sethos-build.php:251:                                            href="https://kaztokyo.sakura.ne.jp/genshin-impact-blog-<?php echo strtolower($name); ?>-best-build">
+./templates/character/genshin/Sethos-build.php:253:                                                src="<?php echo get_template_directory_uri(); ?>/images/genshin/<?php echo $name; ?>.png"
+./templates/character/genshin/Sethos-build.php:256:                                                src="<?php echo get_template_directory_uri(); ?>/images/genshin/element_<?php echo $info['element']; ?>.png"
+./templates/character/genshin/Sethos-build.php:271:                                //$characters = get_genshin_characters();
+./templates/character/genshin/Sethos-build.php:283:                                            href="https://kaztokyo.sakura.ne.jp/genshin-impact-blog-<?php echo strtolower($name); ?>-best-build">
+./templates/character/genshin/Sethos-build.php:285:                                                src="<?php echo get_template_directory_uri(); ?>/images/genshin/<?php echo $name; ?>.png"
+./templates/character/genshin/Sethos-build.php:288:                                                src="<?php echo get_template_directory_uri(); ?>/images/genshin/element_<?php echo $info['element']; ?>.png"
+./templates/character/genshin/Sethos-build.php:303:                                //$characters = get_genshin_characters();
+./templates/character/genshin/Sethos-build.php:314:                                            href="https://kaztokyo.sakura.ne.jp/genshin-impact-blog-<?php echo strtolower($name); ?>-best-build">
+./templates/character/genshin/Sethos-build.php:316:                                                src="<?php echo get_template_directory_uri(); ?>/images/genshin/<?php echo $name; ?>.png"
+./templates/character/genshin/Sethos-build.php:319:                                                src="<?php echo get_template_directory_uri(); ?>/images/genshin/element_<?php echo $info['element']; ?>.png"
+./templates/character/genshin/Sethos-build.php:332:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/UI_GachaTypeIcon_Sword.png",
+./templates/character/genshin/Sethos-build.php:346:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/talent_2.png",
+./templates/character/genshin/Sethos-build.php:355:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/talent_3.png",
+./templates/character/genshin/Sethos-build.php:370:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Sethos/talent_4.png",
+./templates/character/genshin/Sethos-build.php:377:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Sethos/talent_5.png",
+./templates/character/genshin/Sethos-build.php:384:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Sethos/talent_6.png",
+./templates/character/genshin/Sethos-build.php:394:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Sethos/constellation_1.png",
+./templates/character/genshin/Sethos-build.php:401:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Sethos/constellation_2.png",
+./templates/character/genshin/Sethos-build.php:408:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Sethos/constellation_3.png",
+./templates/character/genshin/Sethos-build.php:414:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Sethos/constellation_4.png",
+./templates/character/genshin/Sethos-build.php:420:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Sethos/constellation_5.png",
+./templates/character/genshin/Sethos-build.php:426:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Sethos/constellation_6.png",
+./templates/character/genshin/Sethos-build.php:578:                                                    $materialUrl = "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Farming/" . ucfirst(str_replace(" ", "_", $material)) . ".png";
+./templates/character/genshin/Arlecchino-build.php:4: * Description: Template for displaying Genshin Impact character builds AYAKA.
+./templates/character/genshin/Arlecchino-build.php:40:                $image_url = 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Arlecchino.png';
+./templates/character/genshin/Arlecchino-build.php:49:                        <h1 class="character-name">Genshin Impact Arlecchino Build</h1> <img class="character-element"
+./templates/character/genshin/Arlecchino-build.php:50:                            src="https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/element_pyro.png"
+./templates/character/genshin/Arlecchino-build.php:54:                            src="https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/weapon_sword.png"
+./templates/character/genshin/Arlecchino-build.php:61:                    $image_base_path = 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/farming/';
+./templates/character/genshin/Arlecchino-build.php:109:                                            src="https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/weapons/<?php echo urlencode(str_replace(' ', '_', $weaponName)); ?>.png"
+./templates/character/genshin/Arlecchino-build.php:142:                                $imageUrl = "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/" . str_replace(' ', '_', strtolower($artifactName)) . ".png";
+./templates/character/genshin/Arlecchino-build.php:183:                        target="_blank" class="character-credit">Character Builds by Genshin Impact Helper →</a>
+./templates/character/genshin/Arlecchino-build.php:244:                                //$characters = get_genshin_characters();
+./templates/character/genshin/Arlecchino-build.php:255:                                            href="https://kaztokyo.sakura.ne.jp/genshin-impact-blog-<?php echo strtolower($name); ?>-best-build">
+./templates/character/genshin/Arlecchino-build.php:257:                                                src="<?php echo get_template_directory_uri(); ?>/images/genshin/<?php echo $name; ?>.png"
+./templates/character/genshin/Arlecchino-build.php:260:                                                src="<?php echo get_template_directory_uri(); ?>/images/genshin/element_<?php echo $info['element']; ?>.png"
+./templates/character/genshin/Arlecchino-build.php:275:                                //$characters = get_genshin_characters();
+./templates/character/genshin/Arlecchino-build.php:287:                                            href="https://kaztokyo.sakura.ne.jp/genshin-impact-blog-<?php echo strtolower($name); ?>-best-build">
+./templates/character/genshin/Arlecchino-build.php:289:                                                src="<?php echo get_template_directory_uri(); ?>/images/genshin/<?php echo $name; ?>.png"
+./templates/character/genshin/Arlecchino-build.php:292:                                                src="<?php echo get_template_directory_uri(); ?>/images/genshin/element_<?php echo $info['element']; ?>.png"
+./templates/character/genshin/Arlecchino-build.php:307:                                //$characters = get_genshin_characters();
+./templates/character/genshin/Arlecchino-build.php:318:                                            href="https://kaztokyo.sakura.ne.jp/genshin-impact-blog-<?php echo strtolower($name); ?>-best-build">
+./templates/character/genshin/Arlecchino-build.php:320:                                                src="<?php echo get_template_directory_uri(); ?>/images/genshin/<?php echo $name; ?>.png"
+./templates/character/genshin/Arlecchino-build.php:323:                                                src="<?php echo get_template_directory_uri(); ?>/images/genshin/element_<?php echo $info['element']; ?>.png"
+./templates/character/genshin/Arlecchino-build.php:336:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/UI_GachaTypeIcon_Sword.png",
+./templates/character/genshin/Arlecchino-build.php:353:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Arlecchino/talent_2.png",
+./templates/character/genshin/Arlecchino-build.php:368:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Arlecchino/talent_3.png",
+./templates/character/genshin/Arlecchino-build.php:382:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Arlecchino/talent_4.png",
+./templates/character/genshin/Arlecchino-build.php:392:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Arlecchino/talent_5.png",
+./templates/character/genshin/Arlecchino-build.php:398:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Arlecchino/talent_6.png",
+./templates/character/genshin/Arlecchino-build.php:408:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Arlecchino/constellation_1.png",
+./templates/character/genshin/Arlecchino-build.php:415:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Arlecchino/constellation_2.png",
+./templates/character/genshin/Arlecchino-build.php:421:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Arlecchino/constellation_3.png",
+./templates/character/genshin/Arlecchino-build.php:427:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Arlecchino/constellation_4.png",
+./templates/character/genshin/Arlecchino-build.php:433:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Arlecchino/constellation_5.png",
+./templates/character/genshin/Arlecchino-build.php:439:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Arlecchino/constellation_6.png",
+./templates/character/genshin/Arlecchino-build.php:592:                                                    $materialUrl = "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/farming/" . ucfirst(str_replace(" ", "_", $material)) . ".png";
+./templates/character/genshin/Xiao-build.php:4: * Description: Template for displaying Genshin Impact character builds Xiao.
+./templates/character/genshin/Xiao-build.php:40:                $image_url = 'https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Xiao.png';
+./templates/character/genshin/Xiao-build.php:49:                        <h1 class="character-name">Genshin Impact Xiao Build</h1> <img class="character-element"
+./templates/character/genshin/Xiao-build.php:50:                            src="https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/element_anemo.png"
+./templates/character/genshin/Xiao-build.php:54:                            src="https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/weapon_polearm.png"
+./templates/character/genshin/Xiao-build.php:61:                    $image_base_path = 'https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/farming/';
+./templates/character/genshin/Xiao-build.php:110:                                        src="https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Xiao/<?php echo urlencode(str_replace(' ', '_', $weaponName)); ?>.png"
+./templates/character/genshin/Xiao-build.php:155:                                    $imageUrl = "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/" . str_replace(' ', '_', strtolower($artifactName)) . ".png";
+./templates/character/genshin/Xiao-build.php:241:                                    //$characters = get_genshin_characters();
+./templates/character/genshin/Xiao-build.php:253:                                                href="https://kaztokyo.sakura.ne.jp/genshin-impact-blog-<?php echo strtolower($name); ?>-best-build">
+./templates/character/genshin/Xiao-build.php:255:                                                    src="<?php echo get_template_directory_uri(); ?>/images/genshin/<?php echo $name; ?>.png"
+./templates/character/genshin/Xiao-build.php:258:                                                    src="<?php echo get_template_directory_uri(); ?>/images/genshin/element_<?php echo $info['element']; ?>.png"
+./templates/character/genshin/Xiao-build.php:273:                                    //$characters = get_genshin_characters();
+./templates/character/genshin/Xiao-build.php:284:                                                href="https://kaztokyo.sakura.ne.jp/genshin-impact-blog-<?php echo strtolower($name); ?>-best-build">
+./templates/character/genshin/Xiao-build.php:286:                                                    src="<?php echo get_template_directory_uri(); ?>/images/genshin/<?php echo $name; ?>.png"
+./templates/character/genshin/Xiao-build.php:289:                                                    src="<?php echo get_template_directory_uri(); ?>/images/genshin/element_<?php echo $info['element']; ?>.png"
+./templates/character/genshin/Xiao-build.php:304:                                    //$characters = get_genshin_characters();
+./templates/character/genshin/Xiao-build.php:315:                                                href="https://kaztokyo.sakura.ne.jp/genshin-impact-blog-<?php echo strtolower($name); ?>-best-build">
+./templates/character/genshin/Xiao-build.php:317:                                                    src="<?php echo get_template_directory_uri(); ?>/images/genshin/<?php echo $name; ?>.png"
+./templates/character/genshin/Xiao-build.php:320:                                                    src="<?php echo get_template_directory_uri(); ?>/images/genshin/element_<?php echo $info['element']; ?>.png"
+./templates/character/genshin/Xiao-build.php:368:                                    "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Xiao/UI_GachaTypeIcon_Polearm.png",
+./templates/character/genshin/Xiao-build.php:374:                                    "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Xiao/talent_2.png",
+./templates/character/genshin/Xiao-build.php:380:                                    "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Xiao/talent_3.png",
+./templates/character/genshin/Xiao-build.php:428:                                    "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Xiao/talent_4.png",
+./templates/character/genshin/Xiao-build.php:434:                                    "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Xiao/talent_5.png",
+./templates/character/genshin/Xiao-build.php:440:                                    "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Xiao/talent_6.png",
+./templates/character/genshin/Xiao-build.php:487:                                    "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Xiao/constellation_1.png",
+./templates/character/genshin/Xiao-build.php:493:                                    "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Xiao/constellation_2.png",
+./templates/character/genshin/Xiao-build.php:499:                                    "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Xiao/constellation_3.png",
+./templates/character/genshin/Xiao-build.php:505:                                    "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Xiao/constellation_4.png",
+./templates/character/genshin/Xiao-build.php:511:                                    "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Xiao/constellation_5.png",
+./templates/character/genshin/Xiao-build.php:517:                                    "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Xiao/constellation_6.png",
+./templates/character/genshin/Xiao-build.php:624:                                                        $materialUrl = "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Xiao/" . ucfirst(str_replace(" ", "_", $material)) . ".png";
+./page-tekken7-character.php:38:        <a href="https://gamewidth.net/tekken7/about-<?php echo $value; ?>-tekken7/">
+./page-tekken7-character.php:43:            <a href="https://gamewidth.net/tekken7/about-<?php echo $value; ?>-tekken7/"><?php echo $value; ?></a>
+./_bak_nested_wp-content_20260216_204314/themes/x7-naigaicorp/header-77.php:461:          $logo_url    = get_theme_mod('dess_logo_genshin', '');
+./_bak_nested_wp-content_20260216_204314/themes/x7-naigaicorp/header-77.php:462:          $logo_link   = get_theme_mod('logo_link_genshin_select', '');
+./_bak_nested_wp-content_20260216_204314/themes/x7-naigaicorp/header-77.php:463:          $logo_width  = get_theme_mod('logo_width_genshin', '');
+./_bak_nested_wp-content_20260216_204314/themes/x7-naigaicorp/header-77.php:464:          $logo_height = get_theme_mod('logo_height_genshin', '');
+./_bak_nested_wp-content_20260216_204314/themes/x7-naigaicorp/header-77.php:559:      // 条件: ギャラリーページまたは genshin-impact-characters ページテンプレートの場合
+./_bak_nested_wp-content_20260216_204314/themes/x7-naigaicorp/header-77.php:560:      if ($page_slug == 'tekken-gallery' || is_page_template('page-tekken7-character.php') || is_page_template('genshin-impact-characters.php')) :
+./templates/character/genshin/Nahida-build.php:4: * Description: Template for displaying Genshin Impact character builds Nahida.
+./templates/character/genshin/Nahida-build.php:40:                $image_url = 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Nahida.png';
+./templates/character/genshin/Nahida-build.php:49:                        <h1 class="character-name">Genshin Impact Nahida Build</h1> <img class="character-element"
+./templates/character/genshin/Nahida-build.php:50:                            src="https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/element_dendro.png"
+./templates/character/genshin/Nahida-build.php:54:                            src="https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/weapon_sword.png"
+./templates/character/genshin/Nahida-build.php:61:                    $image_base_path = 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/farming/';
+./templates/character/genshin/Nahida-build.php:108:                                        src="https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Nahida/<?php echo urlencode(str_replace(' ', '_', $weaponName)); ?>.png"
+./templates/character/genshin/Nahida-build.php:154:                                    $imageUrl = "https://rerollcdn.com/GENSHIN/Gear/" . strtolower(str_replace(' ', '_', $artifact[0])) . ".png";
+./templates/character/genshin/Nahida-build.php:242:                                    //$characters = get_genshin_characters();
+./templates/character/genshin/Nahida-build.php:253:                                                href="https://kaztokyo.sakura.ne.jp/genshin-impact-blog-<?php echo strtolower($name); ?>-best-build">
+./templates/character/genshin/Nahida-build.php:255:                                                    src="<?php echo get_template_directory_uri(); ?>/images/genshin/<?php echo $name; ?>.png"
+./templates/character/genshin/Nahida-build.php:258:                                                    src="<?php echo get_template_directory_uri(); ?>/images/genshin/element_<?php echo $info['element']; ?>.png"
+./templates/character/genshin/Nahida-build.php:273:                                    //$characters = get_genshin_characters();
+./templates/character/genshin/Nahida-build.php:284:                                                href="https://kaztokyo.sakura.ne.jp/genshin-impact-blog-<?php echo strtolower($name); ?>-best-build">
+./templates/character/genshin/Nahida-build.php:286:                                                    src="<?php echo get_template_directory_uri(); ?>/images/genshin/<?php echo $name; ?>.png"
+./templates/character/genshin/Nahida-build.php:289:                                                    src="<?php echo get_template_directory_uri(); ?>/images/genshin/element_<?php echo $info['element']; ?>.png"
+./templates/character/genshin/Nahida-build.php:304:                                    //$characters = get_genshin_characters();
+./templates/character/genshin/Nahida-build.php:315:                                                href="https://kaztokyo.sakura.ne.jp/genshin-impact-blog-<?php echo strtolower($name); ?>-best-build">
+./templates/character/genshin/Nahida-build.php:317:                                                    src="<?php echo get_template_directory_uri(); ?>/images/genshin/<?php echo $name; ?>.png"
+./templates/character/genshin/Nahida-build.php:320:                                                    src="<?php echo get_template_directory_uri(); ?>/images/genshin/element_<?php echo $info['element']; ?>.png"
+./templates/character/genshin/Nahida-build.php:367:                                    "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/UI_GachaTypeIcon_Catalyst.png",
+./templates/character/genshin/Nahida-build.php:380:                                    "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Nahida/talent_2.png",
+./templates/character/genshin/Nahida-build.php:397:                                    "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Nahida/talent_3.png",
+./templates/character/genshin/Nahida-build.php:453:                                    "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Nahida/talent_4.png",
+./templates/character/genshin/Nahida-build.php:461:                                    "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Nahida/talent_5.png",
+./templates/character/genshin/Nahida-build.php:468:                                    "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Nahida/talent_6.png",
+./templates/character/genshin/Nahida-build.php:515:                                    "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Nahida/constellation_1.png",
+./templates/character/genshin/Nahida-build.php:521:                                    "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Nahida/constellation_2.png",
+./templates/character/genshin/Nahida-build.php:529:                                    "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Nahida/constellation_3.png",
+./templates/character/genshin/Nahida-build.php:536:                                    "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Nahida/constellation_4.png",
+./templates/character/genshin/Nahida-build.php:542:                                    "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Nahida/constellation_5.png",
+./templates/character/genshin/Nahida-build.php:549:                                    "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Nahida/constellation_6.png",
+./templates/character/genshin/Nahida-build.php:661:                                                        $materialUrl = "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Nahida/" . ucfirst(str_replace(" ", "_", $material)) . ".png";
+./templates/character/genshin/Wriothesley-build.php:4: * Description: Template for displaying Genshin Impact character builds AYAKA.
+./templates/character/genshin/Wriothesley-build.php:40:                $image_url = 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Wriothesley.png';
+./templates/character/genshin/Wriothesley-build.php:49:                        <h1 class="character-name">Genshin Impact Wriothesley Build</h1> <img class="character-element"
+./templates/character/genshin/Wriothesley-build.php:50:                            src="https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/element_cryo.png"
+./templates/character/genshin/Wriothesley-build.php:54:                            src="https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/weapon_catalyst.png"
+./templates/character/genshin/Wriothesley-build.php:61:                    $image_base_path = 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/farming/';
+./templates/character/genshin/Wriothesley-build.php:109:                                            src="https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/weapons/<?php echo urlencode(str_replace(' ', '_', $weaponName)); ?>.png"
+./templates/character/genshin/Wriothesley-build.php:145:                                $imageUrl = "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/" . str_replace(' ', '_', strtolower($artifactName)) . ".png";
+./templates/character/genshin/Wriothesley-build.php:186:                        target="_blank" class="character-credit">Character Builds by Genshin Impact Helper →</a>
+./templates/character/genshin/Wriothesley-build.php:247:                                //$characters = get_genshin_characters();
+./templates/character/genshin/Wriothesley-build.php:258:                                            href="https://kaztokyo.sakura.ne.jp/genshin-impact-blog-<?php echo strtolower($name); ?>-best-build">
+./templates/character/genshin/Wriothesley-build.php:260:                                                src="<?php echo get_template_directory_uri(); ?>/images/genshin/<?php echo $name; ?>.png"
+./templates/character/genshin/Wriothesley-build.php:263:                                                src="<?php echo get_template_directory_uri(); ?>/images/genshin/element_<?php echo $info['element']; ?>.png"
+./templates/character/genshin/Wriothesley-build.php:278:                                //$characters = get_genshin_characters();
+./templates/character/genshin/Wriothesley-build.php:290:                                            href="https://kaztokyo.sakura.ne.jp/genshin-impact-blog-<?php echo strtolower($name); ?>-best-build">
+./templates/character/genshin/Wriothesley-build.php:292:                                                src="<?php echo get_template_directory_uri(); ?>/images/genshin/<?php echo $name; ?>.png"
+./templates/character/genshin/Wriothesley-build.php:295:                                                src="<?php echo get_template_directory_uri(); ?>/images/genshin/element_<?php echo $info['element']; ?>.png"
+./templates/character/genshin/Wriothesley-build.php:310:                                //$characters = get_genshin_characters();
+./templates/character/genshin/Wriothesley-build.php:321:                                            href="https://kaztokyo.sakura.ne.jp/genshin-impact-blog-<?php echo strtolower($name); ?>-best-build">
+./templates/character/genshin/Wriothesley-build.php:323:                                                src="<?php echo get_template_directory_uri(); ?>/images/genshin/<?php echo $name; ?>.png"
+./templates/character/genshin/Wriothesley-build.php:326:                                                src="<?php echo get_template_directory_uri(); ?>/images/genshin/element_<?php echo $info['element']; ?>.png"
+./templates/character/genshin/Wriothesley-build.php:339:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/UI_GachaTypeIcon_Sword.png",
+./templates/character/genshin/Wriothesley-build.php:354:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Wriothesley/talent_2.png",
+./templates/character/genshin/Wriothesley-build.php:366:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Wriothesley/talent_3.png",
+./templates/character/genshin/Wriothesley-build.php:381:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Wriothesley/talent_4.png",
+./templates/character/genshin/Wriothesley-build.php:387:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Wriothesley/talent_5.png",
+./templates/character/genshin/Wriothesley-build.php:393:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Wriothesley/talent_6.png",
+./templates/character/genshin/Wriothesley-build.php:405:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Wriothesley/constellation_1.png",
+./templates/character/genshin/Wriothesley-build.php:418:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Wriothesley/constellation_2.png",
+./templates/character/genshin/Wriothesley-build.php:425:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Wriothesley/constellation_3.png",
+./templates/character/genshin/Wriothesley-build.php:431:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Wriothesley/constellation_4.png",
+./templates/character/genshin/Wriothesley-build.php:438:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Wriothesley/constellation_5.png",
+./templates/character/genshin/Wriothesley-build.php:444:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Wriothesley/constellation_6.png",
+./templates/character/genshin/Wriothesley-build.php:603:                                                    $materialUrl = "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/farming/" . ucfirst(str_replace(" ", "_", $material)) . ".png";
+./templates/character/genshin/Xiangling-build.php:4: * Description: Template for displaying Genshin Impact character builds Xianling.
+./templates/character/genshin/Xiangling-build.php:40:                $image_url = 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Xiangling.png';
+./templates/character/genshin/Xiangling-build.php:49:                        <h1 class="character-name">Genshin Impact Xiangling Build</h1> <img class="character-element"
+./templates/character/genshin/Xiangling-build.php:50:                            src="https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/element_pyro.png"
+./templates/character/genshin/Xiangling-build.php:54:                            src="https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/weapon_polearm.png"
+./templates/character/genshin/Xiangling-build.php:61:                    $image_base_path = 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/farming/';
+./templates/character/genshin/Xiangling-build.php:107:                                        src="https://rerollcdn.com/GENSHIN/Weapons/<?php echo urlencode(str_replace(' ', '_', $weaponName)); ?>.png"
+./templates/character/genshin/Xiangling-build.php:150:                                    $imageUrl = "https://rerollcdn.com/GENSHIN/Gear/" . strtolower(str_replace(' ', '_', $artifact[0])) . ".png";
+./templates/character/genshin/Xiangling-build.php:237:                                    //$characters = get_genshin_characters();
+./templates/character/genshin/Xiangling-build.php:248:                                                href="https://kaztokyo.sakura.ne.jp/genshin-impact-blog-<?php echo strtolower($name); ?>-best-build">
+./templates/character/genshin/Xiangling-build.php:250:                                                    src="<?php echo get_template_directory_uri(); ?>/images/genshin/<?php echo $name; ?>.png"
+./templates/character/genshin/Xiangling-build.php:253:                                                    src="<?php echo get_template_directory_uri(); ?>/images/genshin/element_<?php echo $info['element']; ?>.png"
+./templates/character/genshin/Xiangling-build.php:268:                                    //$characters = get_genshin_characters();
+./templates/character/genshin/Xiangling-build.php:279:                                                href="https://kaztokyo.sakura.ne.jp/genshin-impact-blog-<?php echo strtolower($name); ?>-best-build">
+./templates/character/genshin/Xiangling-build.php:281:                                                    src="<?php echo get_template_directory_uri(); ?>/images/genshin/<?php echo $name; ?>.png"
+./templates/character/genshin/Xiangling-build.php:284:                                                    src="<?php echo get_template_directory_uri(); ?>/images/genshin/element_<?php echo $info['element']; ?>.png"
+./templates/character/genshin/Xiangling-build.php:299:                                    //$characters = get_genshin_characters();
+./templates/character/genshin/Xiangling-build.php:310:                                                href="https://kaztokyo.sakura.ne.jp/genshin-impact-blog-<?php echo strtolower($name); ?>-best-build">
+./templates/character/genshin/Xiangling-build.php:312:                                                    src="<?php echo get_template_directory_uri(); ?>/images/genshin/<?php echo $name; ?>.png"
+./templates/character/genshin/Xiangling-build.php:315:                                                    src="<?php echo get_template_directory_uri(); ?>/images/genshin/element_<?php echo $info['element']; ?>.png"
+./templates/character/genshin/Xiangling-build.php:363:                                    "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/xiangling/UI_GachaTypeIcon_Polearm.png",
+./templates/character/genshin/Xiangling-build.php:369:                                    "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/xiangling/talent_2.png",
+./templates/character/genshin/Xiangling-build.php:375:                                    "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/xiangling/talent_3.png",
+./templates/character/genshin/Xiangling-build.php:422:                                    "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/xiangling/talent_4.png",
+./templates/character/genshin/Xiangling-build.php:428:                                    "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/xiangling/talent_5.png",
+./templates/character/genshin/Xiangling-build.php:434:                                    "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/xiangling/talent_6.png",
+./templates/character/genshin/Xiangling-build.php:480:                                    "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/xiangling/constellation_1.png",
+./templates/character/genshin/Xiangling-build.php:486:                                    "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/xiangling/constellation_2.png",
+./templates/character/genshin/Xiangling-build.php:492:                                    "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/xiangling/constellation_3.png",
+./templates/character/genshin/Xiangling-build.php:498:                                    "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/xiangling/constellation_4.png",
+./templates/character/genshin/Xiangling-build.php:504:                                    "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/xiangling/constellation_5.png",
+./templates/character/genshin/Xiangling-build.php:510:                                    "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/xiangling/constellation_6.png",
+./templates/character/genshin/Xiangling-build.php:619:                                                        $materialUrl = "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/xiangling/" . ucfirst(str_replace(" ", "_", $material)) . ".png";
+./templates/character/genshin/Xingqiu-build.php:4: * Description: Template for displaying Genshin Impact character builds Xingqiu.
+./templates/character/genshin/Xingqiu-build.php:40:                $image_url = 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Xingqiu.png';
+./templates/character/genshin/Xingqiu-build.php:49:                        <h1 class="character-name">Genshin Impact Xingqiu Build</h1> <img class="character-element"
+./templates/character/genshin/Xingqiu-build.php:50:                            src="https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/element_hydro.png"
+./templates/character/genshin/Xingqiu-build.php:54:                            src="https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/weapon_sword.png"
+./templates/character/genshin/Xingqiu-build.php:61:                    $image_base_path = 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/farming/';
+./templates/character/genshin/Xingqiu-build.php:109:                                        src="https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Xingqiu/<?php echo urlencode(str_replace(' ', '_', $weaponName)); ?>.png"
+./templates/character/genshin/Xingqiu-build.php:154:                                    $imageUrl = "https://rerollcdn.com/GENSHIN/Gear/" . strtolower(str_replace(' ', '_', $artifact[0])) . ".png";
+./templates/character/genshin/Xingqiu-build.php:242:                                    //$characters = get_genshin_characters();
+./templates/character/genshin/Xingqiu-build.php:253:                                                href="https://kaztokyo.sakura.ne.jp/genshin-impact-blog-<?php echo strtolower($name); ?>-best-build">
+./templates/character/genshin/Xingqiu-build.php:255:                                                    src="<?php echo get_template_directory_uri(); ?>/images/genshin/<?php echo $name; ?>.png"
+./templates/character/genshin/Xingqiu-build.php:258:                                                    src="<?php echo get_template_directory_uri(); ?>/images/genshin/element_<?php echo $info['element']; ?>.png"
+./templates/character/genshin/Xingqiu-build.php:273:                                    //$characters = get_genshin_characters();
+./templates/character/genshin/Xingqiu-build.php:284:                                                href="https://kaztokyo.sakura.ne.jp/genshin-impact-blog-<?php echo strtolower($name); ?>-best-build">
+./templates/character/genshin/Xingqiu-build.php:286:                                                    src="<?php echo get_template_directory_uri(); ?>/images/genshin/<?php echo $name; ?>.png"
+./templates/character/genshin/Xingqiu-build.php:289:                                                    src="<?php echo get_template_directory_uri(); ?>/images/genshin/element_<?php echo $info['element']; ?>.png"
+./templates/character/genshin/Xingqiu-build.php:304:                                    //$characters = get_genshin_characters();
+./templates/character/genshin/Xingqiu-build.php:315:                                                href="https://kaztokyo.sakura.ne.jp/genshin-impact-blog-<?php echo strtolower($name); ?>-best-build">
+./templates/character/genshin/Xingqiu-build.php:317:                                                    src="<?php echo get_template_directory_uri(); ?>/images/genshin/<?php echo $name; ?>.png"
+./templates/character/genshin/Xingqiu-build.php:320:                                                    src="<?php echo get_template_directory_uri(); ?>/images/genshin/element_<?php echo $info['element']; ?>.png"
+./templates/character/genshin/Xingqiu-build.php:367:                                    "icon" => "https://rerollcdn.com/GENSHIN/Skill/UI_GachaTypeIcon_Sword.png",
+./templates/character/genshin/Xingqiu-build.php:373:                                    "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Xingqiu/talent_2.png",
+./templates/character/genshin/Xingqiu-build.php:379:                                    "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Xingqiu/talent_3.png",
+./templates/character/genshin/Xingqiu-build.php:428:                                    "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Xingqiu/talent_4.png",
+./templates/character/genshin/Xingqiu-build.php:434:                                    "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Xingqiu/talent_5.png",
+./templates/character/genshin/Xingqiu-build.php:440:                                    "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Xingqiu/talent_6.png",
+./templates/character/genshin/Xingqiu-build.php:488:                                    "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Xingqiu/constellation_1.png",
+./templates/character/genshin/Xingqiu-build.php:494:                                    "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Xingqiu/constellation_2.png",
+./templates/character/genshin/Xingqiu-build.php:500:                                    "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Xingqiu/constellation_3.png",
+./templates/character/genshin/Xingqiu-build.php:506:                                    "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Xingqiu/constellation_4.png",
+./templates/character/genshin/Xingqiu-build.php:512:                                    "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Xingqiu/constellation_5.png",
+./templates/character/genshin/Xingqiu-build.php:518:                                    "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Xingqiu/constellation_6.png",
+./templates/character/genshin/Xingqiu-build.php:629:                                                        $materialUrl = "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Xingqiu/" . ucfirst(str_replace(" ", "_", $material)) . ".png";
+./templates/character/genshin/Sigewinne-build.php:4: * Description: Template for displaying Genshin Impact character builds AYAKA.
+./templates/character/genshin/Sigewinne-build.php:40:                $image_url = 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Sigewinne/Sigewinne.png';
+./templates/character/genshin/Sigewinne-build.php:49:                        <h1 class="character-name">Genshin Impact Sigewinne Build</h1> <img class="character-element"
+./templates/character/genshin/Sigewinne-build.php:50:                            src="https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/element_hydro.png"
+./templates/character/genshin/Sigewinne-build.php:54:                            src="https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/weapon_bow.png"
+./templates/character/genshin/Sigewinne-build.php:61:                    $image_base_path = 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/farming/';
+./templates/character/genshin/Sigewinne-build.php:109:                                            src="https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/weapons/<?php echo urlencode(str_replace(' ', '_', $weaponName)); ?>.png"
+./templates/character/genshin/Sigewinne-build.php:137:                                $imageUrl = "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/" . str_replace(' ', '_', strtolower($artifactName)) . ".png";
+./templates/character/genshin/Sigewinne-build.php:178:                        target="_blank" class="character-credit">Character Builds by Genshin Impact Helper →</a>
+./templates/character/genshin/Sigewinne-build.php:239:                                //$characters = get_genshin_characters();
+./templates/character/genshin/Sigewinne-build.php:250:                                            href="https://kaztokyo.sakura.ne.jp/genshin-impact-blog-<?php echo strtolower($name); ?>-best-build">
+./templates/character/genshin/Sigewinne-build.php:252:                                                src="<?php echo get_template_directory_uri(); ?>/images/genshin/<?php echo $name; ?>.png"
+./templates/character/genshin/Sigewinne-build.php:255:                                                src="<?php echo get_template_directory_uri(); ?>/images/genshin/element_<?php echo $info['element']; ?>.png"
+./templates/character/genshin/Sigewinne-build.php:270:                                //$characters = get_genshin_characters();
+./templates/character/genshin/Sigewinne-build.php:282:                                            href="https://kaztokyo.sakura.ne.jp/genshin-impact-blog-<?php echo strtolower($name); ?>-best-build">
+./templates/character/genshin/Sigewinne-build.php:284:                                                src="<?php echo get_template_directory_uri(); ?>/images/genshin/<?php echo $name; ?>.png"
+./templates/character/genshin/Sigewinne-build.php:287:                                                src="<?php echo get_template_directory_uri(); ?>/images/genshin/element_<?php echo $info['element']; ?>.png"
+./templates/character/genshin/Sigewinne-build.php:302:                                //$characters = get_genshin_characters();
+./templates/character/genshin/Sigewinne-build.php:313:                                            href="https://kaztokyo.sakura.ne.jp/genshin-impact-blog-<?php echo strtolower($name); ?>-best-build">
+./templates/character/genshin/Sigewinne-build.php:315:                                                src="<?php echo get_template_directory_uri(); ?>/images/genshin/<?php echo $name; ?>.png"
+./templates/character/genshin/Sigewinne-build.php:318:                                                src="<?php echo get_template_directory_uri(); ?>/images/genshin/element_<?php echo $info['element']; ?>.png"
+./templates/character/genshin/Sigewinne-build.php:331:        "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/UI_GachaTypeIcon_Sword.png",
+./templates/character/genshin/Sigewinne-build.php:347:        "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/talent_2.png",
+./templates/character/genshin/Sigewinne-build.php:356:        "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/talent_3.png",
+./templates/character/genshin/Sigewinne-build.php:371:                        "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Sigewinne/talent_4.png",
+./templates/character/genshin/Sigewinne-build.php:378:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Sigewinne/talent_5.png",
+./templates/character/genshin/Sigewinne-build.php:385:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Sigewinne/talent_6.png",
+./templates/character/genshin/Sigewinne-build.php:395:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Sigewinne/constellation_1.png",
+./templates/character/genshin/Sigewinne-build.php:403:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Sigewinne/constellation_2.png",
+./templates/character/genshin/Sigewinne-build.php:411:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Sigewinne/constellation_3.png",
+./templates/character/genshin/Sigewinne-build.php:417:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Sigewinne/constellation_4.png",
+./templates/character/genshin/Sigewinne-build.php:423:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Sigewinne/constellation_5.png",
+./templates/character/genshin/Sigewinne-build.php:429:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Sigewinne/constellation_6.png",
+./templates/character/genshin/Sigewinne-build.php:581:                                                    $materialUrl = "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Farming/" . ucfirst(str_replace(" ", "_", $material)) . ".png";
+./templates/character/genshin/Clorinde-build.php:4: * Description: Template for displaying Genshin Impact character builds AYAKA.
+./templates/character/genshin/Clorinde-build.php:40:                $image_url = 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Clorinde/Clorinde.png';
+./templates/character/genshin/Clorinde-build.php:49:                        <h1 class="character-name">Genshin Impact Clorinde Build</h1> <img class="character-element"
+./templates/character/genshin/Clorinde-build.php:50:                            src="https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/element_electro.png"
+./templates/character/genshin/Clorinde-build.php:54:                            src="https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/weapon_sword.png"
+./templates/character/genshin/Clorinde-build.php:61:                    $image_base_path = 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/farming/';
+./templates/character/genshin/Clorinde-build.php:109:                                            src="https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/weapons/<?php echo urlencode(str_replace(' ', '_', $weaponName)); ?>.png"
+./templates/character/genshin/Clorinde-build.php:140:                                $imageUrl = "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/" . str_replace(' ', '_', strtolower($artifactName)) . ".png";
+./templates/character/genshin/Clorinde-build.php:181:                        target="_blank" class="character-credit">Character Builds by Genshin Impact Helper →</a>
+./templates/character/genshin/Clorinde-build.php:242:                                //$characters = get_genshin_characters();
+./templates/character/genshin/Clorinde-build.php:253:                                            href="https://kaztokyo.sakura.ne.jp/genshin-impact-blog-<?php echo strtolower($name); ?>-best-build">
+./templates/character/genshin/Clorinde-build.php:255:                                                src="<?php echo get_template_directory_uri(); ?>/images/genshin/<?php echo $name; ?>.png"
+./templates/character/genshin/Clorinde-build.php:258:                                                src="<?php echo get_template_directory_uri(); ?>/images/genshin/element_<?php echo $info['element']; ?>.png"
+./templates/character/genshin/Clorinde-build.php:273:                                //$characters = get_genshin_characters();
+./templates/character/genshin/Clorinde-build.php:285:                                            href="https://kaztokyo.sakura.ne.jp/genshin-impact-blog-<?php echo strtolower($name); ?>-best-build">
+./templates/character/genshin/Clorinde-build.php:287:                                                src="<?php echo get_template_directory_uri(); ?>/images/genshin/<?php echo $name; ?>.png"
+./templates/character/genshin/Clorinde-build.php:290:                                                src="<?php echo get_template_directory_uri(); ?>/images/genshin/element_<?php echo $info['element']; ?>.png"
+./templates/character/genshin/Clorinde-build.php:305:                                //$characters = get_genshin_characters();
+./templates/character/genshin/Clorinde-build.php:316:                                            href="https://kaztokyo.sakura.ne.jp/genshin-impact-blog-<?php echo strtolower($name); ?>-best-build">
+./templates/character/genshin/Clorinde-build.php:318:                                                src="<?php echo get_template_directory_uri(); ?>/images/genshin/<?php echo $name; ?>.png"
+./templates/character/genshin/Clorinde-build.php:321:                                                src="<?php echo get_template_directory_uri(); ?>/images/genshin/element_<?php echo $info['element']; ?>.png"
+./templates/character/genshin/Clorinde-build.php:334:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/UI_GachaTypeIcon_Sword.png",
+./templates/character/genshin/Clorinde-build.php:340:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Clorinde/talent_2.png",
+./templates/character/genshin/Clorinde-build.php:349:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Clorinde/talent_3.png",
+./templates/character/genshin/Clorinde-build.php:363:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Clorinde/talent_4.png",
+./templates/character/genshin/Clorinde-build.php:370:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Clorinde/talent_5.png",
+./templates/character/genshin/Clorinde-build.php:376:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Clorinde/talent_6.png",
+./templates/character/genshin/Clorinde-build.php:386:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Clorinde/constellation_1.png",
+./templates/character/genshin/Clorinde-build.php:393:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Clorinde/constellation_2.png",
+./templates/character/genshin/Clorinde-build.php:399:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Clorinde/constellation_3.png",
+./templates/character/genshin/Clorinde-build.php:405:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Clorinde/constellation_4.png",
+./templates/character/genshin/Clorinde-build.php:411:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Clorinde/constellation_5.png",
+./templates/character/genshin/Clorinde-build.php:417:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Clorinde/constellation_6.png",
+./templates/character/genshin/Clorinde-build.php:569:                                                    $materialUrl = "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Farming/" . ucfirst(str_replace(" ", "_", $material)) . ".png";
+./templates/character/genshin/chiori-build.php:4: * Description: Template for displaying Genshin Impact character builds AYAKA.
+./templates/character/genshin/chiori-build.php:39:        $image_url = 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Chiori.png';
+./templates/character/genshin/chiori-build.php:48:            <h1 class="character-name">Genshin Impact Chiori Build</h1> <img class="character-element"
+./templates/character/genshin/chiori-build.php:49:              src="https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/element_geo.png" alt="Geo">
+./templates/character/genshin/chiori-build.php:52:              src="https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/weapon_sword.png"
+./templates/character/genshin/chiori-build.php:59:          $image_base_path = 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/farming/';
+./templates/character/genshin/chiori-build.php:107:                      src="https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/weapons/<?php echo urlencode(str_replace(' ', '_', $weaponName)); ?>.png"
+./templates/character/genshin/chiori-build.php:139:                $imageUrl = "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/" . str_replace(' ', '_', strtolower($artifactName)) . ".png";
+./templates/character/genshin/chiori-build.php:180:            target="_blank" class="character-credit">Character Builds by Genshin Impact Helper →</a>
+./templates/character/genshin/chiori-build.php:241:                //$characters = get_genshin_characters();
+./templates/character/genshin/chiori-build.php:252:                      href="https://kaztokyo.sakura.ne.jp/genshin-impact-blog-<?php echo strtolower($name); ?>-best-build">
+./templates/character/genshin/chiori-build.php:254:                        src="<?php echo get_template_directory_uri(); ?>/images/genshin/<?php echo $name; ?>.png"
+./templates/character/genshin/chiori-build.php:257:                        src="<?php echo get_template_directory_uri(); ?>/images/genshin/element_<?php echo $info['element']; ?>.png"
+./templates/character/genshin/chiori-build.php:272:                //$characters = get_genshin_characters();
+./templates/character/genshin/chiori-build.php:284:                      href="https://kaztokyo.sakura.ne.jp/genshin-impact-blog-<?php echo strtolower($name); ?>-best-build">
+./templates/character/genshin/chiori-build.php:286:                        src="<?php echo get_template_directory_uri(); ?>/images/genshin/<?php echo $name; ?>.png"
+./templates/character/genshin/chiori-build.php:289:                        src="<?php echo get_template_directory_uri(); ?>/images/genshin/element_<?php echo $info['element']; ?>.png"
+./templates/character/genshin/chiori-build.php:304:                //$characters = get_genshin_characters();
+./templates/character/genshin/chiori-build.php:315:                      href="https://kaztokyo.sakura.ne.jp/genshin-impact-blog-<?php echo strtolower($name); ?>-best-build">
+./templates/character/genshin/chiori-build.php:317:                        src="<?php echo get_template_directory_uri(); ?>/images/genshin/<?php echo $name; ?>.png"
+./templates/character/genshin/chiori-build.php:320:                        src="<?php echo get_template_directory_uri(); ?>/images/genshin/element_<?php echo $info['element']; ?>.png"
+./templates/character/genshin/chiori-build.php:333:              "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/UI_GachaTypeIcon_Sword.png",
+./templates/character/genshin/chiori-build.php:339:              "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/chiori/talent_2.png",
+./templates/character/genshin/chiori-build.php:352:              "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/chiori/talent_3.png",
+./templates/character/genshin/chiori-build.php:365:              "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/chiori/talent_4.png",
+./templates/character/genshin/chiori-build.php:382:              "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/chiori/talent_5.png",
+./templates/character/genshin/chiori-build.php:388:              "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/chiori/talent_6.png",
+./templates/character/genshin/chiori-build.php:398:              "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/chiori/constellation_1.png",
+./templates/character/genshin/chiori-build.php:408:              "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/chiori/constellation_2.png",
+./templates/character/genshin/chiori-build.php:414:              "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/chiori/constellation_3.png",
+./templates/character/genshin/chiori-build.php:420:              "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/chiori/constellation_4.png",
+./templates/character/genshin/chiori-build.php:426:              "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/chiori/constellation_5.png",
+./templates/character/genshin/chiori-build.php:432:              "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/chiori/constellation_6.png",
+./templates/character/genshin/chiori-build.php:590:                            $materialUrl = "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/farming/" . ucfirst(str_replace(" ", "_", $material)) . ".png";
+./templates/character/genshin/Navia-build.php:4: * Description: Template for displaying Genshin Impact character builds AYAKA.
+./templates/character/genshin/Navia-build.php:40:                $image_url = 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Navia.png';
+./templates/character/genshin/Navia-build.php:49:                        <h1 class="character-name">Genshin Impact Navia Build</h1> <img class="character-element"
+./templates/character/genshin/Navia-build.php:50:                            src="https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/element_geo.png"
+./templates/character/genshin/Navia-build.php:54:                            src="https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/weapon_sword.png"
+./templates/character/genshin/Navia-build.php:61:                    $image_base_path = 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/farming/';
+./templates/character/genshin/Navia-build.php:109:                                            src="https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/weapons/<?php echo urlencode(str_replace(' ', '_', $weaponName)); ?>.png"
+./templates/character/genshin/Navia-build.php:142:                                $imageUrl = "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/" . str_replace(' ', '_', strtolower($artifactName)) . ".png";
+./templates/character/genshin/Navia-build.php:183:                        target="_blank" class="character-credit">Character Builds by Genshin Impact Helper →</a>
+./templates/character/genshin/Navia-build.php:244:                                //$characters = get_genshin_characters();
+./templates/character/genshin/Navia-build.php:255:                                            href="https://kaztokyo.sakura.ne.jp/genshin-impact-blog-<?php echo strtolower($name); ?>-best-build">
+./templates/character/genshin/Navia-build.php:257:                                                src="<?php echo get_template_directory_uri(); ?>/images/genshin/<?php echo $name; ?>.png"
+./templates/character/genshin/Navia-build.php:260:                                                src="<?php echo get_template_directory_uri(); ?>/images/genshin/element_<?php echo $info['element']; ?>.png"
+./templates/character/genshin/Navia-build.php:275:                                //$characters = get_genshin_characters();
+./templates/character/genshin/Navia-build.php:287:                                            href="https://kaztokyo.sakura.ne.jp/genshin-impact-blog-<?php echo strtolower($name); ?>-best-build">
+./templates/character/genshin/Navia-build.php:289:                                                src="<?php echo get_template_directory_uri(); ?>/images/genshin/<?php echo $name; ?>.png"
+./templates/character/genshin/Navia-build.php:292:                                                src="<?php echo get_template_directory_uri(); ?>/images/genshin/element_<?php echo $info['element']; ?>.png"
+./templates/character/genshin/Navia-build.php:307:                                //$characters = get_genshin_characters();
+./templates/character/genshin/Navia-build.php:318:                                            href="https://kaztokyo.sakura.ne.jp/genshin-impact-blog-<?php echo strtolower($name); ?>-best-build">
+./templates/character/genshin/Navia-build.php:320:                                                src="<?php echo get_template_directory_uri(); ?>/images/genshin/<?php echo $name; ?>.png"
+./templates/character/genshin/Navia-build.php:323:                                                src="<?php echo get_template_directory_uri(); ?>/images/genshin/element_<?php echo $info['element']; ?>.png"
+./templates/character/genshin/Navia-build.php:336:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/UI_GachaTypeIcon_Sword.png",
+./templates/character/genshin/Navia-build.php:353:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Navia/talent_2.png",
+./templates/character/genshin/Navia-build.php:363:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Navia/talent_3.png",
+./templates/character/genshin/Navia-build.php:377:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Arlecchino/talent_4.png",
+./templates/character/genshin/Navia-build.php:384:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Arlecchino/talent_5.png",
+./templates/character/genshin/Navia-build.php:390:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Arlecchino/talent_6.png",
+./templates/character/genshin/Navia-build.php:400:                                "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Navia/constellation_1.png",
+./templates/character/genshin/Navia-build.php:408:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Navia/constellation_2.png",
+./templates/character/genshin/Navia-build.php:416:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Navia/constellation_3.png",
+./templates/character/genshin/Navia-build.php:423:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Navia/constellation_4.png",
+./templates/character/genshin/Navia-build.php:429:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Navia/constellation_5.png",
+./templates/character/genshin/Navia-build.php:435:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Navia/constellation_6.png",
+./templates/character/genshin/Navia-build.php:592:                                                    $materialUrl = "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/farming/" . ucfirst(str_replace(" ", "_", $material)) . ".png";
+./templates/character/genshin/xianyun-build.php:4: * Description: Template for displaying Genshin Impact character builds Xianyun.
+./templates/character/genshin/xianyun-build.php:33:                $image_url = 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Xianyun.png';
+./templates/character/genshin/xianyun-build.php:42:                        <h1 class="character-name">Genshin Impact Xianyun Build</h1> <img class="character-element"
+./templates/character/genshin/xianyun-build.php:43:                            src="https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/element_anemo.png"
+./templates/character/genshin/xianyun-build.php:47:                            src="https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/weapon_sword.png"
+./templates/character/genshin/xianyun-build.php:54:                    $image_base_path = 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/farming/';
+./templates/character/genshin/xianyun-build.php:99:                                    $imageUrl = "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/{$encodedWeaponName}.png";
+./templates/character/genshin/xianyun-build.php:135:                                $imageUrl = "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/" . str_replace(' ', '_', strtolower($artifactName)) . ".png";
+./templates/character/genshin/xianyun-build.php:239:                                    //$characters = get_genshin_characters();
+./templates/character/genshin/xianyun-build.php:250:                                                href="https://kaztokyo.sakura.ne.jp/genshin-impact-blog-<?php echo strtolower($name); ?>-best-build">
+./templates/character/genshin/xianyun-build.php:252:                                                    src="<?php echo get_template_directory_uri(); ?>/images/genshin/<?php echo $name; ?>.png"
+./templates/character/genshin/xianyun-build.php:255:                                                    src="<?php echo get_template_directory_uri(); ?>/images/genshin/element_<?php echo $info['element']; ?>.png"
+./templates/character/genshin/xianyun-build.php:270:                                    //$characters = get_genshin_characters();
+./templates/character/genshin/xianyun-build.php:281:                                                href="https://kaztokyo.sakura.ne.jp/genshin-impact-blog-<?php echo strtolower($name); ?>-best-build">
+./templates/character/genshin/xianyun-build.php:283:                                                    src="<?php echo get_template_directory_uri(); ?>/images/genshin/<?php echo $name; ?>.png"
+./templates/character/genshin/xianyun-build.php:286:                                                    src="<?php echo get_template_directory_uri(); ?>/images/genshin/element_<?php echo $info['element']; ?>.png"
+./templates/character/genshin/xianyun-build.php:301:                                    //$characters = get_genshin_characters();
+./templates/character/genshin/xianyun-build.php:312:                                                href="https://kaztokyo.sakura.ne.jp/genshin-impact-blog-<?php echo strtolower($name); ?>-best-build">
+./templates/character/genshin/xianyun-build.php:314:                                                    src="<?php echo get_template_directory_uri(); ?>/images/genshin/<?php echo $name; ?>.png"
+./templates/character/genshin/xianyun-build.php:317:                                                    src="<?php echo get_template_directory_uri(); ?>/images/genshin/element_<?php echo $info['element']; ?>.png"
+./templates/character/genshin/xianyun-build.php:347:                                "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/UI_GachaTypeIcon_Sword.png",
+./templates/character/genshin/xianyun-build.php:353:                                "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayato/talent_2.png",
+./templates/character/genshin/xianyun-build.php:359:                                "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayato/talent_3.png",
+./templates/character/genshin/xianyun-build.php:376:                                "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayato/talent_4.png",
+./templates/character/genshin/xianyun-build.php:382:                                "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayato/talent_5.png",
+./templates/character/genshin/xianyun-build.php:388:                                "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayato/talent_6.png",
+./templates/character/genshin/xianyun-build.php:398:                                "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayato/constellation_1.png",
+./templates/character/genshin/xianyun-build.php:404:                                "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayato/constellation_2.png",
+./templates/character/genshin/xianyun-build.php:410:                                "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayato/constellation_3.png",
+./templates/character/genshin/xianyun-build.php:416:                                "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayato/constellation_4.png",
+./templates/character/genshin/xianyun-build.php:422:                                "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayato/constellation_5.png",
+./templates/character/genshin/xianyun-build.php:428:                                "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayato/constellation_6.png",
+./templates/character/genshin/xianyun-build.php:458:                                    'icon' => 'https://rerollcdn.com/GENSHIN/Skill/UI_GachaTypeIcon_Catalyst.png',
+./templates/character/genshin/xianyun-build.php:464:                                    'icon' => 'https://rerollcdn.com/GENSHIN/Skill/1/Xianyun/talent_2.png',
+./templates/character/genshin/xianyun-build.php:470:                                    'icon' => 'https://rerollcdn.com/GENSHIN/Skill/1/Xianyun/talent_3.png',
+./templates/character/genshin/xianyun-build.php:517:                                    'icon' => 'https://rerollcdn.com/GENSHIN/Skill/1/Xianyun/talent_4.png',
+./templates/character/genshin/xianyun-build.php:523:                                    'icon' => 'https://rerollcdn.com/GENSHIN/Skill/1/Xianyun/talent_5.png',
+./templates/character/genshin/xianyun-build.php:529:                                    'icon' => 'https://rerollcdn.com/GENSHIN/Skill/1/Xianyun/talent_6.png',
+./templates/character/genshin/xianyun-build.php:577:                                    'icon' => 'https://rerollcdn.com/GENSHIN/Skill/1/Xianyun/constellation_1.png',
+./templates/character/genshin/xianyun-build.php:583:                                    'icon' => 'https://rerollcdn.com/GENSHIN/Skill/1/Xianyun/constellation_2.png',
+./templates/character/genshin/xianyun-build.php:589:                                    'icon' => 'https://rerollcdn.com/GENSHIN/Skill/1/Xianyun/constellation_3.png',
+./templates/character/genshin/xianyun-build.php:595:                                    'icon' => 'https://rerollcdn.com/GENSHIN/Skill/1/Xianyun/constellation_4.png',
+./templates/character/genshin/xianyun-build.php:601:                                    'icon' => 'https://rerollcdn.com/GENSHIN/Skill/1/Xianyun/constellation_5.png',
+./templates/character/genshin/xianyun-build.php:607:                                    'icon' => 'https://rerollcdn.com/GENSHIN/Skill/1/Xianyun/constellation_6.png',
+./templates/character/genshin/xianyun-build.php:712:                                                        $materialUrl = "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/xianyun/" . ucfirst(str_replace(" ", "_", $material)) . ".png";
+./templates/character/genshin/furina-build.php:4: * Description: Template for displaying Genshin Impact character builds Furina.
+./templates/character/genshin/furina-build.php:41:                $image_url = 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Furina.png';
+./templates/character/genshin/furina-build.php:50:                        <h1 class="character-name">Genshin Impact Furina Build</h1> <img class="character-element"
+./templates/character/genshin/furina-build.php:51:                            src="https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/element_hydro.png"
+./templates/character/genshin/furina-build.php:55:                            src="https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/weapon_sword.png"
+./templates/character/genshin/furina-build.php:62:                    $image_base_path = 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/farming/';
+./templates/character/genshin/furina-build.php:133:                                    $imageUrl = "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/furina/{$encodedWeaponName}.png";
+./templates/character/genshin/furina-build.php:176:                                $imageUrl = "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/" . str_replace(' ', '_', strtolower($artifactName)) . ".png";
+./templates/character/genshin/furina-build.php:276:                                    //$characters = get_genshin_characters();
+./templates/character/genshin/furina-build.php:287:                                                href="https://kaztokyo.sakura.ne.jp/genshin-impact-blog-<?php echo strtolower($name); ?>-best-build">
+./templates/character/genshin/furina-build.php:289:                                                    src="<?php echo get_template_directory_uri(); ?>/images/genshin/<?php echo $name; ?>.png"
+./templates/character/genshin/furina-build.php:292:                                                    src="<?php echo get_template_directory_uri(); ?>/images/genshin/element_<?php echo $info['element']; ?>.png"
+./templates/character/genshin/furina-build.php:307:                                    //$characters = get_genshin_characters();
+./templates/character/genshin/furina-build.php:318:                                                href="https://kaztokyo.sakura.ne.jp/genshin-impact-blog-<?php echo strtolower($name); ?>-best-build">
+./templates/character/genshin/furina-build.php:320:                                                    src="<?php echo get_template_directory_uri(); ?>/images/genshin/<?php echo $name; ?>.png"
+./templates/character/genshin/furina-build.php:323:                                                    src="<?php echo get_template_directory_uri(); ?>/images/genshin/element_<?php echo $info['element']; ?>.png"
+./templates/character/genshin/furina-build.php:338:                                    //$characters = get_genshin_characters();
+./templates/character/genshin/furina-build.php:349:                                                href="https://kaztokyo.sakura.ne.jp/genshin-impact-blog-<?php echo strtolower($name); ?>-best-build">
+./templates/character/genshin/furina-build.php:351:                                                    src="<?php echo get_template_directory_uri(); ?>/images/genshin/<?php echo $name; ?>.png"
+./templates/character/genshin/furina-build.php:354:                                                    src="<?php echo get_template_directory_uri(); ?>/images/genshin/element_<?php echo $info['element']; ?>.png"
+./templates/character/genshin/furina-build.php:384:                                "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/UI_GachaTypeIcon_Sword.png",
+./templates/character/genshin/furina-build.php:390:                                "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayato/talent_2.png",
+./templates/character/genshin/furina-build.php:396:                                "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayato/talent_3.png",
+./templates/character/genshin/furina-build.php:413:                                "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayato/talent_4.png",
+./templates/character/genshin/furina-build.php:419:                                "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayato/talent_5.png",
+./templates/character/genshin/furina-build.php:425:                                "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayato/talent_6.png",
+./templates/character/genshin/furina-build.php:435:                                "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayato/constellation_1.png",
+./templates/character/genshin/furina-build.php:441:                                "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayato/constellation_2.png",
+./templates/character/genshin/furina-build.php:447:                                "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayato/constellation_3.png",
+./templates/character/genshin/furina-build.php:453:                                "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayato/constellation_4.png",
+./templates/character/genshin/furina-build.php:459:                                "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayato/constellation_5.png",
+./templates/character/genshin/furina-build.php:465:                                "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayato/constellation_6.png",
+./templates/character/genshin/furina-build.php:510:                                    'icon' => 'https://rerollcdn.com/GENSHIN/Skill/UI_GachaTypeIcon_Sword.png',
+./templates/character/genshin/furina-build.php:516:                                    'icon' => 'https://rerollcdn.com/GENSHIN/Skill/1/Furina/talent_2.png',
+./templates/character/genshin/furina-build.php:522:                                    'icon' => 'https://rerollcdn.com/GENSHIN/Skill/1/Furina/talent_3.png',
+./templates/character/genshin/furina-build.php:570:                                    'icon' => 'https://rerollcdn.com/GENSHIN/Skill/1/Furina/talent_4.png',
+./templates/character/genshin/furina-build.php:576:                                    'icon' => 'https://rerollcdn.com/GENSHIN/Skill/1/Furina/talent_5.png',
+./templates/character/genshin/furina-build.php:582:                                    'icon' => 'https://rerollcdn.com/GENSHIN/Skill/1/Furina/talent_6.png',
+./templates/character/genshin/furina-build.php:647:                                    'icon' => 'https://rerollcdn.com/GENSHIN/Skill/1/Furina/constellation_1.png',
+./templates/character/genshin/furina-build.php:653:                                    'icon' => 'https://rerollcdn.com/GENSHIN/Skill/1/Furina/constellation_2.png',
+./templates/character/genshin/furina-build.php:659:                                    'icon' => 'https://rerollcdn.com/GENSHIN/Skill/1/Furina/constellation_3.png',
+./templates/character/genshin/furina-build.php:665:                                    'icon' => 'https://rerollcdn.com/GENSHIN/Skill/1/Furina/constellation_4.png',
+./templates/character/genshin/furina-build.php:671:                                    'icon' => 'https://rerollcdn.com/GENSHIN/Skill/1/Furina/constellation_5.png',
+./templates/character/genshin/furina-build.php:677:                                    'icon' => 'https://rerollcdn.com/GENSHIN/Skill/1/Furina/constellation_6.png',
+./templates/character/genshin/furina-build.php:784:                                                        $materialUrl = "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/furina/" . ucfirst(str_replace(" ", "_", $material)) . ".png";
+./templates/character/genshin/Neuvillette-build.php:4: * Description: Template for displaying Genshin Impact character builds AYAKA.
+./templates/character/genshin/Neuvillette-build.php:40:                $image_url = 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Neuvillette.png';
+./templates/character/genshin/Neuvillette-build.php:49:                        <h1 class="character-name">Genshin Impact Neuvillette Build</h1> <img class="character-element"
+./templates/character/genshin/Neuvillette-build.php:50:                            src="https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/element_geo.png"
+./templates/character/genshin/Neuvillette-build.php:54:                            src="https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/weapon_catalyst.png"
+./templates/character/genshin/Neuvillette-build.php:61:                    $image_base_path = 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/farming/';
+./templates/character/genshin/Neuvillette-build.php:109:                                            src="https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/weapons/<?php echo urlencode(str_replace(' ', '_', $weaponName)); ?>.png"
+./templates/character/genshin/Neuvillette-build.php:147:                                $imageUrl = "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/" . str_replace(' ', '_', strtolower($artifactName)) . ".png";
+./templates/character/genshin/Neuvillette-build.php:188:                        target="_blank" class="character-credit">Character Builds by Genshin Impact Helper →</a>
+./templates/character/genshin/Neuvillette-build.php:249:                                //$characters = get_genshin_characters();
+./templates/character/genshin/Neuvillette-build.php:260:                                            href="https://kaztokyo.sakura.ne.jp/genshin-impact-blog-<?php echo strtolower($name); ?>-best-build">
+./templates/character/genshin/Neuvillette-build.php:262:                                                src="<?php echo get_template_directory_uri(); ?>/images/genshin/<?php echo $name; ?>.png"
+./templates/character/genshin/Neuvillette-build.php:265:                                                src="<?php echo get_template_directory_uri(); ?>/images/genshin/element_<?php echo $info['element']; ?>.png"
+./templates/character/genshin/Neuvillette-build.php:280:                                //$characters = get_genshin_characters();
+./templates/character/genshin/Neuvillette-build.php:292:                                            href="https://kaztokyo.sakura.ne.jp/genshin-impact-blog-<?php echo strtolower($name); ?>-best-build">
+./templates/character/genshin/Neuvillette-build.php:294:                                                src="<?php echo get_template_directory_uri(); ?>/images/genshin/<?php echo $name; ?>.png"
+./templates/character/genshin/Neuvillette-build.php:297:                                                src="<?php echo get_template_directory_uri(); ?>/images/genshin/element_<?php echo $info['element']; ?>.png"
+./templates/character/genshin/Neuvillette-build.php:312:                                //$characters = get_genshin_characters();
+./templates/character/genshin/Neuvillette-build.php:323:                                            href="https://kaztokyo.sakura.ne.jp/genshin-impact-blog-<?php echo strtolower($name); ?>-best-build">
+./templates/character/genshin/Neuvillette-build.php:325:                                                src="<?php echo get_template_directory_uri(); ?>/images/genshin/<?php echo $name; ?>.png"
+./templates/character/genshin/Neuvillette-build.php:328:                                                src="<?php echo get_template_directory_uri(); ?>/images/genshin/element_<?php echo $info['element']; ?>.png"
+./templates/character/genshin/Neuvillette-build.php:341:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/UI_GachaTypeIcon_Sword.png",
+./templates/character/genshin/Neuvillette-build.php:363:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Neuvillette/talent_2.png",
+./templates/character/genshin/Neuvillette-build.php:372:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Neuvillette/talent_3.png",
+./templates/character/genshin/Neuvillette-build.php:386:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Arlecchino/talent_4.png",
+./templates/character/genshin/Neuvillette-build.php:392:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Arlecchino/talent_5.png",
+./templates/character/genshin/Neuvillette-build.php:398:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Arlecchino/talent_6.png",
+./templates/character/genshin/Neuvillette-build.php:408:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Neuvillette/constellation_1.png",
+./templates/character/genshin/Neuvillette-build.php:414:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Neuvillette/constellation_2.png",
+./templates/character/genshin/Neuvillette-build.php:420:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Neuvillette/constellation_3.png",
+./templates/character/genshin/Neuvillette-build.php:426:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Neuvillette/constellation_4.png",
+./templates/character/genshin/Neuvillette-build.php:432:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Neuvillette/constellation_5.png",
+./templates/character/genshin/Neuvillette-build.php:438:                            "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Neuvillette/constellation_6.png",
+./templates/character/genshin/Neuvillette-build.php:596:                                                    $materialUrl = "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/farming/" . ucfirst(str_replace(" ", "_", $material)) . ".png";
+./templates/character/genshin/ayato-build.php:4: * Description: Template for displaying Genshin Impact character builds AYATO.
+./templates/character/genshin/ayato-build.php:39:        $image_url = 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Ayato.png';
+./templates/character/genshin/ayato-build.php:48:            <h1 class="character-name">Genshin Impact AyatoBuild</h1> <img class="character-element"
+./templates/character/genshin/ayato-build.php:49:              src="https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/element_hydro.png" alt="Hydro">
+./templates/character/genshin/ayato-build.php:52:              src="https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/weapon_sword.png"
+./templates/character/genshin/ayato-build.php:59:          $image_base_path = 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/';
+./templates/character/genshin/ayato-build.php:111:                  $imageUrl = "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/ayato/{$encodedWeaponName}.png";
+./templates/character/genshin/ayato-build.php:150:                $imageUrl = "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/" . str_replace(' ', '_', strtolower($artifactName)) . ".png";
+./templates/character/genshin/ayato-build.php:188:            target="_blank" class="character-credit">Character Builds by Genshin Impact Helper →</a>
+./templates/character/genshin/ayato-build.php:246:                //$characters = get_genshin_characters();
+./templates/character/genshin/ayato-build.php:257:                      href="https://kaztokyo.sakura.ne.jp/genshin-impact-blog-<?php echo strtolower($name); ?>-best-build">
+./templates/character/genshin/ayato-build.php:259:                        src="<?php echo get_template_directory_uri(); ?>/images/genshin/<?php echo $name; ?>.png"
+./templates/character/genshin/ayato-build.php:262:                        src="<?php echo get_template_directory_uri(); ?>/images/genshin/element_<?php echo $info['element']; ?>.png"
+./templates/character/genshin/ayato-build.php:277:                //$characters = get_genshin_characters();
+./templates/character/genshin/ayato-build.php:288:                      href="https://kaztokyo.sakura.ne.jp/genshin-impact-blog-<?php echo strtolower($name); ?>-best-build">
+./templates/character/genshin/ayato-build.php:290:                        src="<?php echo get_template_directory_uri(); ?>/images/genshin/<?php echo $name; ?>.png"
+./templates/character/genshin/ayato-build.php:293:                        src="<?php echo get_template_directory_uri(); ?>/images/genshin/element_<?php echo $info['element']; ?>.png"
+./templates/character/genshin/ayato-build.php:308:                //$characters = get_genshin_characters();
+./templates/character/genshin/ayato-build.php:320:                      href="https://kaztokyo.sakura.ne.jp/genshin-impact-blog-<?php echo strtolower($name); ?>-best-build">
+./templates/character/genshin/ayato-build.php:322:                        src="<?php echo get_template_directory_uri(); ?>/images/genshin/<?php echo $name; ?>.png"
+./templates/character/genshin/ayato-build.php:325:                        src="<?php echo get_template_directory_uri(); ?>/images/genshin/element_<?php echo $info['element']; ?>.png"
+./templates/character/genshin/ayato-build.php:338:              "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/UI_GachaTypeIcon_Sword.png",
+./templates/character/genshin/ayato-build.php:344:              "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayato/talent_2.png",
+./templates/character/genshin/ayato-build.php:350:              "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayato/talent_3.png",
+./templates/character/genshin/ayato-build.php:364:              "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayato/talent_4.png",
+./templates/character/genshin/ayato-build.php:370:              "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayato/talent_5.png",
+./templates/character/genshin/ayato-build.php:376:              "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayato/talent_6.png",
+./templates/character/genshin/ayato-build.php:386:              "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayato/constellation_1.png",
+./templates/character/genshin/ayato-build.php:392:              "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayato/constellation_2.png",
+./templates/character/genshin/ayato-build.php:398:              "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayato/constellation_3.png",
+./templates/character/genshin/ayato-build.php:404:              "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayato/constellation_4.png",
+./templates/character/genshin/ayato-build.php:410:              "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayato/constellation_5.png",
+./templates/character/genshin/ayato-build.php:416:              "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayato/constellation_6.png",
+./templates/character/genshin/ayato-build.php:431:                'icon' => 'https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/UI_GachaTypeIcon_Sword.png',
+./templates/character/genshin/ayato-build.php:445:                'icon' => 'https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/ayato/talent_3.png',
+./templates/character/genshin/ayato-build.php:462:                'icon' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayato/talent_4.png',
+./templates/character/genshin/ayato-build.php:629:                          $materialUrl = "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayato/" . ucfirst(str_replace(" ", "_", $material)) . ".png";
+./js/scripts.js:879:    var keywords = ['Genshin Impact', 'Tekken7'];
+./templates/character/genshin/ayaka-build copy.php:4: * Description: Template for displaying Genshin Impact character builds AYAKA.
+./templates/character/genshin/ayaka-build copy.php:39:        $image_url = 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Ayaka.png';
+./templates/character/genshin/ayaka-build copy.php:48:            <h1 class="character-name">Genshin Impact Ayaka Build</h1> <img class="character-element"
+./templates/character/genshin/ayaka-build copy.php:49:              src="https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/element_cryo.png" alt="Cryo">
+./templates/character/genshin/ayaka-build copy.php:52:              src="https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/weapon_sword.png"
+./templates/character/genshin/ayaka-build copy.php:59:          $image_base_path = 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/';
+./templates/character/genshin/ayaka-build copy.php:107:                      src="https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/weapons/<?php echo urlencode(str_replace(' ', '_', $weaponName)); ?>.png"
+./templates/character/genshin/ayaka-build copy.php:147:                  $imageUrl = "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/" . str_replace(' ', '_', strtolower($artifactName)) . ".png";
+./templates/character/genshin/ayaka-build copy.php:179:            target="_blank" class="character-credit">Character Builds by Genshin Impact Helper →</a>
+./templates/character/genshin/ayaka-build copy.php:240:                //$characters = get_genshin_characters();
+./templates/character/genshin/ayaka-build copy.php:253:                      href="https://kaztokyo.sakura.ne.jp/genshin-impact-blog-<?php echo strtolower($name); ?>-best-build">
+./templates/character/genshin/ayaka-build copy.php:255:                        src="<?php echo get_template_directory_uri(); ?>/images/genshin/<?php echo $name; ?>.png"
+./templates/character/genshin/ayaka-build copy.php:258:                        src="<?php echo get_template_directory_uri(); ?>/images/genshin/element_<?php echo $info['element']; ?>.png"
+./templates/character/genshin/ayaka-build copy.php:273:                //$characters = get_genshin_characters();
+./templates/character/genshin/ayaka-build copy.php:286:                      href="https://kaztokyo.sakura.ne.jp/genshin-impact-blog-<?php echo strtolower($name); ?>-best-build">
+./templates/character/genshin/ayaka-build copy.php:288:                        src="<?php echo get_template_directory_uri(); ?>/images/genshin/<?php echo $name; ?>.png"
+./templates/character/genshin/ayaka-build copy.php:291:                        src="<?php echo get_template_directory_uri(); ?>/images/genshin/element_<?php echo $info['element']; ?>.png"
+./templates/character/genshin/ayaka-build copy.php:306:                //$characters = get_genshin_characters();
+./templates/character/genshin/ayaka-build copy.php:319:                      href="https://kaztokyo.sakura.ne.jp/genshin-impact-blog-<?php echo strtolower($name); ?>-best-build">
+./templates/character/genshin/ayaka-build copy.php:321:                        src="<?php echo get_template_directory_uri(); ?>/images/genshin/<?php echo $name; ?>.png"
+./templates/character/genshin/ayaka-build copy.php:324:                        src="<?php echo get_template_directory_uri(); ?>/images/genshin/element_<?php echo $info['element']; ?>.png"
+./templates/character/genshin/ayaka-build copy.php:337:              "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/UI_GachaTypeIcon_Sword.png",
+./templates/character/genshin/ayaka-build copy.php:343:              "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayaka/talent_2.png",
+./templates/character/genshin/ayaka-build copy.php:349:              "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayaka/talent_3.png",
+./templates/character/genshin/ayaka-build copy.php:355:              "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayaka/talent_4.png",
+./templates/character/genshin/ayaka-build copy.php:368:              "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayaka/talent_4.png",
+./templates/character/genshin/ayaka-build copy.php:374:              "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayaka/talent_5.png",
+./templates/character/genshin/ayaka-build copy.php:380:              "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayaka/talent_6.png",
+./templates/character/genshin/ayaka-build copy.php:390:              "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayaka/constellation_1.png",
+./templates/character/genshin/ayaka-build copy.php:396:              "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayaka/constellation_2.png",
+./templates/character/genshin/ayaka-build copy.php:402:              "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayaka/constellation_3.png",
+./templates/character/genshin/ayaka-build copy.php:408:              "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayaka/constellation_4.png",
+./templates/character/genshin/ayaka-build copy.php:414:              "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayaka/constellation_5.png",
+./templates/character/genshin/ayaka-build copy.php:420:              "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayaka/constellation_6.png",
+./templates/character/genshin/ayaka-build copy.php:435:                'icon' => 'https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/UI_GachaTypeIcon_Sword.png',
+./templates/character/genshin/ayaka-build copy.php:441:                'icon' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayaka/talent_2.png',
+./templates/character/genshin/ayaka-build copy.php:447:                'icon' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayaka/talent_2.png',
+./templates/character/genshin/ayaka-build copy.php:453:                'icon' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayaka/talent_4.png',
+./templates/character/genshin/ayaka-build copy.php:621:                            $materialUrl = "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/ayaka/" . ucfirst(str_replace(" ", "_", $material)) . ".png";
+./templates/character/genshin/eula-build.php:4: * Description: Template for displaying Genshin Impact character builds Eula.
+./templates/character/genshin/eula-build.php:40:                $image_url = 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Eula.png';
+./templates/character/genshin/eula-build.php:49:                        <h1 class="character-name">Genshin Impact Eula Build</h1> <img class="character-element"
+./templates/character/genshin/eula-build.php:50:                            src="https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/element_cryo.png"
+./templates/character/genshin/eula-build.php:54:                            src="https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/weapon_claymore.png"
+./templates/character/genshin/eula-build.php:61:                    $image_base_path = 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/farming/';
+./templates/character/genshin/eula-build.php:107:                                        src="https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Eula/<?php echo urlencode(str_replace(' ', '_', $weaponName)); ?>.png"
+./templates/character/genshin/eula-build.php:150:                                    $imageUrl = "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/" . str_replace(' ', '_', strtolower($artifactName)) . ".png";
+./templates/character/genshin/eula-build.php:237:                                    //$characters = get_genshin_characters();
+./templates/character/genshin/eula-build.php:248:                                                href="https://kaztokyo.sakura.ne.jp/genshin-impact-blog-<?php echo strtolower($name); ?>-best-build">
+./templates/character/genshin/eula-build.php:250:                                                    src="<?php echo get_template_directory_uri(); ?>/images/genshin/<?php echo $name; ?>.png"
+./templates/character/genshin/eula-build.php:253:                                                    src="<?php echo get_template_directory_uri(); ?>/images/genshin/element_<?php echo $info['element']; ?>.png"
+./templates/character/genshin/eula-build.php:268:                                    //$characters = get_genshin_characters();
+./templates/character/genshin/eula-build.php:279:                                                href="https://kaztokyo.sakura.ne.jp/genshin-impact-blog-<?php echo strtolower($name); ?>-best-build">
+./templates/character/genshin/eula-build.php:281:                                                    src="<?php echo get_template_directory_uri(); ?>/images/genshin/<?php echo $name; ?>.png"
+./templates/character/genshin/eula-build.php:284:                                                    src="<?php echo get_template_directory_uri(); ?>/images/genshin/element_<?php echo $info['element']; ?>.png"
+./templates/character/genshin/eula-build.php:299:                                    //$characters = get_genshin_characters();
+./templates/character/genshin/eula-build.php:310:                                                href="https://kaztokyo.sakura.ne.jp/genshin-impact-blog-<?php echo strtolower($name); ?>-best-build">
+./templates/character/genshin/eula-build.php:312:                                                    src="<?php echo get_template_directory_uri(); ?>/images/genshin/<?php echo $name; ?>.png"
+./templates/character/genshin/eula-build.php:315:                                                    src="<?php echo get_template_directory_uri(); ?>/images/genshin/element_<?php echo $info['element']; ?>.png"
+./templates/character/genshin/eula-build.php:345:                                "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/UI_GachaTypeIcon_Sword.png",
+./templates/character/genshin/eula-build.php:351:                                "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayato/talent_2.png",
+./templates/character/genshin/eula-build.php:357:                                "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayato/talent_3.png",
+./templates/character/genshin/eula-build.php:374:                                "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayato/talent_4.png",
+./templates/character/genshin/eula-build.php:380:                                "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayato/talent_5.png",
+./templates/character/genshin/eula-build.php:386:                                "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayato/talent_6.png",
+./templates/character/genshin/eula-build.php:396:                                "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayato/constellation_1.png",
+./templates/character/genshin/eula-build.php:402:                                "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayato/constellation_2.png",
+./templates/character/genshin/eula-build.php:408:                                "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayato/constellation_3.png",
+./templates/character/genshin/eula-build.php:414:                                "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayato/constellation_4.png",
+./templates/character/genshin/eula-build.php:420:                                "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayato/constellation_5.png",
+./templates/character/genshin/eula-build.php:426:                                "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayato/constellation_6.png",
+./templates/character/genshin/eula-build.php:455:                                    'icon' => 'https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Eula/UI_GachaTypeIcon_Claymore.png',
+./templates/character/genshin/eula-build.php:461:                                    'icon' => 'https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Eula/talent_2.png',
+./templates/character/genshin/eula-build.php:467:                                    'icon' => 'https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Eula/talent_3.png',
+./templates/character/genshin/eula-build.php:516:                                    'icon' => 'https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Eula/talent_4.png',
+./templates/character/genshin/eula-build.php:522:                                    'icon' => 'https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Eula/talent_5.png',
+./templates/character/genshin/eula-build.php:528:                                    'icon' => 'https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/Eula/talent_6.png',
+./templates/character/genshin/eula-build.php:577:                                    'icon' => 'https://rerollcdn.com/GENSHIN/Skill/1/Eula/constellation_1.png',
+./templates/character/genshin/eula-build.php:583:                                    'icon' => 'https://rerollcdn.com/GENSHIN/Skill/1/Eula/constellation_2.png',
+./templates/character/genshin/eula-build.php:589:                                    'icon' => 'https://rerollcdn.com/GENSHIN/Skill/1/Eula/constellation_3.png',
+./templates/character/genshin/eula-build.php:595:                                    'icon' => 'https://rerollcdn.com/GENSHIN/Skill/1/Eula/constellation_4.png',
+./templates/character/genshin/eula-build.php:601:                                    'icon' => 'https://rerollcdn.com/GENSHIN/Skill/1/Eula/constellation_5.png',
+./templates/character/genshin/eula-build.php:607:                                    'icon' => 'https://rerollcdn.com/GENSHIN/Skill/1/Eula/constellation_6.png',
+./templates/character/genshin/eula-build.php:712:                                                            $materialUrl = "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/xianyun/" . ucfirst(str_replace(" ", "_", $material)) . ".png";
+./my-genshin-build.php:3: * Template Name: My Genshin Build
+./my-genshin-build.php:4: * Template Post Type: genshin-build
+./my-genshin-build.php:21:            get_template_part( 'template-parts/content', 'single-genshin_build' );
+./templates/character/genshin/ayaka-build.php:4: * Description: Template for displaying Genshin Impact character builds AYAKA.
+./templates/character/genshin/ayaka-build.php:39:        $image_url = 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/Ayaka.png';
+./templates/character/genshin/ayaka-build.php:48:            <h1 class="character-name">Genshin Impact Ayaka Build</h1> <img class="character-element"
+./templates/character/genshin/ayaka-build.php:49:              src="https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/element_cryo.png" alt="Cryo">
+./templates/character/genshin/ayaka-build.php:52:              src="https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/weapon_sword.png"
+./templates/character/genshin/ayaka-build.php:59:          $image_base_path = 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/';
+./templates/character/genshin/ayaka-build.php:107:                      src="https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/weapons/<?php echo urlencode(str_replace(' ', '_', $weaponName)); ?>.png"
+./templates/character/genshin/ayaka-build.php:147:                  $imageUrl = "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/" . str_replace(' ', '_', strtolower($artifactName)) . ".png";
+./templates/character/genshin/ayaka-build.php:179:            target="_blank" class="character-credit">Character Builds by Genshin Impact Helper →</a>
+./templates/character/genshin/ayaka-build.php:240:                //$characters = get_genshin_characters();
+./templates/character/genshin/ayaka-build.php:253:                      href="https://kaztokyo.sakura.ne.jp/genshin-impact-blog-<?php echo strtolower($name); ?>-best-build">
+./templates/character/genshin/ayaka-build.php:255:                        src="<?php echo get_template_directory_uri(); ?>/images/genshin/<?php echo $name; ?>.png"
+./templates/character/genshin/ayaka-build.php:258:                        src="<?php echo get_template_directory_uri(); ?>/images/genshin/element_<?php echo $info['element']; ?>.png"
+./templates/character/genshin/ayaka-build.php:273:                //$characters = get_genshin_characters();
+./templates/character/genshin/ayaka-build.php:286:                      href="https://kaztokyo.sakura.ne.jp/genshin-impact-blog-<?php echo strtolower($name); ?>-best-build">
+./templates/character/genshin/ayaka-build.php:288:                        src="<?php echo get_template_directory_uri(); ?>/images/genshin/<?php echo $name; ?>.png"
+./templates/character/genshin/ayaka-build.php:291:                        src="<?php echo get_template_directory_uri(); ?>/images/genshin/element_<?php echo $info['element']; ?>.png"
+./templates/character/genshin/ayaka-build.php:306:                //$characters = get_genshin_characters();
+./templates/character/genshin/ayaka-build.php:319:                      href="https://kaztokyo.sakura.ne.jp/genshin-impact-blog-<?php echo strtolower($name); ?>-best-build">
+./templates/character/genshin/ayaka-build.php:321:                        src="<?php echo get_template_directory_uri(); ?>/images/genshin/<?php echo $name; ?>.png"
+./templates/character/genshin/ayaka-build.php:324:                        src="<?php echo get_template_directory_uri(); ?>/images/genshin/element_<?php echo $info['element']; ?>.png"
+./templates/character/genshin/ayaka-build.php:337:              "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/UI_GachaTypeIcon_Sword.png",
+./templates/character/genshin/ayaka-build.php:343:              "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayaka/talent_2.png",
+./templates/character/genshin/ayaka-build.php:349:              "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayaka/talent_3.png",
+./templates/character/genshin/ayaka-build.php:355:              "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayaka/talent_4.png",
+./templates/character/genshin/ayaka-build.php:368:              "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayaka/talent_4.png",
+./templates/character/genshin/ayaka-build.php:374:              "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayaka/talent_5.png",
+./templates/character/genshin/ayaka-build.php:380:              "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayaka/talent_6.png",
+./templates/character/genshin/ayaka-build.php:390:              "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayaka/constellation_1.png",
+./templates/character/genshin/ayaka-build.php:396:              "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayaka/constellation_2.png",
+./templates/character/genshin/ayaka-build.php:402:              "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayaka/constellation_3.png",
+./templates/character/genshin/ayaka-build.php:408:              "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayaka/constellation_4.png",
+./templates/character/genshin/ayaka-build.php:414:              "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayaka/constellation_5.png",
+./templates/character/genshin/ayaka-build.php:420:              "icon" => "https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayaka/constellation_6.png",
+./templates/character/genshin/ayaka-build.php:435:                'icon' => 'https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/UI_GachaTypeIcon_Sword.png',
+./templates/character/genshin/ayaka-build.php:441:                'icon' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayaka/talent_2.png',
+./templates/character/genshin/ayaka-build.php:447:                'icon' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayaka/talent_2.png',
+./templates/character/genshin/ayaka-build.php:453:                'icon' => 'https://gamewidth.net/wp-content/themes/Xiaoyu Tekken7/images/genshin/ayaka/talent_4.png',
+./templates/character/genshin/ayaka-build.php:621:                            $materialUrl = "https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/ayaka/" . ucfirst(str_replace(" ", "_", $material)) . ".png";
+./css/sample.css:231:    background-image: url(https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/close.svg)!important;
+./css/sample.css:7001:.GenshinImpact .header .nav,.GenshinImpact .header .toolbar .toolbar-active {
+./css/sample.css:7005:.GenshinImpact .header .nav .nav-links .nav-item .nav-link:hover {
+./css/sample.css:7009:.GenshinImpact .header .nav .nav-links .nav-item .nav-link.active {
+./css/sample.css:7013:.GenshinImpact .header .nav .nav-links .nav-item .dropdown-menu {
+./css/sample.css:7019:    background-image: url(https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/2_sm.png)!important;
+./css/sample.css:7028:    background-image: url(https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/3_sm.png)!important;
+./css/sample.css:7032:    background-image: url(https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/4_sm.png)!important;
+./css/sample.css:7042:    background-image: url(https://gamewidth.net/wp-content/themes/Xiaoyu%20Tekken7/images/genshin/5_sm.png)!important;
+./css/editor-style.css:211:.edit-post-layout.interface-interface-skeleton:not(.post-type-genshin_updated) ol {
+./css/editor-style.css:219:.edit-post-layout.interface-interface-skeleton:not(.post-type-genshin_updated) ol li {
+./css/editor-style.css:227:.edit-post-layout.interface-interface-skeleton:not(.post-type-genshin_updated) ol li:before {
+./css/editor-style.css:253:.edit-post-layout.interface-interface-skeleton:not(.post-type-genshin_updated) ul {
+./css/editor-style.css:262:.edit-post-layout.interface-interface-skeleton:not(.post-type-genshin_updated) ul li {
+./css/editor-style.css:272:.edit-post-layout.interface-interface-skeleton:not(.post-type-genshin_updated) ul li::before {
+./css/editor-style.css:296:/*.edit-post-layout.interface-interface-skeleton:not(.post-type-genshin_updated) ul {
+./css/editor-style.css:303:.edit-post-layout.interface-interface-skeleton:not(.post-type-genshin_updated) ul li {
+./css/editor-style.css:310:/*.edit-post-layout.interface-interface-skeleton:not(.post-type-genshin_updated) ul li:before {
+./css/editor-style.css:367:/*.genshin_updated ul,
+./css/editor-style.css:368:.edit-post-layout.post-type-genshin_updated.interface-interface-skeleton ul {
+./css/editor-style.css:375:.genshin_updated ul li,
+./css/editor-style.css:376:.edit-post-layout.post-type-genshin_updated.interface-interface-skeleton ul li {
+./css/editor-style.css:383:.genshin_updated ul li::before,
+./css/editor-style.css:384:.edit-post-layout.post-type-genshin_updated.interface-interface-skeleton ul li::before {
+./css/editor-style.css:402:/* カスタム投稿タイプgenshin_updatedの編集画面のスタイル 反映されていない */
+./css/editor-style.css:403:/*.edit-post-layout.post-type-genshin_updated.interface-interface-skeleton ul {
+./css/editor-style.css:408:.edit-post-layout.post-type-genshin_updated.interface-interface-skeleton ul li {
+./css/editor-style.css:415:.edit-post-layout.post-type-genshin_updated.interface-interface-skeleton ul li::before {

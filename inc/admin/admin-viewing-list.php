@@ -154,6 +154,33 @@ if (!function_exists('naigai_get_property_price_value')) {
     }
 }
 
+if (!function_exists('naigai_is_soldout_price')) {
+    function naigai_is_soldout_price($price)
+    {
+        $price = trim(wp_strip_all_tags((string) $price));
+        if ($price === '') return false;
+
+        $normalized = str_replace([' ', '　', ',', '円'], '', $price);
+
+        if (preg_match('/^0+(?:\.0+)?$/', $normalized)) return true;
+        if (preg_match('/^0+(?:\.0+)?万円$/u', $normalized)) return true;
+
+        return false;
+    }
+}
+
+if (!function_exists('naigai_format_price_label')) {
+    function naigai_format_price_label($price)
+    {
+        $price = trim((string) $price);
+
+        if ($price === '') return '';
+        if (naigai_is_soldout_price($price)) return '売却済み';
+
+        return $price;
+    }
+}
+
 /* =========================================================
  * meta getter / setter
  * ========================================================= */
@@ -667,7 +694,8 @@ if (!function_exists('naigai_render_viewing_list_admin_page')) {
                         $period_label = naigai_format_period_label($m['start_date'], $m['end_date']);
                         $time_label   = naigai_format_time_range($m['time_start'], $m['time_end']);
                         $status_label = ($m['enabled'] === '1') ? 'カレンダー表示ON' : 'カレンダー表示OFF';
-                        $price        = $m['price'] ? $m['price'] : '未設定';
+                        $price = naigai_format_price_label($m['price']);
+                        if ($price === '') $price = '未設定';
                     ?>
                         <div class="naigai-admin-card">
                             <a class="naigai-admin-card__thumb" href="<?php echo esc_url($view_link); ?>" target="_blank" rel="noopener noreferrer">
@@ -938,7 +966,7 @@ if (!function_exists('naigai_ajax_get_calendar_events')) {
                 'property_type_label'  => $type_label,
                 'area'                 => (string) ($meta['area'] ?? ''),
                 'area_label'           => $area_label,
-                'price'                => (string) ($meta['price'] ?? ''),
+                'price'                => naigai_format_price_label((string) ($meta['price'] ?? '')),
                 'viewing_period_label' => $period_label,
                 'time_label'           => $time_label,
                 'time_start'           => (string) ($meta['time_start'] ?? ''),
@@ -1051,7 +1079,7 @@ if (!function_exists('naigai_build_property_list_rows')) {
                 'title'        => $title,
                 'type_label'   => $type_label,
                 'area_label'   => $area_label,
-                'price'        => (string) ($m['price'] ?? ''),
+                'price'        => naigai_format_price_label((string) ($m['price'] ?? '')),
                 'period_label' => $period_label,
                 'time_label'   => $time_label,
                 'staff'        => (string) ($m['staff'] ?? ''),
@@ -1118,7 +1146,7 @@ if (!function_exists('naigai_render_property_list_html')) {
                                 <span class="naigai-property-row__area">地域：<?php echo esc_html($row['area_label']); ?></span>
                             <?php endif; ?>
 
-                            <?php if (!empty($row['price'])) : ?>
+                            <?php if ($row['price'] !== '') : ?>
                                 <span class="naigai-property-row__price">価格：<?php echo esc_html($row['price']); ?></span>
                             <?php endif; ?>
                         </div>
@@ -1194,9 +1222,9 @@ if (!function_exists('naigai_get_reservation_modal_payload')) {
         $period_label = naigai_format_period_label($meta['start_date'], $end_date);
         $time_label   = naigai_format_time_range($meta['time_start'], $meta['time_end']);
 
-        $price = (string) ($meta['price'] ?? '');
+        $price = naigai_format_price_label((string) ($meta['price'] ?? ''));
         if ($price === '') {
-            $price = '売却済';
+            $price = '売却済み';
         }
 
         return [
@@ -1206,6 +1234,7 @@ if (!function_exists('naigai_get_reservation_modal_payload')) {
             'permalink'    => $permalink,
             'thumbnail'    => $thumb,
             'price'        => $price,
+            'price_is_soldout' => naigai_is_soldout_price((string) ($meta['price'] ?? '')) ? 1 : 0,
             'staff'        => (string) ($meta['staff'] ?? ''),
             'period_label' => $period_label,
             'time_label'   => $time_label,

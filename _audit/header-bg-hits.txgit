@@ -1,0 +1,378 @@
+53:.dark-theme #touch-menu,
+54:.dark-theme .sidebar-navigation .drawer-close {
+67:.sidebar-navigation .drawer-close:focus-visible {
+80:  background: currentColor;
+98:.sidebar-navigation {
+105:body.admin-bar .sidebar-navigation {
+109:.sidebar-navigation.visible {
+114:.sidebar-navigation .drawer-close {
+131:body.admin-bar .sidebar-navigation .drawer-close {
+135:.sidebar-navigation .drawer-close > span {
+139:  background: currentColor;
+143:.sidebar-navigation .drawer-close > span:first-child {
+147:.sidebar-navigation .drawer-close > span:last-child {
+177:  background-color: #ffe6e6;
+221:  background-color: #fff; /* 通常時の背景色 */
+225:  background-color: #f0f0f0; /* ホバー時の背景色 */
+252:  background-color: #0056b3;
+257:  background-color: #007bff;
+278:  background-color: #0056b3;
+288:  background-color: #007bff;
+310:  background-color: #ccc;
+415:  background-color: rgba(51, 51, 51, 0.8);
+437:    background-color: #0d0b47;
+451:    background-color: #1a1a8c;
+465:    background-color: #0d0b47;
+479:    background-color: #1a1a8c;
+486:  background-color: #ff69b4; /* ピンク色 */
+499:  background-color: #ff1493; /* ホバー時の濃いピンク */
+512:    background-color: #ff1493; /* ホバー時の濃いピンク */
+525:    background-color: #ff1493; /* ホバー時の濃いピンク */
+536:  background-color: var(--main-bg); /* 背景色 */
+566:  background-color: var(--sub-grey); /* 背景色 */
+615:  background-color: #4caf50; /* ボタンの背景色 */
+629:  background-color: #ff9933; /* ホバー時の背景色 */
+639:body.dark-theme .customer-info-form {
+640:  background-color: var(--sub-grey); /* ダークモード背景色 */
+644:body.dark-theme .customer-info-form h2,
+645:body.dark-theme .customer-info-form label,
+646:body.dark-theme .customer-info-form .attention {
+650:body.dark-theme .customer-info-form input[type='text'],
+651:body.dark-theme .customer-info-form input[type='email'],
+652:body.dark-theme .customer-info-form input[type='tel'],
+653:body.dark-theme .customer-info-form input[type='number'],
+654:body.dark-theme .customer-info-form select,
+655:body.dark-theme .customer-info-form textarea {
+656:  background-color: var(--grey); /* ダークモードの入力フィールド背景色 */
+661:body.dark-theme .submit {
+662:  background-color: #4caf50; /* ダークモードボタン背景色 */
+666:body.dark-theme .submit:hover {
+667:  background-color: #45a049; /* ダークモードホバー時の背景色 */
+735:  background-color: #ffffff;
+763:  --header-bg: #fff;
+765:  --nav-bg: #004bba;
+783:.dark-theme {
+784:  --header-bg: #1c1c1c;
+786:  --nav-bg: #083a8e;
+791:  background: var(--header-bg);
+796:/*.navg_under{ background:var(--nav-bg) !important; }*/
+809:#breadcrumb ol {
+814:#breadcrumb li {
+818:#breadcrumb a,
+819:#breadcrumb span {
+824:#breadcrumb a:hover {
+827:#breadcrumb li + li::before {
+834:#breadcrumb li:first-child > a::before {
+843:.color-mode #btn-mode {
+849:.color-mode .btn-switch {
+853:  background: #bdbdbd;  /* 初期状態の背景色 */
+860:.color-mode .btn-switch::after {
+867:  background: #fff;  /* スライダー部分の背景色 */
+874:  background: #bdbdbd;  /* 背景色は変更なし */
+883:body.dark-theme {
+884:  background-color: #111827;  /* ダークモード背景色 */
+888:/*body.dark-theme a {
+912:  .header-wrapper {
+924:  .header__top {
+932:    background: var(--header-bg);
+939:  .header__top > .color-mode {
+949:  .header__top > .phone-container {
+958:  .header__top > .phone-container #phone-link {
+967:    background: rgba(0, 0, 0, 0.04);
+977:  .dark-theme .header__top > .phone-container #phone-link {
+978:    background: rgba(255, 255, 255, 0.06);
+982:  .header__top > .phone-container #phone-link .phone-text {
+987:  .header__top > .phone-container #phone-link svg {
+991:  .header__top > .phone-container #phone-link:active {
+995:  .header__top > .phone-container #phone-link:focus-visible {
+1001:  .top-header {
+1006:  #breadcrumb {
+1017:  .search-form-container {
+1025:      background: #004bba;
+1059:      background: rgba(255, 255, 255, .12);
+1075:      background: #004bba;
+1105:      background: rgba(255, 255, 255, .15);
+1112:      .header-menu-mobile {
+1116:      .header-menu-pc {
+1125:        background: #004bba;
+1173:        background: #004bba;
+1223:        background: #000;
+1244:        background: #f8f8f8;
+1261:      .header-menu-mobile {
+1265:      .header-menu-pc {
+1291:      .header-menu-mobile {
+1295:      .header-menu-pc {
+1309:        background: #004bba;
+1335:          background: transparent !important;
+1356:      --header-bg: #fff;
+1360:    .dark-theme {
+1361:      --header-bg: #1d1d1d;
+1371:      .header__top {
+1375:        background: var(--header-bg);
+1423:  background: rgba(0, 0, 0, 0.5);
+1476:.dark-theme .foot-socials a {
+1514:  background-color: var(--main-bg);
+1571:body.dark-theme {
+1581:/*.dark-theme .foot-socials ul li a {
+1585:body.dark-theme .my-link-blue {
+1595:body.dark-theme .my-link-red {
+1683:  background-color: #3498db;
+1744:  background: url(images/social-sprite.jpeg) no-repeat;
+1822:  background: #333 none repeat scroll 0 0;
+1830:  background: center;
+1834:  background: #333 none repeat scroll 0 0;
+1864:    background: #333 none repeat scroll 0 0;
+1897:  background-color: rgba(0, 0, 0, 0.5);
+2061:  background: rgba(0, 0, 0, 0.5); /* 半透明の背景 */
+2163:  background-color: rgba(0, 0, 0, 0.5); /* 背景色の透明度を設定 */
+2249:  /* background-color: #fff; */
+2364:.sidebar-navigation {
+2365:  background: #fff; /* 背景色 */
+2389:.dark-theme .sidebar-navigation {
+2390:  background-color: var(--main-bg); /* ダークテーマ用の背景色 */
+2398:.sidebar-navigation .menu-item-has-children > a::after,
+2399:.header-menu-mobile .menu-item-has-children > a::after {
+2412:.sidebar-navigation .menu-item-has-children > a::after {
+2416:.header-menu-mobile .menu-item-has-children > a::after {
+2421:.sidebar-navigation .menu-item-has-children.rotated > a::after,
+2422:.sidebar-navigation .menu-item-has-children.open > a::after,
+2423:.header-menu-mobile .menu-item-has-children.rotated > a::after,
+2424:.header-menu-mobile .menu-item-has-children.open > a::after {
+2432:.dark-theme .sidebar-navigation .menu-item-has-children > a::after {
+2436:.dark-theme .header-menu-mobile .menu-item-has-children > a::after {
+2446:  .sidebar-navigation .menu-item-has-children .sub-menu {
+2456:  .sidebar-navigation .menu-item-has-children.open .sub-menu {
+2469:.sidebar-navigation.visible {
+2474:.sidebar-navigation > ul {
+2481:.sidebar-navigation ul ul {
+2487:.header-menu-mobile a {
+2503:.sidebar-navigation a {
+2510:.dark-theme .sidebar-navigation a {
+2515:.dark-theme .sidebar-navigation a:hover {
+2521:  .sidebar-navigation {
+2527:  .sidebar-navigation.visible {
+2532:  .sidebar-navigation a {
+2538:.sidebar-navigation ul {
+2662:  background-color: #55acee; /* Twitter color */
+2672:  background: -o-radial-gradient(
+2681:  background: radial-gradient(
+2702:  /*background: #ffff;*/
+2877:  background: rgba(0, 0, 0, 0.5);
+2886:  background: rgba(0, 0, 0, 0.7);
+2902:  background-color: rgba(0, 0, 0, 0.6); /* 半透明の背景 */
+2923:  background-color: rgba(0, 0, 0, 0.8);
+3037:  background-color: #ff9933; /* オレンジ色に変更 */
+3048:  background-color: #007bff; /* 青色 */
+3070:  background-color: #4caf50; /* 緑色 */
+3077:  background-color: #0056b3; /* 濃い青色 */
+3171:  background-color: rgba(0, 0, 0, 0.5);
+3199:  background-color: white; /* モーダルの内容の背景 */
+3206:  background-color: #fff;
+3308:  background-color: #f0f0f0; /* 背景色を追加して見やすくする */
+3319:  background-color: #ff4c4c; /* ボタンの色 */
+3357:  background-color: #ff1f1f; /* ホバー時の色 */
+3367:  background-color: white;
+3481:  background: #fff;
+3554:  background-color: #f2faff; /* 薄いブルー */
+3588:  background-color: #e6f2ff; /* 少し明るくする */
+3595:  background-color: #4a90e2; /* 青色 */
+3607:  background-color: #357ab7; /* ホバー時に少し暗く */
+3613:  background-color: #4a90e2;
+3623:  background-color: #357ab7;
+3628:  background-color: #4a90e2;
+3641:  background-color: #357ab7; /* ホバー時に濃い色 */
+3646:  background-color: #4a90e2; /* ボタンの青色 */
+3662:  background-color: #357ab7; /* 少し濃い青に変化 */
+3668:  background-color: #fff;
+3692:  background-color: #fff;
+3713:  background-color: #4caf50; /* 緑色 */
+3728:  background-color: #45a049; /* ホバー時に少し濃い緑色 */
+3743:  background-color: #dcdcdc; /* グレーに変える */
+3827:  background-color: #f0f0f0;
+3922:  background-color: #007bff; /* 背景色を青に設定 */
+3940:  background-color: #ff7f00; /* ホバー時の背景色をオレンジに設定 */
+3958:  background-color: #007bff; /* 背景色を青に設定 */
+3976:  background-color: #ff7f00; /* ホバー時の背景色をオレンジに設定 */
+3987:  background-color: #2196f3; /* ボタン色を変更 */
+3995:  background-color: #1976d2;
+4007:    background-color: #ffc107; /* モバイル時の色 */
+4012:.navigation {
+4017:  background: url(images/gray.gif) repeat-y 50% 0;
+4024:.navigation a img {
+4042:.dark-theme .alignright,
+4043:.dark-theme .alignleft {
+4047:.navigation a {
+4058:.navigation a:hover,
+4059:.navigation a:focus-visible {
+4082:  background: #ddd;
+4087:  background: #fff;
+4097:  background: #ffeff7;
+4247:  background-color: #4caf50;
+4260:  background-color: #45a049;
+4330:  background: url(images/quote.png) no-repeat 0 0;
+4366:  background: #eee;
+4377:  background: #f9f9f9;
+4384:  background: #f9f9f9;
+4391:  background: #f9f9f9;
+4398:  background: #f9f9f9;
+4405:  background: #f9f9f9;
+4417:  background: #fff; /* 背景色 */
+4433:  background: #0d6efd;
+4446:  /*background: #0056b3;*/
+4472:  background-color: #f3f3f3;
+4574:  background: #464e54;
+4622:  background: #000;
+4668:.dark-theme .home-slide-info > h3 a {
+4690:  background: transparent;
+4709:  background: #004bba;
+4757:  /*background: #f9f9f9 none repeat scroll 0 0;*/
+4784:  background-color: #222;
+4794:  background-color: #444; /* 背景色を少し明るくする */
+4810:  background-color: #222;
+4815:  background-color: #666;
+4942:body.dark-theme .archive-post-info > h3 a {
+4953:body.dark-theme .gallery-slider h2 {
+4993:  background-color: rgba(0, 0, 0, 0.6);
+5015:  /*background: #eaeaea none repeat scroll 0 0;*/
+5092:  background: #f5f5f5;
+5100:  background: #f5f5f5;
+5112:  background: #333 none repeat scroll 0 0;
+5172:  background-color: #f0f0f0; /* ホバー時の背景色 */
+5565:  background-color: #333;
+5627:  background-color: #000;
+5638:  background: #333 none repeat scroll 0 0;
+5720:  background: #0056b3; /* 濃いブルー */
+5739:  background: #00bcd4; /* シアン系の背景 */
+5757:    background: #0056b3; /* 濃いブルー */
+5774:    background: #00bcd4; /* シアン系の背景 */
+5834:  background-color: #f2c1be; /* 背景色を変更 */
+5840:  background-color: #eeb3b9; /* 背景色を変更 */
+5850:#menu-global-navigation .mega-menu .dropdown-menu {
+5883:#menu-global-navigation .mega-thumbs .dropdown-menu {
+5914:  #menu-global-navigation .mega-thumbs .dropdown-menu {
+5929:  #menu-global-navigation .mega-thumbs .dropdown-menu {
+6020:  #menu-global-navigation .mega-menu .dropdown-menu {
+6037:  #menu-global-navigation .mega-menu .dropdown-menu {
+6048:body.dark-theme .content-box1 h2 a {
+6058:body.dark-theme .content-box a h2 {
+6068:body.dark-theme .post-meta .category a {
+6078:body.dark-theme .sidebar-comment-num a {
+6088:body.dark-theme .more-link a {
+6098:body.dark-theme .recent-big-content-box h1 a {
+6113:body.dark-theme .recent-content-box h1 a {
+6123:.dark-theme #farmingSchedule h2 {
+6133:.dark-theme .social-nav a {
+6143:/*.dark-theme .type-post a {
+6151:.dark-theme .wp-block-kadence-column a {
+6163:.dark-theme #main h1 a {
+6174:.dark-theme #main h2 a {
+6179:navigation a {
+6184:.navigation a {
+6215:body .dark-theme .post-date a {
+6237:/*.dark-theme li a {
+6246:/*.dark-theme .navbar li a {
+6251:    background-color: #f2c1be !important; /* ドロップダウンメニューの背景色 */
+6266:  background: #fff;
+6287:  /*background-color: var(--bs-table-bg);*/
+6292:  /*background-color: var(--bs-body-bg);*/
+6293:  background: #303b7a;
+6336:body.dark-theme #dataTable .table thead tr th td {
+6351:  background-color: #2931aa;
+6370:body.dark-theme #dataTable thead tr th {
+6377:  background-color: transparent; /* 背景色を透明にする例 */
+6382:  background-color: #fff;
+6427:  background: none;
+6529:  background-color: rgba(0, 0, 0, 0.5);
+6752:  background-color: rgba(0, 0, 0, 0.5); /* 半透明の黒背景 */
+6814:  /*background-color: transparent; /* 背景色なし */
+6823:  /*background-color: rgba(0, 0, 0, 0.8); /* ホバー時の背景色 */
+6855:  background: #ddd;
+6867:  background: #007bff;
+6875:  background: #007bff;
+7008:  background-color: rgba(0, 0, 0, 0.7); /* 背景を暗く */
+7019:  background-color: white;
+7033:  background-color: #ff4c4c; /* ボタンの色 */
+7070:  background-color: #ff1f1f; /* ホバー時の色 */
+7088:  background-color: transparent; /* 初期状態で背景色が表示されないように */
+7139:  background: rgba(0, 0, 0, 0.6);
+7157:  background-color: rgba(0, 0, 0, 0.5);
+7337:  background: #f3f6f8;
+7342:.sidebar-navigation .menu-item-has-children > a::after,
+7343:.header-menu-mobile .menu-item-has-children > a::after {
+7355:.sidebar-navigation .menu-item-has-children > a::after {
+7359:.header-menu-mobile .menu-item-has-children > a::after {
+7363:.sidebar-navigation .menu-item-has-children.rotated > a::after,
+7364:.sidebar-navigation .menu-item-has-children.open > a::after,
+7365:.header-menu-mobile .menu-item-has-children.rotated > a::after,
+7366:.header-menu-mobile .menu-item-has-children.open > a::after {
+7370:.dark-theme .sidebar-navigation .menu-item-has-children > a::after {
+7374:.dark-theme .header-menu-mobile .menu-item-has-children > a::after {
+7386:.search-form-30 {
+7393:  background: #fff;
+7397:.search-form-30 label {
+7403:.search-form-30 input {
+7413:  background: #fff;
+7417:.search-form-30 input::placeholder {
+7422:.search-form-30 button {
+7433:  background: #2589d0;
+7436:.search-form-30 button::after {
+7446:body.dark-theme .search-form-30 {
+7447:  background: #111827;
+7451:body.dark-theme .search-form-30 input {
+7452:  background: #111827;
+7456:body.dark-theme .search-form-30 input::placeholder {
+7476:   SP : touch / dark / phone / breadcrumb
+7480:  .header-wrapper {
+7485:  .header-wrapper::before {
+7489:  .header__top {
+7502:    background: var(--header-bg);
+7507:  body.dark-theme .header__top {
+7508:    background: var(--header-bg);
+7566:  .header__top > .color-mode {
+7583:  .header__top > .search-form-container {
+7595:  .header__top > .search-form-container form,
+7596:  .header__top > .search-form-container .search-form-20 {
+7600:  .header__top > .search-form-container .search-form-20 {
+7607:    background: #fff;
+7610:  .header__top > .search-form-container .search-form-20 select,
+7611:  .header__top > .search-form-container .search-form-20 input[type="text"] {
+7616:    background: #fff;
+7621:  .header__top > .search-form-container .search-form-20 select {
+7627:  .header__top > .search-form-container .search-form-20 input[type="text"] {
+7632:  .header__top > .search-form-container .search-form-20 button,
+7633:  .header__top > .search-form-container .search-form-20 input[type="submit"] {
+7645:    background: #2b8fe8 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='10.5' cy='10.5' r='5.75' fill='none' stroke='%23ffffff' stroke-width='2.25'/%3E%3Cpath d='M15 15l5 5' fill='none' stroke='%23ffffff' stroke-width='2.25' stroke-linecap='round'/%3E%3C/svg%3E") center center / 18px 18px no-repeat;
+7650:  .header__top > .search-form-container .search-form-20 button::before,
+7651:  .header__top > .search-form-container .search-form-20 input[type="submit"]::before,
+7652:  .header__top > .search-form-container .search-form-20 button::after,
+7653:  .header__top > .search-form-container .search-form-20 input[type="submit"]::after {
+7657:  .header__top > .top-header {
+7665:  .header__top > .top-header #breadcrumb {
+7672:  .header__top > .phone-container,
+7677:  .sidebar-navigation {
+7685:  .header__top > .search-form-container {
+7689:  .header__top {
+7706:  .header__top > .color-mode {
+7720:    background: none;
+7725:  body.admin-bar .header__top > .color-mode {
+7729:  .header__top > .phone-container {
+7739:  body.admin-bar .header__top > .phone-container {
+7743:  .header__top > .top-header {
+7750:  .header__top > .top-header #breadcrumb {
+7758:  .sidebar-navigation {
+7782:  background: #eef6ff;
+7786:.dark-theme .post-meta .category a,
+7787:.dark-theme .post-meta-row .category a,
+7788:.dark-theme .post-meta a.category-badge,
+7789:.dark-theme .post-meta-row a.category-badge,
+7790:.dark-theme .post-meta a.meta-badge,
+7791:.dark-theme .post-meta-row a.meta-badge,
+7792:.dark-theme .post-meta a.genre-badge,
+7793:.dark-theme .post-meta-row a.genre-badge {
+7794:  background: rgba(43, 143, 232, 0.18);
+7823:  --header-bg: #ffffff;
+7825:  --nav-bg: #0b57d0;
+7830:body.dark-theme {
+7850:  --header-bg: #1c1c1c;
+7852:  --nav-bg: #083a8e;
+7859:  background-color: var(--color-bg);

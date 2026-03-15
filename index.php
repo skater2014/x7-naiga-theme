@@ -227,4 +227,18 @@ endif;
 ?>
 </div><!-- single id end -->
 
-<?php get_footer(); ?>
+<?php <?php
+/**
+ * 専用AIチャットモーダルを直接読み込む
+ *
+ * 役割:
+ * - wp_footer フックに依存せず、テンプレート内へ確実に出力する
+ * - chatgpt-modal.php のHTML/CSSをそのまま画面へ含める
+ */
+$naigai_chat_modal_template = get_template_directory() . '/chatgpt-modal.php';
+if (file_exists($naigai_chat_modal_template)) {
+    include $naigai_chat_modal_template;
+}
+?>
+
+get_footer(); ?>
