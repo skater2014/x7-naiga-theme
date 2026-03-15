@@ -4349,11 +4349,6 @@ blockquote {
   right: 0px; /* 右端に配置 */
 }
 
-/* ボタンホバー時 */
-/*.slider-prev-btn:hover, .slider-next-btn:hover {
-  background-color: rgba(0, 0, 0, 0.8);
-}*/
-
 /* スライダーの画像調整 */
 .popular-post .slick-slide img {
   width: 100%;
@@ -4384,7 +4379,7 @@ blockquote {
   .page-wrapper {
     max-width: 100%; /* スマホでは全幅 */
     padding: 0px 0px; /* 余白を少し小さく */
-    margin-top: 45px;
+    /*margin-top: 45px;*/
   }
 }
 
@@ -4511,17 +4506,7 @@ blockquote {
 }
 
 /* モバイル用スタイル（768px以下） */
-/* 古いコード */
 @media (max-width: 768px) {
-  /* .more-link-wrapper {
-        width: 100%;
-        text-align: center;
-        -webkit-box-orient: vertical;
-        -webkit-box-direction: normal;
-        -ms-flex-direction: column;
-        flex-direction: column;
-    } */
-
   .more-link-wrapper {
     width: 100%; /* ラッパーを横幅100%に */
     text-align: center; /* モバイルでは中央揃え */
@@ -4542,14 +4527,7 @@ blockquote {
 }
 
 /* タブレット用スタイル（768px〜1024px） */
-/* 古いコード */
 @media (min-width: 768px) and (max-width: 1024px) {
-  /* .more-link-wrapper {
-        -webkit-box-pack: justify;
-        -ms-flex-pack: justify;
-        justify-content: flex-end;
-    } */
-
   .more-link-wrapper {
     display: flex;
     justify-content: flex-end; /* 右端に位置 */
@@ -4568,14 +4546,7 @@ blockquote {
 }
 
 /* PC用スタイル（1024px以上） */
-/* 古いコード */
 @media (min-width: 1024px) {
-  /* .more-link-wrapper {
-        -webkit-box-pack: end;
-        -ms-flex-pack: end;
-        justify-content: flex-end;
-    } */
-
   .more-link-wrapper {
     display: flex;
     justify-content: flex-end; /* 右寄せ */
@@ -4617,7 +4588,7 @@ blockquote {
   transition:
     visibility 0.3s ease,
     opacity 0.3s ease;
-  z-index: 23000;
+  z-index: 33000;
 }
 
 /* モーダルがアクティブな状態 */
@@ -4901,7 +4872,7 @@ blockquote {
 
 /* 固定ページ用のフォーム */
 .store-reservation-page-content {
-  padding: 20px; /* デフォルトの余白 */
+  padding: 20px;
   border-radius: 10px;
   width: 100%;
   max-width: 100%;
@@ -4911,6 +4882,44 @@ blockquote {
     opacity 0.3s ease,
     transform 0.3s ease;
   background: #fff;
+  color: #374151;
+}
+
+body.dark-theme .store-reservation-page-content {
+  --color-heading: #111827;
+  --color-text: #374151;
+  --color-muted: #6b7280;
+  --color-border: #d1d5db;
+  --color-link: #1d4f91;
+  background: #ffffff;
+  color: var(--color-text);
+}
+
+body.dark-theme .store-reservation-page-content h2,
+body.dark-theme .store-reservation-page-content h3,
+body.dark-theme .store-reservation-page-content h4,
+body.dark-theme .store-reservation-page-content h5,
+body.dark-theme .store-reservation-page-content h6 {
+  color: var(--color-heading);
+}
+
+body.dark-theme .store-reservation-page-content p,
+body.dark-theme .store-reservation-page-content label,
+body.dark-theme .store-reservation-page-content span,
+body.dark-theme .store-reservation-page-content li {
+  color: var(--color-text);
+}
+
+body.dark-theme .store-reservation-page-content input,
+body.dark-theme .store-reservation-page-content select,
+body.dark-theme .store-reservation-page-content textarea {
+  background: #fff;
+  color: #111827;
+  border: 1px solid var(--color-border);
+}
+
+body.dark-theme .store-reservation-page-content a {
+  color: var(--color-link);
 }
 
 /* 768px以下のモバイル画面に対応（paddingを5pxに変更） */
@@ -8495,4 +8504,445 @@ body.dark-theme .naigai-property-row__options {
   background: #b84d65 !important;
   border-color: #b84d65 !important;
   color: #fff !important;
+}
+
+#chatgpt-modal,
+#chatgpt-modal * {
+  box-sizing: border-box;
+}
+
+/* =========================================================
+   chat modal
+   - JSは触らない
+   - 余白の原因だった固定heightをやめる
+   - 中身が少ない時は縮む
+   - 多い時だけ全体スクロール
+   ========================================================= */
+
+#chatgpt-modal,
+#chatgpt-modal * {
+  box-sizing: border-box;
+}
+
+#chatgpt-modal {
+  position: fixed;
+  right: 16px;
+  bottom: 96px;
+  display: none;
+  width: min(420px, calc(100vw - 24px));
+  z-index: 24120;
+  font-family: inherit;
+}
+
+#chatgpt-modal.is-open {
+  display: block;
+}
+
+/* 閉じるボタンは外 */
+#chatgpt-modal .chatgpt-close-btn {
+  position: absolute;
+  top: -12px;
+  right: -12px;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 999px;
+  background: #efefef;
+  color: #111;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 10;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+}
+
+/* ここだけがスクロール担当 */
+#chatgpt-modal .chatgpt-modal-content {
+  background: #fff;
+  color: #111;
+  border-radius: 18px;
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.24);
+  max-height: min(76dvh, 720px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+#chatgpt-modal .chatgpt-modal-header {
+  background: #fff;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+#chatgpt-modal #chatgpt-modal-title {
+  margin: 0;
+  padding: 14px 16px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+#chatgpt-modal .chatgpt-modal-body {
+  background: #fff;
+}
+
+#chatgpt-modal .chatgpt-company-box {
+  padding: 10px 12px;
+  border-bottom: 1px solid #ececec;
+  background: #fafafa;
+}
+
+#chatgpt-modal .chatgpt-company-grid {
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr);
+  gap: 8px;
+  align-items: start;
+}
+
+#chatgpt-modal .chatgpt-company-logo-col {
+  display: flex;
+  justify-content: center;
+  padding-top: 2px;
+}
+
+#chatgpt-modal .chatgpt-company-favicon {
+  display: block;
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+}
+
+#chatgpt-modal .chatgpt-company-meta {
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 54px minmax(0, 1fr);
+  gap: 4px 8px;
+}
+
+#chatgpt-modal .chatgpt-company-row {
+  display: contents;
+}
+
+#chatgpt-modal .chatgpt-company-row dt {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.45;
+  color: #666;
+}
+
+#chatgpt-modal .chatgpt-company-row dd {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+#chatgpt-modal .chatgpt-company-row dd a {
+  color: #1f6feb;
+  text-decoration: none;
+}
+
+#chatgpt-modal .chatgpt-company-names {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  font-weight: 700;
+}
+
+#chatgpt-modal .chatgpt-quick-actions {
+  padding: 8px 12px 0;
+  background: #fff;
+}
+
+#chatgpt-modal .chatgpt-intent-group {
+  margin: 0 0 8px;
+  padding: 8px;
+  border: 1px solid #d9e0ea;
+  border-radius: 12px;
+  background: #fbfcfe;
+}
+
+#chatgpt-modal .chatgpt-intent-legend {
+  padding: 0 6px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #183153;
+}
+
+#chatgpt-modal .chatgpt-option-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+#chatgpt-modal .chatgpt-radio-card {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 8px 10px;
+  border: 1px solid #d6dde8;
+  border-radius: 10px;
+  background: #fff;
+  cursor: pointer;
+}
+
+#chatgpt-modal .chatgpt-radio-card input[type='radio'] {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  flex: 0 0 18px;
+  accent-color: #0a47b8;
+}
+
+#chatgpt-modal .chatgpt-radio-card-text {
+  min-width: 0;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: #123123;
+}
+
+#chatgpt-modal .chatgpt-radio-card:has(input[type='radio']:checked) {
+  border-color: #0a47b8;
+  background: #eef4ff;
+  box-shadow: inset 0 0 0 1px #0a47b8;
+}
+
+#chatgpt-modal .chatgpt-selection-bar,
+#chatgpt-selection-bar {
+  display: none;
+}
+
+#chatgpt-modal .chatgpt-messages {
+  padding: 8px 12px 6px;
+  background: #fff;
+}
+
+#chatgpt-modal .gpt-response,
+#chatgpt-modal .gpt-user-message,
+#chatgpt-modal .gpt-loading {
+  margin: 0 0 6px;
+  padding: 9px 10px;
+  border-radius: 10px;
+  font-size: 13px;
+  line-height: 1.6;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+#chatgpt-modal .gpt-response {
+  background: #f4f6fa;
+}
+
+#chatgpt-modal .gpt-user-message {
+  background: #e8f1ff;
+}
+
+#chatgpt-modal .gpt-response a,
+#chatgpt-modal .gpt-user-message a {
+  color: #1f6feb;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+#chatgpt-modal .chatgpt-error-box {
+  margin: 0 12px 6px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: #fff1f1;
+  color: #b00000;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+/* 四角い帯を消す */
+#chatgpt-modal .chatgpt-form {
+  padding: 0 12px 12px;
+  background: transparent;
+  border: 0;
+}
+
+#chatgpt-modal .chatgpt-message {
+  display: block;
+  width: 100%;
+  min-height: 44px;
+  max-height: 88px;
+  padding: 8px 10px;
+  border: 1px solid #d5d5d5;
+  border-radius: 10px;
+  background: #fff;
+  color: #111;
+  font-size: 14px;
+  line-height: 1.4;
+  resize: none;
+  overflow-y: auto;
+  caret-color: #111;
+}
+
+#chatgpt-modal .chatgpt-message::placeholder {
+  color: #999;
+  opacity: 1;
+}
+
+#chatgpt-modal .chatgpt-send-btn {
+  display: block;
+  width: 100%;
+  min-height: 42px;
+  margin-top: 6px;
+  border: 0;
+  border-radius: 10px;
+  background: #2f72e3;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.2;
+  cursor: pointer;
+}
+
+#chatgpt-modal .chatgpt-send-btn:disabled {
+  opacity: 0.75;
+  cursor: wait;
+}
+
+#chatgpt-launcher {
+  position: fixed;
+  right: 16px;
+  bottom: 24px;
+  z-index: 24110;
+  min-width: 132px;
+  height: 46px;
+  padding: 0 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 0;
+  border-radius: 999px;
+  background: #0a47b8;
+  color: #fff;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.24);
+  cursor: pointer;
+}
+
+#chatgpt-launcher .chatgpt-launcher-icon {
+  width: 20px;
+  height: 20px;
+  flex: 0 0 20px;
+  fill: currentColor;
+}
+
+#chatgpt-launcher .chatgpt-launcher-label {
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+@media (max-width: 1024px) {
+  #chatgpt-modal {
+    right: 12px;
+    bottom: 88px;
+    width: min(420px, calc(100vw - 24px));
+  }
+
+  #chatgpt-modal .chatgpt-modal-content {
+    max-height: min(78dvh, 760px);
+  }
+
+  #chatgpt-modal .chatgpt-form {
+    padding: 0 10px 10px;
+  }
+
+  #chatgpt-modal .chatgpt-message {
+    min-height: 42px;
+    max-height: 84px;
+  }
+
+  #chatgpt-modal .chatgpt-send-btn {
+    min-height: 40px;
+  }
+
+  #chatgpt-launcher {
+    right: 12px;
+    bottom: 20px;
+    min-width: 126px;
+    height: 44px;
+  }
+}
+
+@media (max-width: 767px) {
+  #chatgpt-modal {
+    left: 12px;
+    right: 12px;
+    bottom: 84px;
+    width: auto;
+  }
+
+  #chatgpt-modal .chatgpt-modal-content {
+    max-height: calc(100dvh - 96px);
+    border-radius: 14px;
+  }
+
+  #chatgpt-modal .chatgpt-close-btn {
+    top: -8px;
+    right: -8px;
+    width: 38px;
+    height: 38px;
+    font-size: 26px;
+  }
+
+  #chatgpt-modal #chatgpt-modal-title {
+    padding: 12px;
+    font-size: 17px;
+  }
+
+  #chatgpt-modal .chatgpt-company-box {
+    padding: 9px 10px;
+  }
+
+  #chatgpt-modal .chatgpt-company-meta {
+    grid-template-columns: 50px minmax(0, 1fr);
+    gap: 4px 6px;
+  }
+
+  #chatgpt-modal .chatgpt-company-row dt {
+    font-size: 10px;
+  }
+
+  #chatgpt-modal .chatgpt-company-row dd {
+    font-size: 12px;
+  }
+
+  #chatgpt-modal .chatgpt-option-grid {
+    grid-template-columns: 1fr;
+  }
+
+  #chatgpt-modal .chatgpt-quick-actions {
+    padding: 8px 10px 0;
+  }
+
+  #chatgpt-modal .chatgpt-messages {
+    padding: 8px 10px 6px;
+  }
+
+  #chatgpt-modal .gpt-response,
+  #chatgpt-modal .gpt-user-message,
+  #chatgpt-modal .gpt-loading {
+    padding: 9px 10px;
+    font-size: 13px;
+  }
+
+  #chatgpt-launcher {
+    right: 12px;
+    bottom: 12px;
+  }
+
+  #chatgpt-launcher .chatgpt-launcher-label {
+    font-size: 12px;
+  }
 }

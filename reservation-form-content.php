@@ -30,12 +30,6 @@
         ?>
       </h3>
 
-
-
-
-
-
-
       <form id="store-reservation-form" action="<?php echo esc_url(admin_url('admin-ajax.php')); ?>" method="POST">
         <?php wp_nonce_field('store_reservation_action', 'store_reservation_nonce'); ?>
 
