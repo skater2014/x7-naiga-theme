@@ -2663,34 +2663,71 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 });
 
-// 予約モーダル　書き込み
+// =========================================================
+// 予約モーダルの初期化
+// - DOMの読み込み完了後に実行
+// - 物件 / 採用の情報を拾ってモーダルへ流し込む
+// - 価格表示ルール:
+//   0 / 応相談 -> 応相談
+//   空 / 売却済 / 売却済み -> 売却済み + sold-out
+//   それ以外 -> 万円を付けて表示
+// =========================================================
 document.addEventListener('DOMContentLoaded', () => {
+  // モーダル本体
   const $modal = jQuery('#store-reservation-modal');
-  const $closeBtn = $modal.find('.close-btn');
-  const $form = $modal.find('form'); // ✅ フォームを取得
 
+  // 閉じるボタン
+  const $closeBtn = $modal.find('.close-btn');
+
+  // モーダル内フォーム
+  const $form = $modal.find('form');
+
+  // 現在のURLが採用ページかどうかを判定
+  // /recruitment を含む場合は採用モードにする
   var isRecruitmentPage = window.location.href.includes('/recruitment');
 
+  // =========================================================
+  // 予約リンククリック時の処理
+  // - 一覧のカードからタイトル / 画像 / 価格 / ID を取得
+  // - 取得した情報をモーダルに流し込んで開く
+  // =========================================================
   jQuery(document).on('click', '.store-reserve-link', function (event) {
+    // aタグの通常遷移を止める
     event.preventDefault();
     console.log('✅ リンクがクリックされました');
 
+    // クリックした予約リンクに一番近い記事要素を取得
     var postElement = jQuery(this).closest('.main-custom-post, li');
+
+    // data-post-id から投稿IDを取得
     var post_id = jQuery(this).data('post-id');
 
-    // **タイトル取得**
+    // =========================================================
+    // タイトル取得
+    // - h1
+    // - h2 a
+    // - h2
+    // の順に探す
+    // =========================================================
     var title =
       postElement.find('h1').text().trim() ||
       postElement.find('h2 a').text().trim() ||
       postElement.find('h2').text().trim();
 
+    // タイトルが取れなかった時の保険
     if (!title || title === '') {
       title = isRecruitmentPage ? '採用情報' : '物件情報';
     }
 
+    // モーダルへタイトルを書き込む
     $modal.find('#reservation-property-title').text(title);
 
-    // **サムネイル画像の取得**
+    // =========================================================
+    // サムネイル画像の取得
+    // - YouTube埋め込みなら YouTube のサムネイルURLを使う
+    // - Vimeoなら背景画像からURLを抜く
+    // - 通常記事なら .blog-post-image の背景画像を使う
+    // =========================================================
     var thumbnail = '';
     var video_id = postElement.find('lite-youtube').attr('videoid');
 
@@ -2698,33 +2735,52 @@ document.addEventListener('DOMContentLoaded', () => {
       thumbnail = 'https://i.ytimg.com/vi/' + video_id + '/hqdefault.jpg';
     } else if (postElement.find('.blog-post-image').hasClass('vimeo')) {
       var vimeoThumbnail = postElement.find('lite-vimeo').css('background-image');
+
       if (vimeoThumbnail && vimeoThumbnail !== 'none') {
+        // url("...") から中身のURLだけ抜く
         thumbnail = vimeoThumbnail.replace(/url\(["']?(.*?)["']?\)/, '$1');
       }
     } else {
       var backgroundImage = postElement.find('.blog-post-image').css('background-image');
+
       if (backgroundImage && backgroundImage !== 'none') {
+        // url("...") から中身のURLだけ抜く
         thumbnail = backgroundImage.replace(/url\(["']?(.*?)["']?\)/, '$1');
       }
     }
 
-    // **デフォルトサムネイル画像**
+    // 画像が取れない場合はデフォルト画像
     if (!thumbnail || thumbnail === '') {
       thumbnail = 'https://naigaicorp.net/wp-content/themes/Xiaoyu%20Tekken7/images/noimage.gif';
     }
 
-    // **モーダルにサムネイルを表示**
+    // モーダルのサムネイル領域に背景画像としてセット
     $modal.find('#reservation-property-thumbnail').css({
       'background-image': 'url(' + thumbnail + ')',
       'background-size': 'cover',
       'background-position': 'center',
     });
 
-    // **モーダルのヘッダーを設定**
+    // =========================================================
+    // モーダル見出し
+    // 採用ページなら「面接予約」
+    // 物件ページなら「来店予約」
+    // =========================================================
     $modal.find('#reservation-header').text(isRecruitmentPage ? '面接予約' : '来店予約');
 
-    // **給与 or 価格の取得**
+    // =========================================================
+    // 給与 or 価格の取得
+    // 採用ページ:
+    //   「給与」ラベルの隣の値を取得
+    //   見つからない時は 応相談
+    //
+    // 物件ページ:
+    //   「価格」ラベルの隣の値を取得
+    //   見つからない時は 空文字
+    //   空文字は後で「売却済み」として扱う
+    // =========================================================
     var price = '';
+
     if (isRecruitmentPage) {
       var salaryElement = postElement
         .find('.recruitment-info-table .recruitment-row .recruitment-label')
@@ -2742,33 +2798,55 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .next('.property-value');
 
+      // 価格欄そのものが無い時は空文字にする
+      // 空文字は後段で 売却済み 扱い
       price = priceElement.length ? priceElement.text().trim() : '';
     }
 
-    // **モーダル内の情報を設定**
-    // IDは数値だけセット（formDataで使う）
+    // =========================================================
+    // モーダル内のIDとラベルを設定
+    // =========================================================
+
+    // 投稿ID本体
     $modal.find('#reservation-property-id').text(post_id);
 
-    // ラベルは別の span にセット（表示専用）
+    // 「物件ID: 」または「採用ID: 」のラベル
     $modal.find('#reservation-property-label').text(isRecruitmentPage ? '採用ID: ' : '物件ID: ');
 
+    // =========================================================
+    // 価格表示ルール
+    // rawPrice = 元の価格文字列を trim したもの
+    //
+    // ルール:
+    // - 0 / 応相談 -> 応相談
+    // - 空 / 売却済 / 売却済み -> 売却済み + sold-out
+    // - それ以外 -> 万円を付けて表示
+    // =========================================================
     var $price = $modal.find('#reservation-property-price');
     var rawPrice = String(price || '').trim();
 
+    // いったん sold-out を外して初期化
     $price.removeClass('sold-out');
 
+    // 0 または 応相談 は「応相談」
     if (rawPrice === '0' || rawPrice === '応相談') {
       $price.attr('data-sold-out', '0').attr('data-price', '応相談').text('応相談');
-    } else if (rawPrice === '' || rawPrice === '売却済' || rawPrice === '売却済み') {
+    }
+    // 空 / 売却済 / 売却済み は「売却済み」
+    else if (rawPrice === '' || rawPrice === '売却済' || rawPrice === '売却済み') {
       $price
         .addClass('sold-out')
         .attr('data-sold-out', '1')
         .attr('data-price', '')
         .text('売却済み');
-    } else {
+    }
+    // それ以外は価格として扱う
+    else {
       var normalizedPrice = rawPrice;
 
+      // まだ「万円」が無い場合だけ付ける
       if (normalizedPrice.indexOf('万円') === -1) {
+        // 末尾に「円」が付いていたら消してから「万円」を付ける
         normalizedPrice = normalizedPrice.replace('円', '') + '万円';
       }
 
@@ -2777,27 +2855,38 @@ document.addEventListener('DOMContentLoaded', () => {
         .attr('data-price', normalizedPrice.replace('万円', '').trim())
         .text(normalizedPrice);
     }
+
     console.log('✅ モーダルを開く処理が実行されました');
 
-    // **モーダルを開く & 画面リセット**
+    // =========================================================
+    // モーダルを開く
+    // - active を付ける
+    // - 入力画面だけ表示
+    // - 確認画面 / 完了画面は隠す
+    // =========================================================
     $modal.addClass('active').css({ display: 'flex', visibility: 'visible' }).fadeIn(300);
-    $modal.find('#step-input').show(); // 入力画面を表示
-    $modal.find('#step-confirm').hide(); // 確認画面を非表示
-    $modal.find('#step-complete').hide(); // 完了画面を非表示
+    $modal.find('#step-input').show();
+    $modal.find('#step-confirm').hide();
+    $modal.find('#step-complete').hide();
   });
 
-  // **モーダルを閉じる処理**
+  // =========================================================
+  // モーダルを閉じる共通処理
+  // - フォームをリセット
+  // - モーダルを閉じる
+  // - ステップ表示を初期状態へ戻す
+  // =========================================================
   function closeModal() {
     console.log('✅ モーダルを閉じる処理が実行されました');
 
-    // **フォームの内容をリセット**
+    // 入力済みフォームを初期化
     $form[0].reset();
 
-    // **モーダルを閉じる際に画面をリセット**
+    // フェードアウト後に状態を完全リセット
     $modal.removeClass('active').fadeOut(300, function () {
       $modal.css({ visibility: 'hidden', display: 'none' });
 
-      // **入力画面を表示**
+      // 次回のために入力画面へ戻す
       $modal.find('#step-input').show();
       $modal.find('#step-confirm').hide();
       $modal.find('#step-complete').hide();
@@ -2806,12 +2895,18 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // **閉じるボタンの処理**
+  // =========================================================
+  // 閉じるボタン
+  // =========================================================
   $closeBtn.on('click', function () {
     closeModal();
   });
 
-  // **モーダルの背景クリックで閉じる**
+  // =========================================================
+  // 背景クリックで閉じる
+  // - モーダル本体の外側ではなく
+  //   #store-reservation-modal.active 自体をクリックした時だけ閉じる
+  // =========================================================
   jQuery(document).on('click', function (e) {
     if (jQuery(e.target).is('#store-reservation-modal.active')) {
       console.log('✅ モーダル背景がクリックされました');
