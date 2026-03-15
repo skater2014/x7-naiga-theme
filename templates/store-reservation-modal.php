@@ -45,18 +45,10 @@
               </h3>
 
               <h3>価格:
-                <?php if ($is_sold_out): ?>
-                  <span
-                    id="reservation-property-price"
-                    class="sold-out"
-                    data-price=""
-                    data-sold-out="1">売却済み</span>
-                <?php else: ?>
-                  <span
-                    id="reservation-property-price"
-                    data-price="<?php echo esc_attr($display_price); ?>"
-                    data-sold-out="0"><?php echo esc_html($display_price); ?> 万円</span>
-                <?php endif; ?>
+                <span
+                  id="reservation-property-price"
+                  data-price=""
+                  data-sold-out=""></span>
               </h3>
             </div>
           </div>

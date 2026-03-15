@@ -1131,10 +1131,22 @@ document.addEventListener('DOMContentLoaded', function () {
       'background-size': 'cover',
       'background-position': 'center',
     });
+
     $modal.find('#reservation-header').text('来店予約');
     $modal.find('#reservation-property-id').text(data.post_id || '');
     $modal.find('#reservation-property-label').text('物件ID: ');
-    $modal.find('#reservation-property-price').text(data.price || '売却済');
+    var $price = $modal.find('#reservation-property-price');
+    var rawPrice = String(data.price || '').trim();
+    var isSoldOut =
+      !rawPrice || rawPrice === '0' || rawPrice === '売却済' || rawPrice === '売却済み';
+
+    $price.removeClass('sold-out');
+
+    if (isSoldOut) {
+      $price.addClass('sold-out').text('売却済み');
+    } else {
+      $price.text(rawPrice);
+    }
 
     $modal
       .attr('data-post-id', data.post_id || '')
@@ -1181,6 +1193,8 @@ document.addEventListener('DOMContentLoaded', function () {
       },
     });
   }
+
+  window.openReserveByPostId = openReserveByPostId;
 
   function setMode(mode, calendar) {
     var viewHarness = calendarEl.querySelector('.fc-view-harness');
@@ -1407,7 +1421,26 @@ function openHomeReservationModal(data) {
   $modal.find('#reservation-header').text('来店予約');
   $modal.find('#reservation-property-id').text(data.post_id || '');
   $modal.find('#reservation-property-label').text('物件ID: ');
-  $modal.find('#reservation-property-price').text(data.price || '売却済');
+  var $price = $modal.find('#reservation-property-price');
+  var rawPrice = String(data.price || '').trim();
+  var isSoldOut = !rawPrice || rawPrice === '0' || rawPrice === '売却済' || rawPrice === '売却済み';
+
+  $price.removeClass('sold-out');
+
+  if (isSoldOut) {
+    $price.addClass('sold-out').attr('data-sold-out', '1').attr('data-price', '').text('売却済み');
+  } else {
+    var normalizedPrice = rawPrice;
+    if (!normalizedPrice.includes('万円')) {
+      normalizedPrice = normalizedPrice.replace(/円$/, '') + '万円';
+    }
+
+    $price
+      .removeClass('sold-out')
+      .attr('data-sold-out', '0')
+      .attr('data-price', normalizedPrice.replace(/\s*万円$/, ''))
+      .text(normalizedPrice);
+  }
 
   $modal
     .attr('data-post-id', data.post_id || '')
@@ -2709,7 +2742,7 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .next('.property-value');
 
-      price = priceElement.length ? priceElement.text().trim() : '売却済';
+      price = priceElement.length ? priceElement.text().trim() : '';
     }
 
     // **モーダル内の情報を設定**
@@ -2719,8 +2752,31 @@ document.addEventListener('DOMContentLoaded', () => {
     // ラベルは別の span にセット（表示専用）
     $modal.find('#reservation-property-label').text(isRecruitmentPage ? '採用ID: ' : '物件ID: ');
 
-    $modal.find('#reservation-property-price').text(price === '売却済' ? '売却済' : price);
+    var $price = $modal.find('#reservation-property-price');
+    var rawPrice = String(price || '').trim();
 
+    $price.removeClass('sold-out');
+
+    if (rawPrice === '0' || rawPrice === '応相談') {
+      $price.attr('data-sold-out', '0').attr('data-price', '応相談').text('応相談');
+    } else if (rawPrice === '' || rawPrice === '売却済' || rawPrice === '売却済み') {
+      $price
+        .addClass('sold-out')
+        .attr('data-sold-out', '1')
+        .attr('data-price', '')
+        .text('売却済み');
+    } else {
+      var normalizedPrice = rawPrice;
+
+      if (normalizedPrice.indexOf('万円') === -1) {
+        normalizedPrice = normalizedPrice.replace('円', '') + '万円';
+      }
+
+      $price
+        .attr('data-sold-out', '0')
+        .attr('data-price', normalizedPrice.replace('万円', '').trim())
+        .text(normalizedPrice);
+    }
     console.log('✅ モーダルを開く処理が実行されました');
 
     // **モーダルを開く & 画面リセット**
@@ -4003,7 +4059,31 @@ jQuery(document).ready(function ($) {
         if (response.success && response.data) {
           $('#reservation-property-title').text(response.data.title);
           $('#reservation-property-id').text(response.data.post_id);
-          $('#reservation-property-price').text(response.data.price);
+          var $price = $('#reservation-property-price');
+          var rawPrice = String(response.data.price || '').trim();
+          var isSoldOut =
+            !rawPrice || rawPrice === '0' || rawPrice === '売却済' || rawPrice === '売却済み';
+
+          $price.removeClass('sold-out');
+
+          if (isSoldOut) {
+            $price
+              .addClass('sold-out')
+              .attr('data-sold-out', '1')
+              .attr('data-price', '')
+              .text('売却済み');
+          } else {
+            var normalizedPrice = rawPrice;
+            if (!normalizedPrice.includes('万円')) {
+              normalizedPrice = normalizedPrice.replace(/円$/, '') + '万円';
+            }
+
+            $price
+              .removeClass('sold-out')
+              .attr('data-sold-out', '0')
+              .attr('data-price', normalizedPrice.replace(/\s*万円$/, ''))
+              .text(normalizedPrice);
+          }
           $('#reservation-property-thumbnail').css(
             'background-image',
             'url(' + response.data.image + ')',
