@@ -1606,9 +1606,8 @@ require get_template_directory() . '/inc/functions/custom-walker.php';
 // 採用ページ
 require get_template_directory() . '/inc/functions/custom-functions.php';
 
-// 固定ページ　画像３枚　swiper
-require get_template_directory() . '/inc/functions/function-page.php';
-
+// 固定ページ　お部屋ギャラリーページ　swiper
+require get_template_directory() . '/inc/functions/page-gallery-room-functions.php';
 
 // 資料請求PDF
 //require_once get_template_directory() . '/inc/functions/generate-pdf.php';
