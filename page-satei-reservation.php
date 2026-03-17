@@ -11,8 +11,12 @@ name    HTMLフォームで サーバーに送るため（POSTのキー名）
  */
 get_header('77'); ?>
 
-<h1>お客様の不動産売却査定フォーム</h1>
-
+<div class="satei-page-hero">
+  <h1>お客様の不動産売却査定フォーム</h1>
+  <div class="satei-page-intro">
+    <?php the_content(); ?>
+  </div>
+</div>
 <!-- 物件情報（売却査定用） -->
 <div id="store-reservation-form-container" class="store-reservation-form">
   <div class="store-reservation-page-content">

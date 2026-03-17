@@ -560,6 +560,10 @@ body.dark-theme .header__top > .search-form-container .search-form-30 input::pla
   }
 }
 
+.satei-page-hero {
+  padding: 20px;
+}
+
 /* =========================================================
    Tablet : 768px ～ 1199.98px
    touch / dark / search
@@ -4796,7 +4800,7 @@ blockquote {
 /* モバイルおよびタブレットデバイス用のスタイル（最大幅768px） */
 @media only screen and (max-width: 768px) {
   #store-reservation-form-container {
-    padding: 0; /* モバイルではpaddingを無効化 */
+    padding: 20px; /* モバイルではpaddingを無効化 */
     width: 100%; /* モバイルでは幅100% */
   }
 
