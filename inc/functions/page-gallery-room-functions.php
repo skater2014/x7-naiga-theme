@@ -122,7 +122,7 @@ function rg_register_room_gallery_metaboxes()
 {
     add_meta_box(
         'rg_room_gallery_slider_images',
-        'ヒーロースライダー画像（最大20枚）',
+        'ヒーロースライダー画像 / スライド別文言（最大20枚）',
         'rg_render_slider_images_metabox',
         'page',
         'normal',
@@ -149,10 +149,10 @@ function rg_register_room_gallery_metaboxes()
 
     add_meta_box(
         'rg_room_gallery_hero_text',
-        'ヒーロー文言設定',
+        'ヒーロー共通 fallback 文言',
         'rg_render_hero_text_metabox',
         'page',
-        'side',
+        'normal',
         'default'
     );
 
@@ -200,7 +200,7 @@ function rg_filter_room_gallery_metaboxes()
 add_action('do_meta_boxes', 'rg_filter_room_gallery_metaboxes', 99);
 
 /* =========================================================
- * 1. ヒーロースライダー画像
+ * 1. ヒーロースライダー画像 / スライド別文言
  * ========================================================= */
 
 /**
@@ -212,58 +212,265 @@ add_action('do_meta_boxes', 'rg_filter_room_gallery_metaboxes', 99);
 function rg_render_slider_images_metabox($post)
 {
     wp_nonce_field('rg_room_gallery_save', 'rg_room_gallery_nonce');
-
-    echo '<p>上部 Hero Slider 用の画像です。最大20枚まで設定できます。</p>';
-    echo '<div class="rg-slider-image-list">';
-
-    for ($i = 1; $i <= 20; $i++) {
-        $image_id  = absint(get_post_meta($post->ID, "slider_image_{$i}", true));
-        $image_url = $image_id ? wp_get_attachment_image_url($image_id, 'medium') : '';
-
-        echo '<div class="rg-slider-image-row" style="margin-bottom:16px;padding:12px;border:1px solid #ddd;">';
-        echo '<p style="margin:0 0 8px;"><strong>画像' . esc_html($i) . '</strong></p>';
-        echo '<input type="hidden" name="slider_image_' . esc_attr($i) . '" id="slider_image_' . esc_attr($i) . '" value="' . esc_attr($image_id) . '">';
-        echo '<img id="slider_preview_' . esc_attr($i) . '" src="' . esc_url($image_url) . '" style="max-width:220px;display:' . ($image_url ? 'block' : 'none') . ';margin-bottom:8px;">';
-        echo '<button type="button" class="button rg-select-single-image" data-target="' . esc_attr($i) . '">画像を選択</button> ';
-        echo '<button type="button" class="button rg-remove-single-image" data-target="' . esc_attr($i) . '">削除</button>';
-        echo '</div>';
-    }
-
-    echo '</div>';
 ?>
+    <style>
+        .rg-slider-image-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .rg-slider-image-row {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+            padding: 14px;
+            border: 1px solid #dcdcde;
+            border-radius: 8px;
+            background: #fff;
+        }
+
+        .rg-slider-image-media {
+            flex: 0 0 180px;
+            width: 180px;
+        }
+
+        .rg-slider-image-preview {
+            display: block;
+            width: 100%;
+            height: auto;
+            aspect-ratio: 16 / 10;
+            object-fit: cover;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background: #f6f7f7;
+        }
+
+        .rg-slider-image-empty {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            aspect-ratio: 16 / 10;
+            border: 1px dashed #c3c4c7;
+            border-radius: 6px;
+            background: #f6f7f7;
+            color: #646970;
+            font-size: 12px;
+            text-align: center;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        .rg-slider-image-body {
+            flex: 1 1 auto;
+            min-width: 0;
+        }
+
+        .rg-slider-image-title {
+            margin: 0 0 8px;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .rg-slider-image-note {
+            margin: 0 0 10px;
+            color: #646970;
+        }
+
+        .rg-slider-image-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+
+        .rg-slider-text-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+
+        .rg-slider-field {
+            margin: 0;
+        }
+
+        .rg-slider-field label {
+            display: block;
+            margin: 0 0 4px;
+            font-weight: 600;
+        }
+
+        @media (max-width: 782px) {
+            .rg-slider-image-row {
+                flex-direction: column;
+            }
+
+            .rg-slider-image-media {
+                width: 100%;
+                max-width: 260px;
+            }
+        }
+    </style>
+
+    <p>上部 Hero Slider 用の画像です。最大20枚まで設定できます。</p>
+    <p style="margin:0 0 16px;color:#646970;">
+        各スライドごとに文言を設定できます。2枚目以降が未入力なら、1枚目 → 共通 fallback 文言 → ページタイトル の順で補完します。
+    </p>
+
+    <div class="rg-slider-image-list">
+        <?php for ($i = 1; $i <= 20; $i++) : ?>
+            <?php
+            $image_id  = absint(get_post_meta($post->ID, "slider_image_{$i}", true));
+            $image_url = $image_id ? wp_get_attachment_image_url($image_id, 'medium') : '';
+
+            $eyebrow = get_post_meta($post->ID, "_rg_slide_hero_eyebrow_{$i}", true);
+            $title   = get_post_meta($post->ID, "_rg_slide_hero_title_{$i}", true);
+            $lead    = get_post_meta($post->ID, "_rg_slide_hero_lead_{$i}", true);
+            $text    = get_post_meta($post->ID, "_rg_slide_hero_text_{$i}", true);
+            ?>
+            <div class="rg-slider-image-row">
+                <div class="rg-slider-image-media">
+                    <input
+                        type="hidden"
+                        name="slider_image_<?php echo esc_attr($i); ?>"
+                        id="slider_image_<?php echo esc_attr($i); ?>"
+                        value="<?php echo esc_attr($image_id); ?>">
+
+                    <?php if ($image_url) : ?>
+                        <img
+                            id="slider_preview_<?php echo esc_attr($i); ?>"
+                            class="rg-slider-image-preview"
+                            src="<?php echo esc_url($image_url); ?>"
+                            alt="">
+                        <div
+                            id="slider_empty_<?php echo esc_attr($i); ?>"
+                            class="rg-slider-image-empty"
+                            style="display:none;">
+                            画像未設定
+                        </div>
+                    <?php else : ?>
+                        <img
+                            id="slider_preview_<?php echo esc_attr($i); ?>"
+                            class="rg-slider-image-preview"
+                            src=""
+                            alt=""
+                            style="display:none;">
+                        <div
+                            id="slider_empty_<?php echo esc_attr($i); ?>"
+                            class="rg-slider-image-empty">
+                            画像未設定
+                        </div>
+                    <?php endif; ?>
+                </div>
+
+                <div class="rg-slider-image-body">
+                    <p class="rg-slider-image-title">スライド <?php echo esc_html($i); ?></p>
+                    <p class="rg-slider-image-note">この順番でヒーロースライダーに表示されます。</p>
+
+                    <div class="rg-slider-image-actions">
+                        <button
+                            type="button"
+                            class="button button-primary rg-select-single-image"
+                            data-target="<?php echo esc_attr($i); ?>">
+                            画像を選択
+                        </button>
+
+                        <button
+                            type="button"
+                            class="button rg-remove-single-image"
+                            data-target="<?php echo esc_attr($i); ?>">
+                            削除
+                        </button>
+                    </div>
+
+                    <div class="rg-slider-text-grid">
+                        <p class="rg-slider-field">
+                            <label for="rg_slide_hero_eyebrow_<?php echo esc_attr($i); ?>">上部小見出し</label>
+                            <input
+                                type="text"
+                                id="rg_slide_hero_eyebrow_<?php echo esc_attr($i); ?>"
+                                name="rg_slide_hero_eyebrow_<?php echo esc_attr($i); ?>"
+                                value="<?php echo esc_attr($eyebrow); ?>"
+                                class="widefat"
+                                placeholder="NASU ROOM STYLE">
+                        </p>
+
+                        <p class="rg-slider-field">
+                            <label for="rg_slide_hero_title_<?php echo esc_attr($i); ?>">タイトル</label>
+                            <input
+                                type="text"
+                                id="rg_slide_hero_title_<?php echo esc_attr($i); ?>"
+                                name="rg_slide_hero_title_<?php echo esc_attr($i); ?>"
+                                value="<?php echo esc_attr($title); ?>"
+                                class="widefat"
+                                placeholder="未入力ならページタイトル">
+                        </p>
+
+                        <p class="rg-slider-field">
+                            <label for="rg_slide_hero_lead_<?php echo esc_attr($i); ?>">リード文</label>
+                            <textarea
+                                id="rg_slide_hero_lead_<?php echo esc_attr($i); ?>"
+                                name="rg_slide_hero_lead_<?php echo esc_attr($i); ?>"
+                                rows="3"
+                                class="widefat"
+                                placeholder="2枚目以降未入力なら1枚目の値を使用"><?php echo esc_textarea($lead); ?></textarea>
+                        </p>
+
+                        <p class="rg-slider-field">
+                            <label for="rg_slide_hero_text_<?php echo esc_attr($i); ?>">説明文</label>
+                            <textarea
+                                id="rg_slide_hero_text_<?php echo esc_attr($i); ?>"
+                                name="rg_slide_hero_text_<?php echo esc_attr($i); ?>"
+                                rows="4"
+                                class="widefat"
+                                placeholder="2枚目以降未入力なら1枚目の値を使用"><?php echo esc_textarea($text); ?></textarea>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        <?php endfor; ?>
+    </div>
+
     <script>
         jQuery(function($) {
-            $(document).off('click.rgSelectSingle').on('click.rgSelectSingle', '.rg-select-single-image', function(e) {
-                e.preventDefault();
+            $(document)
+                .off('click.rgSelectSingle')
+                .on('click.rgSelectSingle', '.rg-select-single-image', function(e) {
+                    e.preventDefault();
 
-                const target = $(this).data('target');
-                const frame = wp.media({
-                    title: '画像を選択',
-                    button: {
-                        text: 'この画像を使用'
-                    },
-                    library: {
-                        type: 'image'
-                    },
-                    multiple: false
+                    const target = $(this).data('target');
+                    const frame = wp.media({
+                        title: '画像を選択',
+                        button: {
+                            text: 'この画像を使用'
+                        },
+                        library: {
+                            type: 'image'
+                        },
+                        multiple: false
+                    });
+
+                    frame.on('select', function() {
+                        const attachment = frame.state().get('selection').first().toJSON();
+                        $('#slider_image_' + target).val(attachment.id);
+                        $('#slider_preview_' + target).attr('src', attachment.url).show();
+                        $('#slider_empty_' + target).hide();
+                    });
+
+                    frame.open();
                 });
 
-                frame.on('select', function() {
-                    const attachment = frame.state().get('selection').first().toJSON();
-                    $('#slider_image_' + target).val(attachment.id);
-                    $('#slider_preview_' + target).attr('src', attachment.url).show();
+            $(document)
+                .off('click.rgRemoveSingle')
+                .on('click.rgRemoveSingle', '.rg-remove-single-image', function(e) {
+                    e.preventDefault();
+
+                    const target = $(this).data('target');
+                    $('#slider_image_' + target).val('');
+                    $('#slider_preview_' + target).attr('src', '').hide();
+                    $('#slider_empty_' + target).show();
                 });
-
-                frame.open();
-            });
-
-            $(document).off('click.rgRemoveSingle').on('click.rgRemoveSingle', '.rg-remove-single-image', function(e) {
-                e.preventDefault();
-
-                const target = $(this).data('target');
-                $('#slider_image_' + target).val('');
-                $('#slider_preview_' + target).attr('src', '').hide();
-            });
         });
     </script>
 <?php
@@ -288,31 +495,180 @@ function rg_render_gallery_images_metabox($post)
     $gallery_images = array_slice(array_values(array_filter(array_map('absint', $gallery_images))), 0, 20);
 
 ?>
+    <style>
+        .rg-gallery-toolbar {
+            margin: 12px 0 16px;
+        }
+
+        .rg-gallery-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin: 0;
+            padding: 0;
+        }
+
+        .rg-gallery-card {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+            padding: 14px;
+            border: 1px solid #dcdcde;
+            background: #fff;
+            border-radius: 8px;
+        }
+
+        .rg-gallery-card-media {
+            flex: 0 0 140px;
+            width: 140px;
+        }
+
+        .rg-gallery-card-media img {
+            display: block;
+            width: 100%;
+            height: auto;
+            aspect-ratio: 4 / 3;
+            object-fit: cover;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            background: #f6f7f7;
+        }
+
+        .rg-gallery-card-body {
+            flex: 1 1 auto;
+            min-width: 0;
+        }
+
+        .rg-gallery-card-title {
+            margin: 0 0 10px;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .rg-gallery-field {
+            margin: 0 0 10px;
+        }
+
+        .rg-gallery-field:last-child {
+            margin-bottom: 0;
+        }
+
+        .rg-gallery-field label {
+            display: block;
+            margin: 0 0 4px;
+            font-weight: 600;
+        }
+
+        .rg-gallery-actions {
+            margin-top: 10px;
+        }
+
+        @media (max-width: 782px) {
+            .rg-gallery-card {
+                flex-direction: column;
+            }
+
+            .rg-gallery-card-media {
+                width: 100%;
+                max-width: 220px;
+            }
+        }
+    </style>
+
     <p>下部カルーセル用の画像です。最大20枚まで設定できます。</p>
 
-    <div id="rg-gallery-container">
-        <ul id="rg-gallery-list" style="display:flex;flex-wrap:wrap;gap:12px;padding:0;margin:12px 0;list-style:none;">
-            <?php foreach ($gallery_images as $image_id) : ?>
-                <?php $img_url = wp_get_attachment_image_url($image_id, 'thumbnail'); ?>
-                <?php if (!$img_url) continue; ?>
-                <li data-id="<?php echo esc_attr($image_id); ?>" style="width:120px;">
-                    <img src="<?php echo esc_url($img_url); ?>" style="display:block;width:100%;height:auto;margin-bottom:6px;">
-                    <button type="button" class="button-link-delete rg-remove-gallery-image">削除</button>
-                </li>
-            <?php endforeach; ?>
-        </ul>
+    <div class="rg-gallery-toolbar">
+        <button type="button" id="rg-add-gallery-images" class="button button-primary">画像を追加</button>
+    </div>
 
-        <input
-            type="hidden"
-            id="room_gallery_images"
-            name="room_gallery_images"
-            value="<?php echo esc_attr(implode(',', $gallery_images)); ?>">
+    <input
+        type="hidden"
+        id="room_gallery_images"
+        name="room_gallery_images"
+        value="<?php echo esc_attr(implode(',', $gallery_images)); ?>">
 
-        <button type="button" id="rg-add-gallery-images" class="button">画像を追加</button>
+    <div id="rg-gallery-list" class="rg-gallery-list">
+        <?php foreach ($gallery_images as $index => $image_id) : ?>
+            <?php
+            $img_url = wp_get_attachment_image_url($image_id, 'medium');
+            if (!$img_url) {
+                continue;
+            }
+
+            $meta_index  = $index + 1;
+            $label_value = get_post_meta($post->ID, "_rg_gallery_label_{$meta_index}", true);
+            $alt_value   = get_post_meta($post->ID, "_rg_gallery_alt_{$meta_index}", true);
+            ?>
+            <div class="rg-gallery-card" data-id="<?php echo esc_attr($image_id); ?>">
+                <div class="rg-gallery-card-media">
+                    <img src="<?php echo esc_url($img_url); ?>" alt="">
+                </div>
+
+                <div class="rg-gallery-card-body">
+                    <p class="rg-gallery-card-title">画像<?php echo esc_html($meta_index); ?></p>
+
+                    <p class="rg-gallery-field">
+                        <label for="rg_gallery_label_<?php echo esc_attr($meta_index); ?>">ラベル</label>
+                        <input
+                            type="text"
+                            id="rg_gallery_label_<?php echo esc_attr($meta_index); ?>"
+                            name="rg_gallery_label_<?php echo esc_attr($meta_index); ?>"
+                            value="<?php echo esc_attr($label_value); ?>"
+                            class="widefat"
+                            placeholder="例: living / kitchen / bathroom">
+                    </p>
+
+                    <p class="rg-gallery-field">
+                        <label for="rg_gallery_alt_<?php echo esc_attr($meta_index); ?>">alt補助文</label>
+                        <input
+                            type="text"
+                            id="rg_gallery_alt_<?php echo esc_attr($meta_index); ?>"
+                            name="rg_gallery_alt_<?php echo esc_attr($meta_index); ?>"
+                            value="<?php echo esc_attr($alt_value); ?>"
+                            class="widefat"
+                            placeholder="画像altが無いときの補助文">
+                    </p>
+
+                    <div class="rg-gallery-actions">
+                        <button type="button" class="button-link-delete rg-remove-gallery-image">削除</button>
+                    </div>
+                </div>
+            </div>
+        <?php endforeach; ?>
     </div>
 
     <script>
         jQuery(function($) {
+            function rebuildNames() {
+                $('#rg-gallery-list .rg-gallery-card').each(function(index) {
+                    const num = index + 1;
+
+                    $(this).find('.rg-gallery-card-title').text('画像' + num);
+
+                    $(this).find('[name^="rg_gallery_label_"]')
+                        .attr('name', 'rg_gallery_label_' + num)
+                        .attr('id', 'rg_gallery_label_' + num);
+
+                    $(this).find('[name^="rg_gallery_alt_"]')
+                        .attr('name', 'rg_gallery_alt_' + num)
+                        .attr('id', 'rg_gallery_alt_' + num);
+
+                    $(this).find('label[for^="rg_gallery_label_"]').attr('for', 'rg_gallery_label_' + num);
+                    $(this).find('label[for^="rg_gallery_alt_"]').attr('for', 'rg_gallery_alt_' + num);
+                });
+            }
+
+            function syncIds() {
+                const ids = [];
+                $('#rg-gallery-list .rg-gallery-card').each(function() {
+                    const id = String($(this).data('id') || '');
+                    if (id) {
+                        ids.push(id);
+                    }
+                });
+                $('#room_gallery_images').val(ids.join(','));
+            }
+
             $(document).off('click.rgAddGallery').on('click.rgAddGallery', '#rg-add-gallery-images', function(e) {
                 e.preventDefault();
 
@@ -345,19 +701,37 @@ function rg_render_gallery_images_metabox($post)
 
                         ids.push(id);
 
-                        const thumbUrl = attachment.sizes && attachment.sizes.thumbnail ?
-                            attachment.sizes.thumbnail.url :
-                            attachment.url;
+                        const thumbUrl = attachment.sizes && attachment.sizes.medium ?
+                            attachment.sizes.medium.url :
+                            (attachment.sizes && attachment.sizes.thumbnail ? attachment.sizes.thumbnail.url : attachment.url);
+
+                        const nextNum = $('#rg-gallery-list .rg-gallery-card').length + 1;
 
                         $('#rg-gallery-list').append(
-                            '<li data-id="' + id + '" style="width:120px;">' +
-                            '<img src="' + thumbUrl + '" style="display:block;width:100%;height:auto;margin-bottom:6px;">' +
+                            '<div class="rg-gallery-card" data-id="' + id + '">' +
+                            '<div class="rg-gallery-card-media">' +
+                            '<img src="' + thumbUrl + '" alt="">' +
+                            '</div>' +
+                            '<div class="rg-gallery-card-body">' +
+                            '<p class="rg-gallery-card-title">画像' + nextNum + '</p>' +
+                            '<p class="rg-gallery-field">' +
+                            '<label for="rg_gallery_label_' + nextNum + '">ラベル</label>' +
+                            '<input type="text" id="rg_gallery_label_' + nextNum + '" name="rg_gallery_label_' + nextNum + '" class="widefat" placeholder="例: living / kitchen / bathroom">' +
+                            '</p>' +
+                            '<p class="rg-gallery-field">' +
+                            '<label for="rg_gallery_alt_' + nextNum + '">alt補助文</label>' +
+                            '<input type="text" id="rg_gallery_alt_' + nextNum + '" name="rg_gallery_alt_' + nextNum + '" class="widefat" placeholder="画像altが無いときの補助文">' +
+                            '</p>' +
+                            '<div class="rg-gallery-actions">' +
                             '<button type="button" class="button-link-delete rg-remove-gallery-image">削除</button>' +
-                            '</li>'
+                            '</div>' +
+                            '</div>' +
+                            '</div>'
                         );
                     });
 
-                    $('#room_gallery_images').val(ids.join(','));
+                    syncIds();
+                    rebuildNames();
                 });
 
                 frame.open();
@@ -366,16 +740,9 @@ function rg_render_gallery_images_metabox($post)
             $(document).off('click.rgRemoveGallery').on('click.rgRemoveGallery', '.rg-remove-gallery-image', function(e) {
                 e.preventDefault();
 
-                const $li = $(this).closest('li');
-                const id = String($li.data('id'));
-                $li.remove();
-
-                let ids = $('#room_gallery_images').val() ? $('#room_gallery_images').val().split(',') : [];
-                ids = ids.filter(function(item) {
-                    return item && item !== id;
-                });
-
-                $('#room_gallery_images').val(ids.join(','));
+                $(this).closest('.rg-gallery-card').remove();
+                syncIds();
+                rebuildNames();
             });
         });
     </script>
@@ -463,7 +830,7 @@ function rg_render_video_metabox($post)
 }
 
 /* =========================================================
- * 4. ヒーロー文言
+ * 4. ヒーロー共通 fallback 文言
  * ========================================================= */
 
 /**
@@ -481,20 +848,70 @@ function rg_render_hero_text_metabox($post)
     $text    = get_post_meta($post->ID, '_rg_hero_text', true);
 
 ?>
-    <p>
-        <label for="rg_hero_eyebrow"><strong>上部小見出し</strong></label>
-        <input type="text" id="rg_hero_eyebrow" name="rg_hero_eyebrow" value="<?php echo esc_attr($eyebrow); ?>" class="widefat" placeholder="NASU ROOM STYLE">
-    </p>
+    <style>
+        .rg-hero-text-box {
+            padding: 14px;
+            border: 1px solid #dcdcde;
+            border-radius: 8px;
+            background: #fff;
+        }
 
-    <p>
-        <label for="rg_hero_lead"><strong>リード文</strong></label>
-        <textarea id="rg_hero_lead" name="rg_hero_lead" rows="3" class="widefat" placeholder="東京と那須、二つの魅力を取り入れた暮らしを実現したい方へ。"><?php echo esc_textarea($lead); ?></textarea>
-    </p>
+        .rg-hero-text-field {
+            margin: 0 0 14px;
+        }
 
-    <p>
-        <label for="rg_hero_text"><strong>説明文</strong></label>
-        <textarea id="rg_hero_text" name="rg_hero_text" rows="4" class="widefat" placeholder="二拠点生活・移住・別荘購入を検討する方に向けて、理想の住まいと暮らし方をご提案します。"><?php echo esc_textarea($text); ?></textarea>
-    </p>
+        .rg-hero-text-field:last-child {
+            margin-bottom: 0;
+        }
+
+        .rg-hero-text-field label {
+            display: block;
+            margin: 0 0 6px;
+            font-weight: 700;
+        }
+
+        .rg-hero-text-note {
+            margin: 0 0 12px;
+            color: #646970;
+        }
+    </style>
+
+    <div class="rg-hero-text-box">
+        <p class="rg-hero-text-note">
+            各スライド個別文言が未入力のときに使う共通 fallback 文言です。
+        </p>
+
+        <p class="rg-hero-text-field">
+            <label for="rg_hero_eyebrow">上部小見出し</label>
+            <input
+                type="text"
+                id="rg_hero_eyebrow"
+                name="rg_hero_eyebrow"
+                value="<?php echo esc_attr($eyebrow); ?>"
+                class="widefat"
+                placeholder="NASU ROOM STYLE">
+        </p>
+
+        <p class="rg-hero-text-field">
+            <label for="rg_hero_lead">リード文</label>
+            <textarea
+                id="rg_hero_lead"
+                name="rg_hero_lead"
+                rows="3"
+                class="widefat"
+                placeholder="東京と那須、二つの魅力を取り入れた暮らしを実現したい方へ。"><?php echo esc_textarea($lead); ?></textarea>
+        </p>
+
+        <p class="rg-hero-text-field">
+            <label for="rg_hero_text">説明文</label>
+            <textarea
+                id="rg_hero_text"
+                name="rg_hero_text"
+                rows="4"
+                class="widefat"
+                placeholder="二拠点生活・移住・別荘購入を検討する方に向けて、理想の住まいと暮らし方をご提案します。"><?php echo esc_textarea($text); ?></textarea>
+        </p>
+    </div>
 <?php
 }
 
@@ -525,18 +942,34 @@ function rg_render_section_text_metabox($post)
         'rg_cta_email'     => 'CTA メールアドレス',
     );
 
+    $defaults = array(
+        'rg_media_title'   => '北米住宅仕様',
+        'rg_media_lead'    => '住まいの考え方や空間づくりの参考として、建築仕様や雰囲気をご覧いただけます。',
+        'rg_youtube_title' => '分譲地紹介',
+        'rg_youtube_lead'  => '那須での暮らしや周辺環境のイメージを深めたい方に向けて、分譲地の魅力をご紹介します。',
+        'rg_related_title' => '関連する住まい・暮らしのご紹介',
+        'rg_related_lead'  => '那須での住まいづくりや暮らしの参考になる情報をご覧いただけます。',
+        'rg_gallery_title' => '那須で描く、これからの暮らし',
+        'rg_gallery_lead'  => '住まいの雰囲気や空間づくりの参考として、写真を大きくご覧いただけます。',
+        'rg_cta_text'      => '住まいや暮らしに関するご相談は、下記メールアドレスからお問い合わせください。',
+        'rg_cta_email'     => 'contact@naigaicorp.net',
+    );
+
+    echo '<p style="margin:0 0 12px;color:#646970;">未入力の場合は既定値を使用します。</p>';
+
     foreach ($fields as $key => $label) {
         $value = get_post_meta($post->ID, '_' . $key, true);
+        $placeholder = isset($defaults[$key]) ? $defaults[$key] : '';
 
         echo '<p>';
         echo '<label for="' . esc_attr($key) . '"><strong>' . esc_html($label) . '</strong></label>';
 
         if ($key === 'rg_cta_email') {
-            echo '<input type="email" id="' . esc_attr($key) . '" name="' . esc_attr($key) . '" value="' . esc_attr($value) . '" class="widefat" placeholder="contact@naigaicorp.net">';
+            echo '<input type="email" id="' . esc_attr($key) . '" name="' . esc_attr($key) . '" value="' . esc_attr($value) . '" class="widefat" placeholder="' . esc_attr($placeholder) . '">';
         } elseif (strpos($key, '_title') !== false) {
-            echo '<input type="text" id="' . esc_attr($key) . '" name="' . esc_attr($key) . '" value="' . esc_attr($value) . '" class="widefat">';
+            echo '<input type="text" id="' . esc_attr($key) . '" name="' . esc_attr($key) . '" value="' . esc_attr($value) . '" class="widefat" placeholder="' . esc_attr($placeholder) . '">';
         } else {
-            echo '<textarea id="' . esc_attr($key) . '" name="' . esc_attr($key) . '" rows="3" class="widefat">' . esc_textarea($value) . '</textarea>';
+            echo '<textarea id="' . esc_attr($key) . '" name="' . esc_attr($key) . '" rows="3" class="widefat" placeholder="' . esc_attr($placeholder) . '">' . esc_textarea($value) . '</textarea>';
         }
 
         echo '</p>';
@@ -587,6 +1020,54 @@ function rg_save_room_gallery_metaboxes($post_id)
         }
     }
 
+    /* ---------- スライドごとのヒーロー文言 ---------- */
+    for ($i = 1; $i <= 20; $i++) {
+        $eyebrow_key = "_rg_slide_hero_eyebrow_{$i}";
+        $title_key   = "_rg_slide_hero_title_{$i}";
+        $lead_key    = "_rg_slide_hero_lead_{$i}";
+        $text_key    = "_rg_slide_hero_text_{$i}";
+
+        $eyebrow_val = isset($_POST["rg_slide_hero_eyebrow_{$i}"])
+            ? rg_clean_text($_POST["rg_slide_hero_eyebrow_{$i}"])
+            : '';
+
+        $title_val = isset($_POST["rg_slide_hero_title_{$i}"])
+            ? rg_clean_text($_POST["rg_slide_hero_title_{$i}"])
+            : '';
+
+        $lead_val = isset($_POST["rg_slide_hero_lead_{$i}"])
+            ? rg_clean_textarea($_POST["rg_slide_hero_lead_{$i}"])
+            : '';
+
+        $text_val = isset($_POST["rg_slide_hero_text_{$i}"])
+            ? rg_clean_textarea($_POST["rg_slide_hero_text_{$i}"])
+            : '';
+
+        if ($eyebrow_val !== '') {
+            update_post_meta($post_id, $eyebrow_key, $eyebrow_val);
+        } else {
+            delete_post_meta($post_id, $eyebrow_key);
+        }
+
+        if ($title_val !== '') {
+            update_post_meta($post_id, $title_key, $title_val);
+        } else {
+            delete_post_meta($post_id, $title_key);
+        }
+
+        if ($lead_val !== '') {
+            update_post_meta($post_id, $lead_key, $lead_val);
+        } else {
+            delete_post_meta($post_id, $lead_key);
+        }
+
+        if ($text_val !== '') {
+            update_post_meta($post_id, $text_key, $text_val);
+        } else {
+            delete_post_meta($post_id, $text_key);
+        }
+    }
+
     /* ---------- 下部ギャラリー ---------- */
     if (isset($_POST['room_gallery_images'])) {
         $gallery_ids = rg_sanitize_csv_ids($_POST['room_gallery_images'], 20);
@@ -595,6 +1076,32 @@ function rg_save_room_gallery_metaboxes($post_id)
             update_post_meta($post_id, 'room_gallery_images', $gallery_ids);
         } else {
             delete_post_meta($post_id, 'room_gallery_images');
+        }
+    }
+
+    /* ---------- 下部ギャラリー ラベル / alt補助文 ---------- */
+    for ($i = 1; $i <= 20; $i++) {
+        $label_key = "_rg_gallery_label_{$i}";
+        $alt_key   = "_rg_gallery_alt_{$i}";
+
+        $label_val = isset($_POST["rg_gallery_label_{$i}"])
+            ? rg_clean_text($_POST["rg_gallery_label_{$i}"])
+            : '';
+
+        $alt_val = isset($_POST["rg_gallery_alt_{$i}"])
+            ? rg_clean_text($_POST["rg_gallery_alt_{$i}"])
+            : '';
+
+        if ($label_val !== '') {
+            update_post_meta($post_id, $label_key, $label_val);
+        } else {
+            delete_post_meta($post_id, $label_key);
+        }
+
+        if ($alt_val !== '') {
+            update_post_meta($post_id, $alt_key, $alt_val);
+        } else {
+            delete_post_meta($post_id, $alt_key);
         }
     }
 
@@ -630,7 +1137,7 @@ function rg_save_room_gallery_metaboxes($post_id)
         }
     }
 
-    /* ---------- ヒーロー文言 ---------- */
+    /* ---------- 共通 fallback ヒーロー文言 ---------- */
     $hero_fields = array(
         '_rg_hero_eyebrow' => isset($_POST['rg_hero_eyebrow']) ? rg_clean_text($_POST['rg_hero_eyebrow']) : '',
         '_rg_hero_lead'    => isset($_POST['rg_hero_lead']) ? rg_clean_textarea($_POST['rg_hero_lead']) : '',
@@ -668,3 +1175,127 @@ function rg_save_room_gallery_metaboxes($post_id)
     }
 }
 add_action('save_post_page', 'rg_save_room_gallery_metaboxes');
+
+/* =========================================================
+ * フロント表示: MP4 / MP3
+ * ========================================================= */
+if (!function_exists('display_media_mp4')) {
+    function display_media_mp4($post_id = null)
+    {
+        $post_id = $post_id ?: get_the_ID();
+
+        $url = get_post_meta($post_id, '_media_file', true);
+        if ($url === '') {
+            $url = get_post_meta($post_id, '_media_url', true);
+        }
+
+        if (!$url) {
+            return;
+        }
+
+        $path = (string) parse_url($url, PHP_URL_PATH);
+        $ext  = strtolower(pathinfo($path, PATHINFO_EXTENSION));
+
+        $audio_mimes = array(
+            'mp3' => 'audio/mpeg',
+            'm4a' => 'audio/mp4',
+            'aac' => 'audio/aac',
+            'wav' => 'audio/wav',
+            'ogg' => 'audio/ogg',
+        );
+
+        echo '<div class="room-media-block">';
+
+        if (isset($audio_mimes[$ext])) {
+            /* -----------------------------------------
+             * 音声ファイル:
+             * スクロール位置で再生/停止したいので
+             * js-scroll-autoplay-media クラスを付与
+             * ----------------------------------------- */
+            echo '<audio class="room-audio-player js-scroll-autoplay-media" controls preload="metadata">';
+            echo '<source src="' . esc_url($url) . '" type="' . esc_attr($audio_mimes[$ext]) . '">';
+            echo 'お使いのブラウザは audio 再生に対応していません。';
+            echo '</audio>';
+        } else {
+            /* -----------------------------------------
+             * 動画ファイル:
+             * スクロール位置で再生/停止したいので
+             * js-scroll-autoplay-media クラスを付与
+             * 自動再生制限対策として muted / playsinline を付与
+             * ----------------------------------------- */
+            echo '<div class="custom-video custom-video--bg">';
+            echo '<video class="room-video-player room-video-player--bg js-scroll-autoplay-media" controls playsinline muted preload="metadata">';
+            echo '<source src="' . esc_url($url) . '" type="video/mp4">';
+            echo 'お使いのブラウザは video 再生に対応していません。';
+            echo '</video>';
+            echo '</div>';
+        }
+
+        echo '</div>';
+    }
+}
+
+/* =========================================================
+ * フロント表示: YouTube
+ * ========================================================= */
+if (!function_exists('display_media_youtube')) {
+    function display_media_youtube($post_id = null)
+    {
+        $post_id = $post_id ?: get_the_ID();
+
+        $youtube_ids = array();
+
+        for ($i = 1; $i <= 5; $i++) {
+            $id = trim((string) get_post_meta($post_id, "_youtube_id_{$i}", true));
+            $id = preg_replace('/[^A-Za-z0-9_-]/', '', $id);
+
+            if ($id !== '') {
+                $youtube_ids[] = $id;
+            }
+        }
+
+        $youtube_ids = array_values(array_unique($youtube_ids));
+
+        if (empty($youtube_ids)) {
+            return;
+        }
+
+        $has_multi = count($youtube_ids) > 1;
+
+        echo '<div class="youtube-video-shell">';
+
+        if ($has_multi) {
+            echo '<button type="button" class="youtube-video-nav youtube-video-nav-prev" aria-label="前の動画"><span aria-hidden="true">‹</span></button>';
+        }
+
+        echo '<div class="swiper youtube-video-slider">';
+        echo '<div class="swiper-wrapper">';
+
+        foreach ($youtube_ids as $index => $id) {
+            echo '<div class="swiper-slide">';
+            echo '<div class="youtube-video">';
+            echo '<lite-youtube'
+                . ' videoid="' . esc_attr($id) . '"'
+                . ' title="' . esc_attr('YouTube動画 ' . ($index + 1)) . '"'
+                . ' playlabel="' . esc_attr('YouTube動画を再生') . '"'
+                . ' params="' . esc_attr('rel=0&playsinline=1') . '"'
+                . '></lite-youtube>';
+            echo '</div>';
+            echo '</div>';
+        }
+
+        echo '</div>';
+
+        if ($has_multi) {
+            echo '<div class="youtube-video-pagination"></div>';
+        }
+
+        echo '</div>';
+
+        if ($has_multi) {
+            echo '<button type="button" class="youtube-video-nav youtube-video-nav-next" aria-label="次の動画"><span aria-hidden="true">›</span></button>';
+        }
+
+        echo '</div>';
+    }
+}
