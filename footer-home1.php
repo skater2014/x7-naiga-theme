@@ -38,8 +38,7 @@ if (is_archive()) : ?>
 
 
     <!-- CHATGPTモーダルの呼び出し -->
-    <?php get_template_part('templates/chatgpt-modal'); ?>
-
+    <?php naigai_render_chatgpt_modal(); ?>
 
     <div class="bottom-foot">
       <div class="copyright">
