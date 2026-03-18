@@ -4913,7 +4913,7 @@ body.dark-theme .store-reservation-page-content h6 {
 
 body.dark-theme .store-reservation-page-content p,
 body.dark-theme .store-reservation-page-content label,
-body.dark-theme .store-reservation-page-content span,
+/*body.dark-theme .store-reservation-page-content span,*/
 body.dark-theme .store-reservation-page-content li {
   color: var(--color-text);
 }
