@@ -353,6 +353,38 @@ body.menu-open #touch-menu,
 }
 
 /* -----------------------------
+   PC navigation : submenu arrow
+   .navg__list.header-menu-pc 用
+------------------------------ */
+.navg__list.header-menu-pc .menu-item-has-children > a {
+  display: inline-flex;
+  align-items: center;
+}
+
+.navg__list.header-menu-pc .menu-item-has-children > a::after {
+  content: '';
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  margin-left: 6px;
+  border-style: solid;
+  border-width: 2px 2px 0 0;
+  border-color: #fff;
+  transform: rotate(225deg);
+  transition:
+    transform 0.25s ease,
+    opacity 0.25s ease;
+  opacity: 0.9;
+  flex: 0 0 auto;
+}
+
+.navg__list.header-menu-pc .menu-item-has-children:hover > a::after,
+.navg__list.header-menu-pc .menu-item-has-children:focus-within > a::after {
+  transform: rotate(135deg);
+  opacity: 1;
+}
+
+/* -----------------------------
    search-form 共通
    20 / 30 の両方を header 用に整える
 ------------------------------ */
@@ -2365,7 +2397,7 @@ input.firefox-validation:invalid {
   .footer-fixed {
     bottom: 0; /* 常に表示 */
     opacity: 1; /* 常に表示 */
-    padding: 10px 20px;
+    padding: 0px 20px;
   }
 
   .footer-fixed__link a {
@@ -9059,37 +9091,4 @@ body.dark-theme .naigai-property-row__options {
   #chatgpt-launcher .chatgpt-launcher-label {
     font-size: 12px;
   }
-}
-
-/* =========================================================
-   PC header menu : submenu arrow
-   - .navg__list.header-menu-pc の子メニューあり項目だけ表示
-   - hover で矢印を回転
-========================================================= */
-.navg__list.header-menu-pc .menu-item-has-children > a {
-  display: inline-flex;
-  align-items: center;
-}
-
-.navg__list.header-menu-pc .menu-item-has-children > a::after {
-  content: '';
-  display: inline-block;
-  width: 9px;
-  height: 9px;
-  margin-left: 6px;
-  border-style: solid;
-  border-width: 2px 2px 0 0;
-  border-color: var(--link-color-black);
-  transform: rotate(225deg);
-  transition:
-    transform 0.25s ease,
-    opacity 0.25s ease;
-  opacity: 0.9;
-  flex: 0 0 auto;
-}
-
-.navg__list.header-menu-pc .menu-item-has-children:hover > a::after,
-.navg__list.header-menu-pc .menu-item-has-children:focus-within > a::after {
-  transform: rotate(135deg);
-  opacity: 1;
 }
