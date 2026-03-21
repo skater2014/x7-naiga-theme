@@ -2697,32 +2697,67 @@ body.dark-theme .submit:hover {
   padding: 0;
   list-style: none;
 }
+
 #breadcrumb li {
   display: inline;
   font-weight: 600;
 }
+
 #breadcrumb a,
 #breadcrumb span {
-  color: #8a8a8a;
   text-decoration: none;
   line-height: 1.8;
 }
+
+#breadcrumb a {
+  color: #8a8a8a;
+}
+
+#breadcrumb a span {
+  color: inherit;
+}
+
+#breadcrumb li:last-child > span[itemprop='name'] {
+  color: #4b5563;
+  font-weight: 700;
+}
+
 #breadcrumb a:hover {
   text-decoration: underline;
 }
+
 #breadcrumb li + li::before {
   font-family: 'Font Awesome 6 Free';
   font-weight: 900;
   content: '\f0da';
-  color: silver;
+  color: #b0b0b0;
   margin: 0 0.45em;
 }
+
 #breadcrumb li:first-child > a::before {
   font-family: 'Font Awesome 6 Free';
   font-weight: 900;
   content: '\f015';
   color: #f3948f;
   margin-right: 0.35em;
+}
+
+/* ダークモード時のパンくず */
+body.dark-theme #breadcrumb a {
+  color: #cbd5e1;
+}
+
+body.dark-theme #breadcrumb a span {
+  color: inherit;
+}
+
+body.dark-theme #breadcrumb li:last-child > span[itemprop='name'] {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+body.dark-theme #breadcrumb li + li::before {
+  color: #94a3b8;
 }
 
 /* ---------- 4) ダークトグル（共通） ---------- */
