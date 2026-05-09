@@ -1,0 +1,156 @@
+/* =========================================================
+ * assets/css/pages/page-body-header.css
+ *
+ * 対象:
+ * - /hokubei-jutaku
+ * - /nasu-used-renovation
+ * - /minpaku
+ * - /nasu-ideal-home
+ * - /zairai-kouhou
+ * - /sekou-jirei
+ *
+ * 役割:
+ * - body 背景色
+ * - .header__top 背景色 / border / 文字色
+ *
+ * 絶対禁止:
+ * - .page-wrapper / #content / #primary / #main / .site-main / article / .page は塗らない
+ * - 本文・カード・セクションの中身は触らない
+ * ========================================================= */
+
+/* light: wakugui系 / minpaku support / sekou */
+body:is(
+  .page-template-page-wakugumi,
+  .page-template-page-wakugumi-php,
+  .page-template-page-used-renovation,
+  .page-template-page-used-renovation-php,
+  .page-template-page-minpaku-support,
+  .page-template-page-minpaku-support-php,
+  .page-template-page-sekoujirei,
+  .page-template-page-sekoujirei-php
+) {
+  --page-body-header-bg: #edf2f6;
+  --page-body-header-fg: #1f2937;
+  --page-body-header-border: #d8e0e8;
+}
+
+/* light: nasu guide */
+body:is(
+  .page-template-page-nasu-guide,
+  .page-template-page-nasu-guide-php
+) {
+  --page-body-header-bg: #e9eef3;
+  --page-body-header-fg: #1f2937;
+  --page-body-header-border: #d4dde6;
+}
+
+/* light: zairai */
+body:is(
+  .page-template-page-zairai,
+  .page-template-page-zairai-php
+) {
+  --page-body-header-bg: #ffffff;
+  --page-body-header-fg: #1f2937;
+  --page-body-header-border: #e5ebf1;
+}
+
+/* dark: wakugui系 / minpaku support / sekou */
+body:is(.dark-mode, .is-dark, .theme-dark, .dark-theme, .dark, [data-theme='dark']):is(
+  .page-template-page-wakugumi,
+  .page-template-page-wakugumi-php,
+  .page-template-page-used-renovation,
+  .page-template-page-used-renovation-php,
+  .page-template-page-minpaku-support,
+  .page-template-page-minpaku-support-php,
+  .page-template-page-sekoujirei,
+  .page-template-page-sekoujirei-php
+),
+html:is(.dark, .is-dark, .theme-dark, .dark-theme, [data-theme='dark'])
+  body:is(
+    .page-template-page-wakugumi,
+    .page-template-page-wakugumi-php,
+    .page-template-page-used-renovation,
+    .page-template-page-used-renovation-php,
+    .page-template-page-minpaku-support,
+    .page-template-page-minpaku-support-php,
+    .page-template-page-sekoujirei,
+    .page-template-page-sekoujirei-php
+  ) {
+  --page-body-header-bg: #09131a;
+  --page-body-header-fg: #e5eef5;
+  --page-body-header-border: #22313d;
+}
+
+/* dark: nasu guide */
+body:is(.dark-mode, .is-dark, .theme-dark, .dark-theme, .dark, [data-theme='dark']):is(
+  .page-template-page-nasu-guide,
+  .page-template-page-nasu-guide-php
+),
+html:is(.dark, .is-dark, .theme-dark, [data-theme='dark'])
+  body:is(
+    .page-template-page-nasu-guide,
+    .page-template-page-nasu-guide-php
+  ) {
+  --page-body-header-bg: #0f1419;
+  --page-body-header-fg: #edf2f7;
+  --page-body-header-border: #2a3440;
+}
+
+/* dark: zairai */
+body:is(.dark-mode, .is-dark, .theme-dark, .dark-theme, .dark, [data-theme='dark']):is(
+  .page-template-page-zairai,
+  .page-template-page-zairai-php
+),
+html:is(.dark, .is-dark, .theme-dark, [data-theme='dark'])
+  body:is(
+    .page-template-page-zairai,
+    .page-template-page-zairai-php
+  ) {
+  --page-body-header-bg: #0f1821;
+  --page-body-header-fg: #e7edf3;
+  --page-body-header-border: rgba(255, 255, 255, 0.08);
+}
+
+/* apply: body only */
+body:is(
+  .page-template-page-wakugumi,
+  .page-template-page-wakugumi-php,
+  .page-template-page-used-renovation,
+  .page-template-page-used-renovation-php,
+  .page-template-page-minpaku-support,
+  .page-template-page-minpaku-support-php,
+  .page-template-page-nasu-guide,
+  .page-template-page-nasu-guide-php,
+  .page-template-page-zairai,
+  .page-template-page-zairai-php,
+  .page-template-page-sekoujirei,
+  .page-template-page-sekoujirei-php
+) {
+  background: var(--page-body-header-bg) !important;
+  background-color: var(--page-body-header-bg) !important;
+}
+
+/* apply: header top only */
+body:is(
+  .page-template-page-wakugumi,
+  .page-template-page-wakugumi-php,
+  .page-template-page-used-renovation,
+  .page-template-page-used-renovation-php,
+  .page-template-page-minpaku-support,
+  .page-template-page-minpaku-support-php,
+  .page-template-page-nasu-guide,
+  .page-template-page-nasu-guide-php,
+  .page-template-page-zairai,
+  .page-template-page-zairai-php,
+  .page-template-page-sekoujirei,
+  .page-template-page-sekoujirei-php
+) .header__top {
+  --header-bg: var(--page-body-header-bg);
+  --header-fg: var(--page-body-header-fg);
+  --border: var(--page-body-header-border);
+
+  background: var(--page-body-header-bg) !important;
+  background-color: var(--page-body-header-bg) !important;
+  color: var(--page-body-header-fg) !important;
+  border-bottom-color: var(--page-body-header-border) !important;
+}

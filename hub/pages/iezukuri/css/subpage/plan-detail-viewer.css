@@ -1,0 +1,899 @@
+/* =========================================================
+ * hub/pages/iezukuri/css/subpage/plan-detail-viewer.css
+ *
+ * 対象:
+ * - /iezukuri/plan/{slug}
+ *
+ * 役割:
+ * - 間取り詳細ページ専用CSS
+ * - 外観 / 図面 / 概要 / 操作ボタン / 内装写真
+ * - 住宅の特徴 / 関連プラン / lightGallery
+ *
+ * 管理しない:
+ * - 色トークン: base.css
+ * - サブページ共通骨組み: subpage.css
+ * - PDF紙面: css/pdf/plan-pdf.css
+ * ========================================================= */
+
+/* =========================================================
+ * 01. page / wrapper
+ * ========================================================= */
+
+body.single-iez_plan main.hub-customhome-subpage {
+  background: var(--plan-page-bg);
+  color: var(--plan-text);
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-single-back-nav,
+body.single-iez_plan main.hub-customhome-subpage .iez-block__inner,
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail__inner {
+  width: min(1280px, calc(100% - 64px));
+  margin-inline: auto;
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-single-back-nav {
+  margin-top: 24px;
+  margin-bottom: 18px;
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-single-back-nav__link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 0 16px;
+  border-radius: 999px;
+  border: 1px solid var(--plan-border);
+  background: var(--plan-chip-bg);
+  color: var(--plan-chip-text);
+  font-weight: 800;
+  text-decoration: none;
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-block {
+  padding: 48px 0 72px;
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-block__kicker {
+  margin: 0 0 10px;
+  color: var(--plan-accent);
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: .14em;
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-block__title {
+  margin: 0;
+  color: var(--plan-text);
+  font-size: clamp(32px, 4vw, 52px);
+  line-height: 1.22;
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-block__lead {
+  max-width: 920px;
+  margin: 18px 0 0;
+  color: var(--plan-muted);
+  font-size: 16px;
+  line-height: 1.9;
+}
+
+/* =========================================================
+ * 02. board
+ * ========================================================= */
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board {
+  padding: 34px;
+  border-radius: 32px;
+  background: var(--plan-panel-bg);
+  border: 1px solid var(--plan-border);
+  box-shadow: var(--plan-shadow);
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__row {
+  margin-top: 42px;
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__row:first-of-type {
+  margin-top: 0;
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__section-header {
+  margin-bottom: 20px;
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__section-title,
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__section-header h2,
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__section-header h3 {
+  margin: 0;
+  color: var(--plan-text);
+  font-size: clamp(24px, 2.6vw, 34px);
+  line-height: 1.35;
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__section-lead,
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__section-header p {
+  margin: 10px 0 0;
+  color: var(--plan-muted);
+  line-height: 1.75;
+}
+
+/* =========================================================
+ * 03. image zoom
+ * ========================================================= */
+
+body.single-iez_plan main.hub-customhome-subpage .js-iez-lg-item {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  color: inherit;
+  text-decoration: none;
+  cursor: zoom-in;
+}
+
+body.single-iez_plan main.hub-customhome-subpage .js-iez-lg-item::after {
+  content: "画像を拡大";
+  position: absolute;
+  right: 18px;
+  bottom: 18px;
+  z-index: 3;
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 16px 0 44px;
+  border-radius: 999px;
+  background: rgba(255, 250, 242, .94);
+  color: var(--plan-accent-dark);
+  font-size: 13px;
+  font-weight: 900;
+  box-shadow: var(--plan-shadow);
+  pointer-events: none;
+}
+
+body.single-iez_plan main.hub-customhome-subpage .js-iez-lg-item::before {
+  content: "＋";
+  position: absolute;
+  right: 118px;
+  bottom: 18px;
+  z-index: 4;
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--plan-accent-dark);
+  color: #fff;
+  font-size: 20px;
+  font-weight: 900;
+  pointer-events: none;
+}
+
+
+/* =========================================================
+ * 03b. button image reset
+ * 役割:
+ * - button要素の標準装飾で画像・バッジが崩れるのを防ぐ
+ * - バッジ absolute の基準を各ボタンに固定する
+ * ========================================================= */
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__exterior-button,
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__drawing-button,
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__gallery-item {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: zoom-in;
+  appearance: none;
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__exterior-button:focus-visible,
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__drawing-button:focus-visible,
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__gallery-item:focus-visible {
+  outline: 3px solid var(--plan-accent-soft);
+  outline-offset: 3px;
+}
+
+/* =========================================================
+ * 04. exterior
+ * ========================================================= */
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__exterior-button {
+  border-radius: 28px;
+  background: var(--plan-panel-bg);
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__exterior-button img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 8;
+  object-fit: cover;
+  object-position: center;
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__badge {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 2;
+  min-height: 30px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: rgba(255, 250, 242, .92);
+  color: var(--plan-accent-dark);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+/* =========================================================
+ * 05. drawing / summary
+ * ========================================================= */
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__row--plan-summary {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(360px, .75fr);
+  gap: 26px;
+  align-items: stretch;
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__tabs {
+  display: grid;
+  grid-template-columns: repeat(var(--iez-plan-tab-count, 3), minmax(0, 1fr));
+  gap: 8px;
+  padding: 8px;
+  margin-bottom: 14px;
+  border-radius: 22px;
+  border: 1px solid var(--plan-border);
+  background: rgba(255, 255, 255, .6);
+}
+
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__tabs.is-count-1 {
+  grid-template-columns: 1fr;
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__tabs.is-count-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__tabs.is-count-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__tabs.is-count-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__title {
+  margin: 0 0 8px;
+  color: var(--plan-text);
+  font-size: clamp(22px, 2.2vw, 32px);
+  line-height: 1.35;
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__tab {
+  min-height: 54px;
+  border: 0;
+  border-radius: 16px;
+  background: transparent;
+  color: var(--plan-muted);
+  font-weight: 900;
+  cursor: pointer;
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__tab.is-active {
+  background: var(--plan-accent-dark);
+  color: #fff;
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__panel {
+  display: none;
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__panel.is-active {
+  display: block;
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__drawing-button {
+  border-radius: 24px;
+  background: var(--plan-card-bg);
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__drawing-button img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: contain;
+  background: var(--plan-card-bg);
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__summary {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 28px;
+  border-radius: 24px;
+  background: var(--plan-card-bg);
+  border: 1px solid var(--plan-border);
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__label {
+  margin: 0 0 10px;
+  color: var(--plan-accent);
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: .12em;
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__style {
+  margin: 0 0 8px;
+  color: var(--plan-accent);
+  font-size: 22px;
+  line-height: 1.35;
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__layout {
+  width: fit-content;
+  margin: 0 0 16px;
+  padding: 8px 16px;
+  background: var(--plan-chip-bg);
+  color: var(--plan-chip-text);
+  font-weight: 900;
+  font-size: 20px;
+  line-height: 1.4;
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__text {
+  margin: 0 0 18px;
+  color: var(--plan-muted);
+  line-height: 1.9;
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__summary-list {
+  margin: 0;
+  display: grid;
+  border-top: 1px solid var(--plan-border);
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__summary-list div {
+  display: grid;
+  grid-template-columns: 92px minmax(0, 1fr);
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--plan-border);
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__summary-list dt {
+  color: var(--plan-accent);
+  font-weight: 900;
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__summary-list dd {
+  margin: 0;
+  color: var(--plan-text);
+  font-weight: 900;
+  line-height: 1.6;
+}
+
+/* =========================================================
+ * 06. actions
+ * ========================================================= */
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__row--actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  justify-content: center;
+  padding-top: 28px;
+  border-top: 1px solid var(--plan-border);
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__row--actions .iez-plan-single-control__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
+  padding: 0 30px;
+  border-radius: 999px;
+  background: var(--plan-button-bg);
+  color: var(--plan-button-text);
+  font-weight: 900;
+  text-decoration: none;
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__row--actions .iez-plan-single-control__btn:hover {
+  background: var(--plan-button-bg-hover);
+}
+
+/* =========================================================
+ * 07. gallery
+ * ========================================================= */
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__gallery-item {
+  border-radius: 24px;
+  background: var(--plan-card-bg);
+  box-shadow: var(--plan-shadow);
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__gallery-item img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__gallery-item span {
+  display: block;
+  min-height: 62px;
+  padding: 16px 124px 16px 20px;
+  color: var(--plan-text);
+  font-weight: 900;
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__gallery-item::before {
+  right: 92px;
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__gallery-item::after {
+  right: 18px;
+}
+
+/* =========================================================
+ * 08. features
+ * ========================================================= */
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__feature-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__feature-card {
+  display: grid;
+  grid-template-columns: 46px minmax(0, 1fr);
+  gap: 14px;
+  min-height: 128px;
+  padding: 22px;
+  border-radius: 20px;
+  background: var(--plan-card-bg);
+  border: 1px solid var(--plan-border);
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__feature-icon {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  color: var(--plan-accent-dark);
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__feature-icon svg {
+  width: 32px;
+  height: 32px;
+  display: block;
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__feature-icon svg * {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__feature-body h4 {
+  margin: 0 0 8px;
+  color: var(--plan-text);
+  font-size: 18px;
+  line-height: 1.45;
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__feature-body p {
+  margin: 0;
+  color: var(--plan-muted);
+  line-height: 1.85;
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__feature-more {
+  display: none;
+}
+
+/* =========================================================
+ * 09. related
+ * ========================================================= */
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__related-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 22px;
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__related-card {
+  overflow: hidden;
+  border-radius: 22px;
+  background: var(--plan-card-bg);
+  border: 1px solid var(--plan-border);
+  box-shadow: var(--plan-shadow);
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__related-card:nth-child(even) {
+  background: var(--plan-card-bg-alt);
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__related-card a {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__related-card img {
+  display: block;
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__related-body {
+  padding: 16px;
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__related-body h4 {
+  margin: 0 0 8px;
+  color: var(--plan-text);
+  font-size: 16px;
+  line-height: 1.45;
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__related-body p {
+  margin: 0;
+  color: var(--plan-muted);
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.55;
+}
+
+
+/* =========================================================
+ * 10. custom modal
+ * 役割:
+ * - block-plan-viewer.php が出力する .iez-plan-modal を管理
+ * - aria-hidden=true の時は必ず非表示にする
+ * ========================================================= */
+
+body.single-iez_plan .iez-plan-modal[aria-hidden="true"] {
+  display: none !important;
+}
+
+body.single-iez_plan .iez-plan-modal[aria-hidden="false"] {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+body.single-iez_plan .iez-plan-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: var(--plan-lightbox-overlay);
+}
+
+body.single-iez_plan .iez-plan-modal__dialog {
+  position: relative;
+  z-index: 1;
+  width: min(1180px, 100%);
+  max-height: calc(100vh - 48px);
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  overflow: hidden;
+  border-radius: 24px;
+  background: var(--plan-panel-bg);
+  box-shadow: var(--plan-shadow);
+}
+
+body.single-iez_plan .iez-plan-modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--plan-border);
+}
+
+body.single-iez_plan .iez-plan-modal__title {
+  margin: 0;
+  color: var(--plan-text);
+  font-weight: 900;
+}
+
+body.single-iez_plan .iez-plan-modal__close,
+body.single-iez_plan .iez-plan-modal__nav {
+  min-height: 42px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--plan-button-bg);
+  color: var(--plan-button-text);
+  font-weight: 900;
+  cursor: pointer;
+}
+
+body.single-iez_plan .iez-plan-modal__close {
+  padding: 0 18px;
+}
+
+body.single-iez_plan .iez-plan-modal__body {
+  position: relative;
+  min-height: 0;
+  display: grid;
+  place-items: center;
+  padding: 18px 72px;
+}
+
+body.single-iez_plan .iez-plan-modal__image {
+  display: block;
+  max-width: 100%;
+  max-height: calc(100vh - 150px);
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+body.single-iez_plan .iez-plan-modal__nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 54px;
+  padding: 0;
+}
+
+body.single-iez_plan .iez-plan-modal__nav.is-prev {
+  left: 14px;
+}
+
+body.single-iez_plan .iez-plan-modal__nav.is-next {
+  right: 14px;
+}
+
+/* =========================================================
+ * 10. lightGallery
+ * ========================================================= */
+
+body.single-iez_plan .lg-backdrop {
+  background: var(--plan-lightbox-overlay) !important;
+}
+
+body.single-iez_plan .lg-sub-html {
+  display: none !important;
+}
+
+body.single-iez_plan .lg-thumb-item,
+body.single-iez_plan .lg-thumb-item.active,
+body.single-iez_plan .lg-thumb-item:hover {
+  border-color: var(--plan-accent-soft) !important;
+}
+
+body.single-iez_plan .lg-toolbar .lg-close,
+body.single-iez_plan .lg-actions .lg-prev,
+body.single-iez_plan .lg-actions .lg-next,
+body.single-iez_plan .lg-outer .lg-prev,
+body.single-iez_plan .lg-outer .lg-next {
+  background: var(--plan-lightbox-control-bg) !important;
+  color: var(--plan-lightbox-control-text) !important;
+  box-shadow: var(--plan-shadow) !important;
+}
+
+body.single-iez_plan .lg-toolbar .lg-close {
+  top: 16px !important;
+  right: 18px !important;
+}
+
+body.single-iez_plan .lg-actions .lg-prev,
+body.single-iez_plan .lg-outer .lg-prev {
+  left: 18px !important;
+}
+
+body.single-iez_plan .lg-actions .lg-next,
+body.single-iez_plan .lg-outer .lg-next {
+  right: 18px !important;
+}
+
+/* =========================================================
+ * 11. responsive
+ * ========================================================= */
+
+@media (max-width: 1200px) {
+  body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__related-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  body.single-iez_plan main.hub-customhome-subpage .iez-plan-single-back-nav,
+  body.single-iez_plan main.hub-customhome-subpage .iez-block__inner,
+  body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail__inner {
+    width: calc(100% - 28px);
+  }
+
+  body.single-iez_plan main.hub-customhome-subpage .iez-block {
+    padding: 36px 0 56px;
+  }
+
+  body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board {
+    padding: 20px;
+    border-radius: 24px;
+  }
+
+  body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__row--plan-summary,
+  body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__gallery-grid,
+  body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__feature-grid,
+  body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__related-grid {
+    grid-template-columns: 1fr;
+  }
+
+  body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__tabs {
+    grid-template-columns: 1fr;
+  }
+
+  body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__gallery-item img {
+    height: auto;
+  }
+
+  body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__feature-grid:not(.is-expanded) .iez-plan-detail-board__feature-card:nth-child(n + 6) {
+    display: none;
+  }
+
+  body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__feature-more {
+    display: block;
+    margin-top: 14px;
+    text-align: center;
+  }
+
+  body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__feature-more-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 42px;
+    padding: 0 18px;
+    border-radius: 999px;
+    border: 1px solid var(--plan-border);
+    background: var(--plan-panel-bg);
+    color: var(--plan-text);
+    font-weight: 900;
+  }
+
+  body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__related-card img {
+    height: 210px;
+  }
+}
+
+
+/* =========================================================
+ * current repair: plan zoom / gallery / related contrast
+ *
+ * 目的:
+ * - PHP側の button[data-iez-plan-open] に拡大表示を出す
+ * - 外観 / 図面 / 複数内装写真で同じ拡大操作にする
+ * - 関連プランに不要な背景色を入れない
+ * - summary / gallery / feature / related を同じ塗りにしない
+ * ========================================================= */
+
+/* 画像を開くボタン共通 */
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-zoom-button,
+body.single-iez_plan main.hub-customhome-subpage [data-iez-plan-open] {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: zoom-in;
+  appearance: none;
+}
+
+/* サブ画像を含む全画像に「画像を拡大」表示 */
+body.single-iez_plan main.hub-customhome-subpage [data-iez-plan-open]::after {
+  content: "画像を拡大";
+  position: absolute;
+  right: 18px;
+  bottom: 18px;
+  z-index: 6;
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 16px 0 44px;
+  border-radius: 999px;
+  background: rgba(255, 250, 242, .96);
+  color: var(--plan-accent-dark);
+  font-size: 13px;
+  font-weight: 900;
+  box-shadow: var(--plan-shadow);
+  pointer-events: none;
+}
+
+body.single-iez_plan main.hub-customhome-subpage [data-iez-plan-open]::before {
+  content: "＋";
+  position: absolute;
+  right: 118px;
+  bottom: 18px;
+  z-index: 7;
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--plan-accent-dark);
+  color: #fff;
+  font-size: 20px;
+  font-weight: 900;
+  pointer-events: none;
+}
+
+/* サブ画像カード。背景は白寄せ、特徴カードとは分ける */
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__gallery-item {
+  background: #fff;
+  border: 1px solid var(--plan-border);
+  box-shadow: var(--plan-shadow);
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__gallery-item img {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: #fff;
+  object-fit: contain;
+}
+
+/* 住宅の特徴。ギャラリーと同じ塗りにしない */
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__feature-card {
+  background: rgba(255, 255, 255, .72);
+  border: 1px solid var(--plan-border);
+  box-shadow: none;
+}
+
+/* 関連プラン。背景色はいらない */
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__row--related {
+  background: transparent;
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__related-card,
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__related-card:nth-child(even) {
+  background: transparent;
+  box-shadow: none;
+  border: 0;
+  border-radius: 0;
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__related-card img {
+  border-radius: 18px;
+  border: 1px solid var(--plan-border);
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__related-body {
+  padding: 12px 0 0;
+}
+
+/* モーダルは閉じている時に絶対に表示しない */
+body.single-iez_plan .iez-plan-modal[aria-hidden="true"] {
+  display: none !important;
+}

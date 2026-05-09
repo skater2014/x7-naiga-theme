@@ -1,0 +1,889 @@
+/* =========================================================
+ * 北米住宅ページ 全体CSS 修正版
+ * 役割:
+ * - 全体をフル幅で表示する
+ * - ダークモード時の配色を統一する
+ * - Hero / Card / Flow / Contact の見た目を整理する
+ * - ボタンと画像表示の崩れを抑える
+ * ========================================================= */
+
+/* =========================================================
+ * 0) ページ外枠の制約を解除する
+ * 役割:
+ * - テーマ側の page-wrapper / content-area の幅制限を解除
+ * - 北米住宅ページだけ背景を全幅に広げる
+ * ========================================================= */
+
+body:has(.wakugui-page) {
+  background: #edf2f6 !important;
+}
+
+:is(
+  body.dark-mode,
+  body.is-dark,
+  body.theme-dark,
+  body.dark-theme,
+  body.dark,
+  body[data-theme='dark']
+):has(.wakugui-page) {
+  background: #09131a !important;
+}
+
+:where(
+  #content,
+  #primary,
+  #main,
+  .site-content,
+  .content-area,
+  .site-main,
+  .page-wrapper,
+  .entry-content,
+  .post-content,
+  .inside-article,
+  article,
+  .page
+):has(.wakugui-page) {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+}
+
+/* =========================================================
+ * 1) ページ全体のデザイントークン
+ * 役割:
+ * - 色、余白、角丸、影の共通変数
+ * - ダークモード時はここでまとめて上書き
+ * - ボタン色もこのページ内だけで管理する
+ * ========================================================= */
+
+.wakugui-page {
+  --wg-content: 1180px;
+  --wg-wide: 1360px;
+
+  --wg-bg: #edf2f6;
+  --wg-surface: #ffffff;
+  --wg-surface-2: #f5f8fb;
+
+  --wg-panel: linear-gradient(180deg, rgba(255, 255, 255, 0.94) 0%, rgba(247, 250, 252, 0.98) 100%);
+  --wg-panel-border: rgba(27, 56, 72, 0.1);
+  --wg-panel-shadow: 0 22px 54px rgba(20, 34, 48, 0.08);
+
+  --wg-line: rgba(36, 72, 93, 0.16);
+  --wg-text: #1b2731;
+  --wg-muted: #667887;
+
+  --wg-accent: #6d97b3;
+  --wg-accent-dark: #547b95;
+  --wg-accent-soft: rgba(109, 151, 179, 0.14);
+
+  --wg-radius: 30px;
+  --wg-card-radius: 24px;
+
+  /* ボタン色 */
+  --wg-btn-primary-bg: var(--wg-accent);
+  --wg-btn-primary-border: var(--wg-accent);
+  --wg-btn-primary-text: #12212c;
+  --wg-btn-primary-bg-hover: var(--wg-accent-dark);
+  --wg-btn-primary-border-hover: var(--wg-accent-dark);
+  --wg-btn-primary-text-hover: #12212c;
+
+  --wg-btn-secondary-bg: #ffffff;
+  --wg-btn-secondary-border: var(--wg-line);
+  --wg-btn-secondary-text: var(--wg-text);
+  --wg-btn-secondary-bg-hover: var(--wg-surface-2);
+  --wg-btn-secondary-border-hover: var(--wg-line);
+  --wg-btn-secondary-text-hover: var(--wg-text);
+
+  --wg-btn-focus-ring: rgba(215, 179, 106, 0.22);
+
+  position: relative;
+  isolation: isolate;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  padding-bottom: 1px;
+  color: var(--wg-text);
+  background:
+    radial-gradient(circle at top, rgba(109, 151, 179, 0.12), transparent 34%), var(--wg-bg);
+  box-shadow: 0 0 0 100vmax var(--wg-bg);
+  clip-path: inset(0 -100vmax);
+}
+
+.wakugui-page::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--wg-bg);
+  box-shadow: 0 0 0 100vmax var(--wg-bg);
+  clip-path: inset(0 -100vmax);
+}
+
+:is(
+    body.dark-mode,
+    body.is-dark,
+    body.theme-dark,
+    body.dark-theme,
+    body.dark,
+    body[data-theme='dark']
+  )
+  .wakugui-page {
+  --wg-bg: #09131a;
+  --wg-surface: #16242d;
+  --wg-surface-2: #10202a;
+
+  --wg-panel: linear-gradient(180deg, rgba(17, 31, 41, 0.94) 0%, rgba(12, 25, 34, 0.98) 100%);
+  --wg-panel-border: rgba(125, 167, 193, 0.14);
+  --wg-panel-shadow: 0 22px 54px rgba(0, 0, 0, 0.28);
+
+  --wg-line: rgba(125, 167, 193, 0.24);
+  --wg-text: #eff5f8;
+  --wg-muted: #b7c6cf;
+
+  --wg-accent: #86abc3;
+  --wg-accent-dark: #6e96b2;
+  --wg-accent-soft: rgba(134, 171, 195, 0.12);
+
+  /* Primary は黒に寄せず、青系のまま少し明るく見せる */
+  --wg-btn-primary-bg: #7a9fb7;
+  --wg-btn-primary-border: #7a9fb7;
+  --wg-btn-primary-text: #ffffff;
+  --wg-btn-primary-bg-hover: #89adc3;
+  --wg-btn-primary-border-hover: #89adc3;
+  --wg-btn-primary-text-hover: #ffffff;
+
+  /* Secondary も黒ではなく、青グレーの面として見せる */
+  --wg-btn-secondary-bg: #243848;
+  --wg-btn-secondary-border: #496172;
+  --wg-btn-secondary-text: #edf4f7;
+  --wg-btn-secondary-bg-hover: #2d4556;
+  --wg-btn-secondary-border-hover: #5c7485;
+  --wg-btn-secondary-text-hover: #ffffff;
+
+  --wg-btn-focus-ring: rgba(215, 179, 106, 0.3);
+}
+
+/* =========================================================
+ * 2) リセットと共通文字
+ * 役割:
+ * - このページ内だけ box-sizing を統一
+ * - 画像の崩れを防ぐ
+ * - テキスト色を変数で統一する
+ * ========================================================= */
+
+.wakugui-page,
+.wakugui-page *,
+.wakugui-page *::before,
+.wakugui-page *::after {
+  box-sizing: border-box;
+}
+
+.wakugui-page img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.wakugui-page,
+.wakugui-page p,
+.wakugui-page li,
+.wakugui-page span,
+.wakugui-page dt,
+.wakugui-page dd,
+.wakugui-page h1,
+.wakugui-page h2,
+.wakugui-page h3,
+.wakugui-page h4 {
+  color: var(--wg-text);
+}
+
+/* =========================================================
+ * 3) 共通レイアウト部品
+ * 役割:
+ * - 中央カラム幅
+ * - セクション余白
+ * - 見出しブロック
+ * ========================================================= */
+
+.wakugui-inner {
+  width: min(var(--wg-content), calc(100% - 32px));
+  margin-inline: auto;
+}
+
+.wakugui-section {
+  padding: 36px 0;
+}
+
+.wakugui-section--contact {
+  padding-top: 18px;
+  padding-bottom: 72px;
+}
+
+.wakugui-head {
+  max-width: 880px;
+  margin-bottom: 0;
+}
+
+.wakugui-head--center {
+  margin-inline: auto;
+  text-align: center;
+}
+
+.wakugui-head__title {
+  margin: 0;
+  font-size: clamp(1.9rem, 3vw, 3rem);
+  line-height: 1.18;
+  letter-spacing: 0.01em;
+}
+
+.wakugui-head__text {
+  margin: 16px 0 0;
+  color: var(--wg-muted);
+  font-size: clamp(1rem, 1.45vw, 1.08rem);
+  line-height: 1.95;
+}
+
+.wakugui-eyebrow {
+  display: inline-block;
+  margin: 0 0 14px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--wg-muted);
+}
+
+.wakugui-eyebrow.is-accent,
+.wakugui-flow__step {
+  color: var(--wg-accent);
+}
+
+/* =========================================================
+ * 4) Hero
+ * 役割:
+ * - ページ冒頭の大きなビジュアル
+ * - 文字は常に白で読みやすく固定
+ * - 画像の見え方が揺れにくいよう比率を固定する
+ * ========================================================= */
+
+.wakugui-hero-shell {
+  width: min(var(--wg-wide), calc(100% - 32px));
+  margin: 18px auto 34px;
+}
+
+.wakugui-hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  isolation: isolate;
+  aspect-ratio: 16 / 7;
+  min-height: 420px;
+  border-radius: 34px;
+  background: linear-gradient(135deg, #dbe6ee 0%, #eef4f8 55%, #f8fbfd 100%);
+  box-shadow: var(--wg-panel-shadow);
+}
+
+:is(
+    body.dark-mode,
+    body.is-dark,
+    body.theme-dark,
+    body.dark-theme,
+    body.dark,
+    body[data-theme='dark']
+  )
+  .wakugui-hero {
+  background: linear-gradient(135deg, #14212a 0%, #1a2934 55%, #20323e 100%);
+}
+
+.wakugui-hero__media,
+.wakugui-hero__media picture,
+.wakugui-hero__overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.wakugui-hero__media {
+  z-index: 0;
+  background: var(--wg-surface-2);
+}
+
+.wakugui-hero__media picture {
+  display: block;
+}
+
+.wakugui-hero__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+}
+
+.wakugui-hero__overlay {
+  z-index: 1;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(10, 20, 28, 0.82) 0%,
+      rgba(10, 20, 28, 0.6) 38%,
+      rgba(10, 20, 28, 0.24) 70%,
+      rgba(10, 20, 28, 0.08) 100%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(10, 20, 28, 0.02) 0%,
+      rgba(10, 20, 28, 0) 52%,
+      rgba(10, 20, 28, 0.22) 100%
+    );
+}
+
+.wakugui-hero__content {
+  position: relative;
+  z-index: 2;
+  display: block;
+  width: min(100%, 720px);
+  max-width: 720px;
+  padding: clamp(34px, 5vw, 60px) clamp(24px, 5vw, 56px);
+}
+
+.wakugui-hero .wakugui-eyebrow,
+.wakugui-hero .wakugui-eyebrow.is-accent,
+.wakugui-hero .wakugui-head__title,
+.wakugui-hero .wakugui-head__text,
+.wakugui-hero__title,
+.wakugui-hero__text {
+  color: #ffffff !important;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.18);
+}
+
+.wakugui-hero__title {
+  margin: 0;
+  font-size: clamp(34px, 5vw, 68px);
+  line-height: 1.06;
+  letter-spacing: 0.01em;
+  text-wrap: balance;
+}
+
+.wakugui-hero__text {
+  max-width: 640px;
+  margin: 18px 0 0;
+  font-size: clamp(15px, 1.4vw, 18px);
+  line-height: 1.85;
+}
+
+/* =========================================================
+ * 5) 共通パネル / 2カラム / 画像カード
+ * 役割:
+ * - lifestyle 等の左右分割
+ * - copy panel と media panel の共通外観
+ * - 画像カードの比率を先に確保してガタつきを減らす
+ * ========================================================= */
+
+.wakugui-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 26px;
+  align-items: stretch;
+}
+
+.wakugui-split.is-reverse .wakugui-card--copy {
+  order: 2;
+}
+
+.wakugui-split.is-reverse .wakugui-card--media {
+  order: 1;
+}
+
+.wakugui-card,
+.wakugui-flow-panel,
+.wakugui-contact {
+  overflow: hidden;
+  border: 1px solid var(--wg-panel-border);
+  border-radius: var(--wg-radius);
+  background: var(--wg-panel);
+  box-shadow: var(--wg-panel-shadow);
+  backdrop-filter: blur(6px);
+}
+
+.wakugui-card--copy,
+.wakugui-flow-panel,
+.wakugui-contact {
+  padding: clamp(24px, 4vw, 40px);
+}
+
+.wakugui-card--copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.wakugui-card--media {
+  padding: 12px;
+  background: var(--wg-surface);
+}
+
+.wakugui-card__media-frame {
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  min-height: 0;
+  border-radius: var(--wg-card-radius);
+  background: var(--wg-surface-2);
+}
+
+.wakugui-card__media-frame img {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  object-fit: cover;
+  object-position: center center;
+}
+
+/* =========================================================
+ * 6) Flow
+ * 役割:
+ * - 5ステップ表示
+ * - PC は横、Tablet 以下で縦積み
+ * ========================================================= */
+
+.wakugui-flow {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 28px;
+  align-items: stretch;
+}
+
+.wakugui-flow__item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+  min-height: 124px;
+  padding: 18px 16px;
+  text-align: center;
+  border: 1px solid var(--wg-panel-border);
+  border-radius: 22px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.88) 0%, var(--wg-surface-2) 100%);
+}
+
+:is(
+    body.dark-mode,
+    body.is-dark,
+    body.theme-dark,
+    body.dark-theme,
+    body.dark,
+    body[data-theme='dark']
+  )
+  .wakugui-flow__item {
+  background: linear-gradient(180deg, #182833 0%, #11202a 100%);
+}
+
+.wakugui-flow__item:not(:last-child)::after {
+  content: '→';
+  position: absolute;
+  top: 50%;
+  right: -14px;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  transform: translateY(-50%);
+  border: 1px solid var(--wg-panel-border);
+  border-radius: 999px;
+  background: var(--wg-surface);
+  color: var(--wg-accent);
+  font-size: 15px;
+  font-weight: 700;
+  box-shadow: 0 8px 18px rgba(23, 37, 50, 0.08);
+}
+
+:is(
+    body.dark-mode,
+    body.is-dark,
+    body.theme-dark,
+    body.dark-theme,
+    body.dark,
+    body[data-theme='dark']
+  )
+  .wakugui-flow__item:not(:last-child)::after {
+  background: #16242d;
+}
+
+.wakugui-flow__label {
+  color: var(--wg-text);
+  line-height: 1.7;
+}
+
+/* =========================================================
+ * 7) ボタン本体
+ * 役割:
+ * - primary / secondary の見た目を統一
+ * - ダークモード時は色だけ変数で差し替える
+ * ========================================================= */
+
+.ngw-btn,
+.wakugui-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55em;
+  width: auto;
+  min-width: 0;
+  max-width: 320px;
+  min-height: 52px;
+  padding: 13px 22px;
+  box-sizing: border-box;
+  border: 1px solid transparent;
+  border-radius: 16px;
+  appearance: none;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+  white-space: normal;
+  word-break: keep-all;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.35;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.ngw-btn::after,
+.wakugui-btn::after {
+  content: '›';
+  flex: 0 0 auto;
+  font-size: 1em;
+  line-height: 1;
+}
+
+.ngw-btn:hover,
+.wakugui-btn:hover,
+.ngw-btn:focus-visible,
+.wakugui-btn:focus-visible {
+  transform: translateY(-1px);
+}
+
+.ngw-btn:focus-visible,
+.wakugui-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--wg-btn-focus-ring);
+}
+
+.ngw-btn.is-primary,
+.wakugui-btn.is-primary {
+  background: var(--wg-btn-primary-bg);
+  border-color: var(--wg-btn-primary-border);
+  color: var(--wg-btn-primary-text);
+}
+
+.ngw-btn.is-primary:hover,
+.wakugui-btn.is-primary:hover,
+.ngw-btn.is-primary:focus-visible,
+.wakugui-btn.is-primary:focus-visible {
+  background: var(--wg-btn-primary-bg-hover);
+  border-color: var(--wg-btn-primary-border-hover);
+  color: var(--wg-btn-primary-text-hover);
+}
+
+.ngw-btn.is-secondary,
+.wakugui-btn.is-secondary {
+  background: var(--wg-btn-secondary-bg);
+  border-color: var(--wg-btn-secondary-border);
+  color: var(--wg-btn-secondary-text);
+}
+
+.ngw-btn.is-secondary:hover,
+.wakugui-btn.is-secondary:hover,
+.ngw-btn.is-secondary:focus-visible,
+.wakugui-btn.is-secondary:focus-visible {
+  background: var(--wg-btn-secondary-bg-hover);
+  border-color: var(--wg-btn-secondary-border-hover);
+  color: var(--wg-btn-secondary-text-hover);
+}
+
+/* =========================================================
+ * 8) ボタン並び
+ * 役割:
+ * - Hero / Card / Contact の actions を統一管理する
+ * - Card の 2ボタンは同じ幅で揃えやすくする
+ * ========================================================= */
+
+.wakugui-hero__actions,
+.wakugui-card__actions,
+.wakugui-contact__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.wakugui-hero__actions .ngw-btn,
+.wakugui-hero__actions .wakugui-btn,
+.wakugui-contact__actions .ngw-btn,
+.wakugui-contact__actions .wakugui-btn {
+  flex: 0 1 280px;
+  max-width: none;
+  white-space: normal;
+  text-align: center;
+}
+
+.wakugui-card__actions {
+  width: 100%;
+  max-width: 640px;
+}
+
+.wakugui-card__actions .ngw-btn,
+.wakugui-card__actions .wakugui-btn {
+  flex: 1 1 calc(50% - 6px);
+  max-width: none;
+  min-height: 56px;
+  justify-content: center;
+  text-align: center;
+}
+
+.wakugui-contact__actions {
+  justify-content: center;
+}
+
+/* =========================================================
+ * 9) Contact
+ * 役割:
+ * - 末尾の問い合わせブロック
+ * - 画像あり / 画像なし の両対応
+ * ========================================================= */
+
+.wakugui-contact {
+  position: relative;
+  isolation: isolate;
+  text-align: center;
+  background:
+    radial-gradient(circle at top, var(--wg-accent-soft), transparent 55%), var(--wg-panel);
+}
+
+.wakugui-contact--has-image {
+  background: #10202a;
+}
+
+.wakugui-contact__media,
+.wakugui-contact__media img,
+.wakugui-contact__overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.wakugui-contact__media img {
+  object-fit: cover;
+  object-position: center center;
+}
+
+.wakugui-contact__overlay {
+  z-index: 1;
+  background: linear-gradient(
+    90deg,
+    rgba(9, 19, 26, 0.82) 0%,
+    rgba(9, 19, 26, 0.58) 58%,
+    rgba(9, 19, 26, 0.24) 100%
+  );
+}
+
+.wakugui-contact__inner {
+  position: relative;
+  z-index: 2;
+}
+
+.wakugui-contact--has-image .wakugui-eyebrow,
+.wakugui-contact--has-image .wakugui-head__title,
+.wakugui-contact--has-image .wakugui-head__text {
+  color: #ffffff !important;
+}
+
+/* =========================================================
+ * 10) Lifestyle セクション専用
+ * 役割:
+ * - ボタン付きの split セクションだけ比率調整
+ * - 見出し幅を少し絞って読みやすくする
+ * ========================================================= */
+
+.wakugui-section:has(.wakugui-card__actions) .wakugui-split {
+  grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+  gap: 30px;
+}
+
+.wakugui-section:has(.wakugui-card__actions) .wakugui-head {
+  max-width: 760px;
+}
+
+.wakugui-section:has(.wakugui-card__actions) .wakugui-head__title {
+  max-width: 8.4em;
+  font-size: clamp(2.05rem, 3vw, 3rem);
+  line-height: 1.1;
+  text-wrap: balance;
+}
+
+.wakugui-section:has(.wakugui-card__actions) .wakugui-head__text {
+  max-width: 34ch;
+}
+
+/* =========================================================
+ * 11) Tablet
+ * 役割:
+ * - 2カラムを1カラムへ
+ * - flow の矢印を下向きへ変更
+ * - Hero と画像カードの比率を少し緩める
+ * ========================================================= */
+
+@media (max-width: 1100px) {
+  .wakugui-split,
+  .wakugui-flow,
+  .wakugui-section:has(.wakugui-card__actions) .wakugui-split {
+    grid-template-columns: 1fr;
+  }
+
+  .wakugui-split.is-reverse .wakugui-card--copy,
+  .wakugui-split.is-reverse .wakugui-card--media {
+    order: initial;
+  }
+
+  .wakugui-hero {
+    aspect-ratio: 16 / 8;
+    min-height: 360px;
+  }
+
+  .wakugui-hero__content {
+    width: min(100%, 680px);
+  }
+
+  .wakugui-card__media-frame {
+    aspect-ratio: 16 / 10;
+  }
+
+  .wakugui-flow__item:not(:last-child)::after {
+    content: '↓';
+    top: auto;
+    right: 50%;
+    bottom: -18px;
+    transform: translateX(50%);
+  }
+}
+
+/* =========================================================
+ * 12) SP
+ * 役割:
+ * - 余白を詰める
+ * - ボタンを縦積みにする
+ * - Hero をスマホ向けに下寄せする
+ * ========================================================= */
+
+@media (max-width: 767px) {
+  .wakugui-inner,
+  .wakugui-hero-shell {
+    width: calc(100% - 20px);
+  }
+
+  .wakugui-hero-shell {
+    margin: 14px auto 28px;
+  }
+
+  .wakugui-hero {
+    align-items: flex-end;
+    aspect-ratio: 4 / 5;
+    min-height: 0;
+    border-radius: 24px;
+  }
+
+  .wakugui-hero__media img {
+    object-position: center center;
+  }
+
+  .wakugui-hero__content {
+    width: 100%;
+    max-width: none;
+    padding: 90px 20px 22px;
+  }
+
+  .wakugui-hero__title {
+    font-size: clamp(30px, 10vw, 42px);
+    line-height: 1.12;
+  }
+
+  .wakugui-hero__text {
+    margin-top: 12px;
+    font-size: 15px;
+    line-height: 1.78;
+  }
+
+  .wakugui-section {
+    padding: 26px 0;
+  }
+
+  .wakugui-section--contact {
+    padding-bottom: 52px;
+  }
+
+  .wakugui-card--copy,
+  .wakugui-flow-panel,
+  .wakugui-contact,
+  .wakugui-contact__inner {
+    padding: 22px 18px;
+  }
+
+  .wakugui-card--media {
+    padding: 10px;
+  }
+
+  .wakugui-card__media-frame {
+    aspect-ratio: 4 / 3;
+  }
+
+  .wakugui-hero__actions,
+  .wakugui-card__actions,
+  .wakugui-contact__actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .ngw-btn,
+  .wakugui-btn,
+  .wakugui-hero__actions .ngw-btn,
+  .wakugui-hero__actions .wakugui-btn,
+  .wakugui-card__actions .ngw-btn,
+  .wakugui-card__actions .wakugui-btn,
+  .wakugui-contact__actions .ngw-btn,
+  .wakugui-contact__actions .wakugui-btn {
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+    flex: none;
+  }
+
+  .wakugui-section:has(.wakugui-card__actions) .wakugui-head__title {
+    max-width: none;
+    font-size: clamp(1.95rem, 8vw, 2.45rem);
+    line-height: 1.14;
+  }
+
+  .wakugui-section:has(.wakugui-card__actions) .wakugui-head__text {
+    max-width: none;
+  }
+
+  .wakugui-contact__actions {
+    display: flex;
+  }
+}
+

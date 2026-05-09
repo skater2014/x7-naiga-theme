@@ -1,0 +1,1046 @@
+### 1. _ch_plan_ keys in theme
+single-iez_plan.php:72:     *    - 編集画面の説明文 _ch_plan_description
+hub/pages/iezukuri/inc/loader.php:110:require_once __DIR__ . '/lightgallery-enqueue.php';
+hub/pages/iezukuri/inc/plan-home-switch-data.php:98:                'key'   => '_ch_plan_show_in_home',
+hub/pages/iezukuri/inc/plan-home-switch-data.php:102:                'key'   => '_ch_plan_show_in_cards',
+hub/pages/iezukuri/inc/plan-home-switch-data.php:115:        $ap = get_post_meta($a->ID, '_ch_plan_is_card_primary', true) === '1' ? 1 : 0;
+hub/pages/iezukuri/inc/plan-home-switch-data.php:116:        $bp = get_post_meta($b->ID, '_ch_plan_is_card_primary', true) === '1' ? 1 : 0;
+hub/pages/iezukuri/inc/plan-home-switch-data.php:128:        $plans[] = naigai_iez_plan_home_switch_plan_data($post->ID, $info);
+hub/pages/iezukuri/inc/plan-home-switch-data.php:163:function naigai_iez_plan_home_switch_plan_data($post_id, $info) {
+hub/pages/iezukuri/inc/plan-home-switch-data.php:167:    $style  = get_post_meta($post_id, '_ch_plan_style', true);
+hub/pages/iezukuri/inc/plan-home-switch-data.php:168:    $layout = get_post_meta($post_id, '_ch_plan_layout', true);
+hub/pages/iezukuri/inc/plan-home-switch-data.php:169:    $area   = get_post_meta($post_id, '_ch_plan_total_area', true);
+hub/pages/iezukuri/inc/plan-home-switch-data.php:170:    $tsubo  = get_post_meta($post_id, '_ch_plan_tsubo', true);
+hub/pages/iezukuri/inc/plan-home-switch-data.php:171:    $desc   = get_post_meta($post_id, '_ch_plan_description', true);
+hub/pages/iezukuri/inc/plan-home-switch-data.php:173:    $exterior_id = absint(get_post_meta($post_id, '_ch_plan_exterior_image_id', true));
+hub/pages/iezukuri/inc/plan-home-switch-data.php:174:    if (!$exterior_id && has_post_thumbnail($post_id)) {
+hub/pages/iezukuri/inc/plan-home-switch-data.php:175:        $exterior_id = absint(get_post_thumbnail_id($post_id));
+hub/pages/iezukuri/inc/plan-home-switch-data.php:178:    $gallery_ids = naigai_iez_plan_home_switch_parse_ids(get_post_meta($post_id, '_ch_plan_gallery_image_ids', true));
+hub/pages/iezukuri/inc/plan-home-switch-data.php:182:    $exterior = naigai_iez_plan_home_switch_img($exterior_id, '外観写真', 'work');
+hub/pages/iezukuri/inc/plan-home-switch-data.php:183:    if ($exterior) {
+hub/pages/iezukuri/inc/plan-home-switch-data.php:184:        $works[] = $exterior;
+hub/pages/iezukuri/inc/plan-home-switch-data.php:187:    $gallery_labels = array('内装写真 1', '内装写真 2', '内装写真 3', '内装写真 4');
+hub/pages/iezukuri/inc/plan-home-switch-data.php:188:    foreach ($gallery_ids as $i => $id) {
+hub/pages/iezukuri/inc/plan-home-switch-data.php:189:        $img = naigai_iez_plan_home_switch_img($id, $gallery_labels[$i] ?? '内装写真', 'work');
+hub/pages/iezukuri/inc/plan-home-switch-data.php:195:    $floor_type = get_post_meta($post_id, '_ch_plan_floor_type', true) ?: 'one_story';
+hub/pages/iezukuri/inc/plan-home-switch-data.php:199:    $plan_1f_id = absint(get_post_meta($post_id, '_ch_plan_1f_image_id', true));
+hub/pages/iezukuri/inc/plan-home-switch-data.php:200:    $plan_2f_id = absint(get_post_meta($post_id, '_ch_plan_2f_image_id', true));
+hub/pages/iezukuri/inc/plan-home-switch-data.php:201:    $site_id    = absint(get_post_meta($post_id, '_ch_plan_site_image_id', true));
+hub/pages/iezukuri/inc/plan-home-switch-data.php:203:    if ($floor_type === 'two_story') {
+hub/pages/iezukuri/inc/plan-home-switch-data.php:204:        $img = naigai_iez_plan_home_switch_img($plan_1f_id, '1F 平面図', 'plan');
+hub/pages/iezukuri/inc/plan-home-switch-data.php:209:        $img = naigai_iez_plan_home_switch_img($plan_2f_id, '2F 平面図', 'plan');
+hub/pages/iezukuri/inc/plan-home-switch-data.php:214:        $img = naigai_iez_plan_home_switch_img($plan_1f_id, '平面図', 'plan');
+hub/pages/iezukuri/inc/plan-home-switch-data.php:220:    $img = naigai_iez_plan_home_switch_img($site_id, '配置図', 'plan');
+hub/pages/iezukuri/inc/plan-home-switch-data.php:236:        'is_primary'    => get_post_meta($post_id, '_ch_plan_is_card_primary', true) === '1',
+hub/pages/iezukuri/inc/plan-post-type.php:17:    register_post_type('iez_plan', array(
+hub/pages/iezukuri/inc/plan-post-type.php:35:        'supports'      => array('title', 'editor', 'thumbnail', 'excerpt', 'page-attributes'),
+hub/pages/iezukuri/inc/plan-post-type.php:44:    register_taxonomy('iez_plan_type', array('iez_plan'), array(
+hub/pages/iezukuri/inc/plan-post-type.php:61:    register_taxonomy('iez_plan_size', array('iez_plan'), array(
+hub/pages/iezukuri/inc/plan-post-type.php:78:    register_taxonomy('iez_plan_feature', array('iez_plan'), array(
+hub/pages/iezukuri/inc/hero-renderer.php:168:        $gallery_ids = naigai_iez_hero_meta($post_id, '_ch_hero_gallery_ids', '');
+hub/pages/iezukuri/inc/hero-renderer.php:169:        $items = naigai_iez_hero_items($post_id, $gallery_ids, $title, $lead, $motion, $caption_motion);
+hub/pages/iezukuri/inc/hero-renderer.php:175:                $image_id = get_post_thumbnail_id($post_id);
+hub/pages/iezukuri/inc/seo.php:47:    if ($post_id && has_post_thumbnail($post_id)) {
+hub/pages/iezukuri/inc/seo.php:48:        $image = get_the_post_thumbnail_url($post_id, 'large');
+hub/pages/iezukuri/inc/seo.php:58:    echo '<meta property="og:type" content="website">' . "\n";
+hub/pages/iezukuri/inc/intro-overlay-admin-page.php:19:            'dashicons-format-gallery',
+hub/pages/iezukuri/inc/plan-feature-catalog.php:66:        'exterior_refresh' => array(
+hub/pages/iezukuri/inc/plan-feature-catalog.php:69:            'icon'  => 'exterior_refresh',
+hub/pages/iezukuri/inc/plan-feature-catalog.php:82:        'one_floor' => array(
+hub/pages/iezukuri/inc/plan-feature-catalog.php:85:            'icon'  => 'one_floor',
+hub/pages/iezukuri/inc/plan-feature-catalog.php:92:        'second_floor' => array(
+hub/pages/iezukuri/inc/plan-feature-catalog.php:95:            'icon'  => 'second_floor',
+hub/pages/iezukuri/inc/plan-feature-catalog.php:202:        'exterior_refresh',
+hub/pages/iezukuri/inc/plan-feature-catalog.php:262:     * 2. _ch_plan_feature_keys があれば追加で反映する。
+hub/pages/iezukuri/inc/plan-feature-catalog.php:263:     * 3. 2階建てなら stairs / second_floor を追加する。
+hub/pages/iezukuri/inc/plan-feature-catalog.php:264:     * 4. _ch_plan_option_keys があれば最後に足す。
+hub/pages/iezukuri/inc/plan-feature-catalog.php:267:    $manual = naigai_iez_plan_parse_key_list(get_post_meta($post_id, '_ch_plan_feature_keys', true));
+hub/pages/iezukuri/inc/plan-feature-catalog.php:289:    $floor_type = get_post_meta($post_id, '_ch_plan_floor_type', true);
+hub/pages/iezukuri/inc/plan-feature-catalog.php:291:    if ($floor_type === 'two_story' || naigai_iez_plan_has_term_slug($post_id, 'iez_plan_building_form', 'two-story')) {
+hub/pages/iezukuri/inc/plan-feature-catalog.php:293:        $keys[] = 'second_floor';
+hub/pages/iezukuri/inc/plan-feature-catalog.php:295:        $keys[] = 'one_floor';
+hub/pages/iezukuri/inc/plan-feature-catalog.php:298:    $option_keys = naigai_iez_plan_parse_key_list(get_post_meta($post_id, '_ch_plan_option_keys', true));
+hub/pages/iezukuri/inc/plan-feature-catalog.php:337:            'second_floor' => '<path d="M10 34h28"/><path d="M14 34V18l10-8 10 8v16"/><path d="M18 34v-8h6v8"/><path d="M28 20h5"/><path d="M28 25h5"/>',
+hub/pages/iezukuri/inc/plan-feature-catalog.php:340:            'one_floor' => '<path d="M9 30h30"/><path d="M13 30V20l11-8 11 8v10"/><path d="M19 30v-7h10v7"/>',
+hub/pages/iezukuri/inc/plan-feature-catalog.php:348:            'exterior_refresh' => '<path d="M8 25l16-13 16 13"/><path d="M13 23v16h22V23"/><path d="M18 39V29h8v10"/><path d="M31 28h5"/><path d="M36 10l2 4 4 2-4 2-2 4-2-4-4-2 4-2 2-4"/>',
+hub/pages/iezukuri/inc/page-content-renderer.php:17: * - iez_plan の _ch_plan_* メタとは分ける
+hub/pages/iezukuri/inc/lightgallery-enqueue.php:3: * hub/pages/iezukuri/inc/lightgallery-enqueue.php
+hub/pages/iezukuri/inc/lightgallery-enqueue.php:20:    $vendor_css = '/vendor/lightgallery/css/lightgallery-bundle.min.css';
+hub/pages/iezukuri/inc/lightgallery-enqueue.php:21:    $vendor_js  = '/vendor/lightgallery/js/lightgallery.umd.min.js';
+hub/pages/iezukuri/inc/lightgallery-enqueue.php:22:    $thumb_js   = '/vendor/lightgallery/js/plugins/thumbnail/lg-thumbnail.umd.min.js';
+hub/pages/iezukuri/inc/lightgallery-enqueue.php:23:    $zoom_js    = '/vendor/lightgallery/js/plugins/zoom/lg-zoom.umd.min.js';
+hub/pages/iezukuri/inc/lightgallery-enqueue.php:24:    $init_js    = '/js/iezukuri-lightgallery-init.js';
+hub/pages/iezukuri/inc/lightgallery-enqueue.php:28:            'naigai-iez-lightgallery',
+hub/pages/iezukuri/inc/lightgallery-enqueue.php:37:            'naigai-iez-lightgallery',
+hub/pages/iezukuri/inc/lightgallery-enqueue.php:47:            'naigai-iez-lightgallery-thumbnail',
+hub/pages/iezukuri/inc/lightgallery-enqueue.php:49:            array('naigai-iez-lightgallery'),
+hub/pages/iezukuri/inc/lightgallery-enqueue.php:57:            'naigai-iez-lightgallery-zoom',
+hub/pages/iezukuri/inc/lightgallery-enqueue.php:59:            array('naigai-iez-lightgallery'),
+hub/pages/iezukuri/inc/lightgallery-enqueue.php:67:            'naigai-iez-lightgallery-init',
+hub/pages/iezukuri/inc/lightgallery-enqueue.php:70:                'naigai-iez-lightgallery',
+hub/pages/iezukuri/inc/lightgallery-enqueue.php:71:                'naigai-iez-lightgallery-thumbnail',
+hub/pages/iezukuri/inc/lightgallery-enqueue.php:72:                'naigai-iez-lightgallery-zoom',
+hub/pages/iezukuri/inc/plan-archive.php:27:add_filter('register_post_type_args', function ($args, $post_type) {
+hub/pages/iezukuri/inc/plan-display-metabox.php:14:add_action('add_meta_boxes', 'naigai_iez_plan_add_display_metabox');
+hub/pages/iezukuri/inc/plan-display-metabox.php:15:add_action('save_post_iez_plan', 'naigai_iez_plan_save_display_metabox', 20, 2);
+hub/pages/iezukuri/inc/plan-display-metabox.php:18:    add_meta_box(
+hub/pages/iezukuri/inc/plan-display-metabox.php:32:        '_ch_plan_show_in_home'    => 'show in home / 家づくりトップに表示',
+hub/pages/iezukuri/inc/plan-display-metabox.php:33:        '_ch_plan_show_in_archive' => 'show in archive / 一覧に表示',
+hub/pages/iezukuri/inc/plan-display-metabox.php:34:        '_ch_plan_show_in_detail'  => 'show in detail / 詳細に特徴を表示',
+hub/pages/iezukuri/inc/plan-display-metabox.php:35:        '_ch_plan_show_in_cards'   => 'show in cards / 3カード切替対象',
+hub/pages/iezukuri/inc/plan-display-metabox.php:36:        '_ch_plan_is_card_primary' => 'primary / この分類の代表プラン',
+hub/pages/iezukuri/inc/plan-display-metabox.php:58:        ? naigai_iez_plan_parse_key_list(get_post_meta($post->ID, '_ch_plan_option_keys', true))
+hub/pages/iezukuri/inc/plan-display-metabox.php:66:        echo '<input type="checkbox" name="_ch_plan_option_keys[]" value="' . esc_attr($key) . '" ' . checked(in_array($key, $saved_options, true), true, false) . '> ';
+hub/pages/iezukuri/inc/plan-display-metabox.php:103:        '_ch_plan_show_in_home',
+hub/pages/iezukuri/inc/plan-display-metabox.php:104:        '_ch_plan_show_in_archive',
+hub/pages/iezukuri/inc/plan-display-metabox.php:105:        '_ch_plan_show_in_detail',
+hub/pages/iezukuri/inc/plan-display-metabox.php:106:        '_ch_plan_show_in_cards',
+hub/pages/iezukuri/inc/plan-display-metabox.php:107:        '_ch_plan_is_card_primary',
+hub/pages/iezukuri/inc/plan-display-metabox.php:116:    if (isset($_POST['_ch_plan_option_keys']) && is_array($_POST['_ch_plan_option_keys'])) {
+hub/pages/iezukuri/inc/plan-display-metabox.php:117:        $option_keys = array_values(array_unique(array_filter(array_map('sanitize_key', $_POST['_ch_plan_option_keys']))));
+hub/pages/iezukuri/inc/plan-display-metabox.php:120:    update_post_meta($post_id, '_ch_plan_option_keys', implode(',', $option_keys));
+hub/pages/iezukuri/inc/plan-display-metabox.php:122:    if (get_post_meta($post_id, '_ch_plan_show_in_detail', true) === '') {
+hub/pages/iezukuri/inc/plan-display-metabox.php:123:        update_post_meta($post_id, '_ch_plan_show_in_detail', '1');
+hub/pages/iezukuri/inc/plan-seo.php:18: * - _ch_plan_description は使わない。
+hub/pages/iezukuri/inc/plan-extra-taxonomies.php:17:    register_taxonomy('iez_plan_scope', array('iez_plan'), array(
+hub/pages/iezukuri/inc/plan-extra-taxonomies.php:37:    register_taxonomy('iez_plan_building_form', array('iez_plan'), array(
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023123:47:.ch-site-header {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023123:56:.ch-site-header__inner {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023123:67:.ch-site-header__brand {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023123:75:.ch-site-header__brand-logo {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023123:83:.ch-site-header__brand-main {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023123:89:.ch-site-header__brand-sub {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023123:97:.ch-site-header__nav--desktop {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023123:101:.ch-site-header__list,
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023123:102:.ch-site-header__drawer-list {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023123:111:.ch-site-header__list li,
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023123:112:.ch-site-header__drawer-list li {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023123:118:.ch-site-header__list a,
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023123:119:.ch-site-header__drawer-list a {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023123:133:.ch-site-header__list a:hover,
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023123:134:.ch-site-header__drawer-list a:hover {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023123:138:.ch-site-header--pipe .ch-site-header__list {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023123:142:.ch-site-header--pipe .ch-site-header__list li + li::before {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023123:148:.ch-site-header--pipe .ch-site-header__list a,
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023123:149:.ch-site-header--minimal .ch-site-header__list a {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023123:154:.ch-site-header--pipe .ch-site-header__list a {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023123:158:.ch-site-header--minimal .ch-site-header__list a {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023123:162:.ch-site-header--pipe .ch-site-header__list a:hover,
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023123:163:.ch-site-header--minimal .ch-site-header__list a:hover {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023123:168:.ch-site-header__toggle {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023123:179:.ch-site-header__toggle span {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023123:187:.ch-site-header__drawer[hidden] {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023123:191:.ch-site-header__drawer {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023123:198:.ch-site-header__drawer-inner {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023123:204:.ch-site-header__drawer-list {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023123:209:.ch-site-header__drawer-list a {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023123:952:  .ch-site-header__nav--desktop {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023123:956:  .ch-site-header__toggle {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023123:1094:  body.admin-bar .ch-site-header {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023123:1103:body.admin-bar .ch-site-header {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023123:1385: * - ch-site-reading
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023123:1388:.hub-customhome-page.hub-customhome-top .ch-site-reading {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023123:1392:.hub-customhome-page.hub-customhome-top .ch-site-reading__grid {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023123:1399:.hub-customhome-page.hub-customhome-top .ch-site-reading .ch-eyebrow {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023123:1403:.hub-customhome-page.hub-customhome-top .ch-site-reading .ch-section-title {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023123:1407:.hub-customhome-page.hub-customhome-top .ch-site-reading__body {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023123:1415:.hub-customhome-page.hub-customhome-top .ch-site-reading__notice {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023123:1424:  .hub-customhome-page.hub-customhome-top .ch-site-reading__grid {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023123:1428:  .hub-customhome-page.hub-customhome-top .ch-site-reading .ch-eyebrow {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023123:1432:  .hub-customhome-page.hub-customhome-top .ch-site-reading .ch-section-title {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023744:47:.ch-site-header {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023744:56:.ch-site-header__inner {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023744:67:.ch-site-header__brand {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023744:75:.ch-site-header__brand-logo {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023744:83:.ch-site-header__brand-main {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023744:89:.ch-site-header__brand-sub {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023744:97:.ch-site-header__nav--desktop {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023744:101:.ch-site-header__list,
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023744:102:.ch-site-header__drawer-list {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023744:111:.ch-site-header__list li,
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023744:112:.ch-site-header__drawer-list li {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023744:118:.ch-site-header__list a,
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023744:119:.ch-site-header__drawer-list a {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023744:133:.ch-site-header__list a:hover,
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023744:134:.ch-site-header__drawer-list a:hover {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023744:138:.ch-site-header--pipe .ch-site-header__list {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023744:142:.ch-site-header--pipe .ch-site-header__list li + li::before {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023744:148:.ch-site-header--pipe .ch-site-header__list a,
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023744:149:.ch-site-header--minimal .ch-site-header__list a {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023744:154:.ch-site-header--pipe .ch-site-header__list a {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023744:158:.ch-site-header--minimal .ch-site-header__list a {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023744:162:.ch-site-header--pipe .ch-site-header__list a:hover,
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023744:163:.ch-site-header--minimal .ch-site-header__list a:hover {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023744:168:.ch-site-header__toggle {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023744:179:.ch-site-header__toggle span {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023744:187:.ch-site-header__drawer[hidden] {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023744:191:.ch-site-header__drawer {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023744:198:.ch-site-header__drawer-inner {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023744:204:.ch-site-header__drawer-list {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023744:209:.ch-site-header__drawer-list a {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023744:952:  .ch-site-header__nav--desktop {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023744:956:  .ch-site-header__toggle {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023744:1094:  body.admin-bar .ch-site-header {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023744:1103:body.admin-bar .ch-site-header {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023744:1385: * - ch-site-reading
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023744:1388:.hub-customhome-page.hub-customhome-top .ch-site-reading {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023744:1392:.hub-customhome-page.hub-customhome-top .ch-site-reading__grid {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023744:1399:.hub-customhome-page.hub-customhome-top .ch-site-reading .ch-eyebrow {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023744:1403:.hub-customhome-page.hub-customhome-top .ch-site-reading .ch-section-title {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023744:1407:.hub-customhome-page.hub-customhome-top .ch-site-reading__body {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023744:1415:.hub-customhome-page.hub-customhome-top .ch-site-reading__notice {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023744:1424:  .hub-customhome-page.hub-customhome-top .ch-site-reading__grid {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023744:1428:  .hub-customhome-page.hub-customhome-top .ch-site-reading .ch-eyebrow {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023744:1432:  .hub-customhome-page.hub-customhome-top .ch-site-reading .ch-section-title {
+hub/pages/iezukuri/css/top/service-panel.css.bak-20260508-050216:285:.hub-customhome-page.hub-customhome-top .ch-service-panel-media__floor {
+hub/pages/iezukuri/css/top/service-panel.css.bak-20260508-050216:343:  .hub-customhome-page.hub-customhome-top .ch-service-panel-media__floor {
+hub/pages/iezukuri/css/top/service-panel.css.bak-20260508-050216:849:.ch-service-panel-media--floor .ch-service-media-static img,
+hub/pages/iezukuri/css/top/service-panel.css.bak-20260508-050216:850:.ch-service-panel-media--floor .ch-service-media-main-swiper img {
+hub/pages/iezukuri/css/top/service-panel.css.bak-20260508-050216:885:.ch-service-panel-media--floor .ch-service-media-thumbs-swiper img {
+hub/pages/iezukuri/css/top/service-panel.css.bak-20260508-023744:285:.hub-customhome-page.hub-customhome-top .ch-service-panel-media__floor {
+hub/pages/iezukuri/css/top/service-panel.css.bak-20260508-023744:343:  .hub-customhome-page.hub-customhome-top .ch-service-panel-media__floor {
+hub/pages/iezukuri/css/top/service-panel.css.bak-20260508-034012:285:.hub-customhome-page.hub-customhome-top .ch-service-panel-media__floor {
+hub/pages/iezukuri/css/top/service-panel.css.bak-20260508-034012:343:  .hub-customhome-page.hub-customhome-top .ch-service-panel-media__floor {
+hub/pages/iezukuri/css/top/service-panel.css.bak-20260508-034012:838:.ch-service-panel-media--floor .ch-service-media-main-swiper img {
+hub/pages/iezukuri/css/top/service-panel.css.bak-20260508-034012:869:.ch-service-panel-media--floor .ch-service-media-thumbs-swiper img {
+hub/pages/iezukuri/css/top/top-footer.css.bak-20260508-032507:99:.hub-customhome-page.hub-customhome-top .ch-site-reading {
+hub/pages/iezukuri/css/top/top-footer.css.bak-20260508-032507:104:.hub-customhome-page.hub-customhome-top .ch-site-reading::before {
+hub/pages/iezukuri/css/top/top-footer.css.bak-20260508-032507:114:.hub-customhome-page.hub-customhome-top .ch-site-reading .ch-shell {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-034012:47:.ch-site-header {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-034012:56:.ch-site-header__inner {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-034012:67:.ch-site-header__brand {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-034012:75:.ch-site-header__brand-logo {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-034012:83:.ch-site-header__brand-main {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-034012:89:.ch-site-header__brand-sub {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-034012:97:.ch-site-header__nav--desktop {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-034012:101:.ch-site-header__list,
+hub/pages/iezukuri/css/top/top.css.bak-20260508-034012:102:.ch-site-header__drawer-list {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-034012:111:.ch-site-header__list li,
+hub/pages/iezukuri/css/top/top.css.bak-20260508-034012:112:.ch-site-header__drawer-list li {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-034012:118:.ch-site-header__list a,
+hub/pages/iezukuri/css/top/top.css.bak-20260508-034012:119:.ch-site-header__drawer-list a {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-034012:133:.ch-site-header__list a:hover,
+hub/pages/iezukuri/css/top/top.css.bak-20260508-034012:134:.ch-site-header__drawer-list a:hover {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-034012:138:.ch-site-header--pipe .ch-site-header__list {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-034012:142:.ch-site-header--pipe .ch-site-header__list li + li::before {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-034012:148:.ch-site-header--pipe .ch-site-header__list a,
+hub/pages/iezukuri/css/top/top.css.bak-20260508-034012:149:.ch-site-header--minimal .ch-site-header__list a {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-034012:154:.ch-site-header--pipe .ch-site-header__list a {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-034012:158:.ch-site-header--minimal .ch-site-header__list a {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-034012:162:.ch-site-header--pipe .ch-site-header__list a:hover,
+hub/pages/iezukuri/css/top/top.css.bak-20260508-034012:163:.ch-site-header--minimal .ch-site-header__list a:hover {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-034012:168:.ch-site-header__toggle {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-034012:179:.ch-site-header__toggle span {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-034012:187:.ch-site-header__drawer[hidden] {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-034012:191:.ch-site-header__drawer {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-034012:198:.ch-site-header__drawer-inner {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-034012:204:.ch-site-header__drawer-list {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-034012:209:.ch-site-header__drawer-list a {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-034012:952:  .ch-site-header__nav--desktop {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-034012:956:  .ch-site-header__toggle {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-034012:1094:  body.admin-bar .ch-site-header {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-034012:1103:body.admin-bar .ch-site-header {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-034012:1385: * - ch-site-reading
+hub/pages/iezukuri/css/top/top.css.bak-20260508-034012:1388:.hub-customhome-page.hub-customhome-top .ch-site-reading {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-034012:1392:.hub-customhome-page.hub-customhome-top .ch-site-reading__grid {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-034012:1399:.hub-customhome-page.hub-customhome-top .ch-site-reading .ch-eyebrow {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-034012:1403:.hub-customhome-page.hub-customhome-top .ch-site-reading .ch-section-title {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-034012:1407:.hub-customhome-page.hub-customhome-top .ch-site-reading__body {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-034012:1415:.hub-customhome-page.hub-customhome-top .ch-site-reading__notice {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-034012:1424:  .hub-customhome-page.hub-customhome-top .ch-site-reading__grid {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-034012:1428:  .hub-customhome-page.hub-customhome-top .ch-site-reading .ch-eyebrow {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-034012:1432:  .hub-customhome-page.hub-customhome-top .ch-site-reading .ch-section-title {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-034012:1485:.hub-customhome-page.hub-customhome-top .ch-site-reading {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-034012:1490:.hub-customhome-page.hub-customhome-top .ch-site-reading::before {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-034012:1500:.hub-customhome-page.hub-customhome-top .ch-site-reading .ch-shell {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-032507:47:.ch-site-header {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-032507:56:.ch-site-header__inner {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-032507:67:.ch-site-header__brand {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-032507:75:.ch-site-header__brand-logo {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-032507:83:.ch-site-header__brand-main {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-032507:89:.ch-site-header__brand-sub {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-032507:97:.ch-site-header__nav--desktop {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-032507:101:.ch-site-header__list,
+hub/pages/iezukuri/css/top/top.css.bak-20260508-032507:102:.ch-site-header__drawer-list {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-032507:111:.ch-site-header__list li,
+hub/pages/iezukuri/css/top/top.css.bak-20260508-032507:112:.ch-site-header__drawer-list li {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-032507:118:.ch-site-header__list a,
+hub/pages/iezukuri/css/top/top.css.bak-20260508-032507:119:.ch-site-header__drawer-list a {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-032507:133:.ch-site-header__list a:hover,
+hub/pages/iezukuri/css/top/top.css.bak-20260508-032507:134:.ch-site-header__drawer-list a:hover {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-032507:138:.ch-site-header--pipe .ch-site-header__list {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-032507:142:.ch-site-header--pipe .ch-site-header__list li + li::before {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-032507:148:.ch-site-header--pipe .ch-site-header__list a,
+hub/pages/iezukuri/css/top/top.css.bak-20260508-032507:149:.ch-site-header--minimal .ch-site-header__list a {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-032507:154:.ch-site-header--pipe .ch-site-header__list a {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-032507:158:.ch-site-header--minimal .ch-site-header__list a {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-032507:162:.ch-site-header--pipe .ch-site-header__list a:hover,
+hub/pages/iezukuri/css/top/top.css.bak-20260508-032507:163:.ch-site-header--minimal .ch-site-header__list a:hover {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-032507:168:.ch-site-header__toggle {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-032507:179:.ch-site-header__toggle span {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-032507:187:.ch-site-header__drawer[hidden] {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-032507:191:.ch-site-header__drawer {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-032507:198:.ch-site-header__drawer-inner {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-032507:204:.ch-site-header__drawer-list {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-032507:209:.ch-site-header__drawer-list a {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-032507:952:  .ch-site-header__nav--desktop {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-032507:956:  .ch-site-header__toggle {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-032507:1094:  body.admin-bar .ch-site-header {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-032507:1103:body.admin-bar .ch-site-header {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-032507:1385: * - ch-site-reading
+hub/pages/iezukuri/css/top/top.css.bak-20260508-032507:1388:.hub-customhome-page.hub-customhome-top .ch-site-reading {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-032507:1392:.hub-customhome-page.hub-customhome-top .ch-site-reading__grid {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-032507:1399:.hub-customhome-page.hub-customhome-top .ch-site-reading .ch-eyebrow {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-032507:1403:.hub-customhome-page.hub-customhome-top .ch-site-reading .ch-section-title {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-032507:1407:.hub-customhome-page.hub-customhome-top .ch-site-reading__body {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-032507:1415:.hub-customhome-page.hub-customhome-top .ch-site-reading__notice {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-032507:1424:  .hub-customhome-page.hub-customhome-top .ch-site-reading__grid {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-032507:1428:  .hub-customhome-page.hub-customhome-top .ch-site-reading .ch-eyebrow {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-032507:1432:  .hub-customhome-page.hub-customhome-top .ch-site-reading .ch-section-title {
+hub/pages/iezukuri/css/top/service-panel.css.bak-20260508-032507:285:.hub-customhome-page.hub-customhome-top .ch-service-panel-media__floor {
+hub/pages/iezukuri/css/top/service-panel.css.bak-20260508-032507:343:  .hub-customhome-page.hub-customhome-top .ch-service-panel-media__floor {
+hub/pages/iezukuri/css/top/service-panel.css.bak-20260508-032507:859:.ch-service-panel-media--floor .ch-service-panel-media__image img {
+hub/pages/iezukuri/css/top/service-panel.css.bak-20260508-050037:285:.hub-customhome-page.hub-customhome-top .ch-service-panel-media__floor {
+hub/pages/iezukuri/css/top/service-panel.css.bak-20260508-050037:343:  .hub-customhome-page.hub-customhome-top .ch-service-panel-media__floor {
+hub/pages/iezukuri/css/top/service-panel.css.bak-20260508-050037:849:.ch-service-panel-media--floor .ch-service-media-static img,
+hub/pages/iezukuri/css/top/service-panel.css.bak-20260508-050037:850:.ch-service-panel-media--floor .ch-service-media-main-swiper img {
+hub/pages/iezukuri/css/top/service-panel.css.bak-20260508-050037:885:.ch-service-panel-media--floor .ch-service-media-thumbs-swiper img {
+hub/pages/iezukuri/css/top/service-panel.css.bak-20260508-031232:285:.hub-customhome-page.hub-customhome-top .ch-service-panel-media__floor {
+hub/pages/iezukuri/css/top/service-panel.css.bak-20260508-031232:343:  .hub-customhome-page.hub-customhome-top .ch-service-panel-media__floor {
+hub/pages/iezukuri/css/top/service-panel.css:285:.hub-customhome-page.hub-customhome-top .ch-service-panel-media__floor {
+hub/pages/iezukuri/css/top/service-panel.css:343:  .hub-customhome-page.hub-customhome-top .ch-service-panel-media__floor {
+hub/pages/iezukuri/css/top/service-panel.css:849:.ch-service-panel-media--floor .ch-service-media-static img,
+hub/pages/iezukuri/css/top/service-panel.css:850:.ch-service-panel-media--floor .ch-service-media-main-swiper img {
+hub/pages/iezukuri/css/top/service-panel.css:885:.ch-service-panel-media--floor .ch-service-media-thumbs-swiper img {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-031232:47:.ch-site-header {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-031232:56:.ch-site-header__inner {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-031232:67:.ch-site-header__brand {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-031232:75:.ch-site-header__brand-logo {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-031232:83:.ch-site-header__brand-main {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-031232:89:.ch-site-header__brand-sub {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-031232:97:.ch-site-header__nav--desktop {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-031232:101:.ch-site-header__list,
+hub/pages/iezukuri/css/top/top.css.bak-20260508-031232:102:.ch-site-header__drawer-list {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-031232:111:.ch-site-header__list li,
+hub/pages/iezukuri/css/top/top.css.bak-20260508-031232:112:.ch-site-header__drawer-list li {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-031232:118:.ch-site-header__list a,
+hub/pages/iezukuri/css/top/top.css.bak-20260508-031232:119:.ch-site-header__drawer-list a {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-031232:133:.ch-site-header__list a:hover,
+hub/pages/iezukuri/css/top/top.css.bak-20260508-031232:134:.ch-site-header__drawer-list a:hover {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-031232:138:.ch-site-header--pipe .ch-site-header__list {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-031232:142:.ch-site-header--pipe .ch-site-header__list li + li::before {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-031232:148:.ch-site-header--pipe .ch-site-header__list a,
+hub/pages/iezukuri/css/top/top.css.bak-20260508-031232:149:.ch-site-header--minimal .ch-site-header__list a {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-031232:154:.ch-site-header--pipe .ch-site-header__list a {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-031232:158:.ch-site-header--minimal .ch-site-header__list a {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-031232:162:.ch-site-header--pipe .ch-site-header__list a:hover,
+hub/pages/iezukuri/css/top/top.css.bak-20260508-031232:163:.ch-site-header--minimal .ch-site-header__list a:hover {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-031232:168:.ch-site-header__toggle {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-031232:179:.ch-site-header__toggle span {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-031232:187:.ch-site-header__drawer[hidden] {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-031232:191:.ch-site-header__drawer {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-031232:198:.ch-site-header__drawer-inner {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-031232:204:.ch-site-header__drawer-list {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-031232:209:.ch-site-header__drawer-list a {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-031232:952:  .ch-site-header__nav--desktop {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-031232:956:  .ch-site-header__toggle {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-031232:1094:  body.admin-bar .ch-site-header {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-031232:1103:body.admin-bar .ch-site-header {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-031232:1385: * - ch-site-reading
+hub/pages/iezukuri/css/top/top.css.bak-20260508-031232:1388:.hub-customhome-page.hub-customhome-top .ch-site-reading {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-031232:1392:.hub-customhome-page.hub-customhome-top .ch-site-reading__grid {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-031232:1399:.hub-customhome-page.hub-customhome-top .ch-site-reading .ch-eyebrow {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-031232:1403:.hub-customhome-page.hub-customhome-top .ch-site-reading .ch-section-title {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-031232:1407:.hub-customhome-page.hub-customhome-top .ch-site-reading__body {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-031232:1415:.hub-customhome-page.hub-customhome-top .ch-site-reading__notice {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-031232:1424:  .hub-customhome-page.hub-customhome-top .ch-site-reading__grid {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-031232:1428:  .hub-customhome-page.hub-customhome-top .ch-site-reading .ch-eyebrow {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-031232:1432:  .hub-customhome-page.hub-customhome-top .ch-site-reading .ch-section-title {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-022651:48:.ch-site-header {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-022651:57:.ch-site-header__inner {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-022651:68:.ch-site-header__brand {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-022651:76:.ch-site-header__brand-logo {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-022651:84:.ch-site-header__brand-main {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-022651:90:.ch-site-header__brand-sub {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-022651:98:.ch-site-header__nav--desktop {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-022651:102:.ch-site-header__list,
+hub/pages/iezukuri/css/top/top.css.bak-20260508-022651:103:.ch-site-header__drawer-list {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-022651:112:.ch-site-header__list li,
+hub/pages/iezukuri/css/top/top.css.bak-20260508-022651:113:.ch-site-header__drawer-list li {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-022651:119:.ch-site-header__list a,
+hub/pages/iezukuri/css/top/top.css.bak-20260508-022651:120:.ch-site-header__drawer-list a {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-022651:134:.ch-site-header__list a:hover,
+hub/pages/iezukuri/css/top/top.css.bak-20260508-022651:135:.ch-site-header__drawer-list a:hover {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-022651:139:.ch-site-header--pipe .ch-site-header__list {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-022651:143:.ch-site-header--pipe .ch-site-header__list li + li::before {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-022651:149:.ch-site-header--pipe .ch-site-header__list a,
+hub/pages/iezukuri/css/top/top.css.bak-20260508-022651:150:.ch-site-header--minimal .ch-site-header__list a {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-022651:155:.ch-site-header--pipe .ch-site-header__list a {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-022651:159:.ch-site-header--minimal .ch-site-header__list a {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-022651:163:.ch-site-header--pipe .ch-site-header__list a:hover,
+hub/pages/iezukuri/css/top/top.css.bak-20260508-022651:164:.ch-site-header--minimal .ch-site-header__list a:hover {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-022651:169:.ch-site-header__toggle {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-022651:180:.ch-site-header__toggle span {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-022651:188:.ch-site-header__drawer[hidden] {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-022651:192:.ch-site-header__drawer {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-022651:199:.ch-site-header__drawer-inner {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-022651:205:.ch-site-header__drawer-list {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-022651:210:.ch-site-header__drawer-list a {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-022651:953:  .ch-site-header__nav--desktop {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-022651:957:  .ch-site-header__toggle {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-022651:1095:  body.admin-bar .ch-site-header {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-022651:1104:body.admin-bar .ch-site-header {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-022651:1386: * - ch-site-reading
+hub/pages/iezukuri/css/top/top.css.bak-20260508-022651:1389:.hub-customhome-page.hub-customhome-top .ch-site-reading {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-022651:1393:.hub-customhome-page.hub-customhome-top .ch-site-reading__grid {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-022651:1400:.hub-customhome-page.hub-customhome-top .ch-site-reading .ch-eyebrow {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-022651:1404:.hub-customhome-page.hub-customhome-top .ch-site-reading .ch-section-title {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-022651:1408:.hub-customhome-page.hub-customhome-top .ch-site-reading__body {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-022651:1416:.hub-customhome-page.hub-customhome-top .ch-site-reading__notice {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-022651:1425:  .hub-customhome-page.hub-customhome-top .ch-site-reading__grid {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-022651:1429:  .hub-customhome-page.hub-customhome-top .ch-site-reading .ch-eyebrow {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-022651:1433:  .hub-customhome-page.hub-customhome-top .ch-site-reading .ch-section-title {
+hub/pages/iezukuri/css/top/service-panel.css.bak-20260508-050350:285:.hub-customhome-page.hub-customhome-top .ch-service-panel-media__floor {
+hub/pages/iezukuri/css/top/service-panel.css.bak-20260508-050350:343:  .hub-customhome-page.hub-customhome-top .ch-service-panel-media__floor {
+hub/pages/iezukuri/css/top/service-panel.css.bak-20260508-050350:849:.ch-service-panel-media--floor .ch-service-media-static img,
+hub/pages/iezukuri/css/top/service-panel.css.bak-20260508-050350:850:.ch-service-panel-media--floor .ch-service-media-main-swiper img {
+hub/pages/iezukuri/css/top/service-panel.css.bak-20260508-050350:885:.ch-service-panel-media--floor .ch-service-media-thumbs-swiper img {
+hub/pages/iezukuri/css/top/service-panel.css.bak-20260508-024004:285:.hub-customhome-page.hub-customhome-top .ch-service-panel-media__floor {
+hub/pages/iezukuri/css/top/service-panel.css.bak-20260508-024004:343:  .hub-customhome-page.hub-customhome-top .ch-service-panel-media__floor {
+hub/pages/iezukuri/css/top/top.css:47:.ch-site-header {
+hub/pages/iezukuri/css/top/top.css:56:.ch-site-header__inner {
+hub/pages/iezukuri/css/top/top.css:67:.ch-site-header__brand {
+hub/pages/iezukuri/css/top/top.css:75:.ch-site-header__brand-logo {
+hub/pages/iezukuri/css/top/top.css:83:.ch-site-header__brand-main {
+hub/pages/iezukuri/css/top/top.css:89:.ch-site-header__brand-sub {
+hub/pages/iezukuri/css/top/top.css:97:.ch-site-header__nav--desktop {
+hub/pages/iezukuri/css/top/top.css:101:.ch-site-header__list,
+hub/pages/iezukuri/css/top/top.css:102:.ch-site-header__drawer-list {
+hub/pages/iezukuri/css/top/top.css:111:.ch-site-header__list li,
+hub/pages/iezukuri/css/top/top.css:112:.ch-site-header__drawer-list li {
+hub/pages/iezukuri/css/top/top.css:118:.ch-site-header__list a,
+hub/pages/iezukuri/css/top/top.css:119:.ch-site-header__drawer-list a {
+hub/pages/iezukuri/css/top/top.css:133:.ch-site-header__list a:hover,
+hub/pages/iezukuri/css/top/top.css:134:.ch-site-header__drawer-list a:hover {
+hub/pages/iezukuri/css/top/top.css:138:.ch-site-header--pipe .ch-site-header__list {
+hub/pages/iezukuri/css/top/top.css:142:.ch-site-header--pipe .ch-site-header__list li + li::before {
+hub/pages/iezukuri/css/top/top.css:148:.ch-site-header--pipe .ch-site-header__list a,
+hub/pages/iezukuri/css/top/top.css:149:.ch-site-header--minimal .ch-site-header__list a {
+hub/pages/iezukuri/css/top/top.css:154:.ch-site-header--pipe .ch-site-header__list a {
+hub/pages/iezukuri/css/top/top.css:158:.ch-site-header--minimal .ch-site-header__list a {
+hub/pages/iezukuri/css/top/top.css:162:.ch-site-header--pipe .ch-site-header__list a:hover,
+hub/pages/iezukuri/css/top/top.css:163:.ch-site-header--minimal .ch-site-header__list a:hover {
+hub/pages/iezukuri/css/top/top.css:168:.ch-site-header__toggle {
+hub/pages/iezukuri/css/top/top.css:179:.ch-site-header__toggle span {
+hub/pages/iezukuri/css/top/top.css:187:.ch-site-header__drawer[hidden] {
+hub/pages/iezukuri/css/top/top.css:191:.ch-site-header__drawer {
+hub/pages/iezukuri/css/top/top.css:198:.ch-site-header__drawer-inner {
+hub/pages/iezukuri/css/top/top.css:204:.ch-site-header__drawer-list {
+hub/pages/iezukuri/css/top/top.css:209:.ch-site-header__drawer-list a {
+hub/pages/iezukuri/css/top/top.css:952:  .ch-site-header__nav--desktop {
+hub/pages/iezukuri/css/top/top.css:956:  .ch-site-header__toggle {
+hub/pages/iezukuri/css/top/top.css:1094:  body.admin-bar .ch-site-header {
+hub/pages/iezukuri/css/top/top.css:1103:body.admin-bar .ch-site-header {
+hub/pages/iezukuri/css/top/top.css:1385: * - ch-site-reading
+hub/pages/iezukuri/css/top/top.css:1388:.hub-customhome-page.hub-customhome-top .ch-site-reading {
+hub/pages/iezukuri/css/top/top.css:1392:.hub-customhome-page.hub-customhome-top .ch-site-reading__grid {
+hub/pages/iezukuri/css/top/top.css:1399:.hub-customhome-page.hub-customhome-top .ch-site-reading .ch-eyebrow {
+hub/pages/iezukuri/css/top/top.css:1403:.hub-customhome-page.hub-customhome-top .ch-site-reading .ch-section-title {
+hub/pages/iezukuri/css/top/top.css:1407:.hub-customhome-page.hub-customhome-top .ch-site-reading__body {
+hub/pages/iezukuri/css/top/top.css:1415:.hub-customhome-page.hub-customhome-top .ch-site-reading__notice {
+hub/pages/iezukuri/css/top/top.css:1424:  .hub-customhome-page.hub-customhome-top .ch-site-reading__grid {
+hub/pages/iezukuri/css/top/top.css:1428:  .hub-customhome-page.hub-customhome-top .ch-site-reading .ch-eyebrow {
+hub/pages/iezukuri/css/top/top.css:1432:  .hub-customhome-page.hub-customhome-top .ch-site-reading .ch-section-title {
+hub/pages/iezukuri/css/top/top.css:1485:.hub-customhome-page.hub-customhome-top .ch-site-reading {
+hub/pages/iezukuri/css/top/top.css:1490:.hub-customhome-page.hub-customhome-top .ch-site-reading::before {
+hub/pages/iezukuri/css/top/top.css:1500:.hub-customhome-page.hub-customhome-top .ch-site-reading .ch-shell {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023229:47:.ch-site-header {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023229:56:.ch-site-header__inner {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023229:67:.ch-site-header__brand {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023229:75:.ch-site-header__brand-logo {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023229:83:.ch-site-header__brand-main {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023229:89:.ch-site-header__brand-sub {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023229:97:.ch-site-header__nav--desktop {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023229:101:.ch-site-header__list,
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023229:102:.ch-site-header__drawer-list {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023229:111:.ch-site-header__list li,
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023229:112:.ch-site-header__drawer-list li {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023229:118:.ch-site-header__list a,
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023229:119:.ch-site-header__drawer-list a {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023229:133:.ch-site-header__list a:hover,
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023229:134:.ch-site-header__drawer-list a:hover {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023229:138:.ch-site-header--pipe .ch-site-header__list {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023229:142:.ch-site-header--pipe .ch-site-header__list li + li::before {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023229:148:.ch-site-header--pipe .ch-site-header__list a,
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023229:149:.ch-site-header--minimal .ch-site-header__list a {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023229:154:.ch-site-header--pipe .ch-site-header__list a {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023229:158:.ch-site-header--minimal .ch-site-header__list a {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023229:162:.ch-site-header--pipe .ch-site-header__list a:hover,
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023229:163:.ch-site-header--minimal .ch-site-header__list a:hover {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023229:168:.ch-site-header__toggle {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023229:179:.ch-site-header__toggle span {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023229:187:.ch-site-header__drawer[hidden] {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023229:191:.ch-site-header__drawer {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023229:198:.ch-site-header__drawer-inner {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023229:204:.ch-site-header__drawer-list {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023229:209:.ch-site-header__drawer-list a {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023229:952:  .ch-site-header__nav--desktop {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023229:956:  .ch-site-header__toggle {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023229:1094:  body.admin-bar .ch-site-header {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023229:1103:body.admin-bar .ch-site-header {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023229:1385: * - ch-site-reading
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023229:1388:.hub-customhome-page.hub-customhome-top .ch-site-reading {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023229:1392:.hub-customhome-page.hub-customhome-top .ch-site-reading__grid {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023229:1399:.hub-customhome-page.hub-customhome-top .ch-site-reading .ch-eyebrow {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023229:1403:.hub-customhome-page.hub-customhome-top .ch-site-reading .ch-section-title {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023229:1407:.hub-customhome-page.hub-customhome-top .ch-site-reading__body {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023229:1415:.hub-customhome-page.hub-customhome-top .ch-site-reading__notice {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023229:1424:  .hub-customhome-page.hub-customhome-top .ch-site-reading__grid {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023229:1428:  .hub-customhome-page.hub-customhome-top .ch-site-reading .ch-eyebrow {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023229:1432:  .hub-customhome-page.hub-customhome-top .ch-site-reading .ch-section-title {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023025:47:.ch-site-header {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023025:56:.ch-site-header__inner {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023025:67:.ch-site-header__brand {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023025:75:.ch-site-header__brand-logo {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023025:83:.ch-site-header__brand-main {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023025:89:.ch-site-header__brand-sub {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023025:97:.ch-site-header__nav--desktop {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023025:101:.ch-site-header__list,
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023025:102:.ch-site-header__drawer-list {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023025:111:.ch-site-header__list li,
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023025:112:.ch-site-header__drawer-list li {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023025:118:.ch-site-header__list a,
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023025:119:.ch-site-header__drawer-list a {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023025:133:.ch-site-header__list a:hover,
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023025:134:.ch-site-header__drawer-list a:hover {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023025:138:.ch-site-header--pipe .ch-site-header__list {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023025:142:.ch-site-header--pipe .ch-site-header__list li + li::before {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023025:148:.ch-site-header--pipe .ch-site-header__list a,
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023025:149:.ch-site-header--minimal .ch-site-header__list a {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023025:154:.ch-site-header--pipe .ch-site-header__list a {
+hub/pages/iezukuri/css/top/top.css.bak-20260508-023025:158:.ch-site-header--minimal .ch-site-header__list a {
+
+### 2. admin metabox files candidates
+hub/pages/iezukuri/inc/loader.php:116: * 管理画面専用のメタボックス / admin CSS / admin JS は admin/loader.php に集約する。
+hub/pages/iezukuri/inc/plan-home-switch-data.php:22: * - CPT: iez_plan
+hub/pages/iezukuri/inc/plan-home-switch-data.php:23: * - taxonomy: iez_plan_type
+hub/pages/iezukuri/inc/plan-home-switch-data.php:46:function naigai_iez_plan_home_switch_payload() {
+hub/pages/iezukuri/inc/plan-home-switch-data.php:71:        $plans = naigai_iez_plan_home_switch_get_plans_by_type($slug, $info);
+hub/pages/iezukuri/inc/plan-home-switch-data.php:84:function naigai_iez_plan_home_switch_get_plans_by_type($type_slug, $info) {
+hub/pages/iezukuri/inc/plan-home-switch-data.php:86:        'post_type'      => 'iez_plan',
+hub/pages/iezukuri/inc/plan-home-switch-data.php:91:                'taxonomy' => 'iez_plan_type',
+hub/pages/iezukuri/inc/plan-home-switch-data.php:98:                'key'   => '_ch_plan_show_in_home',
+hub/pages/iezukuri/inc/plan-home-switch-data.php:102:                'key'   => '_ch_plan_show_in_cards',
+hub/pages/iezukuri/inc/plan-home-switch-data.php:115:        $ap = get_post_meta($a->ID, '_ch_plan_is_card_primary', true) === '1' ? 1 : 0;
+hub/pages/iezukuri/inc/plan-home-switch-data.php:116:        $bp = get_post_meta($b->ID, '_ch_plan_is_card_primary', true) === '1' ? 1 : 0;
+hub/pages/iezukuri/inc/plan-home-switch-data.php:128:        $plans[] = naigai_iez_plan_home_switch_plan_data($post->ID, $info);
+hub/pages/iezukuri/inc/plan-home-switch-data.php:134:function naigai_iez_plan_home_switch_img($attachment_id, $title, $kind) {
+hub/pages/iezukuri/inc/plan-home-switch-data.php:159:function naigai_iez_plan_home_switch_parse_ids($raw) {
+hub/pages/iezukuri/inc/plan-home-switch-data.php:163:function naigai_iez_plan_home_switch_plan_data($post_id, $info) {
+hub/pages/iezukuri/inc/plan-home-switch-data.php:167:    $style  = get_post_meta($post_id, '_ch_plan_style', true);
+hub/pages/iezukuri/inc/plan-home-switch-data.php:168:    $layout = get_post_meta($post_id, '_ch_plan_layout', true);
+hub/pages/iezukuri/inc/plan-home-switch-data.php:169:    $area   = get_post_meta($post_id, '_ch_plan_total_area', true);
+hub/pages/iezukuri/inc/plan-home-switch-data.php:170:    $tsubo  = get_post_meta($post_id, '_ch_plan_tsubo', true);
+hub/pages/iezukuri/inc/plan-home-switch-data.php:171:    $desc   = get_post_meta($post_id, '_ch_plan_description', true);
+hub/pages/iezukuri/inc/plan-home-switch-data.php:173:    $exterior_id = absint(get_post_meta($post_id, '_ch_plan_exterior_image_id', true));
+hub/pages/iezukuri/inc/plan-home-switch-data.php:178:    $gallery_ids = naigai_iez_plan_home_switch_parse_ids(get_post_meta($post_id, '_ch_plan_gallery_image_ids', true));
+hub/pages/iezukuri/inc/plan-home-switch-data.php:182:    $exterior = naigai_iez_plan_home_switch_img($exterior_id, '外観写真', 'work');
+hub/pages/iezukuri/inc/plan-home-switch-data.php:189:        $img = naigai_iez_plan_home_switch_img($id, $gallery_labels[$i] ?? '内装写真', 'work');
+hub/pages/iezukuri/inc/plan-home-switch-data.php:195:    $floor_type = get_post_meta($post_id, '_ch_plan_floor_type', true) ?: 'one_story';
+hub/pages/iezukuri/inc/plan-home-switch-data.php:199:    $plan_1f_id = absint(get_post_meta($post_id, '_ch_plan_1f_image_id', true));
+hub/pages/iezukuri/inc/plan-home-switch-data.php:200:    $plan_2f_id = absint(get_post_meta($post_id, '_ch_plan_2f_image_id', true));
+hub/pages/iezukuri/inc/plan-home-switch-data.php:201:    $site_id    = absint(get_post_meta($post_id, '_ch_plan_site_image_id', true));
+hub/pages/iezukuri/inc/plan-home-switch-data.php:204:        $img = naigai_iez_plan_home_switch_img($plan_1f_id, '1F 平面図', 'plan');
+hub/pages/iezukuri/inc/plan-home-switch-data.php:209:        $img = naigai_iez_plan_home_switch_img($plan_2f_id, '2F 平面図', 'plan');
+hub/pages/iezukuri/inc/plan-home-switch-data.php:214:        $img = naigai_iez_plan_home_switch_img($plan_1f_id, '平面図', 'plan');
+hub/pages/iezukuri/inc/plan-home-switch-data.php:220:    $img = naigai_iez_plan_home_switch_img($site_id, '配置図', 'plan');
+hub/pages/iezukuri/inc/plan-home-switch-data.php:236:        'is_primary'    => get_post_meta($post_id, '_ch_plan_is_card_primary', true) === '1',
+hub/pages/iezukuri/inc/plan-post-type.php:17:    register_post_type('iez_plan', array(
+hub/pages/iezukuri/inc/plan-post-type.php:44:    register_taxonomy('iez_plan_type', array('iez_plan'), array(
+hub/pages/iezukuri/inc/plan-post-type.php:61:    register_taxonomy('iez_plan_size', array('iez_plan'), array(
+hub/pages/iezukuri/inc/plan-post-type.php:78:    register_taxonomy('iez_plan_feature', array('iez_plan'), array(
+hub/pages/iezukuri/inc/hero-renderer.php:10: * - 同じ処理を使うが、画像・H1・P・CTAは post_id ごとに別。
+hub/pages/iezukuri/inc/hero-renderer.php:12: * - 画像名・メディアタイトルをHero見出しに使わない。
+hub/pages/iezukuri/inc/intro-overlay.php:7: * - 画像未設定でもデフォルト画像を表示
+hub/pages/iezukuri/inc/intro-overlay.php:164:        // Motion settings: 空欄や0化けで画像が潰れないように必ず標準値へ戻す。
+hub/pages/iezukuri/inc/icon-catalog.php:12: * - 間取り詳細 iez_plan の特徴アイコンは inc/plan-feature-catalog.php 側。
+hub/pages/iezukuri/inc/intro-overlay-admin-page.php:254:                            <label>画像切り替え間隔 ms</label><br>
+hub/pages/iezukuri/inc/intro-overlay-admin-page.php:281:                                <div><strong>NASU <?php echo esc_html($settings['nasu_ratio']); ?>%</strong><br><span>那須側画像</span></div>
+hub/pages/iezukuri/inc/intro-overlay-admin-page.php:284:                                <div><strong>TOKYO <?php echo esc_html((string) (100 - (int) $settings['nasu_ratio'])); ?>%</strong><br><span>東京側画像</span></div>
+hub/pages/iezukuri/inc/intro-overlay-admin-page.php:287:                        <p class="description">画像未設定時はテーマ内のデフォルト画像が表示されます。</p>
+hub/pages/iezukuri/inc/intro-overlay-admin-page.php:423:                        <h2>那須側 画像</h2>
+hub/pages/iezukuri/inc/intro-overlay-admin-page.php:429:                        <h2>東京側 画像</h2>
+hub/pages/iezukuri/inc/functions-iezukuri.php.bak-20260508-022629:12: * - iez_plan 一覧・詳細
+hub/pages/iezukuri/inc/functions-iezukuri.php.bak-20260508-022629:45:        if (is_singular('iez_plan') || is_post_type_archive('iez_plan')) {
+hub/pages/iezukuri/inc/functions-iezukuri.php.bak-20260508-022629:134:        if (is_singular('iez_plan') || is_post_type_archive('iez_plan')) {
+hub/pages/iezukuri/inc/functions-iezukuri.php.bak-20260508-022629:195:        if (is_post_type_archive('iez_plan')) {
+hub/pages/iezukuri/inc/functions-iezukuri.php.bak-20260508-022629:203:        if (is_singular('iez_plan')) {
+hub/pages/iezukuri/inc/plan-feature-catalog.php:3: * iez_plan 住宅特徴カタログ
+hub/pages/iezukuri/inc/plan-feature-catalog.php:6: * - SVGを投稿メタへ保存しない。
+hub/pages/iezukuri/inc/plan-feature-catalog.php:11: * - iez_plan_type: used-renovation
+hub/pages/iezukuri/inc/plan-feature-catalog.php:13: * - iez_plan_feature: existing-house
+hub/pages/iezukuri/inc/plan-feature-catalog.php:20: *   「中古住宅診断」「Before / After」「間取り変更」「外観刷新」「水回り更新」
+hub/pages/iezukuri/inc/plan-feature-catalog.php:28:function naigai_iez_plan_feature_catalog() {
+hub/pages/iezukuri/inc/plan-feature-catalog.php:49:         *   既存建物確認、間取り変更、外観刷新、水回り更新を前面に出す。
+hub/pages/iezukuri/inc/plan-feature-catalog.php:58:            'text'  => '外観・内装・水回りの変化を比較し、リフォーム後の暮らしを分かりやすく確認できます。',
+hub/pages/iezukuri/inc/plan-feature-catalog.php:62:            'title' => '間取り変更',
+hub/pages/iezukuri/inc/plan-feature-catalog.php:63:            'text'  => '既存の部屋割りや動線を見直し、今の暮らしに合う使いやすい間取りへ整えます。',
+hub/pages/iezukuri/inc/plan-feature-catalog.php:67:            'title' => '外観刷新',
+hub/pages/iezukuri/inc/plan-feature-catalog.php:89:            'text'  => '2階建てでは、階段位置や上下階の動線を整理し、使いやすさを考えます。',
+hub/pages/iezukuri/inc/plan-feature-catalog.php:93:            'title' => '2階動線',
+hub/pages/iezukuri/inc/plan-feature-catalog.php:94:            'text'  => '寝室・子ども部屋・収納など、2階の使い方に合わせて動線を整えます。',
+hub/pages/iezukuri/inc/plan-feature-catalog.php:115:            'text'  => '外観デザインだけでなく、耐久性やメンテナンス性にも配慮します。',
+hub/pages/iezukuri/inc/plan-feature-catalog.php:177:function naigai_iez_plan_base_feature_keys() {
+hub/pages/iezukuri/inc/plan-feature-catalog.php:197:function naigai_iez_plan_used_renovation_feature_keys() {
+hub/pages/iezukuri/inc/plan-feature-catalog.php:210:function naigai_iez_plan_parse_key_list($raw) {
+hub/pages/iezukuri/inc/plan-feature-catalog.php:229:function naigai_iez_plan_has_term_slug($post_id, $taxonomy, $slug) {
+hub/pages/iezukuri/inc/plan-feature-catalog.php:249: * - iez_plan_type: used-renovation
+hub/pages/iezukuri/inc/plan-feature-catalog.php:250: * - iez_plan_feature: existing-house
+hub/pages/iezukuri/inc/plan-feature-catalog.php:252:function naigai_iez_plan_is_used_renovation($post_id) {
+hub/pages/iezukuri/inc/plan-feature-catalog.php:253:    return naigai_iez_plan_has_term_slug($post_id, 'iez_plan_type', 'used-renovation')
+hub/pages/iezukuri/inc/plan-feature-catalog.php:254:        || naigai_iez_plan_has_term_slug($post_id, 'iez_plan_feature', 'existing-house');
+hub/pages/iezukuri/inc/plan-feature-catalog.php:257:function naigai_iez_plan_resolve_feature_keys($post_id) {
+hub/pages/iezukuri/inc/plan-feature-catalog.php:262:     * 2. _ch_plan_feature_keys があれば追加で反映する。
+hub/pages/iezukuri/inc/plan-feature-catalog.php:263:     * 3. 2階建てなら stairs / second_floor を追加する。
+hub/pages/iezukuri/inc/plan-feature-catalog.php:264:     * 4. _ch_plan_option_keys があれば最後に足す。
+hub/pages/iezukuri/inc/plan-feature-catalog.php:266:    $is_used_renovation = naigai_iez_plan_is_used_renovation($post_id);
+hub/pages/iezukuri/inc/plan-feature-catalog.php:267:    $manual = naigai_iez_plan_parse_key_list(get_post_meta($post_id, '_ch_plan_feature_keys', true));
+hub/pages/iezukuri/inc/plan-feature-catalog.php:270:        $keys = naigai_iez_plan_used_renovation_feature_keys();
+hub/pages/iezukuri/inc/plan-feature-catalog.php:278:        $keys = naigai_iez_plan_base_feature_keys();
+hub/pages/iezukuri/inc/plan-feature-catalog.php:281:    if (!$is_used_renovation && naigai_iez_plan_has_term_slug($post_id, 'iez_plan_scope', 'new-build')) {
+hub/pages/iezukuri/inc/plan-feature-catalog.php:285:    if (!$is_used_renovation && naigai_iez_plan_has_term_slug($post_id, 'iez_plan_scope', 'renovation')) {
+hub/pages/iezukuri/inc/plan-feature-catalog.php:289:    $floor_type = get_post_meta($post_id, '_ch_plan_floor_type', true);
+hub/pages/iezukuri/inc/plan-feature-catalog.php:291:    if ($floor_type === 'two_story' || naigai_iez_plan_has_term_slug($post_id, 'iez_plan_building_form', 'two-story')) {
+hub/pages/iezukuri/inc/plan-feature-catalog.php:298:    $option_keys = naigai_iez_plan_parse_key_list(get_post_meta($post_id, '_ch_plan_option_keys', true));
+hub/pages/iezukuri/inc/plan-feature-catalog.php:304:function naigai_iez_plan_resolve_feature_items($post_id) {
+hub/pages/iezukuri/inc/plan-feature-catalog.php:305:    $catalog = naigai_iez_plan_feature_catalog();
+hub/pages/iezukuri/inc/plan-feature-catalog.php:308:    foreach (naigai_iez_plan_resolve_feature_keys($post_id) as $key) {
+hub/pages/iezukuri/inc/plan-feature-catalog.php:319:if (!function_exists('naigai_iez_plan_detail_icon_svg')) {
+hub/pages/iezukuri/inc/plan-feature-catalog.php:320:    function naigai_iez_plan_detail_icon_svg($icon) {
+hub/pages/iezukuri/inc/page-content-renderer.php:13: * - メタが空なら false を返し、既存 templates/content/*.php を fallback 表示する
+hub/pages/iezukuri/inc/page-content-renderer.php:17: * - iez_plan の _ch_plan_* メタとは分ける
+hub/pages/iezukuri/inc/intro-stock-admin.php:82:                    'empty'   => 'まだ画像が入っていません。',
+hub/pages/iezukuri/inc/footer-fixed-cta.php:37:     * - iez_plan 詳細ページ
+hub/pages/iezukuri/inc/footer-fixed-cta.php:38:     * - iez_plan アーカイブ
+hub/pages/iezukuri/inc/footer-fixed-cta.php:41:        if (is_singular('iez_plan') || is_post_type_archive('iez_plan')) {
+hub/pages/iezukuri/inc/functions-iezukuri.php:12: * - iez_plan 一覧・詳細
+hub/pages/iezukuri/inc/functions-iezukuri.php:45:        if (is_singular('iez_plan') || is_post_type_archive('iez_plan')) {
+hub/pages/iezukuri/inc/functions-iezukuri.php:134:        if (is_singular('iez_plan') || is_post_type_archive('iez_plan')) {
+hub/pages/iezukuri/inc/functions-iezukuri.php:195:        if (is_post_type_archive('iez_plan')) {
+hub/pages/iezukuri/inc/functions-iezukuri.php:203:        if (is_singular('iez_plan')) {
+hub/pages/iezukuri/inc/functions-iezukuri.php.bak-20260508-024004:12: * - iez_plan 一覧・詳細
+hub/pages/iezukuri/inc/functions-iezukuri.php.bak-20260508-024004:45:        if (is_singular('iez_plan') || is_post_type_archive('iez_plan')) {
+hub/pages/iezukuri/inc/functions-iezukuri.php.bak-20260508-024004:134:        if (is_singular('iez_plan') || is_post_type_archive('iez_plan')) {
+hub/pages/iezukuri/inc/functions-iezukuri.php.bak-20260508-024004:195:        if (is_post_type_archive('iez_plan')) {
+hub/pages/iezukuri/inc/functions-iezukuri.php.bak-20260508-024004:203:        if (is_singular('iez_plan')) {
+hub/pages/iezukuri/inc/plan-pdf-template.php:18:    if (!is_singular('iez_plan')) {
+hub/pages/iezukuri/inc/lightgallery-enqueue.php:5: * iez_plan 詳細ページだけ lightGallery v2 を読み込む。
+hub/pages/iezukuri/inc/lightgallery-enqueue.php:13:    if (!is_singular('iez_plan')) {
+hub/pages/iezukuri/inc/plan-archive.php:7: * - カスタム投稿タイプ: iez_plan
+hub/pages/iezukuri/inc/plan-archive.php:10: * - iez_plan の一覧URLを /iezukuri/plans/ にする
+hub/pages/iezukuri/inc/plan-archive.php:11: * - iez_plan の詳細URLを /iezukuri/plan/{slug}/ にする
+hub/pages/iezukuri/inc/plan-archive.php:28:    if ($post_type !== 'iez_plan') {
+hub/pages/iezukuri/inc/assets.php.bak-20260508-024004:115:            if (function_exists('naigai_iez_plan_home_switch_payload')) {
+hub/pages/iezukuri/inc/assets.php.bak-20260508-024004:116:                $payload = naigai_iez_plan_home_switch_payload();
+hub/pages/iezukuri/inc/assets.php.bak-20260508-024004:133:            !is_post_type_archive('iez_plan')
+hub/pages/iezukuri/inc/assets.php.bak-20260508-024004:168:        if (is_singular('iez_plan')) {
+hub/pages/iezukuri/inc/helpers.php:70:    if (is_singular('iez_plan')) {
+hub/pages/iezukuri/inc/helpers.php:281: * サブページ用のJSONメタを安全に配列で返す。
+hub/pages/iezukuri/inc/helpers.php:288: * - メタがJSON配列なら array
+hub/pages/iezukuri/inc/layout-enqueue.php:16:        if (is_singular('iez_plan')) {
+hub/pages/iezukuri/inc/plan-display-metabox.php:3: * iez_plan 表示設定メタボックス
+hub/pages/iezukuri/inc/plan-display-metabox.php:14:add_action('add_meta_boxes', 'naigai_iez_plan_add_display_metabox');
+hub/pages/iezukuri/inc/plan-display-metabox.php:15:add_action('save_post_iez_plan', 'naigai_iez_plan_save_display_metabox', 20, 2);
+hub/pages/iezukuri/inc/plan-display-metabox.php:17:function naigai_iez_plan_add_display_metabox() {
+hub/pages/iezukuri/inc/plan-display-metabox.php:18:    add_meta_box(
+hub/pages/iezukuri/inc/plan-display-metabox.php:19:        'naigai_iez_plan_display_settings',
+hub/pages/iezukuri/inc/plan-display-metabox.php:21:        'naigai_iez_plan_render_display_metabox',
+hub/pages/iezukuri/inc/plan-display-metabox.php:22:        'iez_plan',
+hub/pages/iezukuri/inc/plan-display-metabox.php:28:function naigai_iez_plan_render_display_metabox($post) {
+hub/pages/iezukuri/inc/plan-display-metabox.php:29:    wp_nonce_field('naigai_iez_plan_display_settings', 'naigai_iez_plan_display_settings_nonce');
+hub/pages/iezukuri/inc/plan-display-metabox.php:32:        '_ch_plan_show_in_home'    => 'show in home / 家づくりトップに表示',
+hub/pages/iezukuri/inc/plan-display-metabox.php:33:        '_ch_plan_show_in_archive' => 'show in archive / 一覧に表示',
+hub/pages/iezukuri/inc/plan-display-metabox.php:34:        '_ch_plan_show_in_detail'  => 'show in detail / 詳細に特徴を表示',
+hub/pages/iezukuri/inc/plan-display-metabox.php:35:        '_ch_plan_show_in_cards'   => 'show in cards / 3カード切替対象',
+hub/pages/iezukuri/inc/plan-display-metabox.php:36:        '_ch_plan_is_card_primary' => 'primary / この分類の代表プラン',
+hub/pages/iezukuri/inc/plan-display-metabox.php:57:    $saved_options = function_exists('naigai_iez_plan_parse_key_list')
+hub/pages/iezukuri/inc/plan-display-metabox.php:58:        ? naigai_iez_plan_parse_key_list(get_post_meta($post->ID, '_ch_plan_option_keys', true))
+hub/pages/iezukuri/inc/plan-display-metabox.php:66:        echo '<input type="checkbox" name="_ch_plan_option_keys[]" value="' . esc_attr($key) . '" ' . checked(in_array($key, $saved_options, true), true, false) . '> ';
+hub/pages/iezukuri/inc/plan-display-metabox.php:75:    if (function_exists('naigai_iez_plan_feature_catalog')) {
+hub/pages/iezukuri/inc/plan-display-metabox.php:77:        foreach (naigai_iez_plan_feature_catalog() as $key => $item) {
+hub/pages/iezukuri/inc/plan-display-metabox.php:85:function naigai_iez_plan_save_display_metabox($post_id, $post) {
+hub/pages/iezukuri/inc/plan-display-metabox.php:86:    if (!isset($_POST['naigai_iez_plan_display_settings_nonce'])) {
+hub/pages/iezukuri/inc/plan-display-metabox.php:90:    if (!wp_verify_nonce($_POST['naigai_iez_plan_display_settings_nonce'], 'naigai_iez_plan_display_settings')) {
+hub/pages/iezukuri/inc/plan-display-metabox.php:103:        '_ch_plan_show_in_home',
+hub/pages/iezukuri/inc/plan-display-metabox.php:104:        '_ch_plan_show_in_archive',
+hub/pages/iezukuri/inc/plan-display-metabox.php:105:        '_ch_plan_show_in_detail',
+hub/pages/iezukuri/inc/plan-display-metabox.php:106:        '_ch_plan_show_in_cards',
+hub/pages/iezukuri/inc/plan-display-metabox.php:107:        '_ch_plan_is_card_primary',
+hub/pages/iezukuri/inc/plan-display-metabox.php:116:    if (isset($_POST['_ch_plan_option_keys']) && is_array($_POST['_ch_plan_option_keys'])) {
+hub/pages/iezukuri/inc/plan-display-metabox.php:117:        $option_keys = array_values(array_unique(array_filter(array_map('sanitize_key', $_POST['_ch_plan_option_keys']))));
+hub/pages/iezukuri/inc/plan-display-metabox.php:120:    update_post_meta($post_id, '_ch_plan_option_keys', implode(',', $option_keys));
+hub/pages/iezukuri/inc/plan-display-metabox.php:122:    if (get_post_meta($post_id, '_ch_plan_show_in_detail', true) === '') {
+hub/pages/iezukuri/inc/plan-display-metabox.php:123:        update_post_meta($post_id, '_ch_plan_show_in_detail', '1');
+hub/pages/iezukuri/inc/plan-seo.php:5: * iez_plan SEO description
+hub/pages/iezukuri/inc/plan-seo.php:18: * - _ch_plan_description は使わない。
+hub/pages/iezukuri/inc/plan-seo.php:38:if (!function_exists('naigai_iez_plan_seo_trim')) {
+hub/pages/iezukuri/inc/plan-seo.php:39:    function naigai_iez_plan_seo_trim($text, $length = 130) {
+hub/pages/iezukuri/inc/plan-seo.php:65:if (!function_exists('naigai_iez_plan_archive_description')) {
+hub/pages/iezukuri/inc/plan-seo.php:66:    function naigai_iez_plan_archive_description() {
+hub/pages/iezukuri/inc/plan-seo.php:67:        return '那須での家づくり参考プラン一覧です。平屋、配置図、外観、間取り、二世帯住宅、三世代住宅、二拠点生活など、暮らし方に合わせた住まいの方向性を確認できます。';
+hub/pages/iezukuri/inc/plan-seo.php:76:if (!function_exists('naigai_iez_plan_single_description')) {
+hub/pages/iezukuri/inc/plan-seo.php:77:    function naigai_iez_plan_single_description($post_id) {
+hub/pages/iezukuri/inc/plan-seo.php:82:            return naigai_iez_plan_seo_trim($description, 130);
+hub/pages/iezukuri/inc/plan-seo.php:85:        return '那須での暮らし方に合わせた家づくりプランです。間取り、外観、配置図、平面図、暮らしやすさを確認できます。';
+hub/pages/iezukuri/inc/plan-seo.php:92:if (!function_exists('naigai_iez_plan_output_seo_meta')) {
+hub/pages/iezukuri/inc/plan-seo.php:93:    function naigai_iez_plan_output_seo_meta() {
+hub/pages/iezukuri/inc/plan-seo.php:94:        if (is_post_type_archive('iez_plan')) {
+hub/pages/iezukuri/inc/plan-seo.php:95:            $description = naigai_iez_plan_archive_description();
+hub/pages/iezukuri/inc/plan-seo.php:96:        } elseif (is_singular('iez_plan')) {
+hub/pages/iezukuri/inc/plan-seo.php:97:            $description = naigai_iez_plan_single_description(get_queried_object_id());
+hub/pages/iezukuri/inc/plan-seo.php:112:add_action('wp_head', 'naigai_iez_plan_output_seo_meta', 1);
+hub/pages/iezukuri/inc/plan-extra-taxonomies.php:3: * iez_plan 追加タクソノミー
+hub/pages/iezukuri/inc/plan-extra-taxonomies.php:6: * - 新築 / リフォームを iez_plan_type に混ぜない
+hub/pages/iezukuri/inc/plan-extra-taxonomies.php:7: * - 平屋 / 2階建てを iez_plan_type に混ぜない
+hub/pages/iezukuri/inc/plan-extra-taxonomies.php:14:add_action('init', 'naigai_iez_plan_register_extra_taxonomies', 20);
+hub/pages/iezukuri/inc/plan-extra-taxonomies.php:16:function naigai_iez_plan_register_extra_taxonomies() {
+hub/pages/iezukuri/inc/plan-extra-taxonomies.php:17:    register_taxonomy('iez_plan_scope', array('iez_plan'), array(
+hub/pages/iezukuri/inc/plan-extra-taxonomies.php:37:    register_taxonomy('iez_plan_building_form', array('iez_plan'), array(
+hub/pages/iezukuri/inc/plan-extra-taxonomies.php:57:    naigai_iez_plan_ensure_extra_terms();
+hub/pages/iezukuri/inc/plan-extra-taxonomies.php:60:function naigai_iez_plan_ensure_extra_terms() {
+hub/pages/iezukuri/inc/plan-extra-taxonomies.php:62:        'iez_plan_scope' => array(
+hub/pages/iezukuri/inc/plan-extra-taxonomies.php:66:        'iez_plan_building_form' => array(
+hub/pages/iezukuri/inc/plan-extra-taxonomies.php:68:            'two-story' => '2階建て',
+hub/pages/iezukuri/inc/assets.php:115:            if (function_exists('naigai_iez_plan_home_switch_payload')) {
+hub/pages/iezukuri/inc/assets.php:116:                $payload = naigai_iez_plan_home_switch_payload();
+hub/pages/iezukuri/inc/assets.php:133:            !is_post_type_archive('iez_plan')
+hub/pages/iezukuri/inc/assets.php:168:        if (is_singular('iez_plan')) {
+hub/pages/iezukuri/templates/top/section-footer.php.bak-20260508-034012:41:                    <li><a href="<?php echo esc_url(home_url('/iezukuri/plans/')); ?>">間取り・プラン</a></li>
+hub/pages/iezukuri/templates/top/section-footer.php.bak-20260508-032507:25:                <p>土地、予算、間取り、リフォームまで。まずは状況を整理するところからご相談ください。</p>
+hub/pages/iezukuri/templates/top/section-footer.php.bak-20260508-032507:30:                <a class="ch-btn ch-btn--ghost-dark" href="<?php echo esc_url(home_url('/iezukuri/plans/')); ?>">間取りを見る</a>
+hub/pages/iezukuri/templates/top/section-footer.php.bak-20260508-032507:46:                <a href="<?php echo esc_url(home_url('/iezukuri/plans/')); ?>">間取り・プラン</a>
+hub/pages/iezukuri/templates/top/section-feature.php.bak-20260508-024004:8: * - 選択パネル：外観 / 間取り図 / 内装
+hub/pages/iezukuri/templates/top/section-feature.php.bak-20260508-024004:102:        if (!$terms || !taxonomy_exists('iez_plan_type')) {
+hub/pages/iezukuri/templates/top/section-feature.php.bak-20260508-024004:107:            'post_type'      => 'iez_plan',
+hub/pages/iezukuri/templates/top/section-feature.php.bak-20260508-024004:116:                    'taxonomy' => 'iez_plan_type',
+hub/pages/iezukuri/templates/top/section-feature.php.bak-20260508-024004:123:        foreach (array('_ch_plan_show_in_home', '_ch_plan_is_card_primary') as $meta_key) {
+hub/pages/iezukuri/templates/top/section-feature.php.bak-20260508-024004:164:        $exterior = naigai_iez_top_image_url(get_post_meta($id, '_ch_plan_exterior_image_id', true));
+hub/pages/iezukuri/templates/top/section-feature.php.bak-20260508-024004:166:        $floor1   = naigai_iez_top_image_url(get_post_meta($id, '_ch_plan_1f_image_id', true));
+hub/pages/iezukuri/templates/top/section-feature.php.bak-20260508-024004:167:        $floor2   = naigai_iez_top_image_url(get_post_meta($id, '_ch_plan_2f_image_id', true));
+hub/pages/iezukuri/templates/top/section-feature.php.bak-20260508-024004:168:        $site     = naigai_iez_top_image_url(get_post_meta($id, '_ch_plan_site_image_id', true));
+hub/pages/iezukuri/templates/top/section-feature.php.bak-20260508-024004:169:        $gallery  = naigai_iez_top_gallery_urls(get_post_meta($id, '_ch_plan_gallery_image_ids', true));
+hub/pages/iezukuri/templates/top/section-feature.php.bak-20260508-024004:220:        'title' => '間取りとプラン',
+hub/pages/iezukuri/templates/top/section-feature.php.bak-20260508-024004:221:        'text'  => '平屋、2階建て、二世帯、リフォーム。暮らし方から間取りを考えます。',
+hub/pages/iezukuri/templates/top/section-feature.php.bak-20260508-024004:228:        'text'  => '実際の住まいから、素材・間取り・外とのつながりを見ていきます。',
+hub/pages/iezukuri/templates/top/section-feature.php.bak-20260508-024004:244:                新築住宅、二世帯住宅、住宅リフォーム。気になる住まい方を選ぶと、外観・間取り図・内装を種類別に確認できます。
+hub/pages/iezukuri/templates/top/section-feature.php.bak-20260508-024004:269:                            <?php naigai_iez_top_media_image($media['exterior'], $item['title'] . ' 外観'); ?>
+hub/pages/iezukuri/templates/top/section-feature.php.bak-20260508-024004:299:                                間取り詳細へ進む
+hub/pages/iezukuri/templates/top/section-feature.php.bak-20260508-024004:309:                            <div class="ch-service-panel-media__title">外観</div>
+hub/pages/iezukuri/templates/top/section-feature.php.bak-20260508-024004:311:                                <?php naigai_iez_top_media_image($media['exterior'], $item['title'] . ' 外観'); ?>
+hub/pages/iezukuri/templates/top/section-feature.php.bak-20260508-024004:317:                            <div class="ch-service-panel-media__title">間取り図</div>
+hub/pages/iezukuri/templates/top/section-feature.php.bak-20260508-024004:320:                                    <?php naigai_iez_top_media_image($media['floor1'], '1F間取り図'); ?>
+hub/pages/iezukuri/templates/top/section-feature.php.bak-20260508-024004:323:                                    <?php naigai_iez_top_media_image($media['floor2'] ?: $media['site'], $media['floor2'] ? '2F間取り図' : '配置図'); ?>
+hub/pages/iezukuri/templates/top/section-feature.php.bak-20260508-024004:374:                考え方、設計方針、間取り、暮らしのポイントへ。知りたい内容から進めます。
+hub/pages/iezukuri/templates/top/section-feature.php:8: * - 選択パネル：外観 / 間取り図 / 内装
+hub/pages/iezukuri/templates/top/section-feature.php:102:        if (!$terms || !taxonomy_exists('iez_plan_type')) {
+hub/pages/iezukuri/templates/top/section-feature.php:107:            'post_type'      => 'iez_plan',
+hub/pages/iezukuri/templates/top/section-feature.php:116:                    'taxonomy' => 'iez_plan_type',
+hub/pages/iezukuri/templates/top/section-feature.php:123:        foreach (array('_ch_plan_show_in_home', '_ch_plan_is_card_primary') as $meta_key) {
+hub/pages/iezukuri/templates/top/section-feature.php:164:        $exterior = naigai_iez_top_image_url(get_post_meta($id, '_ch_plan_exterior_image_id', true));
+hub/pages/iezukuri/templates/top/section-feature.php:166:        $floor1   = naigai_iez_top_image_url(get_post_meta($id, '_ch_plan_1f_image_id', true));
+hub/pages/iezukuri/templates/top/section-feature.php:167:        $floor2   = naigai_iez_top_image_url(get_post_meta($id, '_ch_plan_2f_image_id', true));
+hub/pages/iezukuri/templates/top/section-feature.php:168:        $site     = naigai_iez_top_image_url(get_post_meta($id, '_ch_plan_site_image_id', true));
+hub/pages/iezukuri/templates/top/section-feature.php:169:        $gallery  = naigai_iez_top_gallery_urls(get_post_meta($id, '_ch_plan_gallery_image_ids', true));
+hub/pages/iezukuri/templates/top/section-feature.php:220:        'title' => '間取りとプラン',
+hub/pages/iezukuri/templates/top/section-feature.php:221:        'text'  => '平屋、2階建て、二世帯、リフォーム。暮らし方から間取りを考えます。',
+hub/pages/iezukuri/templates/top/section-feature.php:228:        'text'  => '実際の住まいから、素材・間取り・外とのつながりを見ていきます。',
+hub/pages/iezukuri/templates/top/section-feature.php:244:                新築住宅、二世帯住宅、住宅リフォーム。気になる住まい方を選ぶと、外観・間取り図・内装を種類別に確認できます。
+hub/pages/iezukuri/templates/top/section-feature.php:269:                            <?php naigai_iez_top_media_image($media['exterior'], $item['title'] . ' 外観'); ?>
+hub/pages/iezukuri/templates/top/section-feature.php:299:                                間取り詳細へ進む
+hub/pages/iezukuri/templates/top/section-feature.php:309:                            <div class="ch-service-panel-media__title">外観</div>
+hub/pages/iezukuri/templates/top/section-feature.php:311:                                <?php naigai_iez_top_media_image($media['exterior'], $item['title'] . ' 外観'); ?>
+hub/pages/iezukuri/templates/top/section-feature.php:317:                            <div class="ch-service-panel-media__title">間取り図</div>
+hub/pages/iezukuri/templates/top/section-feature.php:320:                                    <?php naigai_iez_top_media_image($media['floor1'], '1F間取り図'); ?>
+hub/pages/iezukuri/templates/top/section-feature.php:323:                                    <?php naigai_iez_top_media_image($media['floor2'] ?: $media['site'], $media['floor2'] ? '2F間取り図' : '配置図'); ?>
+hub/pages/iezukuri/templates/top/section-feature.php:374:                まずは近い暮らし方を選んでください。写真・間取り・改善ポイントを見ながら、次に見る内容へ進めます。
+hub/pages/iezukuri/templates/top/context.php:4: * 役割: /iezukuri トップのメタ取得・URL解決・配列生成
+hub/pages/iezukuri/templates/top/context.php:190:    4 => array('num' => '04', 'title' => '詳細設計・仕様決定', 'text' => '間取りや内装、設備など、細部まで一緒に整えていきます。', 'icon' => 'detail'),
+hub/pages/iezukuri/templates/top/section-localnav.php:25:        'label' => '間取り',
+hub/pages/iezukuri/templates/top/section-footer.php:36:                    <li><a href="<?php echo esc_url(home_url('/iezukuri/plans/')); ?>">間取り・プラン</a></li>
+hub/pages/iezukuri/templates/top/section-dynamic-lp.php:71:                        <h3>間取り</h3>
+hub/pages/iezukuri/templates/top/section-dynamic-lp.php:72:                        <p>将来的に家族構成に応じた間取りカードを埋め込みます。</p>
+hub/pages/iezukuri/templates/top/feature/section-feature-story-card-data.php.bak-20260508-050350:9: * - 間取りの考え方
+hub/pages/iezukuri/templates/top/feature/section-feature-story-card-data.php.bak-20260508-050350:22:        'title' => '家族の距離感から、間取りを考える。',
+hub/pages/iezukuri/templates/top/feature/section-feature-story-card-data.php.bak-20260508-050350:72:        'heading' => '自分たちだけの間取りで建てる',
+hub/pages/iezukuri/templates/top/feature/section-feature-story-card-data.php.bak-20260508-050350:73:        'title' => '暮らし方から、間取りを組み立てる。',
+hub/pages/iezukuri/templates/top/feature/section-feature-story-card-data.php.bak-20260508-050350:74:        'lead' => '土地、駐車スペース、庭、収納、ワークスペースまで含めて、暮らし方から一つずつ間取りを決めていきます。',
+hub/pages/iezukuri/templates/top/feature/section-feature-story-card-data.php.bak-20260508-050350:75:        'story' => '家を建てるときに大切なのは、部屋数だけではありません。仕事、趣味、家事、家族の時間、庭とのつながりをどう使いたいかで、必要な間取りは変わります。先に暮らし方を整理すると、外観・動線・収納・水回りの優先順位が見えやすくなります。',
+hub/pages/iezukuri/templates/top/feature/section-feature-story-card-data.php.bak-20260508-050350:79:            '既成の間取りでは、自分たちの暮らしに合いにくい。',
+hub/pages/iezukuri/templates/top/feature/section-feature-story-card-data.php.bak-20260508-050350:81:            '土地や庭の使い方が間取りに反映されにくい。',
+hub/pages/iezukuri/templates/top/feature/section-feature-story-card-data.php.bak-20260508-050350:111:                'title' => '外観と内装の好みを整理する',
+hub/pages/iezukuri/templates/top/feature/section-feature-panel-extra.php:11:    <p><?php echo esc_html($item['story_text'] ?? '間取り、収納、水回り、設備、将来の使い方まで含めて、暮らしやすい住まいを整理します。'); ?></p>
+hub/pages/iezukuri/templates/top/feature/section-feature-panel-extra.php:16:        <h4>間取りの特徴</h4>
+hub/pages/iezukuri/templates/top/feature/section-feature-compare.php.bak-20260508-050350:12: * - 間取りの考え方
+hub/pages/iezukuri/templates/top/feature/section-feature-compare.php.bak-20260508-050350:110:                <h5>間取りの考え方</h5>
+hub/pages/iezukuri/templates/top/feature/section-feature-compare.php.bak-20260508-050350:145:     * Before / Action / 間取り案カードへ置き換え。
+hub/pages/iezukuri/templates/top/feature/section-feature-compare.php:12: * - 間取りの考え方
+hub/pages/iezukuri/templates/top/feature/section-feature-compare.php:110:                <h5>間取りの考え方</h5>
+hub/pages/iezukuri/templates/top/feature/section-feature-compare.php:118:                                <img src="<?php echo esc_url($layout['image']); ?>" alt="<?php echo esc_attr($layout['title'] ?? '間取り案'); ?>">
+hub/pages/iezukuri/templates/top/feature/section-feature-compare.php:151:     * Before / Action / 間取り案カードへ置き換え。
+hub/pages/iezukuri/templates/top/feature/section-feature-story-card-data.php:9: * - 間取りの考え方
+hub/pages/iezukuri/templates/top/feature/section-feature-story-card-data.php:22:        'title' => '家族の距離感から、間取りを考える。',
+hub/pages/iezukuri/templates/top/feature/section-feature-story-card-data.php:75:        'heading' => '自分たちだけの間取りで建てる',
+hub/pages/iezukuri/templates/top/feature/section-feature-story-card-data.php:76:        'title' => '暮らし方から、間取りを組み立てる。',
+hub/pages/iezukuri/templates/top/feature/section-feature-story-card-data.php:77:        'lead' => '土地、駐車スペース、庭、収納、ワークスペースまで含めて、暮らし方から一つずつ間取りを決めていきます。',
+hub/pages/iezukuri/templates/top/feature/section-feature-story-card-data.php:78:        'story' => '家を建てるときに大切なのは、部屋数だけではありません。仕事、趣味、家事、家族の時間、庭とのつながりをどう使いたいかで、必要な間取りは変わります。先に暮らし方を整理すると、外観・動線・収納・水回りの優先順位が見えやすくなります。',
+hub/pages/iezukuri/templates/top/feature/section-feature-story-card-data.php:82:            '既成の間取りでは、自分たちの暮らしに合いにくい。',
+hub/pages/iezukuri/templates/top/feature/section-feature-story-card-data.php:84:            '土地や庭の使い方が間取りに反映されにくい。',
+hub/pages/iezukuri/templates/top/feature/section-feature-story-card-data.php:117:                'title' => '外観と内装の好みを整理する',
+hub/pages/iezukuri/templates/top/feature/section-feature-panel-after.php:18:    <p><?php echo esc_html($item['story_text'] ?? '間取り、収納、水回り、設備、将来の使い方まで含めて、暮らしやすい住まいを整理します。'); ?></p>
+hub/pages/iezukuri/templates/top/feature/section-feature-panel-after.php:23:        <h4>間取りの特徴</h4>
+hub/pages/iezukuri/templates/top/feature/section-feature-panel-after.php:64:                        <?php naigai_iez_top_media_image($next_media['exterior'], ($next_item['subtitle'] ?? $next_item['title']) . ' 外観'); ?>
+hub/pages/iezukuri/templates/top/feature/section-feature-life-change-data.php:11: * DBタームメタではなく、まずは固定PHPデータとして管理する。
+hub/pages/iezukuri/templates/top/feature/section-feature-life-change-data.php:53:趣味の収納|趣味道具や季節物が居室に出て、生活空間を圧迫している。|趣味・外用品・日用品の置き場を最初から間取りに入れる。|好きなことを続けながら、部屋をすっきり使える。|趣味収納|収納量、棚、土間収納の見せ方。
+hub/pages/iezukuri/templates/top/feature/section-feature-life-change-data.php:55:二拠点生活|滞在時は快適でも、使わない期間の管理が不安。|換気、収納、外部動線、メンテナンス性を考えて設計する。|那須での滞在と不在時の管理を両立しやすい。|二拠点の間取り|玄関、外部収納、管理しやすい設備。
+hub/pages/iezukuri/templates/top/feature/section-feature-life-change-data.php:62:外観・内装の好み|既製の間取りや見た目では、自分たちらしさが出にくい。|外観、素材、色、照明を暮らし方と合わせて選ぶ。|住む人の好みが伝わる家になる。|外観・内装|外観、床、壁、照明、素材感。
+hub/pages/iezukuri/templates/top/feature/section-feature-life-change-data.php:68:トイレ台数|朝や来客時にトイレ利用が重なりやすい。|家族人数と階数に合わせて台数と位置を決める。|混雑や気まずさを減らせる。|トイレ配置|1階、2階、寝室近くの配置。
+hub/pages/iezukuri/templates/top/feature/section-feature-life-change-data.php:92:    'heading' => '自分たちだけの間取りで建てる',
+hub/pages/iezukuri/templates/top/feature/section-feature-life-change-data.php:94:    'lead' => '土地、趣味、仕事、家族の変化、那須での過ごし方まで間取りに反映するための項目です。',
+hub/pages/iezukuri/templates/top/feature/section-feature-compare.php.bak-20260508-050216:12: * - 間取りの考え方
+hub/pages/iezukuri/templates/top/feature/section-feature-compare.php.bak-20260508-050216:98:                <h5>間取りの考え方</h5>
+hub/pages/iezukuri/templates/top/feature/section-feature-compare.php.bak-20260508-050216:133:     * Before / Action / 間取り案カードへ置き換え。
+hub/pages/iezukuri/templates/top/feature/section-feature-data.php:9:        'title' => '自分たちだけの間取りで建てる',
+hub/pages/iezukuri/templates/top/feature/section-feature-data.php:15:        'story_title' => '土地と暮らし方から、間取りを組み立てる。',
+hub/pages/iezukuri/templates/top/feature/section-feature-data.php:16:        'story_text' => '在宅ワーク、趣味収納、車の台数、庭とのつながり、休日の過ごし方まで含めて、家族に合う間取りを整理します。那須で広めの住空間を取りたい方、自然やゴルフ、二拠点生活、サテライトオフィスを考えたい方にも向いています。',
+hub/pages/iezukuri/templates/top/feature/section-feature-data.php:30:        'story_title' => '家族の距離感から、間取りを考える。',
+hub/pages/iezukuri/templates/top/feature/section-feature-data.php:55:    array('label' => '間取り', 'one-family' => '駐車場、庭、LDK、書斎、収納を自由に計画', 'two-family' => '玄関、水回り、トイレ台数、共有と分離を整理', 'used-renovation' => '既存構造を見ながら動線と収納を改善'),
+hub/pages/iezukuri/templates/top/feature/section-feature-story-card-data.php.bak-20260508-050216:9: * - 間取りの考え方
+hub/pages/iezukuri/templates/top/feature/section-feature-story-card-data.php.bak-20260508-050216:22:        'title' => '家族の距離感から、間取りを考える。',
+hub/pages/iezukuri/templates/top/feature/section-feature-story-card-data.php.bak-20260508-050216:70:        'heading' => '自分たちだけの間取りで建てる',
+hub/pages/iezukuri/templates/top/feature/section-feature-story-card-data.php.bak-20260508-050216:71:        'title' => '暮らし方から、間取りを組み立てる。',
+hub/pages/iezukuri/templates/top/feature/section-feature-story-card-data.php.bak-20260508-050216:72:        'lead' => '土地、駐車スペース、庭、収納、ワークスペースまで含めて、暮らし方から一つずつ間取りを決めていきます。',
+hub/pages/iezukuri/templates/top/feature/section-feature-story-card-data.php.bak-20260508-050216:73:        'story' => '家を建てるときに大切なのは、部屋数だけではありません。仕事、趣味、家事、家族の時間、庭とのつながりをどう使いたいかで、必要な間取りは変わります。先に暮らし方を整理すると、外観・動線・収納・水回りの優先順位が見えやすくなります。',
+hub/pages/iezukuri/templates/top/feature/section-feature-story-card-data.php.bak-20260508-050216:75:            '既成の間取りでは、自分たちの暮らしに合いにくい。',
+hub/pages/iezukuri/templates/top/feature/section-feature-story-card-data.php.bak-20260508-050216:77:            '土地や庭の使い方が間取りに反映されにくい。',
+hub/pages/iezukuri/templates/top/feature/section-feature-story-card-data.php.bak-20260508-050216:107:                'title' => '外観と内装の好みを整理する',
+hub/pages/iezukuri/templates/top/feature/_legacy/section-feature-compare-data.php:6:        'title' => '自分たちだけの間取りで建てる場合の比較',
+hub/pages/iezukuri/templates/top/feature/_legacy/section-feature-compare-data.php:9:            array('label' => '考え方', 'main' => '土地と暮らし方から一から設計', 'sub' => '既製の間取りではなく、自分たちの暮らしに合わせて家をつくります。'),
+hub/pages/iezukuri/templates/top/feature/_legacy/section-feature-compare-data.php:11:            array('label' => '間取り', 'main' => '駐車場、庭、LDK、書斎、収納を自由に計画', 'sub' => '土地、外構、室内動線までまとめて考えられます。'),
+hub/pages/iezukuri/templates/top/feature/_legacy/section-feature-compare-data.php:23:            array('label' => '間取り', 'main' => '玄関、水回り、トイレ台数、共有と分離を整理', 'sub' => '近すぎず離れすぎない距離感を、間取りと設備で調整します。'),
+hub/pages/iezukuri/templates/top/feature/_legacy/section-feature-compare-data.php:35:            array('label' => '間取り', 'main' => '既存構造を見ながら動線と収納を改善', 'sub' => '今の家の制約を見ながら、暮らしやすく直します。'),
+hub/pages/iezukuri/templates/top/section-feature.php.bak-20260508-032507:8: * - 選択パネル：外観 / 間取り図 / 内装
+hub/pages/iezukuri/templates/top/section-feature.php.bak-20260508-032507:102:        if (!$terms || !taxonomy_exists('iez_plan_type')) {
+hub/pages/iezukuri/templates/top/section-feature.php.bak-20260508-032507:107:            'post_type'      => 'iez_plan',
+hub/pages/iezukuri/templates/top/section-feature.php.bak-20260508-032507:116:                    'taxonomy' => 'iez_plan_type',
+hub/pages/iezukuri/templates/top/section-feature.php.bak-20260508-032507:123:        foreach (array('_ch_plan_show_in_home', '_ch_plan_is_card_primary') as $meta_key) {
+hub/pages/iezukuri/templates/top/section-feature.php.bak-20260508-032507:164:        $exterior = naigai_iez_top_image_url(get_post_meta($id, '_ch_plan_exterior_image_id', true));
+hub/pages/iezukuri/templates/top/section-feature.php.bak-20260508-032507:166:        $floor1   = naigai_iez_top_image_url(get_post_meta($id, '_ch_plan_1f_image_id', true));
+hub/pages/iezukuri/templates/top/section-feature.php.bak-20260508-032507:167:        $floor2   = naigai_iez_top_image_url(get_post_meta($id, '_ch_plan_2f_image_id', true));
+hub/pages/iezukuri/templates/top/section-feature.php.bak-20260508-032507:168:        $site     = naigai_iez_top_image_url(get_post_meta($id, '_ch_plan_site_image_id', true));
+hub/pages/iezukuri/templates/top/section-feature.php.bak-20260508-032507:169:        $gallery  = naigai_iez_top_gallery_urls(get_post_meta($id, '_ch_plan_gallery_image_ids', true));
+hub/pages/iezukuri/templates/top/section-feature.php.bak-20260508-032507:220:        'title' => '間取りとプラン',
+hub/pages/iezukuri/templates/top/section-feature.php.bak-20260508-032507:221:        'text'  => '平屋、2階建て、二世帯、リフォーム。暮らし方から間取りを考えます。',
+hub/pages/iezukuri/templates/top/section-feature.php.bak-20260508-032507:228:        'text'  => '実際の住まいから、素材・間取り・外とのつながりを見ていきます。',
+hub/pages/iezukuri/templates/top/section-feature.php.bak-20260508-032507:244:                新築住宅、二世帯住宅、住宅リフォーム。気になる住まい方を選ぶと、外観・間取り図・内装を種類別に確認できます。
+hub/pages/iezukuri/templates/top/section-feature.php.bak-20260508-032507:269:                            <?php naigai_iez_top_media_image($media['exterior'], $item['title'] . ' 外観'); ?>
+hub/pages/iezukuri/templates/top/section-feature.php.bak-20260508-032507:299:                                間取り詳細へ進む
+hub/pages/iezukuri/templates/top/section-feature.php.bak-20260508-032507:309:                            <div class="ch-service-panel-media__title">外観</div>
+hub/pages/iezukuri/templates/top/section-feature.php.bak-20260508-032507:311:                                <?php naigai_iez_top_media_image($media['exterior'], $item['title'] . ' 外観'); ?>
+hub/pages/iezukuri/templates/top/section-feature.php.bak-20260508-032507:317:                            <div class="ch-service-panel-media__title">間取り図</div>
+hub/pages/iezukuri/templates/top/section-feature.php.bak-20260508-032507:320:                                    <?php naigai_iez_top_media_image($media['floor1'], '1F間取り図'); ?>
+hub/pages/iezukuri/templates/top/section-feature.php.bak-20260508-032507:323:                                    <?php naigai_iez_top_media_image($media['floor2'] ?: $media['site'], $media['floor2'] ? '2F間取り図' : '配置図'); ?>
+hub/pages/iezukuri/templates/top/section-feature.php.bak-20260508-032507:374:                考え方、設計方針、間取り、暮らしのポイントへ。知りたい内容から進めます。
+hub/pages/iezukuri/templates/content/nisetai.php:18: * - page-content-renderer.php の仮メタ本文はここでは呼ばない。
+hub/pages/iezukuri/templates/content/nisetai.php:70:                    <p>上下階の音、寝室の位置、水回りの位置など、生活リズムの違いを間取りに反映します。</p>
+hub/pages/iezukuri/templates/content/nisetai.php:85:                <h2>二世帯住宅の間取り相談から対応します</h2>
+hub/pages/iezukuri/templates/content/chuko.php:27: * page-content-renderer.php の仮メタ本文を先に出すと、
+hub/pages/iezukuri/templates/content/chuko.php:158:                    <h3>断熱・内装・間取り変更</h3>
+hub/pages/iezukuri/templates/content/chuko.php:302:                            <td>間取り・内装・設備を変えて、暮らしやすさを上げる。</td>
+hub/pages/iezukuri/templates/content/chuko.php:312:                            <td>間取り変更、内装、収納、キッチン交換、浴室交換、デザイン変更。</td>
+hub/pages/iezukuri/templates/content/rule.php:20:      <p>本フォームでは、注文住宅、住宅リフォーム、中古住宅リフォーム、間取りや資金計画、那須での住まい方に関するご相談を受け付けます。</p>
+hub/pages/iezukuri/templates/content/plans.php:17:            'title'  => '間取り・坪数から参考プランを探す。',
+hub/pages/iezukuri/templates/content/plans.php:18:            'lead'   => '平屋、2階建て、二世帯など、暮らし方に合わせた住まいの参考プランを一覧で確認できます。',
+hub/pages/iezukuri/templates/content/new-house.php:22:                新築は、外観や部屋数だけで決めるものではありません。
+hub/pages/iezukuri/templates/content/new-house.php:56:                    <p>完成後に変えにくい性能を、間取りと同時に考えます。</p>
+hub/pages/iezukuri/templates/content/contact.php:40:                 * FAQはページ編集画面のメタから読む。
+hub/pages/iezukuri/templates/content/contact.php:42:                 * 対象メタ:
+hub/pages/iezukuri/templates/subpage/section-sub-cta.php:21:    'text'   => '土地のこと、資金のこと、間取りのこと。注文住宅に関するご相談を丁寧にお伺いします。',
+hub/pages/iezukuri/templates/subpage/section-sub-hero.php:20: * - 既存の固定ページHeroメタを共通Hero rendererで出す。
+hub/pages/iezukuri/templates/subpage/section-sub-hero.php:29: * - single-iez_plan
+hub/pages/iezukuri/templates/subpage/section-sub-hero.php:84: * chuko は古いメタが残っても反映されるように、slug初期値を優先する。
+hub/pages/iezukuri/templates/subpage/section-sub-hero.php:85: * その他ページはメタがあればメタを優先する。
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:6: * 1段目: 外観写真
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:7: * 2段目: 左 平面図/配置図 + 右 プラン概要
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:18:if (!function_exists('naigai_iez_plan_detail_image_label')) {
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:20:     * プラン詳細の画像表示名
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:23:     * 1. プラン編集画面の画像名メタ
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:29:    function naigai_iez_plan_detail_image_label($post_id, $attachment_id, $fallback = '') {
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:36:        $raw = get_post_meta($post_id, '_ch_plan_image_labels_json', true);
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:76:$plan_label         = get_post_meta($page_id, '_ch_plan_label', true) ?: '平屋 P-A';
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:87: * メタキー:
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:88: * - _ch_plan_gallery_heading
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:89: * - _ch_plan_gallery_text
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:92: * - 画像上限とは関係ない。
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:93: * - 画像ごとのラベル _ch_plan_image_labels_json とは別。
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:96:$plan_gallery_heading = trim((string) get_post_meta($page_id, '_ch_plan_gallery_heading', true));
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:97:$plan_gallery_text    = trim((string) get_post_meta($page_id, '_ch_plan_gallery_text', true));
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:102:$plan_style         = get_post_meta($page_id, '_ch_plan_style', true) ?: '洋風';
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:103:$plan_layout        = get_post_meta($page_id, '_ch_plan_layout', true) ?: '2LDK';
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:104:$plan_total_area    = get_post_meta($page_id, '_ch_plan_total_area', true) ?: '72㎡';
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:105:$plan_tsubo         = get_post_meta($page_id, '_ch_plan_tsubo', true) ?: '約21.8坪';
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:106:$plan_building_area = get_post_meta($page_id, '_ch_plan_building_area', true) ?: '75㎡';
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:107:$plan_family        = get_post_meta($page_id, '_ch_plan_family', true) ?: '夫婦・少人数世帯';
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:117: * 既存メタキー:
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:118: * - _ch_plan_description
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:127:$plan_summary_description = trim((string) get_post_meta($page_id, '_ch_plan_description', true));
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:137: * - メタキー _ch_plan_description を表示する
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:139:$plan_summary_description = trim((string) get_post_meta($page_id, '_ch_plan_description', true));
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:141:$floor_type = get_post_meta($page_id, '_ch_plan_floor_type', true) ?: 'one_story';
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:143:$exterior_id = (int) get_post_meta($page_id, '_ch_plan_exterior_image_id', true);
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:144:$plan_1f_id  = (int) get_post_meta($page_id, '_ch_plan_1f_image_id', true);
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:145:$plan_2f_id  = (int) get_post_meta($page_id, '_ch_plan_2f_image_id', true);
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:146:$site_id     = (int) get_post_meta($page_id, '_ch_plan_site_image_id', true);
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:147:$pdf_id      = (int) get_post_meta($page_id, '_ch_plan_pdf_id', true);
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:150:$gallery_raw = get_post_meta($page_id, '_ch_plan_gallery_image_ids', true);
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:168: * 平面図タブ:
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:169: * - 2F画像がある場合だけ「平面図 1F / 平面図 2F」に分ける
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:170: * - 2F画像がない場合は「平面図」だけ表示する
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:171: * - 住宅タイプの選択より、画像が入っているかを優先する
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:178:        'label'    => $has_2f_plan ? '平面図 1F' : '平面図',
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:179:        'title'    => $has_2f_plan ? '1階 平面図' : '平面図',
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:187:        'label'    => '平面図 2F',
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:188:        'title'    => '2階 平面図',
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:196:        'label'    => '配置図',
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:197:        'title'    => '配置図',
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:202:if (!function_exists('naigai_iez_plan_detail_img_url')) {
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:203:    function naigai_iez_plan_detail_img_url($image_id, $size = 'full') {
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:216:if (!function_exists('naigai_iez_plan_detail_icon_key')) {
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:223:    function naigai_iez_plan_detail_icon_key($title) {
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:278:if (!function_exists('naigai_iez_plan_detail_icon_svg')) {
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:285:    function naigai_iez_plan_detail_icon_svg($icon) {
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:324: * - _ch_plan_feature_keys / _ch_plan_option_keys / タクソノミー / _ch_plan_floor_type から
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:328: * - カタログ関数がない場合だけ _ch_plan_marketing_features を読む。
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:330:if (function_exists('naigai_iez_plan_resolve_feature_items')) {
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:331:    $features = naigai_iez_plan_resolve_feature_items($page_id);
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:335:    $feature_lines_raw = get_post_meta($page_id, '_ch_plan_marketing_features', true);
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:351:            'icon'  => isset($parts[2]) && $parts[2] !== '' ? sanitize_key($parts[2]) : naigai_iez_plan_detail_icon_key($parts[0]),
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:358:if ($exterior_id && naigai_iez_plan_detail_img_url($exterior_id)) {
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:360:        'src'   => naigai_iez_plan_detail_img_url($exterior_id),
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:361:        'title' => '外観写真',
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:366:    $url = naigai_iez_plan_detail_img_url($tab['image_id']);
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:377:    $url = naigai_iez_plan_detail_img_url($gallery_id);
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:402:            <!-- 1段目: 外観写真 -->
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:403:            <section class="iez-plan-detail-board__row iez-plan-detail-board__row--exterior" aria-label="外観写真">
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:404:                <?php if ($exterior_id && naigai_iez_plan_detail_img_url($exterior_id, 'large')) : ?>
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:405:                    <a class="iez-plan-detail-board__exterior-button js-iez-lg-item" href="<?php echo esc_url(naigai_iez_plan_detail_img_url($exterior_id)); ?>" data-sub-html="<?php echo esc_attr(naigai_iez_plan_detail_image_label($page_id, $exterior_id, '外観写真')); ?>" data-exthumbimage="<?php echo esc_url(naigai_iez_plan_detail_img_url($exterior_id, 'medium')); ?>" aria-label="外観写真">
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:406:                        <span class="iez-plan-detail-board__badge">外観写真</span>
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:408:                            src="<?php echo esc_url(naigai_iez_plan_detail_img_url($exterior_id, 'large')); ?>"
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:409:                            alt="<?php echo esc_attr($plan_name); ?> 外観写真"
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:413:                    <div class="iez-plan-detail-board__empty">外観写真は未設定です</div>
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:417:<!-- 2段目: 左 平面図 / 右 概要欄 -->
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:418:            <section class="iez-plan-detail-board__row iez-plan-detail-board__row--plan-summary" aria-label="平面図とプラン概要">
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:436:                                $draw_url = naigai_iez_plan_detail_img_url($tab['image_id'], 'large');
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:437:                                $full_url = naigai_iez_plan_detail_img_url($tab['image_id']);
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:445:                                        <a class="iez-plan-detail-board__drawing-button js-iez-lg-item" href="<?php echo esc_url($full_url); ?>" data-sub-html="<?php echo esc_attr(naigai_iez_plan_detail_image_label($page_id, $tab['image_id'], $tab['title'])); ?>" data-exthumbimage="<?php echo esc_url($draw_url); ?>" aria-label="<?php echo esc_attr($tab['title']); ?>">
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:457:                        <div class="iez-plan-detail-board__empty">平面図は未設定です</div>
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:470:                     * テイスト / 間取り / 面積などの仕様だけを表示する。
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:490:                            <dt>間取り</dt>
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:524:                            $thumb = naigai_iez_plan_detail_img_url($gallery_id, 'medium');
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:525:                            $full  = naigai_iez_plan_detail_img_url($gallery_id, 'full');
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:537:                            <a class="iez-plan-detail-board__gallery-item js-iez-lg-item" href="<?php echo esc_url($full); ?>" data-sub-html="<?php echo esc_attr(naigai_iez_plan_detail_image_label($page_id, $gallery_id, $alt)); ?>" data-exthumbimage="<?php echo esc_url($thumb); ?>" aria-label="<?php echo esc_attr($alt); ?>">
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:539:                                <span><?php echo esc_html(naigai_iez_plan_detail_image_label($page_id, $gallery_id, $alt)); ?></span>
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:557:                                <?php echo naigai_iez_plan_detail_icon_svg($feature['icon']); ?>
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:573:            foreach (array('iez_plan_type', 'iez_plan_size', 'iez_plan_feature') as $tax) {
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:586:                'post_type'      => 'iez_plan',
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:614:                            $related_thumb_id = (int) get_post_meta($related_id, '_ch_plan_exterior_image_id', true);
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:621:                            $related_layout = get_post_meta($related_id, '_ch_plan_layout', true);
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:622:                            $related_area   = get_post_meta($related_id, '_ch_plan_total_area', true);
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:623:                            $related_tsubo  = get_post_meta($related_id, '_ch_plan_tsubo', true);
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:665:    <div class="iez-plan-modal__dialog" role="dialog" aria-modal="true" aria-label="画像を拡大表示">
+hub/pages/iezukuri/templates/components/block-plan-viewer.php:667:            <p class="iez-plan-modal__title" data-iez-plan-title>画像</p>
+hub/pages/iezukuri/templates/components/block-plan-list.php:10: * - カスタム投稿 iez_plan の一覧カードを表示する
+hub/pages/iezukuri/templates/components/block-plan-list.php:18: * メタ取得方針:
+hub/pages/iezukuri/templates/components/block-plan-list.php:19: * - 現在の管理画面データは _ch_plan_* に入っている
+hub/pages/iezukuri/templates/components/block-plan-list.php:20: * - 古い _iez_plan_* も保険として見る
+hub/pages/iezukuri/templates/components/block-plan-list.php:22: * 一覧カード画像:
+hub/pages/iezukuri/templates/components/block-plan-list.php:23: * - _ch_plan_exterior_image_id を最優先
+hub/pages/iezukuri/templates/components/block-plan-list.php:24: * - 平面図 / 配置図 / 間取り図は一覧カード画像に使わない
+hub/pages/iezukuri/templates/components/block-plan-list.php:39: * メタを候補順に取得する
+hub/pages/iezukuri/templates/components/block-plan-list.php:42:if (!function_exists('naigai_iez_plan_list_get_meta')) {
+hub/pages/iezukuri/templates/components/block-plan-list.php:43:    function naigai_iez_plan_list_get_meta($post_id, $keys, $default = '') {
+hub/pages/iezukuri/templates/components/block-plan-list.php:58: * 値から画像IDを取り出す
+hub/pages/iezukuri/templates/components/block-plan-list.php:61:if (!function_exists('naigai_iez_plan_list_get_image_id_from_value')) {
+hub/pages/iezukuri/templates/components/block-plan-list.php:62:    function naigai_iez_plan_list_get_image_id_from_value($value) {
+hub/pages/iezukuri/templates/components/block-plan-list.php:65:                $id = naigai_iez_plan_list_get_image_id_from_value($item);
+hub/pages/iezukuri/templates/components/block-plan-list.php:87:            return naigai_iez_plan_list_get_image_id_from_value($maybe);
+hub/pages/iezukuri/templates/components/block-plan-list.php:92:            return naigai_iez_plan_list_get_image_id_from_value($json);
+hub/pages/iezukuri/templates/components/block-plan-list.php:111: * 一覧カード用の外観画像ID
+hub/pages/iezukuri/templates/components/block-plan-list.php:118: * - _ch_plan_exterior_image_id
+hub/pages/iezukuri/templates/components/block-plan-list.php:121: * - _ch_plan_1f_image_id
+hub/pages/iezukuri/templates/components/block-plan-list.php:122: * - _ch_plan_site_image_id
+hub/pages/iezukuri/templates/components/block-plan-list.php:123: * - 平面図 / 配置図 / 間取り図
+hub/pages/iezukuri/templates/components/block-plan-list.php:125:if (!function_exists('naigai_iez_plan_list_get_card_image_id')) {
+hub/pages/iezukuri/templates/components/block-plan-list.php:126:    function naigai_iez_plan_list_get_card_image_id($post_id) {
+hub/pages/iezukuri/templates/components/block-plan-list.php:128:            '_ch_plan_exterior_image_id',
+hub/pages/iezukuri/templates/components/block-plan-list.php:129:            '_ch_plan_hero_image_id',
+hub/pages/iezukuri/templates/components/block-plan-list.php:130:            '_ch_plan_main_image_id',
+hub/pages/iezukuri/templates/components/block-plan-list.php:131:            '_ch_plan_card_image_id',
+hub/pages/iezukuri/templates/components/block-plan-list.php:133:            '_iez_plan_exterior_image_id',
+hub/pages/iezukuri/templates/components/block-plan-list.php:134:            '_iez_plan_exterior_id',
+hub/pages/iezukuri/templates/components/block-plan-list.php:135:            '_iez_plan_exterior_photo_id',
+hub/pages/iezukuri/templates/components/block-plan-list.php:136:            '_iez_plan_hero_image_id',
+hub/pages/iezukuri/templates/components/block-plan-list.php:137:            '_iez_plan_main_image_id',
+hub/pages/iezukuri/templates/components/block-plan-list.php:138:            '_iez_plan_thumbnail_id',
+hub/pages/iezukuri/templates/components/block-plan-list.php:139:            '_iez_plan_card_image_id',
+hub/pages/iezukuri/templates/components/block-plan-list.php:144:            $id    = naigai_iez_plan_list_get_image_id_from_value($value);
+hub/pages/iezukuri/templates/components/block-plan-list.php:166: * _ch_plan_total_area と _ch_plan_tsubo が両方ある場合:
+hub/pages/iezukuri/templates/components/block-plan-list.php:169:if (!function_exists('naigai_iez_plan_list_get_floor_area_label')) {
+hub/pages/iezukuri/templates/components/block-plan-list.php:170:    function naigai_iez_plan_list_get_floor_area_label($post_id) {
+hub/pages/iezukuri/templates/components/block-plan-list.php:171:        $total_area = naigai_iez_plan_list_get_meta($post_id, array(
+hub/pages/iezukuri/templates/components/block-plan-list.php:172:            '_ch_plan_total_area',
+hub/pages/iezukuri/templates/components/block-plan-list.php:175:        $tsubo = naigai_iez_plan_list_get_meta($post_id, array(
+hub/pages/iezukuri/templates/components/block-plan-list.php:176:            '_ch_plan_tsubo',
+hub/pages/iezukuri/templates/components/block-plan-list.php:191:        return naigai_iez_plan_list_get_meta($post_id, array(
+hub/pages/iezukuri/templates/components/block-plan-list.php:192:            '_iez_plan_floor_area',
+hub/pages/iezukuri/templates/components/block-plan-list.php:193:            '_iez_plan_total_floor_area',
+hub/pages/iezukuri/templates/components/block-plan-list.php:194:            '_iez_plan_area',
+hub/pages/iezukuri/templates/components/block-plan-list.php:195:            '_iez_plan_total_area',
+hub/pages/iezukuri/templates/components/block-plan-list.php:205:    'post_type'      => 'iez_plan',
+hub/pages/iezukuri/templates/components/block-plan-list.php:230:                    $image_id = naigai_iez_plan_list_get_card_image_id($post_id);
+hub/pages/iezukuri/templates/components/block-plan-list.php:242:                     * - 詳細ページ側 single-iez_plan.php と同じ考え方
+hub/pages/iezukuri/templates/components/block-plan-list.php:262:                    $label = naigai_iez_plan_list_get_meta($post_id, array(
+hub/pages/iezukuri/templates/components/block-plan-list.php:263:                        '_ch_plan_label',
+hub/pages/iezukuri/templates/components/block-plan-list.php:264:                        '_iez_plan_label',
+hub/pages/iezukuri/templates/components/block-plan-list.php:265:                        '_iez_plan_plan_label',
+hub/pages/iezukuri/templates/components/block-plan-list.php:266:                        '_iez_plan_code',
+hub/pages/iezukuri/templates/components/block-plan-list.php:271:                    $layout = naigai_iez_plan_list_get_meta($post_id, array(
+hub/pages/iezukuri/templates/components/block-plan-list.php:272:                        '_ch_plan_layout',
+hub/pages/iezukuri/templates/components/block-plan-list.php:273:                        '_iez_plan_layout',
+hub/pages/iezukuri/templates/components/block-plan-list.php:274:                        '_iez_plan_madori',
+hub/pages/iezukuri/templates/components/block-plan-list.php:275:                        '_iez_plan_floor_plan',
+hub/pages/iezukuri/templates/components/block-plan-list.php:281:                    $floor_area = naigai_iez_plan_list_get_floor_area_label($post_id);
+hub/pages/iezukuri/templates/components/block-plan-list.php:283:                    $building_area = naigai_iez_plan_list_get_meta($post_id, array(
+hub/pages/iezukuri/templates/components/block-plan-list.php:284:                        '_ch_plan_building_area',
+hub/pages/iezukuri/templates/components/block-plan-list.php:285:                        '_iez_plan_building_area',
+hub/pages/iezukuri/templates/components/block-plan-list.php:286:                        '_iez_plan_build_area',
+hub/pages/iezukuri/templates/components/block-plan-list.php:287:                        '_iez_plan_construction_area',
+hub/pages/iezukuri/templates/components/block-plan-list.php:292:                    $family = naigai_iez_plan_list_get_meta($post_id, array(
+hub/pages/iezukuri/templates/components/block-plan-list.php:293:                        '_ch_plan_family',
+hub/pages/iezukuri/templates/components/block-plan-list.php:294:                        '_iez_plan_family',
+hub/pages/iezukuri/templates/components/block-plan-list.php:295:                        '_iez_plan_target_family',
+hub/pages/iezukuri/templates/components/block-plan-list.php:296:                        '_iez_plan_family_type',
+hub/pages/iezukuri/templates/components/block-plan-list.php:331:                                            <dt>間取り</dt>
+hub/pages/iezukuri/templates/template-iezukuri-new-house.php:14: * - 間取り計画、標準仕様、設備、断熱、気密、耐震を標準側に置く
+hub/pages/iezukuri/templates/template-iezukuri-new-house.php:42:                    新築住宅は、外観や部屋数だけで決めるものではありません。
+hub/pages/iezukuri/templates/template-iezukuri-new-house.php:43:                    間取り、収納、家事動線、設備、断熱、気密、耐震、そして仕事や趣味に使える場所まで含めて、
+hub/pages/iezukuri/templates/template-iezukuri-new-house.php:62:            <h2>暮らし方から考える間取り計画</h2>
+hub/pages/iezukuri/templates/template-iezukuri-new-house.php:66:                無理のない間取りを考えます。
+hub/pages/iezukuri/templates/template-iezukuri-new-house.php:80:                    毎日の動きが重くならない間取りを考えます。
+hub/pages/iezukuri/templates/template-iezukuri-new-house.php:136:                <p>長く安心して暮らすために、構造や耐震性を大切にします。間取りの自由度だけでなく建物としての強さも考えます。</p>
+hub/pages/iezukuri/templates/template-iezukuri-new-house.php:243:                画像は後で差し替えられるように、まずは表示枠を用意します。
+hub/pages/iezukuri/templates/template-iezukuri-new-house.php:250:                <div>外観・LDK</div>
+hub/pages/iezukuri/templates/template-iezukuri-new-house.php:293:            <li><span>02</span><strong>間取り計画</strong><p>LDK、家事動線、収納、作業スペース、将来の使い方を整理します。</p></li>
+hub/pages/iezukuri/templates/template-iezukuri-new-house.php:306:                間取り、標準仕様、設備、作業スペース、プレミアム造園まで、
+
+### 3. block-plan-viewer.php
+block-plan-viewer.php not found

@@ -1,0 +1,3331 @@
+/**
+ * =========================================================
+ * minpaku-b2c.css
+ * 役割:
+ * - B2C固定ページ / 民泊サポートLP のレイアウト専用
+ * - 色は minpaku common/base の --mnpk-* を使う
+ * - body / header / nav / footer nav の色は決めない
+ * =========================================================
+ */
+
+/* =========================================================
+ * 0. B2C page shell
+ * ========================================================= */
+
+.mnpk-page {
+  padding: 24px 0 32px;
+  background: transparent;
+  color: var(--mnpk-text);
+}
+
+.mnpk-page-shell {
+  width: min(100%, 1320px);
+  margin: 0 auto;
+  padding-inline: 24px;
+  display: grid;
+  gap: 24px;
+  box-sizing: border-box;
+  background: transparent;
+}
+
+.mnpk-page-section {
+  min-width: 0;
+  background: transparent;
+}
+
+/* =========================================================
+ * 1. common panel
+ * ========================================================= */
+
+.mnpk-panel {
+  position: relative;
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid var(--mnpk-border);
+  border-radius: 30px;
+  background: var(--mnpk-surface);
+  color: var(--mnpk-text);
+  box-shadow: var(--mnpk-shadow);
+}
+
+.mnpk-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14);
+}
+
+.mnpk-panel__inner {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  padding: 24px;
+  color: var(--mnpk-text);
+  background: transparent;
+}
+
+.mnpk-page :is(h1, h2, h3, h4) {
+  display: block;
+  margin: 0 0 14px;
+  color: var(--mnpk-heading);
+  line-height: 1.4;
+}
+
+.mnpk-page :is(p, li, dt, dd) {
+  color: var(--mnpk-muted);
+  line-height: 1.9;
+}
+
+.mnpk-page a {
+  color: inherit;
+}
+
+.mnpk-page-eyebrow,
+.mnpk-section-eyebrow {
+  margin: 0 0 12px;
+  color: var(--mnpk-accent);
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1.4;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.mnpk-text-block > * + * {
+  margin-top: 10px;
+}
+
+/* =========================================================
+ * 2. B2C hero
+ * ========================================================= */
+
+.mnpk-page-hero {
+  position: relative;
+  isolation: isolate;
+  min-height: clamp(320px, 36vw, 520px);
+  color: #fff;
+  background-color: var(--mnpk-hero-bg);
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.mnpk-page-hero.has-video {
+  overflow: hidden;
+  background-image: none !important;
+}
+
+.mnpk-page-hero__media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: auto;
+}
+
+.mnpk-page-hero__media.is-video {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.mnpk-page-hero__video {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  background: #000;
+}
+
+.mnpk-page-hero__slide,
+.mnpk-hero-swiper,
+.mnpk-hero-swiper .swiper-wrapper,
+.mnpk-hero-swiper .swiper-slide {
+  width: 100%;
+  height: 100%;
+}
+
+.mnpk-page-hero__slide {
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.mnpk-page-hero__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: var(--mnpk-hero-overlay);
+}
+
+.mnpk-page-hero__inner {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: flex-end;
+  min-height: inherit;
+  padding: 24px;
+  pointer-events: none;
+}
+
+.mnpk-page-hero__content,
+.mnpk-page-hero__content a,
+.mnpk-page-hero__content button {
+  pointer-events: auto;
+}
+
+.mnpk-page-hero__content {
+  width: min(100%, 820px);
+}
+
+.mnpk-page-hero :is(h1, h2, h3, h4, p, li, .mnpk-page-eyebrow) {
+  color: #fff;
+}
+
+.mnpk-page-hero__title {
+  margin: 0;
+  color: var(--mnpk-hero-title);
+  font-size: clamp(30px, 4.2vw, 52px);
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  text-shadow: 0 4px 18px rgba(0, 0, 0, 0.30);
+}
+
+.mnpk-page-hero__lead {
+  margin-top: 14px;
+  max-width: 760px;
+  color: var(--mnpk-hero-text);
+  font-size: 15px;
+  line-height: 1.8;
+  padding: 0;
+  background: transparent;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.24);
+}
+
+.mnpk-page-hero.is-no-image {
+  min-height: 240px;
+  background: var(--mnpk-surface);
+  color: var(--mnpk-text);
+}
+
+.mnpk-page-hero.is-no-image :is(h1, h2, h3, h4) {
+  color: var(--mnpk-heading);
+}
+
+.mnpk-page-hero.is-no-image :is(p, li) {
+  color: var(--mnpk-muted);
+}
+
+/* hero swiper */
+.mnpk-hero-swiper {
+  cursor: grab;
+  touch-action: pan-y;
+}
+
+.mnpk-hero-swiper:active {
+  cursor: grabbing;
+}
+
+.mnpk-page-hero__media.has-pagination .mnpk-hero-swiper__pagination {
+  position: absolute;
+  z-index: 3;
+  pointer-events: auto;
+}
+
+.mnpk-page-hero__media.pagination-center-bottom .mnpk-hero-swiper__pagination {
+  left: 50% !important;
+  right: auto !important;
+  bottom: 18px !important;
+  width: auto !important;
+  transform: translateX(-50%) !important;
+  display: flex !important;
+  gap: 10px !important;
+}
+
+.mnpk-page-hero__media.pagination-right-bottom .mnpk-hero-swiper__pagination {
+  right: 18px !important;
+  left: auto !important;
+  bottom: 18px !important;
+  width: auto !important;
+  transform: none !important;
+  display: flex !important;
+  gap: 10px !important;
+}
+
+.mnpk-page-hero__media.pagination-right-center-vertical .mnpk-hero-swiper__pagination {
+  top: 50% !important;
+  right: 18px !important;
+  left: auto !important;
+  bottom: auto !important;
+  width: auto !important;
+  transform: translateY(-50%) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+}
+
+.mnpk-hero-swiper__pagination .swiper-pagination-bullet {
+  width: 12px !important;
+  height: 12px !important;
+  margin: 0 !important;
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.32);
+  opacity: 1;
+}
+
+.mnpk-hero-swiper__pagination .swiper-pagination-bullet-active {
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.16);
+}
+
+.mnpk-hero-swiper__nav {
+  position: absolute;
+  top: 50%;
+  z-index: 7;
+  width: 46px;
+  height: 46px;
+  margin-top: -23px;
+  border: 1px solid rgba(255, 255, 255, 0.26);
+  border-radius: 999px;
+  background: rgba(8, 18, 31, 0.48);
+  backdrop-filter: blur(4px);
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.mnpk-hero-swiper__nav::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 11px;
+  height: 11px;
+  border-top: 2px solid #fff;
+  border-right: 2px solid #fff;
+}
+
+.mnpk-hero-swiper__nav--prev {
+  left: 16px;
+}
+
+.mnpk-hero-swiper__nav--prev::before {
+  transform: rotate(-135deg);
+}
+
+.mnpk-hero-swiper__nav--next {
+  right: 16px;
+}
+
+.mnpk-hero-swiper__nav--next::before {
+  transform: rotate(45deg);
+}
+
+/* =========================================================
+ * 3. buttons
+ * 色:
+ * - 色は minpaku-base.css の --mnpk-button-* で管理
+ * - B2C側では配置、サイズ、状態だけ管理
+ * ========================================================= */
+
+.mnpk-page-actions,
+.mnpk-card__actions,
+.wakugui-hero__actions,
+.wakugui-card__actions,
+.wakugui-contact__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  margin-top: 18px;
+}
+
+.mnpk-page-btn,
+.ngw-btn.wakugui-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  padding: 0 18px;
+  border: 1px solid var(--mnpk-button-primary-border, var(--mnpk-accent));
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 800;
+  line-height: 1.2;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.mnpk-page-btn.is-primary,
+.ngw-btn.wakugui-btn.is-primary {
+  color: var(--mnpk-button-primary-text, #ffffff);
+  background:
+    linear-gradient(
+      180deg,
+      var(--mnpk-button-primary-bg-2, var(--mnpk-accent-2, var(--mnpk-accent))) 0%,
+      var(--mnpk-button-primary-bg, var(--mnpk-accent)) 100%
+    );
+  border-color: var(--mnpk-button-primary-border, var(--mnpk-accent));
+}
+
+.mnpk-page-btn.is-secondary,
+.ngw-btn.wakugui-btn.is-secondary {
+  color: var(--mnpk-button-secondary-text, var(--mnpk-accent));
+  background: var(--mnpk-button-secondary-bg, var(--mnpk-surface));
+  border-color: var(--mnpk-button-secondary-border, var(--mnpk-border));
+}
+
+/* 画像ありheroの上だけ白系ボタン */
+.mnpk-page-hero:not(.is-no-image) .mnpk-page-btn.is-secondary,
+.wakugui-hero .ngw-btn.wakugui-btn.is-secondary {
+  color: var(--mnpk-hero-button-secondary-text, #ffffff);
+  background: var(--mnpk-hero-button-secondary-bg, rgba(255, 255, 255, 0.14));
+  border-color: var(--mnpk-hero-button-secondary-border, rgba(255, 255, 255, 0.42));
+}
+
+/* 画像なしheroでは白文字にしない。ここが文字が見えない原因 */
+.mnpk-page-hero.is-no-image .mnpk-page-btn.is-primary {
+  color: var(--mnpk-button-primary-text, #ffffff);
+  background:
+    linear-gradient(
+      180deg,
+      var(--mnpk-button-primary-bg-2, var(--mnpk-accent-2, var(--mnpk-accent))) 0%,
+      var(--mnpk-button-primary-bg, var(--mnpk-accent)) 100%
+    );
+  border-color: var(--mnpk-button-primary-border, var(--mnpk-accent));
+}
+
+.mnpk-page-hero.is-no-image .mnpk-page-btn.is-secondary {
+  color: var(--mnpk-hero-noimage-button-secondary-text, var(--mnpk-accent));
+  background: var(--mnpk-hero-noimage-button-secondary-bg, var(--mnpk-surface));
+  border-color: var(--mnpk-hero-noimage-button-secondary-border, var(--mnpk-border-strong));
+}
+
+.mnpk-page-btn:hover,
+.mnpk-page-btn:focus-visible,
+.ngw-btn.wakugui-btn:hover,
+.ngw-btn.wakugui-btn:focus-visible {
+  text-decoration: none;
+  filter: brightness(0.98);
+}
+
+.mnpk-page-btn.is-primary:hover,
+.mnpk-page-btn.is-primary:focus-visible,
+.ngw-btn.wakugui-btn.is-primary:hover,
+.ngw-btn.wakugui-btn.is-primary:focus-visible {
+  color: var(--mnpk-button-primary-text, #ffffff);
+  background: var(--mnpk-accent-hover, #256b8b);
+  border-color: var(--mnpk-accent-hover, #256b8b);
+}
+
+.mnpk-page-btn.is-secondary:hover,
+.mnpk-page-btn.is-secondary:focus-visible,
+.ngw-btn.wakugui-btn.is-secondary:hover,
+.ngw-btn.wakugui-btn.is-secondary:focus-visible {
+  color: var(--mnpk-accent-hover, #256b8b);
+  background: var(--mnpk-accent-soft, #e4f2f7);
+  border-color: var(--mnpk-accent, #2f7fa2);
+}
+
+.mnpk-page-hero:not(.is-no-image) .mnpk-page-btn.is-secondary:hover,
+.mnpk-page-hero:not(.is-no-image) .mnpk-page-btn.is-secondary:focus-visible,
+.wakugui-hero .ngw-btn.wakugui-btn.is-secondary:hover,
+.wakugui-hero .ngw-btn.wakugui-btn.is-secondary:focus-visible {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.22);
+  border-color: rgba(255, 255, 255, 0.62);
+}
+
+
+/* =========================================================
+ * 4. B2C intro / CTA split
+ * ========================================================= */
+
+.mnpk-content-block {
+  width: 100%;
+  max-width: none;
+}
+
+.mnpk-split {
+  display: grid;
+  grid-template-columns: 132px minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.mnpk-split__media {
+  width: 132px;
+  height: 132px;
+  margin: 0;
+  overflow: hidden;
+  border-radius: 18px;
+  background: var(--mnpk-surface-2);
+}
+
+.mnpk-split__media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mnpk-split__body {
+  min-width: 0;
+}
+
+.mnpk-solo-media {
+  width: 100%;
+  margin: 0;
+  overflow: hidden;
+  border-radius: 24px;
+}
+
+.mnpk-solo-media img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+}
+
+.mnpk-page-cta.has-actions .mnpk-page-actions {
+  margin-top: 22px;
+}
+
+.mnpk-page-cta.no-actions .mnpk-page-actions {
+  display: none;
+}
+
+.mnpk-page-cta.is-image-and-body .mnpk-panel__inner,
+.mnpk-page-cta.is-image-only .mnpk-panel__inner {
+  padding: 0;
+}
+
+.mnpk-page-cta.is-image-and-body .mnpk-split {
+  grid-template-columns: minmax(320px, 420px) minmax(0, 1fr);
+  gap: 0;
+  align-items: stretch;
+  min-height: 280px;
+}
+
+.mnpk-page-cta.is-image-and-body .mnpk-split__media {
+  width: 100%;
+  height: 100%;
+  min-height: 280px;
+  border-radius: 0;
+}
+
+.mnpk-page-cta.is-image-and-body .mnpk-split__body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  padding: 32px 34px;
+}
+
+.mnpk-page-cta.is-image-only .mnpk-solo-media {
+  border-radius: 0;
+}
+
+/* CTA media / swiper */
+.mnpk-split__media--cta {
+  position: relative;
+  background: var(--mnpk-surface-2);
+}
+
+.mnpk-page-cta__media,
+.mnpk-solo-media--cta,
+.mnpk-cta-swiper {
+  position: relative;
+  overflow: hidden;
+  border-radius: 18px;
+}
+
+.mnpk-page-cta__media.is-image img,
+.mnpk-solo-media--cta img,
+.mnpk-page-cta__video {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.mnpk-page-cta__video {
+  min-height: 280px;
+  object-fit: cover;
+  background: #000;
+  border-radius: 18px;
+}
+
+.mnpk-page-cta__slide {
+  min-height: 280px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 18px;
+}
+
+.mnpk-cta-swiper__pagination {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 12px;
+  z-index: 5;
+  text-align: center;
+}
+
+.mnpk-cta-swiper__nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 6;
+  width: 42px;
+  height: 42px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.55);
+  cursor: pointer;
+}
+
+.mnpk-cta-swiper__nav::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 10px;
+  height: 10px;
+  border-top: 2px solid #fff;
+  border-right: 2px solid #fff;
+}
+
+.mnpk-cta-swiper__nav--prev {
+  left: 12px;
+}
+
+.mnpk-cta-swiper__nav--prev::before {
+  transform: rotate(-135deg);
+}
+
+.mnpk-cta-swiper__nav--next {
+  right: 12px;
+}
+
+.mnpk-cta-swiper__nav--next::before {
+  transform: rotate(45deg);
+}
+
+/* =========================================================
+ * 5. B2C cards / guide
+ * ========================================================= */
+
+.mnpk-page--unified .mnpk-card-grid,
+.mnpk-page--unified .mnpk-guide-grid {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.mnpk-page--unified .mnpk-card,
+.mnpk-page--unified .mnpk-guide-card {
+  padding: 0;
+  border: 1px solid var(--mnpk-border);
+  border-radius: 24px;
+  background: var(--mnpk-card-bg);
+  box-shadow: var(--mnpk-shadow-soft);
+  color: var(--mnpk-text);
+  overflow: hidden;
+}
+
+.mnpk-page--unified .mnpk-card.mnpk-panel__inner,
+.mnpk-page--unified .mnpk-guide-card.mnpk-panel__inner {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  height: 100%;
+  padding: 0;
+}
+
+.mnpk-page--unified .mnpk-card.is-text-only,
+.mnpk-page--unified .mnpk-guide-card.is-text-only {
+  padding: 24px;
+}
+
+.mnpk-page--unified .mnpk-card__media,
+.mnpk-page--unified .mnpk-guide-card__media {
+  height: 220px;
+  margin: 0;
+  overflow: hidden;
+  border-bottom: 1px solid var(--mnpk-border);
+  background: transparent;
+}
+
+.mnpk-page--unified .mnpk-card__media img,
+.mnpk-page--unified .mnpk-guide-card__media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mnpk-page--unified .mnpk-card__content {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-width: 0;
+  padding: 20px;
+  color: var(--mnpk-text);
+}
+
+.mnpk-page--unified .mnpk-guide-card.is-text-only .mnpk-card__content,
+.mnpk-page--unified .mnpk-card.is-text-only .mnpk-card__content {
+  padding: 0;
+}
+
+.mnpk-page--unified .mnpk-card__actions {
+  margin-top: auto;
+  padding-top: 16px;
+}
+
+/* =========================================================
+ * 6. compare table
+ * ========================================================= */
+
+.mnpk-compare-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.mnpk-compare-table {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.mnpk-compare-table th,
+.mnpk-compare-table td {
+  border: 1px solid var(--mnpk-border);
+  vertical-align: top;
+}
+
+.mnpk-compare-table thead th {
+  padding: 18px;
+}
+
+.mnpk-compare-table__corner {
+  width: 22%;
+  min-width: 180px;
+  text-align: left;
+  color: var(--mnpk-heading);
+  font-weight: 800;
+}
+
+.mnpk-compare-table__head {
+  width: 39%;
+  text-align: left;
+}
+
+.mnpk-compare-table__title {
+  display: block;
+  color: var(--mnpk-heading);
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1.5;
+}
+
+.mnpk-compare-table__rowhead {
+  padding: 16px 18px;
+  text-align: left;
+  color: var(--mnpk-heading);
+  font-weight: 700;
+  line-height: 1.6;
+}
+
+.mnpk-compare-table__cell {
+  padding: 16px 18px;
+  color: var(--mnpk-text-soft);
+  line-height: 1.9;
+}
+
+/* =========================================================
+ * 7. flow
+ * ========================================================= */
+
+/* =========================================================
+ * 8. faq
+ * ========================================================= */
+
+.mnpk-page-faq .mnpk-panel__inner {
+  display: grid;
+  gap: 18px;
+}
+
+.mnpk-faq-list {
+  display: grid;
+  gap: 16px;
+}
+
+.mnpk-faq-item {
+  overflow: hidden;
+  border: 1px solid var(--mnpk-border);
+  border-radius: 18px;
+  background: var(--mnpk-card-bg);
+  color: var(--mnpk-text);
+}
+
+.mnpk-faq-item__q {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  list-style: none;
+  cursor: pointer;
+  margin: 0;
+  padding: 18px 56px 18px 18px;
+  color: var(--mnpk-text);
+  font-weight: 700;
+  line-height: 1.55;
+}
+
+.mnpk-faq-item__q::-webkit-details-marker {
+  display: none;
+}
+
+.mnpk-faq-item__q::before,
+.mnpk-faq-item__q::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 22px;
+  width: 16px;
+  height: 2px;
+  background: var(--mnpk-accent);
+  transform: translateY(-50%);
+  transition: transform 0.2s ease;
+}
+
+.mnpk-faq-item__q::after {
+  transform: translateY(-50%) rotate(90deg);
+}
+
+.mnpk-faq-item[open] .mnpk-faq-item__q::after {
+  transform: translateY(-50%) rotate(0deg);
+}
+
+.mnpk-faq-item__a {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 0 18px 18px;
+  color: var(--mnpk-muted);
+}
+
+.mnpk-faq-item__label {
+  flex: 0 0 28px;
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  background: var(--mnpk-accent-soft);
+  color: var(--mnpk-accent);
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.mnpk-faq-item__label.is-a {
+  background: var(--mnpk-surface-2);
+  color: var(--mnpk-heading);
+}
+
+.mnpk-faq-item__qtext,
+.mnpk-faq-item__atext {
+  min-width: 0;
+}
+
+/* =========================================================
+ * ※ 民泊サポートLP
+ * HTML:
+ * .minpaku-support-page.wakugui-page
+ * .wakugui-hero / .wakugui-split / .wakugui-card
+ * .wakugui-flow / .wakugui-contact
+ *
+ * 色は base の --mnpk-* を使う。
+ * ここではレイアウトだけを管理する。
+ * ========================================================= */
+
+.minpaku-support-page.wakugui-page {
+  padding: 24px 0 48px;
+  background: transparent;
+  color: var(--mnpk-text);
+}
+
+.minpaku-support-page .wakugui-hero-shell,
+.minpaku-support-page .wakugui-inner {
+  width: min(1320px, calc(100% - 48px));
+  margin-inline: auto;
+}
+
+.minpaku-support-page .wakugui-inner {
+  display: grid;
+  gap: 28px;
+  margin-top: 28px;
+}
+
+.minpaku-support-page .wakugui-section {
+  margin: 0;
+}
+
+.minpaku-support-page .wakugui-hero {
+  position: relative;
+  isolation: isolate;
+  min-height: clamp(420px, 42vw, 620px);
+  overflow: hidden;
+  border: 1px solid var(--mnpk-border);
+  border-radius: 30px;
+  background: var(--mnpk-hero-bg);
+  box-shadow: var(--mnpk-shadow);
+}
+
+.minpaku-support-page .wakugui-hero__media,
+.minpaku-support-page .wakugui-hero__media picture,
+.minpaku-support-page .wakugui-hero__media img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.minpaku-support-page .wakugui-hero__media img {
+  display: block;
+  object-fit: cover;
+}
+
+.minpaku-support-page .wakugui-hero__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: var(--mnpk-hero-overlay);
+  pointer-events: none;
+}
+
+.minpaku-support-page .wakugui-hero__content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: inherit;
+  width: min(820px, 100%);
+  padding: clamp(28px, 5vw, 64px);
+}
+
+.minpaku-support-page .wakugui-eyebrow {
+  margin: 0 0 12px;
+  color: var(--mnpk-accent);
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.minpaku-support-page .wakugui-hero .wakugui-eyebrow,
+.minpaku-support-page .wakugui-hero__title,
+.minpaku-support-page .wakugui-hero__text {
+  color: #fff;
+}
+
+.minpaku-support-page .wakugui-hero__title {
+  margin: 0;
+  color: var(--mnpk-hero-title);
+  font-size: clamp(32px, 4.5vw, 56px);
+  line-height: 1.08;
+  letter-spacing: -0.04em;
+  text-shadow: 0 4px 18px rgba(0, 0, 0, 0.30);
+}
+
+.minpaku-support-page .wakugui-hero__text {
+  max-width: 760px;
+  margin: 16px 0 0;
+  color: var(--mnpk-hero-text);
+  font-size: 16px;
+  line-height: 1.9;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.24);
+}
+
+.minpaku-support-page .wakugui-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(360px, 0.95fr);
+  gap: 24px;
+  align-items: stretch;
+}
+
+.minpaku-support-page .wakugui-split.is-reverse {
+  grid-template-columns: minmax(360px, 0.95fr) minmax(0, 1.05fr);
+}
+
+.minpaku-support-page .wakugui-split.is-reverse .wakugui-card--copy {
+  order: 2;
+}
+
+.minpaku-support-page .wakugui-split.is-reverse .wakugui-card--media {
+  order: 1;
+}
+
+.minpaku-support-page .wakugui-card,
+.minpaku-support-page .wakugui-flow-panel,
+.minpaku-support-page .wakugui-contact {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--mnpk-border);
+  border-radius: 28px;
+  background: var(--mnpk-surface);
+  color: var(--mnpk-text);
+  box-shadow: var(--mnpk-shadow-soft);
+}
+
+.minpaku-support-page .wakugui-card--copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(24px, 4vw, 44px);
+}
+
+.minpaku-support-page .wakugui-head {
+  display: grid;
+  gap: 12px;
+}
+
+.minpaku-support-page .wakugui-head--center {
+  max-width: 820px;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.minpaku-support-page .wakugui-head__title {
+  margin: 0;
+  color: var(--mnpk-heading);
+  font-size: clamp(24px, 3vw, 38px);
+  line-height: 1.25;
+  letter-spacing: -0.03em;
+}
+
+.minpaku-support-page .wakugui-head__text {
+  margin: 0;
+  color: var(--mnpk-muted);
+  font-size: 15px;
+  line-height: 1.9;
+}
+
+.minpaku-support-page .wakugui-card--media {
+  min-height: 320px;
+  background: var(--mnpk-card-bg);
+}
+
+.minpaku-support-page .wakugui-card__media-frame {
+  width: 100%;
+  height: 100%;
+  min-height: 320px;
+  overflow: hidden;
+  background: var(--mnpk-surface-2);
+}
+
+.minpaku-support-page .wakugui-card__media-frame img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: inherit;
+  object-fit: cover;
+}
+
+.minpaku-support-page .wakugui-flow-panel {
+  padding: clamp(24px, 4vw, 44px);
+}
+
+.minpaku-support-page .wakugui-flow {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.minpaku-support-page .wakugui-flow__item {
+  position: relative;
+  display: grid;
+  gap: 10px;
+  align-content: start;
+  min-width: 0;
+  padding: 20px;
+  border: 1px solid var(--mnpk-border);
+  border-radius: 20px;
+  background: var(--mnpk-card-bg);
+  box-shadow: var(--mnpk-shadow-soft);
+}
+
+.minpaku-support-page .wakugui-flow__item:not(:last-child)::after {
+  content: '→';
+  position: absolute;
+  top: 50%;
+  right: -20px;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  transform: translateY(-50%);
+  border: 1px solid var(--mnpk-border);
+  border-radius: 999px;
+  background: var(--mnpk-card-bg);
+  color: var(--mnpk-accent);
+  font-weight: 900;
+  box-shadow: var(--mnpk-shadow-soft);
+}
+
+.minpaku-support-page .wakugui-flow__step {
+  color: var(--mnpk-accent);
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.minpaku-support-page .wakugui-flow__label {
+  color: var(--mnpk-heading);
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1.55;
+}
+
+.minpaku-support-page .wakugui-contact {
+  isolation: isolate;
+  min-height: 360px;
+  display: grid;
+  place-items: center;
+  padding: clamp(28px, 5vw, 56px);
+  text-align: center;
+}
+
+.minpaku-support-page .wakugui-contact__media,
+.minpaku-support-page .wakugui-contact__media img,
+.minpaku-support-page .wakugui-contact__overlay {
+  position: absolute;
+  inset: 0;
+}
+
+.minpaku-support-page .wakugui-contact__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.minpaku-support-page .wakugui-contact__overlay {
+  z-index: 1;
+  background: var(--mnpk-hero-overlay);
+}
+
+.minpaku-support-page .wakugui-contact__inner {
+  position: relative;
+  z-index: 2;
+  width: min(820px, 100%);
+}
+
+.minpaku-support-page .wakugui-contact--has-image :is(.wakugui-eyebrow, .wakugui-head__title, .wakugui-head__text) {
+  color: #fff;
+}
+
+/* =========================================================
+ * 9. entry
+ * ========================================================= */
+
+.mnpk-page-entry {
+  overflow: hidden;
+}
+
+.mnpk-page-entry .mnpk-panel__inner {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.mnpk-page-entry .mnpk-panel__inner table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+}
+
+.mnpk-page-entry .mnpk-panel__inner iframe,
+.mnpk-page-entry .mnpk-panel__inner img,
+.mnpk-page-entry .mnpk-panel__inner video {
+  max-width: 100%;
+  height: auto;
+}
+
+/* =========================================================
+ * 10. responsive
+ * ========================================================= */
+
+@media (max-width: 1100px) {
+  .mnpk-page--unified .mnpk-card-grid,
+  .mnpk-page--unified .mnpk-guide-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .mnpk-compare-table {
+    min-width: 700px;
+  }
+
+  .minpaku-support-page .wakugui-flow {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .minpaku-support-page .wakugui-flow__item:nth-child(2n)::after {
+    content: none;
+    display: none;
+  }
+}
+
+@media (max-width: 991px) {
+  .mnpk-page,
+  .minpaku-support-page.wakugui-page {
+    padding: 22px 0 26px;
+  }
+
+  .mnpk-page-shell {
+    padding-inline: 20px;
+    gap: 22px;
+  }
+
+  .mnpk-panel__inner {
+    padding: 22px;
+  }
+
+  .mnpk-page-hero {
+    min-height: 300px;
+  }
+
+  .mnpk-page-hero__inner {
+    padding: 20px;
+  }
+
+  .mnpk-split {
+    grid-template-columns: 124px minmax(0, 1fr);
+    gap: 14px;
+  }
+
+  .mnpk-split__media {
+    width: 124px;
+    height: 124px;
+  }
+
+  .mnpk-page-cta.is-image-and-body .mnpk-split {
+    grid-template-columns: minmax(260px, 320px) minmax(0, 1fr);
+    min-height: 240px;
+  }
+
+  .mnpk-page-cta.is-image-and-body .mnpk-split__media {
+    min-height: 240px;
+  }
+
+  .minpaku-support-page .wakugui-split,
+  .minpaku-support-page .wakugui-split.is-reverse {
+    grid-template-columns: 1fr;
+  }
+
+  .minpaku-support-page .wakugui-split.is-reverse .wakugui-card--copy,
+  .minpaku-support-page .wakugui-split.is-reverse .wakugui-card--media {
+    order: initial;
+  }
+}
+
+@media (max-width: 767px) {
+  .mnpk-page,
+  .minpaku-support-page.wakugui-page {
+    padding: 18px 0 22px;
+  }
+
+  .mnpk-page-shell {
+    padding-inline: 12px;
+    gap: 18px;
+  }
+
+  .mnpk-panel__inner,
+  .mnpk-page--unified .mnpk-card.is-text-only,
+  .mnpk-page--unified .mnpk-guide-card.is-text-only {
+    padding: 16px;
+  }
+
+  .mnpk-page-hero {
+    min-height: 560px;
+  }
+
+  .mnpk-page-hero__inner {
+    align-items: flex-end;
+    padding: 16px;
+  }
+
+  .mnpk-page-hero__title {
+    font-size: clamp(24px, 8vw, 36px);
+    line-height: 1.14;
+  }
+
+  .mnpk-page-hero__lead {
+    margin-top: 12px;
+    font-size: 13px;
+    line-height: 1.7;
+  }
+
+  .mnpk-page-actions,
+  .mnpk-card__actions,
+  .wakugui-hero__actions,
+  .wakugui-card__actions,
+  .wakugui-contact__actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .mnpk-page-actions .mnpk-page-btn,
+  .mnpk-card__actions .mnpk-page-btn,
+  .ngw-btn.wakugui-btn {
+    width: 100%;
+    min-height: 48px;
+  }
+
+  .mnpk-split {
+    grid-template-columns: 104px minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  .mnpk-split__media {
+    width: 104px;
+    height: 104px;
+  }
+
+  .mnpk-page-cta.is-image-and-body .mnpk-panel__inner {
+    padding: 16px;
+  }
+
+  .mnpk-page-cta.is-image-and-body .mnpk-split {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    min-height: 0;
+  }
+
+  .mnpk-page-cta.is-image-and-body .mnpk-split__media {
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    aspect-ratio: 16 / 10;
+    border-radius: 20px;
+  }
+
+  .mnpk-page-cta.is-image-and-body .mnpk-split__body {
+    padding: 0;
+  }
+
+  .mnpk-page-cta.is-image-only .mnpk-panel__inner {
+    padding: 16px;
+  }
+
+  .mnpk-page-cta.is-image-only .mnpk-solo-media {
+    border-radius: 20px;
+  }
+
+  .mnpk-page--unified .mnpk-card-grid,
+  .mnpk-page--unified .mnpk-guide-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .mnpk-page--unified .mnpk-card__media,
+  .mnpk-page--unified .mnpk-guide-card__media {
+    height: 180px;
+  }
+
+  .mnpk-faq-item__q {
+    padding: 16px 48px 16px 16px;
+  }
+
+  .mnpk-faq-item__a {
+    padding: 0 16px 16px;
+  }
+
+  .mnpk-faq-item__label {
+    width: 24px;
+    height: 24px;
+    flex-basis: 24px;
+    font-size: 11px;
+  }
+
+  .mnpk-faq-item__q::before,
+  .mnpk-faq-item__q::after {
+    right: 18px;
+    width: 14px;
+  }
+
+  .mnpk-compare-table-wrap {
+    overflow: visible;
+  }
+
+  .mnpk-compare-table,
+  .mnpk-compare-table thead,
+  .mnpk-compare-table tbody,
+  .mnpk-compare-table tr,
+  .mnpk-compare-table th,
+  .mnpk-compare-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .mnpk-compare-table {
+    min-width: 0;
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+
+  .mnpk-compare-table tbody tr {
+    margin-bottom: 16px;
+  }
+
+  .mnpk-page-cta__video,
+  .mnpk-page-cta__slide {
+    min-height: 220px;
+  }
+
+  .mnpk-cta-swiper__nav {
+    width: 36px;
+    height: 36px;
+  }
+
+  .minpaku-support-page .wakugui-hero-shell,
+  .minpaku-support-page .wakugui-inner {
+    width: min(100%, calc(100% - 24px));
+  }
+
+  .minpaku-support-page .wakugui-hero {
+    min-height: 560px;
+  }
+
+  .minpaku-support-page .wakugui-hero__content {
+    padding: 18px;
+  }
+
+  .minpaku-support-page .wakugui-hero__title {
+    font-size: clamp(26px, 8vw, 38px);
+  }
+
+  .minpaku-support-page .wakugui-card--copy,
+  .minpaku-support-page .wakugui-flow-panel,
+  .minpaku-support-page .wakugui-contact {
+    padding: 20px;
+  }
+
+  .minpaku-support-page .wakugui-flow {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+
+  .minpaku-support-page .wakugui-flow__item:not(:last-child)::after {
+    content: '↓';
+    top: auto;
+    right: 50%;
+    bottom: -24px;
+    transform: translateX(50%);
+  }
+}
+
+
+/* === MPS WAKUGUI FLOW 5COL START === */
+/*
+ * ※ 民泊サポートLP Flow レイアウト調整
+ *
+ * 対象HTML:
+ * .minpaku-support-page
+ *   .wakugui-flow-panel
+ *     .wakugui-flow
+ *       .wakugui-flow__item
+ *
+ * 役割:
+ * - PCでは STEP 1〜5 を横1列にまとめる
+ * - 色は base の --mnpk-* を使う
+ * - ここではレイアウトだけ調整する
+ */
+
+.minpaku-support-page .wakugui-flow-panel {
+  padding: clamp(34px, 5vw, 64px) !important;
+}
+
+.minpaku-support-page .wakugui-flow {
+  display: grid !important;
+  grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+  gap: clamp(14px, 1.4vw, 22px) !important;
+  align-items: stretch !important;
+  margin-top: clamp(28px, 4vw, 48px) !important;
+}
+
+.minpaku-support-page .wakugui-flow__item {
+  position: relative !important;
+  display: grid !important;
+  align-content: center !important;
+  gap: 12px !important;
+
+  min-width: 0 !important;
+  min-height: 150px !important;
+  padding: clamp(18px, 1.8vw, 26px) !important;
+
+  border: 1px solid var(--mnpk-border) !important;
+  border-radius: 24px !important;
+  background: var(--mnpk-card-bg) !important;
+  color: var(--mnpk-text) !important;
+  box-shadow: var(--mnpk-shadow-soft) !important;
+}
+
+.minpaku-support-page .wakugui-flow__step {
+  display: block !important;
+  margin: 0 !important;
+
+  color: var(--mnpk-accent) !important;
+  font-size: clamp(13px, 1.1vw, 17px) !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.14em !important;
+  line-height: 1.2 !important;
+  text-transform: uppercase !important;
+}
+
+.minpaku-support-page .wakugui-flow__label {
+  display: block !important;
+  margin: 0 !important;
+
+  color: var(--mnpk-heading) !important;
+  font-size: clamp(17px, 1.35vw, 24px) !important;
+  font-weight: 900 !important;
+  line-height: 1.55 !important;
+  letter-spacing: -0.02em !important;
+}
+
+/* PC: 横並びの矢印 */
+.minpaku-support-page .wakugui-flow__item:not(:last-child)::after {
+  content: '→' !important;
+  position: absolute !important;
+  top: 50% !important;
+  right: -22px !important;
+  z-index: 5 !important;
+
+  display: grid !important;
+  place-items: center !important;
+
+  width: 42px !important;
+  height: 42px !important;
+  transform: translateY(-50%) !important;
+
+  border: 1px solid var(--mnpk-border) !important;
+  border-radius: 999px !important;
+  background: var(--mnpk-card-bg) !important;
+  color: var(--mnpk-accent) !important;
+
+  font-size: 20px !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+
+  box-shadow: var(--mnpk-shadow-soft) !important;
+  pointer-events: none !important;
+}
+
+/* 1200px未満: 3列 → 2段にする */
+@media (max-width: 1200px) {
+  .minpaku-support-page .wakugui-flow {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+
+  .minpaku-support-page .wakugui-flow__item:nth-child(3n)::after {
+    content: none !important;
+    display: none !important;
+  }
+}
+
+/* 900px未満: 2列 */
+@media (max-width: 900px) {
+  .minpaku-support-page .wakugui-flow {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .minpaku-support-page .wakugui-flow__item:nth-child(3n)::after {
+    content: '→' !important;
+    display: grid !important;
+  }
+
+  .minpaku-support-page .wakugui-flow__item:nth-child(2n)::after {
+    content: none !important;
+    display: none !important;
+  }
+}
+
+/* mobile: 1列 + 下向き矢印 */
+@media (max-width: 767px) {
+  .minpaku-support-page .wakugui-flow-panel {
+    padding: 20px !important;
+  }
+
+  .minpaku-support-page .wakugui-flow {
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+  }
+
+  .minpaku-support-page .wakugui-flow__item {
+    min-height: auto !important;
+    padding: 22px !important;
+  }
+
+  .minpaku-support-page .wakugui-flow__item:not(:last-child)::after,
+  .minpaku-support-page .wakugui-flow__item:nth-child(2n)::after,
+  .minpaku-support-page .wakugui-flow__item:nth-child(3n)::after {
+    content: '↓' !important;
+    top: auto !important;
+    right: 50% !important;
+    bottom: -24px !important;
+    display: grid !important;
+    transform: translateX(50%) !important;
+  }
+}
+
+/* === MPS WAKUGUI FLOW 5COL END === */
+
+
+/* === MPS CONTACT BUTTON CENTER START === */
+/*
+ * ※ 民泊サポートLP Contact ボタン中央配置
+ *
+ * 対象:
+ * .minpaku-support-page .wakugui-contact__actions
+ *
+ * 役割:
+ * - ContactセクションのCTAボタンを中央に置く
+ * - 色はbaseのまま
+ * - レイアウトだけ調整
+ */
+
+.minpaku-support-page .wakugui-contact__actions {
+  width: 100% !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  text-align: center !important;
+}
+
+.minpaku-support-page .wakugui-contact__actions .ngw-btn.wakugui-btn {
+  margin-inline: auto !important;
+}
+
+/* === MPS CONTACT BUTTON CENTER END === */
+
+
+/* === MPS WAKUGUI FLOW TEXT CENTER START === */
+/*
+ * ※ 民泊サポートLP Flow 文字位置調整
+ *
+ * 目的:
+ * - STEPカード内の文字を中央に揃える
+ * - 5列時に文字が大きすぎて汚く改行されるのを抑える
+ * - 色は base の --mnpk-* を使う
+ */
+
+.minpaku-support-page .wakugui-flow__item {
+  align-content: center !important;
+  justify-items: center !important;
+  text-align: center !important;
+  gap: 14px !important;
+  min-height: 170px !important;
+  padding: clamp(18px, 1.6vw, 24px) !important;
+}
+
+.minpaku-support-page .wakugui-flow__step {
+  width: 100% !important;
+  text-align: center !important;
+  color: var(--mnpk-accent) !important;
+  font-size: clamp(12px, 0.95vw, 15px) !important;
+  font-weight: 900 !important;
+  line-height: 1.2 !important;
+  letter-spacing: 0.16em !important;
+}
+
+.minpaku-support-page .wakugui-flow__label {
+  width: 100% !important;
+  max-width: 12em !important;
+  margin-inline: auto !important;
+
+  text-align: center !important;
+  color: var(--mnpk-heading) !important;
+
+  font-size: clamp(16px, 1.15vw, 21px) !important;
+  font-weight: 900 !important;
+  line-height: 1.55 !important;
+  letter-spacing: -0.02em !important;
+
+  /*
+   * 日本語の自動改行を少し自然にする。
+   * 対応ブラウザでは行のバランスも取る。
+   */
+  line-break: strict !important;
+  text-wrap: balance !important;
+  overflow-wrap: normal !important;
+}
+
+/* かなり広い画面だけ少し大きくする */
+@media (min-width: 1500px) {
+  .minpaku-support-page .wakugui-flow__label {
+    font-size: 22px !important;
+  }
+}
+
+/* 1200px未満は3列なので、少し読みやすく戻す */
+@media (max-width: 1200px) {
+  .minpaku-support-page .wakugui-flow__item {
+    min-height: 150px !important;
+  }
+
+  .minpaku-support-page .wakugui-flow__label {
+    max-width: 14em !important;
+    font-size: clamp(17px, 1.8vw, 22px) !important;
+  }
+}
+
+/* 900px未満は2列 */
+@media (max-width: 900px) {
+  .minpaku-support-page .wakugui-flow__label {
+    max-width: 16em !important;
+    font-size: 20px !important;
+  }
+}
+
+/* mobile は1列なので中央のまま、読みやすく */
+@media (max-width: 767px) {
+  .minpaku-support-page .wakugui-flow__item {
+    min-height: auto !important;
+    padding: 24px 20px !important;
+  }
+
+  .minpaku-support-page .wakugui-flow__label {
+    max-width: 100% !important;
+    font-size: 20px !important;
+    line-height: 1.5 !important;
+  }
+}
+
+/* === MPS WAKUGUI FLOW TEXT CENTER END === */
+
+/* =========================================================
+ * B2C MOBILE HERO CTA UNDER IMAGE FINAL
+ * 目的:
+ * - モバイルではCTAを画像の上に重ねない
+ * - 画像/動画/Swiperの下にボタンエリアを配置する
+ * - 色は minpaku-base.css の --mnpk-* を使う
+ * ========================================================= */
+
+.mnpk-page-btn.is-primary,
+.ngw-btn.wakugui-btn.is-primary {
+  color: var(--mnpk-button-primary-text, #fff);
+  background:
+    linear-gradient(
+      180deg,
+      var(--mnpk-button-primary-bg-2, var(--mnpk-accent-2, var(--mnpk-accent))) 0%,
+      var(--mnpk-button-primary-bg, var(--mnpk-accent)) 100%
+    );
+  border-color: var(--mnpk-button-primary-border, var(--mnpk-accent));
+}
+
+.mnpk-page-btn.is-secondary,
+.ngw-btn.wakugui-btn.is-secondary {
+  color: var(--mnpk-button-secondary-text, var(--mnpk-accent));
+  background: var(--mnpk-button-secondary-bg, var(--mnpk-surface));
+  border-color: var(--mnpk-button-secondary-border, var(--mnpk-border-strong));
+}
+
+/* 画像ありheroのPCだけ白系セカンダリにする */
+@media (min-width: 768px) {
+  .mnpk-page-hero:not(.is-no-image) .mnpk-page-btn.is-secondary,
+  .wakugui-hero .ngw-btn.wakugui-btn.is-secondary {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.42);
+  }
+}
+
+/* モバイル: CTAを画像の下に見せる */
+@media (max-width: 767px) {
+  .mnpk-page-hero.has-image,
+  .mnpk-page-hero.has-swiper,
+  .mnpk-page-hero.has-video {
+    --mnpk-mobile-hero-actions-h: 118px;
+    min-height: 560px;
+    background-color: var(--mnpk-surface, #fff);
+    background-position: top center;
+    background-repeat: no-repeat;
+    background-size: 100% calc(100% - var(--mnpk-mobile-hero-actions-h));
+  }
+
+  .mnpk-page-hero.has-swiper .mnpk-page-hero__media,
+  .mnpk-page-hero.has-video .mnpk-page-hero__media {
+    bottom: var(--mnpk-mobile-hero-actions-h);
+    height: auto;
+  }
+
+  .mnpk-page-hero.has-image .mnpk-page-hero__overlay,
+  .mnpk-page-hero.has-swiper .mnpk-page-hero__overlay,
+  .mnpk-page-hero.has-video .mnpk-page-hero__overlay {
+    bottom: var(--mnpk-mobile-hero-actions-h);
+  }
+
+  .mnpk-page-hero.has-image .mnpk-page-hero__inner,
+  .mnpk-page-hero.has-swiper .mnpk-page-hero__inner,
+  .mnpk-page-hero.has-video .mnpk-page-hero__inner {
+    position: relative;
+    display: block;
+    min-height: inherit;
+    padding: 18px;
+    padding-bottom: calc(var(--mnpk-mobile-hero-actions-h) + 18px);
+  }
+
+  .mnpk-page-hero.has-image .mnpk-page-hero__content,
+  .mnpk-page-hero.has-swiper .mnpk-page-hero__content,
+  .mnpk-page-hero.has-video .mnpk-page-hero__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    min-height: calc(560px - var(--mnpk-mobile-hero-actions-h) - 36px);
+    width: 100%;
+  }
+
+  .mnpk-page-hero.has-image .mnpk-page-actions,
+  .mnpk-page-hero.has-swiper .mnpk-page-actions,
+  .mnpk-page-hero.has-video .mnpk-page-actions {
+    position: absolute;
+    left: 18px;
+    right: 18px;
+    bottom: 18px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    z-index: 5;
+  }
+
+  .mnpk-page-hero .mnpk-page-btn {
+    width: 100%;
+    min-height: 44px;
+    border-radius: 999px;
+    font-weight: 800;
+  }
+
+  .mnpk-page-hero .mnpk-page-btn.is-primary {
+    color: var(--mnpk-button-primary-text, #fff);
+    background:
+      linear-gradient(
+        180deg,
+        var(--mnpk-button-primary-bg-2, var(--mnpk-accent-2, var(--mnpk-accent))) 0%,
+        var(--mnpk-button-primary-bg, var(--mnpk-accent)) 100%
+      );
+    border-color: var(--mnpk-button-primary-border, var(--mnpk-accent));
+  }
+
+  .mnpk-page-hero .mnpk-page-btn.is-secondary {
+    color: var(--mnpk-button-secondary-text, var(--mnpk-accent));
+    background: var(--mnpk-button-secondary-bg, var(--mnpk-surface));
+    border-color: var(--mnpk-button-secondary-border, var(--mnpk-border-strong));
+  }
+
+  /* 画像なしheroは通常の本文下ボタン */
+  .mnpk-page-hero.is-no-image {
+    min-height: 0;
+  }
+
+  .mnpk-page-hero.is-no-image .mnpk-page-hero__inner {
+    display: block;
+    min-height: 0;
+    padding: 20px 16px;
+  }
+
+  .mnpk-page-hero.is-no-image .mnpk-page-actions {
+    position: static;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid var(--mnpk-border, #d5e8ef);
+  }
+}
+
+/* =========================================================
+ * B2C HERO SECONDARY BUTTON VISIBLE FINAL
+ * 目的:
+ * - 2個目ボタンを透明にしない
+ * - モバイルではCTAを画像の下の白い帯に配置
+ * - base色トークンを使う
+ * ========================================================= */
+
+/* まず通常状態でも secondary を透明にしない */
+.mnpk-page-hero .mnpk-page-btn.is-secondary {
+  color: var(--mnpk-accent, #2f7fa2) !important;
+  background: var(--mnpk-surface, #ffffff) !important;
+  border-color: var(--mnpk-border-strong, #aaceda) !important;
+  opacity: 1 !important;
+}
+
+/* 画像ありheroで上書きされる白透明指定も潰す */
+.mnpk-page-hero:not(.is-no-image) .mnpk-page-btn.is-secondary {
+  color: var(--mnpk-accent, #2f7fa2) !important;
+  background: var(--mnpk-surface, #ffffff) !important;
+  border-color: var(--mnpk-border-strong, #aaceda) !important;
+}
+
+/* hover */
+.mnpk-page-hero .mnpk-page-btn.is-secondary:hover,
+.mnpk-page-hero .mnpk-page-btn.is-secondary:focus-visible {
+  color: var(--mnpk-accent-hover, #256b8b) !important;
+  background: var(--mnpk-accent-soft, #e4f2f7) !important;
+  border-color: var(--mnpk-accent, #2f7fa2) !important;
+}
+
+/* モバイル: 画像の下にCTA帯を作る */
+@media (max-width: 767px) {
+  .mnpk-page-hero.has-image,
+  .mnpk-page-hero.has-swiper,
+  .mnpk-page-hero.has-video {
+    --mnpk-mobile-hero-cta-height: 112px;
+    min-height: 560px !important;
+    background-color: var(--mnpk-surface, #ffffff) !important;
+    background-position: top center !important;
+    background-repeat: no-repeat !important;
+    background-size: 100% calc(100% - var(--mnpk-mobile-hero-cta-height)) !important;
+  }
+
+  .mnpk-page-hero.has-image .mnpk-page-hero__overlay,
+  .mnpk-page-hero.has-swiper .mnpk-page-hero__overlay,
+  .mnpk-page-hero.has-video .mnpk-page-hero__overlay {
+    bottom: var(--mnpk-mobile-hero-cta-height) !important;
+  }
+
+  .mnpk-page-hero.has-image .mnpk-page-hero__media,
+  .mnpk-page-hero.has-swiper .mnpk-page-hero__media,
+  .mnpk-page-hero.has-video .mnpk-page-hero__media {
+    bottom: var(--mnpk-mobile-hero-cta-height) !important;
+  }
+
+  .mnpk-page-hero.has-image .mnpk-page-hero__inner,
+  .mnpk-page-hero.has-swiper .mnpk-page-hero__inner,
+  .mnpk-page-hero.has-video .mnpk-page-hero__inner {
+    min-height: inherit !important;
+    padding: 18px !important;
+    padding-bottom: calc(var(--mnpk-mobile-hero-cta-height) + 18px) !important;
+  }
+
+  .mnpk-page-hero.has-image .mnpk-page-actions,
+  .mnpk-page-hero.has-swiper .mnpk-page-actions,
+  .mnpk-page-hero.has-video .mnpk-page-actions {
+    position: absolute !important;
+    left: 18px !important;
+    right: 18px !important;
+    bottom: 18px !important;
+    z-index: 5 !important;
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .mnpk-page-hero .mnpk-page-btn {
+    width: 100% !important;
+    min-height: 44px !important;
+    border-radius: 999px !important;
+    font-weight: 800 !important;
+    opacity: 1 !important;
+  }
+
+  .mnpk-page-hero .mnpk-page-btn.is-primary {
+    color: #ffffff !important;
+    background: var(--mnpk-accent, #2f7fa2) !important;
+    border-color: var(--mnpk-accent, #2f7fa2) !important;
+  }
+
+  .mnpk-page-hero .mnpk-page-btn.is-secondary {
+    color: var(--mnpk-accent, #2f7fa2) !important;
+    background: var(--mnpk-surface, #ffffff) !important;
+    border-color: var(--mnpk-border-strong, #aaceda) !important;
+  }
+}
+
+/* =========================================================
+ * B2C HERO MOBILE CTA POSITION FIX
+ * 目的:
+ * - モバイルでCTAを画像の下に置く
+ * - 2個目ボタンを透明にしない
+ * - ボタン幅と位置を中央で揃える
+ * ========================================================= */
+
+/* PC/共通: secondary を透明にしない */
+.mnpk-page-hero .mnpk-page-btn.is-secondary {
+  color: var(--mnpk-accent, #2f7fa2) !important;
+  background: var(--mnpk-surface, #ffffff) !important;
+  border-color: var(--mnpk-border-strong, #aaceda) !important;
+  opacity: 1 !important;
+}
+
+.mnpk-page-hero:not(.is-no-image) .mnpk-page-btn.is-secondary {
+  color: var(--mnpk-accent, #2f7fa2) !important;
+  background: var(--mnpk-surface, #ffffff) !important;
+  border-color: var(--mnpk-border-strong, #aaceda) !important;
+}
+
+/* mobile */
+@media (max-width: 767px) {
+  .mnpk-page-hero.has-image,
+  .mnpk-page-hero.has-video,
+  .mnpk-page-hero.has-swiper {
+    --mnpk-mobile-hero-cta-h: 118px;
+    min-height: 540px !important;
+    overflow: hidden;
+    background-color: var(--mnpk-surface, #fff) !important;
+    background-position: top center !important;
+    background-repeat: no-repeat !important;
+    background-size: 100% calc(100% - var(--mnpk-mobile-hero-cta-h)) !important;
+  }
+
+  .mnpk-page-hero.has-image .mnpk-page-hero__overlay,
+  .mnpk-page-hero.has-video .mnpk-page-hero__overlay,
+  .mnpk-page-hero.has-swiper .mnpk-page-hero__overlay {
+    bottom: var(--mnpk-mobile-hero-cta-h) !important;
+  }
+
+  .mnpk-page-hero.has-image .mnpk-page-hero__inner,
+  .mnpk-page-hero.has-video .mnpk-page-hero__inner,
+  .mnpk-page-hero.has-swiper .mnpk-page-hero__inner {
+    min-height: inherit !important;
+    padding: 18px !important;
+    padding-bottom: calc(var(--mnpk-mobile-hero-cta-h) + 18px) !important;
+  }
+
+  .mnpk-page-hero.has-image .mnpk-page-hero__content,
+  .mnpk-page-hero.has-video .mnpk-page-hero__content,
+  .mnpk-page-hero.has-swiper .mnpk-page-hero__content {
+    width: 100% !important;
+    min-height: calc(540px - var(--mnpk-mobile-hero-cta-h) - 36px) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-end !important;
+  }
+
+  .mnpk-page-hero.has-image .mnpk-page-actions,
+  .mnpk-page-hero.has-video .mnpk-page-actions,
+  .mnpk-page-hero.has-swiper .mnpk-page-actions {
+    position: absolute !important;
+    left: 18px !important;
+    right: 18px !important;
+    bottom: 16px !important;
+    z-index: 5 !important;
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    align-items: stretch !important;
+  }
+
+  .mnpk-page-hero .mnpk-page-btn {
+    width: 100% !important;
+    min-height: 44px !important;
+    padding: 0 18px !important;
+    border-radius: 999px !important;
+    font-size: 13px !important;
+    font-weight: 800 !important;
+    line-height: 1.2 !important;
+    opacity: 1 !important;
+  }
+
+  .mnpk-page-hero .mnpk-page-btn.is-primary {
+    color: #fff !important;
+    background: var(--mnpk-accent, #2f7fa2) !important;
+    border-color: var(--mnpk-accent, #2f7fa2) !important;
+  }
+
+  .mnpk-page-hero .mnpk-page-btn.is-secondary {
+    color: var(--mnpk-accent, #2f7fa2) !important;
+    background: var(--mnpk-surface, #fff) !important;
+    border-color: var(--mnpk-border-strong, #aaceda) !important;
+  }
+}
+
+/* =========================================================
+ * MINPAKU B2C FLOW COMMON
+ * 対象:
+ * - /minpaku-flow
+ * - その他B2C固定ページ内の .mnpk-page-flow
+ *
+ * 方針:
+ * - flow全体は mnpk-panel の枠を使う
+ * - 各STEPも枠線付きカードとして見せる
+ * - 色は base.css の変数を参照する
+ * ========================================================= */
+
+.mnpk-page .mnpk-page-flow {
+  overflow: visible;
+}
+
+.mnpk-page .mnpk-page-flow .mnpk-panel__inner {
+  padding: clamp(22px, 3vw, 34px);
+}
+
+.mnpk-page .mnpk-flow-track {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(18px, 2.4vw, 28px);
+  align-items: stretch;
+}
+
+.mnpk-page .mnpk-flow-step {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  min-height: 210px;
+  padding: clamp(20px, 2.4vw, 28px);
+  border: 1px solid var(--mnpk-border);
+  border-radius: 22px;
+  background: var(--mnpk-surface);
+  color: var(--mnpk-text);
+  box-shadow: var(--mnpk-shadow-soft, 0 7px 18px rgba(15, 23, 42, .055));
+}
+
+.mnpk-page .mnpk-flow-step__label {
+  margin: 0;
+  color: var(--mnpk-accent);
+  font-size: 12px;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+
+.mnpk-page .mnpk-flow-step h3 {
+  margin: 0;
+  color: var(--mnpk-heading);
+  font-size: clamp(20px, 2.2vw, 28px);
+  font-weight: 900;
+  line-height: 1.35;
+  letter-spacing: -0.025em;
+}
+
+.mnpk-page .mnpk-flow-step p:not(.mnpk-flow-step__label) {
+  margin: 0;
+  color: var(--mnpk-muted);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.75;
+}
+
+.mnpk-page .mnpk-flow-step::after {
+  content: "→";
+  position: absolute;
+  top: 50%;
+  right: -22px;
+  z-index: 2;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--mnpk-border);
+  border-radius: 999px;
+  background: var(--mnpk-surface);
+  color: var(--mnpk-accent);
+  font-size: 20px;
+  font-weight: 900;
+  line-height: 1;
+  transform: translateY(-50%);
+  box-shadow: var(--mnpk-shadow-soft, 0 7px 18px rgba(15, 23, 42, .055));
+}
+
+.mnpk-page .mnpk-flow-step:nth-child(3n)::after,
+.mnpk-page .mnpk-flow-step:last-child::after {
+  content: none;
+}
+
+@media (max-width: 900px) {
+  .mnpk-page .mnpk-flow-track {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .mnpk-page .mnpk-flow-step:nth-child(3n)::after {
+    content: "→";
+  }
+
+  .mnpk-page .mnpk-flow-step:nth-child(2n)::after,
+  .mnpk-page .mnpk-flow-step:last-child::after {
+    content: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .mnpk-page .mnpk-flow-track {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .mnpk-page .mnpk-flow-step {
+    min-height: 0;
+    padding: 18px;
+    border-radius: 18px;
+  }
+
+  .mnpk-page .mnpk-flow-step::after {
+    content: none !important;
+  }
+}
+
+
+/* =========================================================
+ * MNPK B2C COMPARE MOBILE FIX START
+ * ---------------------------------------------------------
+ * 対象:
+ * - B2C固定ページの比較表
+ * - .mnpk-compare-table
+ *
+ * 役割:
+ * - PCでは通常のtable表示
+ * - モバイルでは行ごとのカード表示に変換
+ * - 各セルに data-label の列名を表示する
+ *
+ * 注意:
+ * - 管理画面CSSではない
+ * - フロント側B2C CSS
+ * ========================================================= */
+
+.mnpk-compare-table-wrap {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.mnpk-compare-table {
+  width: 100%;
+  min-width: 720px;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.mnpk-compare-table th,
+.mnpk-compare-table td {
+  box-sizing: border-box;
+  vertical-align: top;
+}
+
+@media (max-width: 760px) {
+  .mnpk-compare-table-wrap {
+    overflow: visible;
+  }
+
+  .mnpk-compare-table {
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    border: 0;
+    border-spacing: 0;
+  }
+
+  .mnpk-compare-table thead {
+    display: none !important;
+  }
+
+  .mnpk-compare-table tbody {
+    display: grid !important;
+    gap: 12px;
+    width: 100%;
+  }
+
+  .mnpk-compare-table tr {
+    display: block !important;
+    width: 100%;
+    overflow: hidden;
+    border: 1px solid var(--mnpk-border, rgba(40, 127, 146, .18));
+    border-radius: 18px;
+    background: var(--mnpk-surface, #fff);
+    box-shadow: var(--mnpk-shadow-soft, 0 7px 18px rgba(15, 23, 42, .055));
+  }
+
+  .mnpk-compare-table__rowhead {
+    display: block !important;
+    width: 100% !important;
+    padding: 14px 16px;
+    border: 0 !important;
+    border-bottom: 1px solid var(--mnpk-border, rgba(40, 127, 146, .18)) !important;
+    background: var(--mnpk-accent-soft, #e5f3f6);
+    color: var(--mnpk-page-text, var(--mnpk-text, #172033));
+    font-size: 15px;
+    font-weight: 900;
+    line-height: 1.55;
+    text-align: left;
+  }
+
+  .mnpk-compare-table__cell {
+    display: grid !important;
+    grid-template-columns: minmax(82px, 32%) minmax(0, 1fr);
+    gap: 10px;
+    align-items: start;
+    width: 100% !important;
+    padding: 12px 16px;
+    border: 0 !important;
+    border-bottom: 1px solid var(--mnpk-border, rgba(40, 127, 146, .14)) !important;
+    background: var(--mnpk-surface, #fff);
+    color: var(--mnpk-page-text, var(--mnpk-text, #172033));
+    font-size: 14px;
+    line-height: 1.65;
+    text-align: left;
+  }
+
+  .mnpk-compare-table__cell:last-child {
+    border-bottom: 0 !important;
+  }
+
+  .mnpk-compare-table__cell::before {
+    content: attr(data-label);
+    min-width: 0;
+    color: var(--mnpk-accent-hover, #216b7b);
+    font-weight: 900;
+    line-height: 1.65;
+    word-break: keep-all;
+  }
+}
+
+@media (max-width: 420px) {
+  .mnpk-compare-table__cell {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+
+  .mnpk-compare-table__cell::before {
+    font-size: 13px;
+  }
+}
+
+/* MNPK B2C COMPARE MOBILE FIX END */
+
+
+
+/* =========================================================
+ * MNPK B2C SECTION BUILDER VISUAL ORDER START
+ * ---------------------------------------------------------
+ * 対象:
+ * - B2C固定ページ
+ * - minpaku/b2c/page.php が出力する各 .mnpk-page-section
+ *
+ * 役割:
+ * - _mpb_sections_json で保存した order をフロント表示順に反映する
+ * - HTMLのDOM順はまだ固定順のまま
+ * - 見た目上の表示順だけを安全に入れ替える stage2 対応
+ *
+ * 注意:
+ * - order は親が flex / grid の時だけ効く
+ * - ここで .mnpk-page-shell を縦方向 flex にして、各 section の order を有効化する
+ * - 次段階では page.php 側を render 関数化し、DOM順そのものも入れ替える
+ * ========================================================= */
+
+.mnpk-page-shell {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.mnpk-page-shell > .mnpk-page-section {
+  order: var(--mnpk-section-order, 999);
+}
+
+/* footer nav は通常、最後に置く */
+.mnpk-page-shell > .mnpk-footer-nav,
+.mnpk-page-shell > .minpaku-footer-nav {
+  order: 9999;
+}
+
+/* MNPK B2C SECTION BUILDER VISUAL ORDER END */
+
+
+/* =========================================================
+ * MNPK B2C CONTACT FORM CTA START
+ * ---------------------------------------------------------
+ * CTA内に既存問い合わせフォームテンプレートを表示する。
+ *
+ * 注意:
+ * - shortcodeではなく template-parts/contact/customer-info-form-inner.php を読み込む
+ * - B2CのCTAカード内でフォームが崩れないようにする
+ * ========================================================= */
+
+.mnpk-page-contact-form {
+  width: 100%;
+  margin-top: 18px;
+  padding: clamp(16px, 3vw, 24px);
+  border: 1px solid var(--mnpk-border, rgba(40, 127, 146, .18));
+  border-radius: 22px;
+  background: var(--mnpk-surface, #fff);
+}
+
+.mnpk-page-contact-form:first-child {
+  margin-top: 0;
+}
+
+.mnpk-page-contact-form__intro {
+  margin-bottom: 16px;
+}
+
+.mnpk-page-contact-form__intro h2 {
+  margin: 0 0 8px;
+}
+
+.mnpk-page-contact-form__intro p {
+  margin: 0;
+}
+
+.mnpk-page-contact-form__body input[type="text"],
+.mnpk-page-contact-form__body input[type="email"],
+.mnpk-page-contact-form__body input[type="tel"],
+.mnpk-page-contact-form__body input[type="url"],
+.mnpk-page-contact-form__body textarea,
+.mnpk-page-contact-form__body select {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.mnpk-page-contact-form__body textarea {
+  min-height: 140px;
+}
+
+/* MNPK B2C CONTACT FORM CTA END */
+
+
+/* =========================================================
+ * MNPK B2C CONTACT FORM CSS BRIDGE START
+ * ---------------------------------------------------------
+ * 対象:
+ * - B2C固定ページ CTA内の問い合わせフォーム
+ * - template-parts/contact/customer-info-form-inner.php を読み込んだ場合
+ *
+ * 役割:
+ * - 既存フォームHTMLはそのまま使う
+ * - B2C内で input / textarea / select / button が崩れないように整える
+ * - 他ページのフォームCSSには影響させない
+ *
+ * 注意:
+ * - 必ず .mnpk-page-contact-form 配下だけに限定する
+ * - B2Cの色トークンを使う
+ * ========================================================= */
+
+.mnpk-page-contact-form {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  margin-top: clamp(16px, 2.5vw, 24px);
+  padding: clamp(16px, 3vw, 28px);
+  border: 1px solid var(--mnpk-border, rgba(40, 127, 146, .18));
+  border-radius: 24px;
+  background: var(--mnpk-surface, #fff);
+  box-shadow: var(--mnpk-shadow-soft, 0 10px 26px rgba(15, 23, 42, .06));
+  color: var(--mnpk-page-text, var(--mnpk-text, #172033));
+}
+
+.mnpk-page-contact-form:first-child {
+  margin-top: 0;
+}
+
+.mnpk-page-contact-form *,
+.mnpk-page-contact-form *::before,
+.mnpk-page-contact-form *::after {
+  box-sizing: border-box;
+}
+
+.mnpk-page-contact-form__intro {
+  margin: 0 0 clamp(14px, 2vw, 20px);
+}
+
+.mnpk-page-contact-form__intro h2 {
+  margin: 0 0 8px;
+  color: var(--mnpk-page-text, var(--mnpk-text, #172033));
+  font-size: clamp(22px, 3vw, 32px);
+  line-height: 1.35;
+}
+
+.mnpk-page-contact-form__intro p {
+  margin: 0;
+  color: var(--mnpk-muted, #64788a);
+  line-height: 1.8;
+}
+
+.mnpk-page-contact-form__body {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+/*
+ * 既存フォーム側の wrapper/class が何であっても崩れにくくする。
+ * table/form/p/div/dl の混在を想定。
+ */
+.mnpk-page-contact-form__body form,
+.mnpk-page-contact-form__body .customer-info-form,
+.mnpk-page-contact-form__body .customer-info-form-inner,
+.mnpk-page-contact-form__body .contact-form,
+.mnpk-page-contact-form__body .form-wrap {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+}
+
+.mnpk-page-contact-form__body table {
+  width: 100%;
+  max-width: 100%;
+  border-collapse: collapse;
+}
+
+.mnpk-page-contact-form__body th,
+.mnpk-page-contact-form__body td {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  text-align: left;
+  vertical-align: top;
+}
+
+.mnpk-page-contact-form__body p,
+.mnpk-page-contact-form__body dl,
+.mnpk-page-contact-form__body dd,
+.mnpk-page-contact-form__body dt {
+  margin-top: 0;
+}
+
+.mnpk-page-contact-form__body label,
+.mnpk-page-contact-form__body th,
+.mnpk-page-contact-form__body dt {
+  display: block;
+  margin: 0 0 6px;
+  color: var(--mnpk-page-text, var(--mnpk-text, #172033));
+  font-weight: 800;
+  line-height: 1.6;
+}
+
+.mnpk-page-contact-form__body input[type="text"],
+.mnpk-page-contact-form__body input[type="email"],
+.mnpk-page-contact-form__body input[type="tel"],
+.mnpk-page-contact-form__body input[type="url"],
+.mnpk-page-contact-form__body input[type="number"],
+.mnpk-page-contact-form__body input[type="date"],
+.mnpk-page-contact-form__body input[type="time"],
+.mnpk-page-contact-form__body input[type="password"],
+.mnpk-page-contact-form__body textarea,
+.mnpk-page-contact-form__body select {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-height: 46px;
+  margin: 0 0 14px;
+  padding: 11px 13px;
+  border: 1px solid var(--mnpk-border, rgba(40, 127, 146, .24));
+  border-radius: 14px;
+  background: #fff;
+  color: var(--mnpk-page-text, var(--mnpk-text, #172033));
+  font: inherit;
+  line-height: 1.5;
+  box-shadow: none;
+  outline: none;
+}
+
+.mnpk-page-contact-form__body textarea {
+  min-height: 150px;
+  resize: vertical;
+}
+
+.mnpk-page-contact-form__body input:focus,
+.mnpk-page-contact-form__body textarea:focus,
+.mnpk-page-contact-form__body select:focus {
+  border-color: var(--mnpk-accent, #2b84a0);
+  box-shadow: 0 0 0 3px rgba(43, 132, 160, .16);
+}
+
+.mnpk-page-contact-form__body input[type="checkbox"],
+.mnpk-page-contact-form__body input[type="radio"] {
+  width: auto;
+  min-height: 0;
+  margin: 0 8px 0 0;
+  padding: 0;
+  vertical-align: middle;
+}
+
+.mnpk-page-contact-form__body .checkbox,
+.mnpk-page-contact-form__body .radio,
+.mnpk-page-contact-form__body .form-check {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  margin: 0 0 10px;
+}
+
+.mnpk-page-contact-form__body button,
+.mnpk-page-contact-form__body input[type="submit"],
+.mnpk-page-contact-form__body input[type="button"] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  max-width: 100%;
+  padding: 10px 20px;
+  border: 1px solid var(--mnpk-accent, #2b84a0);
+  border-radius: 999px;
+  background: var(--mnpk-accent, #2b84a0);
+  color: #fff;
+  font: inherit;
+  font-weight: 800;
+  line-height: 1.2;
+  text-decoration: none;
+  cursor: pointer;
+  appearance: none;
+}
+
+.mnpk-page-contact-form__body button:hover,
+.mnpk-page-contact-form__body input[type="submit"]:hover,
+.mnpk-page-contact-form__body input[type="button"]:hover {
+  filter: brightness(.96);
+}
+
+.mnpk-page-contact-form__body .required,
+.mnpk-page-contact-form__body .is-required,
+.mnpk-page-contact-form__body .must {
+  display: inline-flex;
+  align-items: center;
+  min-height: 20px;
+  margin-left: 6px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: #fff2f2;
+  color: #b42318;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.mnpk-page-contact-form__body .error,
+.mnpk-page-contact-form__body .form-error,
+.mnpk-page-contact-form__body .wpcf7-not-valid-tip {
+  margin-top: -8px;
+  margin-bottom: 12px;
+  color: #b42318;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.mnpk-page-contact-form__body .notice,
+.mnpk-page-contact-form__body .message,
+.mnpk-page-contact-form__body .wpcf7-response-output {
+  margin: 14px 0 0;
+  padding: 12px 14px;
+  border: 1px solid var(--mnpk-border, rgba(40, 127, 146, .18));
+  border-radius: 14px;
+  background: var(--mnpk-accent-soft, #e5f3f6);
+  color: var(--mnpk-page-text, var(--mnpk-text, #172033));
+}
+
+/* 既存フォームが横並びを持っている場合は、B2C内では安全に折り返す */
+.mnpk-page-contact-form__body .row,
+.mnpk-page-contact-form__body .form-row,
+.mnpk-page-contact-form__body .field-row,
+.mnpk-page-contact-form__body .form-group {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 0 14px;
+}
+
+@media (min-width: 860px) {
+  .mnpk-page-contact-form__body .form-row.is-2col,
+  .mnpk-page-contact-form__body .field-row.is-2col,
+  .mnpk-page-contact-form__body .form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+}
+
+@media (max-width: 760px) {
+  .mnpk-page-contact-form {
+    padding: 16px;
+    border-radius: 20px;
+  }
+
+  .mnpk-page-contact-form__body button,
+  .mnpk-page-contact-form__body input[type="submit"],
+  .mnpk-page-contact-form__body input[type="button"] {
+    width: 100%;
+  }
+}
+
+/* MNPK B2C CONTACT FORM CSS BRIDGE END */
+
+
+/* =========================================================
+ * MNPK B2C CTA CONTACT BG HARD START
+ * ---------------------------------------------------------
+ * B2C CTAを通常CTA / 問い合わせフォーム / 両方で表示する。
+ * 背景画像がある場合はCTAパネル背景として表示する。
+ * ========================================================= */
+
+.mnpk-page-cta--hard {
+  position: relative;
+  overflow: hidden;
+}
+
+.mnpk-page-cta--hard.has-bg-image {
+  background-image:
+    linear-gradient(90deg, rgba(11, 32, 45, .78), rgba(11, 32, 45, .42)),
+    var(--mnpk-cta-bg-image);
+  background-size: cover;
+  background-position: center;
+  color: #fff;
+}
+
+.mnpk-page-cta--hard.has-bg-image::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 20% 20%, rgba(255,255,255,.16), transparent 36%);
+  pointer-events: none;
+}
+
+.mnpk-page-cta--hard > .mnpk-panel__inner {
+  position: relative;
+  z-index: 1;
+}
+
+.mnpk-page-cta--hard.has-bg-image h2,
+.mnpk-page-cta--hard.has-bg-image p {
+  color: #fff;
+}
+
+.mnpk-page-cta--hard .mnpk-page-cta__content {
+  max-width: 760px;
+}
+
+.mnpk-page-contact-form {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  margin-top: clamp(16px, 2.5vw, 24px);
+  padding: clamp(16px, 3vw, 28px);
+  border: 1px solid var(--mnpk-border, rgba(40, 127, 146, .18));
+  border-radius: 22px;
+  background: var(--mnpk-surface, #fff);
+  color: var(--mnpk-page-text, var(--mnpk-text, #172033));
+  box-shadow: var(--mnpk-shadow-soft, 0 10px 26px rgba(15, 23, 42, .08));
+}
+
+.mnpk-page-contact-form:first-child {
+  margin-top: 0;
+}
+
+.mnpk-page-contact-form *,
+.mnpk-page-contact-form *::before,
+.mnpk-page-contact-form *::after {
+  box-sizing: border-box;
+}
+
+.mnpk-page-contact-form__intro {
+  margin-bottom: 16px;
+}
+
+.mnpk-page-contact-form__body form {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+}
+
+.mnpk-page-contact-form__body input[type="text"],
+.mnpk-page-contact-form__body input[type="email"],
+.mnpk-page-contact-form__body input[type="tel"],
+.mnpk-page-contact-form__body input[type="url"],
+.mnpk-page-contact-form__body input[type="number"],
+.mnpk-page-contact-form__body input[type="date"],
+.mnpk-page-contact-form__body textarea,
+.mnpk-page-contact-form__body select {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-height: 46px;
+  margin: 0 0 14px;
+  padding: 11px 13px;
+  border: 1px solid var(--mnpk-border, rgba(40, 127, 146, .24));
+  border-radius: 14px;
+  background: #fff;
+  color: var(--mnpk-page-text, var(--mnpk-text, #172033));
+  font: inherit;
+}
+
+.mnpk-page-contact-form__body textarea {
+  min-height: 150px;
+  resize: vertical;
+}
+
+.mnpk-page-contact-form__body button,
+.mnpk-page-contact-form__body input[type="submit"],
+.mnpk-page-contact-form__body input[type="button"] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  padding: 10px 20px;
+  border: 1px solid var(--mnpk-accent, #2b84a0);
+  border-radius: 999px;
+  background: var(--mnpk-accent, #2b84a0);
+  color: #fff;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+@media (max-width: 760px) {
+  .mnpk-page-contact-form__body button,
+  .mnpk-page-contact-form__body input[type="submit"],
+  .mnpk-page-contact-form__body input[type="button"] {
+    width: 100%;
+  }
+}
+
+/* MNPK B2C CTA CONTACT BG HARD END */
+
+
+/* =========================================================
+ * B2C CTA media background layer
+ * ---------------------------------------------------------
+ * 目的:
+ * - 既存HTMLを壊さず、CTAの単体画像 / swiper / mp4 を背景のように見せる
+ * - page.php は .mnpk-split__media--cta に media を出しているため、
+ *   その media を absolute レイヤーにする
+ * - フォームモード .is-form-only は既存フォームCSSを使うため対象外
+ * ========================================================= */
+
+.mnpk-page-cta.is-image-and-body {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.mnpk-page-cta.is-image-and-body > .mnpk-panel__inner {
+  position: relative;
+  min-height: clamp(320px, 42vw, 560px);
+  overflow: hidden;
+}
+
+.mnpk-page-cta.is-image-and-body > .mnpk-panel__inner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(8, 20, 28, 0.72), rgba(8, 20, 28, 0.42) 45%, rgba(8, 20, 28, 0.18));
+}
+
+.mnpk-page-cta.is-image-and-body .mnpk-split {
+  display: block;
+  min-height: inherit;
+}
+
+.mnpk-page-cta.is-image-and-body .mnpk-split__media--cta {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  overflow: hidden;
+}
+
+.mnpk-page-cta.is-image-and-body .mnpk-page-cta__media,
+.mnpk-page-cta.is-image-and-body .mnpk-cta-swiper,
+.mnpk-page-cta.is-image-and-body .mnpk-cta-swiper .swiper-wrapper,
+.mnpk-page-cta.is-image-and-body .mnpk-cta-swiper .swiper-slide {
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+}
+
+.mnpk-page-cta.is-image-and-body .mnpk-page-cta__media.is-image img,
+.mnpk-page-cta.is-image-and-body .mnpk-cta-swiper img,
+.mnpk-page-cta.is-image-and-body .mnpk-page-cta__video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* CTA本文・ボタンを背景の上へ */
+.mnpk-page-cta.is-image-and-body .mnpk-split__body {
+  position: relative;
+  z-index: 2;
+  width: min(720px, 100%);
+  min-height: inherit;
+  display: flex;
+  align-items: center;
+  padding: clamp(28px, 5vw, 72px);
+  color: #fff;
+}
+
+.mnpk-page-cta.is-image-and-body .mnpk-content-block {
+  width: min(680px, 100%);
+}
+
+.mnpk-page-cta.is-image-and-body .mnpk-content-block h2,
+.mnpk-page-cta.is-image-and-body .mnpk-content-block p {
+  color: #fff;
+}
+
+.mnpk-page-cta.is-image-and-body .mnpk-page-actions {
+  margin-top: 24px;
+}
+
+/* 背景CTA上のボタンは読みやすくする */
+.mnpk-page-cta.is-image-and-body .mnpk-page-btn.is-secondary {
+  background: rgba(255, 255, 255, 0.92);
+  border-color: rgba(255, 255, 255, 0.92);
+}
+
+/* swiperのページャー・矢印を背景CTA内に乗せる */
+.mnpk-page-cta.is-image-and-body .swiper-pagination,
+.mnpk-page-cta.is-image-and-body .mnpk-cta-swiper__pagination {
+  position: absolute;
+  z-index: 3;
+  left: 0;
+  right: 0;
+  bottom: 18px;
+}
+
+.mnpk-page-cta.is-image-and-body .swiper-button-prev,
+.mnpk-page-cta.is-image-and-body .swiper-button-next,
+.mnpk-page-cta.is-image-and-body .mnpk-cta-swiper__nav {
+  z-index: 4;
+}
+
+/* フォームモードは既存フォームCSSをそのまま使う */
+.mnpk-page-cta.is-form-only > .mnpk-panel__inner {
+  padding: 0;
+}
+
+.mnpk-page-cta.is-form-only .customer-info-page,
+.mnpk-page-cta.is-form-only .customer-info-form-wrap {
+  width: 100%;
+  max-width: none;
+}
+
+/* mobile */
+@media (max-width: 760px) {
+  .mnpk-page-cta.is-image-and-body > .mnpk-panel__inner {
+    min-height: 420px;
+  }
+
+  .mnpk-page-cta.is-image-and-body > .mnpk-panel__inner::before {
+    background: linear-gradient(180deg, rgba(8, 20, 28, 0.72), rgba(8, 20, 28, 0.40));
+  }
+
+  .mnpk-page-cta.is-image-and-body .mnpk-split__body {
+    align-items: flex-end;
+    padding: 28px 22px;
+  }
+}
+
+/* =========================================================
+ * B2C CTA HEIGHT COMPACT FINAL
+ * ---------------------------------------------------------
+ * CTA背景画像 / swiper / mp4 の高さを下げる。
+ * 画像幅・swiper構造・ボタン構造は触らない。
+ * ========================================================= */
+
+body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body > .mnpk-panel__inner,
+body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body > .mnpk-panel__inner {
+  min-height: clamp(220px, 26vw, 360px) !important;
+}
+
+body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body .mnpk-split__body,
+body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body .mnpk-split__body {
+  padding: clamp(22px, 3.5vw, 46px) !important;
+}
+
+body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body .mnpk-content-block h2,
+body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body .mnpk-content-block h2 {
+  margin-bottom: 12px !important;
+  font-size: clamp(1.35rem, 2.4vw, 2rem) !important;
+}
+
+body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body .mnpk-content-block p,
+body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body .mnpk-content-block p {
+  margin-bottom: 18px !important;
+  font-size: clamp(0.95rem, 1.4vw, 1.08rem) !important;
+}
+
+body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body .mnpk-page-actions,
+body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body .mnpk-page-actions {
+  margin-top: 18px !important;
+}
+
+@media (max-width: 760px) {
+  body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body > .mnpk-panel__inner,
+  body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body > .mnpk-panel__inner {
+    min-height: 300px !important;
+  }
+
+  body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body .mnpk-split__body,
+  body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body .mnpk-split__body {
+    padding: 22px !important;
+  }
+}
+
+
+/* =========================================================
+ * B2C CTA FINAL DISPLAY RULE
+ * ---------------------------------------------------------
+ * 単体画像 / mp4:
+ * - 背景CTAとして表示
+ *
+ * swiper:
+ * - 背景にしない
+ * - 左: swiper
+ * - 右: CTAタイトル・説明・ボタン
+ *
+ * contact form:
+ * - customer-info-* の元CSSを使う
+ * - CTA背景CSSを当てない
+ * ========================================================= */
+
+/* 共通: 背景CTAの高さを抑える */
+body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body > .mnpk-panel__inner,
+body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body > .mnpk-panel__inner {
+  min-height: clamp(220px, 24vw, 340px) !important;
+}
+
+/* 単体画像 / mp4 は背景として枠いっぱいに表示 */
+body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body .mnpk-page-cta__media.is-image img,
+body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body .mnpk-page-cta__video,
+body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body .mnpk-page-cta__media.is-image img,
+body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body .mnpk-page-cta__video {
+  object-fit: cover !important;
+  object-position: center center !important;
+}
+
+/* swiperだけは背景化しない。左右2分割に戻す */
+@supports selector(:has(*)) {
+  body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper) > .mnpk-panel__inner,
+  body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper) > .mnpk-panel__inner {
+    min-height: clamp(280px, 32vw, 420px) !important;
+    padding: 0 !important;
+    background: var(--mnpk-surface, #fff) !important;
+  }
+
+  body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper) > .mnpk-panel__inner::before,
+  body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper) > .mnpk-panel__inner::before {
+    display: none !important;
+  }
+
+  body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper) .mnpk-split,
+  body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper) .mnpk-split {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+    min-height: inherit !important;
+  }
+
+  body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper) .mnpk-split__media--cta,
+  body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper) .mnpk-split__media--cta {
+    position: relative !important;
+    inset: auto !important;
+    z-index: 1 !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: inherit !important;
+  }
+
+  body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper) .mnpk-split__body,
+  body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper) .mnpk-split__body {
+    position: relative !important;
+    z-index: 2 !important;
+    width: 100% !important;
+    min-height: inherit !important;
+    padding: clamp(28px, 4vw, 56px) !important;
+    display: flex !important;
+    align-items: center !important;
+    color: var(--mnpk-text, #182733) !important;
+    background: var(--mnpk-surface, #fff) !important;
+  }
+
+  body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper) .mnpk-content-block h2,
+  body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper) .mnpk-content-block p,
+  body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper) .mnpk-content-block h2,
+  body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper) .mnpk-content-block p {
+    color: var(--mnpk-text, #182733) !important;
+  }
+
+  body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper) .mnpk-cta-swiper,
+  body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper) .mnpk-cta-swiper .swiper-wrapper,
+  body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper) .mnpk-cta-swiper .swiper-slide,
+  body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper) .mnpk-cta-swiper,
+  body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper) .mnpk-cta-swiper .swiper-wrapper,
+  body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper) .mnpk-cta-swiper .swiper-slide {
+    height: 100% !important;
+    min-height: inherit !important;
+  }
+
+  body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper) .mnpk-cta-swiper img,
+  body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper) .mnpk-cta-swiper img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center center !important;
+  }
+
+  @media (max-width: 760px) {
+    body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper) .mnpk-split,
+    body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper) .mnpk-split {
+      grid-template-columns: 1fr !important;
+    }
+
+    body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper) .mnpk-split__media--cta,
+    body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper) .mnpk-split__media--cta {
+      min-height: 220px !important;
+    }
+  }
+}
+
+/* contact form は元のCSSを使う。CTA背景化の影響を切る */
+body.page-template-page-minpaku-b2c .mnpk-page-cta.is-form-only,
+body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-form-only {
+  background: transparent !important;
+}
+
+body.page-template-page-minpaku-b2c .mnpk-page-cta.is-form-only > .mnpk-panel__inner,
+body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-form-only > .mnpk-panel__inner {
+  padding: 0 !important;
+  min-height: 0 !important;
+}
+
+body.page-template-page-minpaku-b2c .mnpk-page-cta.is-form-only .customer-info-page,
+body.page-template-page-minpaku-b2c .mnpk-page-cta.is-form-only .customer-info-form-wrap,
+body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-form-only .customer-info-page,
+body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-form-only .customer-info-form-wrap {
+  width: 100% !important;
+  max-width: none !important;
+}
+
+
+/* =========================================================
+ * B2C CTA CLASS DISPLAY FINAL
+ * ---------------------------------------------------------
+ * has-cta-image:
+ * - 単体画像を背景風に表示
+ *
+ * has-cta-video:
+ * - mp4を背景風に表示
+ *
+ * has-cta-swiper:
+ * - 左swiper / 右CTA文章・ボタン の2分割
+ *
+ * is-form-only:
+ * - contact form 元CSSを使う
+ * ========================================================= */
+
+/* 単体画像 / mp4 背景CTA */
+body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body.has-cta-image,
+body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body.has-cta-video,
+body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta-image,
+body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta-video {
+  position: relative !important;
+  overflow: hidden !important;
+  isolation: isolate !important;
+}
+
+body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body.has-cta-image > .mnpk-panel__inner,
+body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body.has-cta-video > .mnpk-panel__inner,
+body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta-image > .mnpk-panel__inner,
+body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta-video > .mnpk-panel__inner {
+  position: relative !important;
+  min-height: clamp(220px, 24vw, 340px) !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+
+body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body.has-cta-image > .mnpk-panel__inner::before,
+body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body.has-cta-video > .mnpk-panel__inner::before,
+body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta-image > .mnpk-panel__inner::before,
+body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta-video > .mnpk-panel__inner::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 1 !important;
+  pointer-events: none !important;
+  background: linear-gradient(90deg, rgba(7,18,28,.72), rgba(7,18,28,.42) 48%, rgba(7,18,28,.14)) !important;
+}
+
+body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body.has-cta-image .mnpk-split,
+body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body.has-cta-video .mnpk-split,
+body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta-image .mnpk-split,
+body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta-video .mnpk-split {
+  display: block !important;
+  min-height: inherit !important;
+}
+
+body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body.has-cta-image .mnpk-split__media--cta,
+body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body.has-cta-video .mnpk-split__media--cta,
+body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta-image .mnpk-split__media--cta,
+body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta-video .mnpk-split__media--cta {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  overflow: hidden !important;
+}
+
+body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body.has-cta-image .mnpk-page-cta__media,
+body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body.has-cta-video .mnpk-page-cta__media,
+body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta-image .mnpk-page-cta__media,
+body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta-video .mnpk-page-cta__media {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 100% !important;
+  margin: 0 !important;
+}
+
+body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body.has-cta-image .mnpk-page-cta__media img,
+body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body.has-cta-video .mnpk-page-cta__video,
+body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta-image .mnpk-page-cta__media img,
+body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta-video .mnpk-page-cta__video {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center center !important;
+}
+
+/* 背景CTAの本文 */
+body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body.has-cta-image .mnpk-split__body,
+body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body.has-cta-video .mnpk-split__body,
+body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta-image .mnpk-split__body,
+body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta-video .mnpk-split__body {
+  position: relative !important;
+  z-index: 2 !important;
+  min-height: inherit !important;
+  width: min(760px, 100%) !important;
+  display: flex !important;
+  align-items: center !important;
+  padding: clamp(26px, 4vw, 56px) !important;
+  color: #fff !important;
+}
+
+body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body.has-cta-image .mnpk-content-block h2,
+body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body.has-cta-image .mnpk-content-block p,
+body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body.has-cta-video .mnpk-content-block h2,
+body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body.has-cta-video .mnpk-content-block p,
+body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta-image .mnpk-content-block h2,
+body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta-image .mnpk-content-block p,
+body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta-video .mnpk-content-block h2,
+body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta-video .mnpk-content-block p {
+  color: #fff !important;
+}
+
+/* swiperは左右2分割 */
+body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body.has-cta-swiper > .mnpk-panel__inner,
+body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta-swiper > .mnpk-panel__inner {
+  min-height: clamp(280px, 32vw, 420px) !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  background: var(--mnpk-surface, #fff) !important;
+}
+
+body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body.has-cta-swiper > .mnpk-panel__inner::before,
+body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta-swiper > .mnpk-panel__inner::before {
+  display: none !important;
+}
+
+body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body.has-cta-swiper .mnpk-split,
+body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta-swiper .mnpk-split {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+  min-height: inherit !important;
+}
+
+body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body.has-cta-swiper .mnpk-split__media--cta,
+body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta-swiper .mnpk-split__media--cta {
+  position: relative !important;
+  inset: auto !important;
+  z-index: 1 !important;
+  width: 100% !important;
+  min-height: inherit !important;
+  overflow: hidden !important;
+}
+
+body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body.has-cta-swiper .mnpk-cta-swiper,
+body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body.has-cta-swiper .mnpk-cta-swiper .swiper-wrapper,
+body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body.has-cta-swiper .mnpk-cta-swiper .swiper-slide,
+body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta-swiper .mnpk-cta-swiper,
+body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta-swiper .mnpk-cta-swiper .swiper-wrapper,
+body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta-swiper .mnpk-cta-swiper .swiper-slide {
+  height: 100% !important;
+  min-height: inherit !important;
+}
+
+body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body.has-cta-swiper .mnpk-cta-swiper img,
+body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta-swiper .mnpk-cta-swiper img {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}
+
+body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body.has-cta-swiper .mnpk-split__body,
+body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta-swiper .mnpk-split__body {
+  position: relative !important;
+  z-index: 2 !important;
+  width: 100% !important;
+  min-height: inherit !important;
+  display: flex !important;
+  align-items: center !important;
+  padding: clamp(28px, 4vw, 56px) !important;
+  color: var(--mnpk-text, #182733) !important;
+  background: var(--mnpk-surface, #fff) !important;
+}
+
+body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body.has-cta-swiper .mnpk-content-block h2,
+body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body.has-cta-swiper .mnpk-content-block p,
+body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta-swiper .mnpk-content-block h2,
+body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta-swiper .mnpk-content-block p {
+  color: var(--mnpk-text, #182733) !important;
+}
+
+/* contact formは元CSSへ戻す */
+body.page-template-page-minpaku-b2c .mnpk-page-cta.is-form-only > .mnpk-panel__inner,
+body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-form-only > .mnpk-panel__inner {
+  padding: 0 !important;
+  min-height: 0 !important;
+}
+
+body.page-template-page-minpaku-b2c .mnpk-page-cta.is-form-only .customer-info-page,
+body.page-template-page-minpaku-b2c .mnpk-page-cta.is-form-only .customer-info-form-wrap,
+body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-form-only .customer-info-page,
+body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-form-only .customer-info-form-wrap {
+  width: 100% !important;
+  max-width: none !important;
+}
+
+@media (max-width: 760px) {
+  body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body.has-cta-swiper .mnpk-split,
+  body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta-swiper .mnpk-split {
+    grid-template-columns: 1fr !important;
+  }
+
+  body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body.has-cta-swiper .mnpk-split__media--cta,
+  body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta-swiper .mnpk-split__media--cta {
+    min-height: 220px !important;
+  }
+}
+
+/* === END B2C CTA CLASS DISPLAY FINAL === */
+

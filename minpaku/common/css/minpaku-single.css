@@ -1,0 +1,966 @@
+/* =========================================================
+ * minpaku-single.css
+ * 民泊 詳細ページ / checkout 骨組みCSS
+ *
+ * 方針:
+ * - このCSSは single-minpaku.php / checkout の骨組みだけ
+ * - 色は minpaku-base.css の --mnpk-* を参照
+ * - 独自色トークンは作らない
+ * - カード中身は基本 var(--mnpk-surface)
+ * - 塗るのは button / chip / pill / label だけ
+ * - 予約モーダルのカレンダー細部は minpaku-booking.css
+ * ========================================================= */
+
+
+/* =========================================================
+ * 01. base
+ * ========================================================= */
+
+.mnpk-single-page,
+.mnpk-checkout-page {
+  min-width: 0;
+  color: var(--mnpk-text);
+}
+
+.mnpk-single-page *,
+.mnpk-checkout-page * {
+  box-sizing: border-box;
+}
+
+.mnpk-single-page {
+  padding-bottom: 80px;
+}
+
+.mnpk-checkout-page {
+  padding-bottom: 64px;
+}
+
+.mnpk-single-page img,
+.mnpk-checkout-page img {
+  display: block;
+  max-width: 100%;
+}
+
+.mnpk-single-page button,
+.mnpk-single-page input,
+.mnpk-single-page select,
+.mnpk-single-page textarea,
+.mnpk-checkout-page button,
+.mnpk-checkout-page input,
+.mnpk-checkout-page select,
+.mnpk-checkout-page textarea {
+  font: inherit;
+}
+
+
+/* =========================================================
+ * 02. page header
+ * ========================================================= */
+
+.mnpk-head,
+.mnpk-checkout-page-head {
+  padding: 28px 0 18px;
+}
+
+.mnpk-head__row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.mnpk-head__main {
+  min-width: 0;
+}
+
+.mnpk-title,
+.mnpk-checkout-page__title,
+.mnpk-checkout-screen__title {
+  margin: 0;
+  color: var(--mnpk-heading);
+  font-size: clamp(28px, 4vw, 42px);
+  line-height: 1.14;
+}
+
+.mnpk-meta-line,
+.mnpk-lead {
+  color: var(--mnpk-muted);
+}
+
+.mnpk-meta-line {
+  margin-top: 10px;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.mnpk-lead {
+  max-width: 900px;
+  margin: 14px 0 0;
+  font-size: 15px;
+  line-height: 1.85;
+}
+
+.mnpk-back-wrap {
+  margin-bottom: 14px;
+}
+
+
+/* =========================================================
+ * 03. common cards / section
+ * ========================================================= */
+
+.mnpk-card,
+.mnpk-summary-card,
+.mnpk-booking-card,
+.mnpk-checkout-stay-card,
+.mnpk-checkout-payment-card,
+.mnpk-summary-box,
+.mnpk-price-breakdown,
+.mnpk-accepted-methods,
+.mnpk-note-block,
+.mnpk-overview-grid__item,
+.mnpk-panorama__viewer-wrap {
+  min-width: 0;
+  border: 1px solid var(--mnpk-border);
+  border-radius: 22px;
+  background: var(--mnpk-surface);
+  color: var(--mnpk-text);
+  box-shadow: none;
+}
+
+.mnpk-card {
+  padding: 24px;
+}
+
+.mnpk-section-head {
+  display: grid;
+  gap: 8px;
+  margin: 0 0 18px;
+}
+
+.mnpk-section-kicker,
+.mnpk-chip,
+.mnpk-amenity,
+.mnpk-payment-pill,
+.mnpk-field-button__label,
+.mnpk-checkout-stay-card__kicker {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  min-height: 30px;
+  padding: 6px 11px;
+  border: 1px solid var(--mnpk-border);
+  border-radius: 999px;
+  background: var(--mnpk-accent-soft);
+  color: var(--mnpk-heading);
+  font-size: 12px;
+  font-weight: 900;
+  line-height: 1.2;
+}
+
+.mnpk-section-title {
+  margin: 0;
+  color: var(--mnpk-heading);
+  font-size: clamp(24px, 3vw, 34px);
+  line-height: 1.22;
+}
+
+.mnpk-content-body {
+  color: var(--mnpk-text);
+  font-size: 15px;
+  line-height: 1.9;
+}
+
+.mnpk-content-body > *:first-child {
+  margin-top: 0;
+}
+
+.mnpk-content-body > *:last-child {
+  margin-bottom: 0;
+}
+
+
+/* =========================================================
+ * 04. gallery
+ * ========================================================= */
+
+.mnpk-hero {
+  padding: 0 0 36px;
+}
+
+.mnpk-hero__inner {
+  width: 100%;
+  padding-inline: 16px;
+}
+
+.mnpk-gallery-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 12px;
+}
+
+.mnpk-gallery-desktop {
+  display: block;
+}
+
+.mnpk-gallery-mobile {
+  display: none;
+}
+
+.mnpk-gallery-grid {
+  display: grid;
+  gap: 8px;
+  padding: 8px;
+  border: 1px solid var(--mnpk-border);
+  border-radius: 26px;
+  background: var(--mnpk-surface);
+  overflow: hidden;
+}
+
+.mnpk-gallery-grid--1 {
+  grid-template-columns: 1fr;
+  grid-template-rows: 560px;
+}
+
+.mnpk-gallery-grid--2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: 560px;
+}
+
+.mnpk-gallery-grid--3,
+.mnpk-gallery-grid--4,
+.mnpk-gallery-grid--5 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-rows: repeat(2, 272px);
+}
+
+.mnpk-gallery-grid--6,
+.mnpk-gallery-grid--more {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-rows: repeat(3, 178px);
+}
+
+.mnpk-gallery-grid--3 .mnpk-gallery-item:first-child,
+.mnpk-gallery-grid--4 .mnpk-gallery-item:first-child,
+.mnpk-gallery-grid--5 .mnpk-gallery-item:first-child {
+  grid-column: 1 / span 2;
+  grid-row: 1 / span 2;
+}
+
+.mnpk-gallery-grid--4 .mnpk-gallery-item:nth-child(4) {
+  grid-column: 3 / span 2;
+}
+
+.mnpk-gallery-grid--6 .mnpk-gallery-item:first-child,
+.mnpk-gallery-grid--more .mnpk-gallery-item:first-child {
+  grid-column: 1 / span 2;
+  grid-row: 1 / span 3;
+}
+
+.mnpk-gallery-grid--6 .mnpk-gallery-item:nth-child(6),
+.mnpk-gallery-grid--more .mnpk-gallery-item:nth-child(6) {
+  grid-column: 3 / span 2;
+}
+
+.mnpk-gallery-item,
+.mnpk-gallery-mobile__button {
+  position: relative;
+  min-width: 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background: var(--mnpk-surface-2);
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.mnpk-gallery-item img,
+.mnpk-gallery-mobile__button img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mnpk-gallery-count-badge {
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  min-height: 38px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: var(--mnpk-accent);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 900;
+}
+
+.mnpk-gallery-swiper {
+  border: 1px solid var(--mnpk-border);
+  border-radius: 24px;
+  background: var(--mnpk-surface);
+  overflow: hidden;
+}
+
+.mnpk-gallery-swiper .swiper-slide {
+  height: 58vw;
+  min-height: 320px;
+  max-height: 540px;
+}
+
+.mnpk-gallery-mobile__all {
+  width: 100%;
+  margin-top: 12px;
+}
+
+.mnpk-gallery-empty {
+  display: grid;
+  place-items: center;
+  min-height: 360px;
+  border: 1px solid var(--mnpk-border);
+  border-radius: 24px;
+  background: var(--mnpk-surface);
+  color: var(--mnpk-muted);
+}
+
+
+/* =========================================================
+ * 05. single layout
+ * ========================================================= */
+
+.mnpk-main {
+  padding: 0 0 40px;
+}
+
+.mnpk-main-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 360px);
+  gap: 28px;
+  align-items: start;
+}
+
+.mnpk-content,
+.mnpk-sidebar {
+  min-width: 0;
+}
+
+.mnpk-content > * + * {
+  margin-top: 24px;
+}
+
+.mnpk-overview-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin: 0;
+}
+
+.mnpk-overview-grid__item {
+  padding: 18px 20px;
+}
+
+.mnpk-overview-grid__item dt {
+  margin: 0 0 8px;
+  color: var(--mnpk-muted);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.mnpk-overview-grid__item dd {
+  margin: 0;
+  color: var(--mnpk-heading);
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.mnpk-summary-chips,
+.mnpk-amenities,
+.mnpk-panorama__thumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.mnpk-summary-chips {
+  margin-bottom: 18px;
+}
+
+.mnpk-panorama {
+  display: grid;
+  gap: 18px;
+}
+
+.mnpk-panorama__viewer-wrap {
+  overflow: hidden;
+}
+
+.mnpk-panorama__viewer {
+  width: 100%;
+  height: 520px;
+  background: var(--mnpk-surface-2);
+}
+
+.mnpk-panorama__meta {
+  padding: 18px 20px;
+}
+
+.mnpk-panorama__title,
+.mnpk-note-block h3 {
+  margin: 0 0 10px;
+  color: var(--mnpk-heading);
+}
+
+.mnpk-panorama__text,
+.mnpk-note-block p {
+  margin: 0;
+  color: var(--mnpk-muted);
+  line-height: 1.85;
+}
+
+.mnpk-notes {
+  display: grid;
+  gap: 18px;
+}
+
+.mnpk-note-block {
+  padding: 18px;
+}
+
+
+/* =========================================================
+ * 06. right booking card
+ * ========================================================= */
+
+.mnpk-booking-card {
+  position: sticky;
+  top: 94px;
+  padding: 22px;
+}
+
+.mnpk-booking-card__top {
+  display: grid;
+  gap: 4px;
+  margin-bottom: 14px;
+}
+
+.mnpk-booking-price {
+  color: var(--mnpk-heading);
+  font-size: 22px;
+  font-weight: 900;
+  line-height: 1.3;
+}
+
+.mnpk-booking-price span,
+.mnpk-booking-subprice,
+.mnpk-booking-meta,
+.mnpk-booking-note,
+.mnpk-payment-methods-note {
+  color: var(--mnpk-muted);
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+/* =========================================================
+ * booking field layout
+ * 予約カード 日程/人数
+ * ========================================================= */
+
+.mnpk-booking-fields {
+  display: grid;
+  gap: 12px;
+  margin: 16px 0 14px;
+}
+
+.mnpk-field-button {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  min-height: 64px;
+  padding: 12px 14px;
+  border: 1px solid var(--mnpk-border);
+  border-radius: 18px;
+  background: var(--mnpk-surface);
+  color: var(--mnpk-text);
+  text-align: left;
+  cursor: pointer;
+}
+
+.mnpk-field-button__label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 58px;
+  min-height: 34px;
+  padding: 0 12px;
+  border: 1px solid var(--mnpk-border);
+  border-radius: 999px;
+  background: var(--mnpk-accent-soft);
+  color: var(--mnpk-heading);
+  font-size: 13px;
+  font-weight: 900;
+  line-height: 1;
+  white-space: nowrap;
+  writing-mode: horizontal-tb;
+  text-orientation: mixed;
+}
+
+.mnpk-field-button__value {
+  min-width: 0;
+  color: var(--mnpk-heading);
+  font-size: 16px;
+  font-weight: 900;
+  line-height: 1.45;
+  white-space: normal;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+.mnpk-field-button--guests .mnpk-field-button__value {
+  text-align: right;
+}
+
+@media (max-width: 420px) {
+  .mnpk-field-button {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+
+  .mnpk-field-button--guests {
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+  }
+}
+
+
+.mnpk-booking-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  margin: 8px 0 14px;
+}
+
+.mnpk-price-breakdown {
+  display: grid;
+  margin: 14px 0 0;
+  padding: 14px 16px;
+}
+
+.mnpk-price-row,
+.mnpk-summary-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--mnpk-border);
+  color: var(--mnpk-muted);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.mnpk-price-row:last-child,
+.mnpk-summary-list li:last-child {
+  border-bottom: 0;
+}
+
+.mnpk-price-row strong,
+.mnpk-summary-list strong {
+  color: var(--mnpk-heading);
+  font-weight: 900;
+}
+
+.mnpk-booking-submit,
+.mnpk-button:not(.mnpk-button--ghost),
+.mnpk-mobile-bookbar__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 48px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: 14px;
+  background: var(--mnpk-accent);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 900;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.mnpk-booking-submit {
+  margin-top: 14px;
+}
+
+.mnpk-button--ghost,
+.mnpk-link-button,
+.mnpk-back-link,
+.mnpk-gallery-toolbar__button,
+.mnpk-gallery-mobile__all {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 8px 14px;
+  border: 1px solid var(--mnpk-border);
+  border-radius: 999px;
+  background: var(--mnpk-surface);
+  color: var(--mnpk-text);
+  font-size: 13px;
+  font-weight: 800;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.mnpk-accepted-methods {
+  margin-top: 14px;
+  padding: 16px;
+}
+
+.mnpk-accepted-methods__label {
+  display: block;
+  margin: 0 0 10px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--mnpk-heading);
+  font-size: 15px;
+  font-weight: 900;
+  line-height: 1.45;
+}
+
+.mnpk-payment-methods {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.mnpk-payment-methods-note {
+  margin: 10px 0 0;
+}
+
+
+/* =========================================================
+ * 07. checkout layout
+ * ========================================================= */
+
+.mnpk-checkout-page-main {
+  padding: 0 0 64px;
+}
+
+.mnpk-checkout-layout,
+.mnpk-checkout-layout--page {
+  display: grid;
+  grid-template-columns: minmax(280px, 420px) minmax(0, 1fr);
+  gap: 28px;
+  align-items: start;
+}
+
+.mnpk-checkout-summary {
+  position: sticky;
+  top: 88px;
+  min-width: 0;
+}
+
+.mnpk-checkout-summary > * + * {
+  margin-top: 12px;
+}
+
+.mnpk-checkout-stay-card,
+.mnpk-checkout-payment-card,
+.mnpk-summary-box {
+  overflow: hidden;
+}
+
+.mnpk-checkout-stay-card__media {
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: var(--mnpk-surface-2);
+}
+
+.mnpk-checkout-stay-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mnpk-checkout-stay-card__body,
+.mnpk-checkout-payment-card,
+.mnpk-summary-box {
+  padding: 20px;
+}
+
+.mnpk-checkout-stay-card__title,
+.mnpk-checkout-stay-card__title--page {
+  margin: 0;
+  color: var(--mnpk-heading);
+  font-size: clamp(22px, 3vw, 28px);
+  line-height: 1.2;
+}
+
+.mnpk-checkout-stay-card__meta,
+.mnpk-checkout-payment-card__lead {
+  color: var(--mnpk-muted);
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.mnpk-checkout-stay-card__meta {
+  margin-top: 10px;
+}
+
+.mnpk-checkout-payment-card__lead {
+  margin: 0 0 18px;
+}
+
+.mnpk-checkout-row-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.mnpk-checkout-row-head h2,
+.mnpk-checkout-row-head h3 {
+  min-width: 0;
+  margin: 0;
+  color: var(--mnpk-heading);
+  font-size: 18px;
+  line-height: 1.35;
+  word-break: keep-all;
+  overflow-wrap: normal;
+}
+
+.mnpk-checkout-row-head .mnpk-link-button,
+.mnpk-checkout-row-head button {
+  width: auto;
+  min-width: 84px;
+  min-height: 36px;
+  padding: 7px 14px;
+  white-space: nowrap;
+}
+
+.mnpk-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.mnpk-form-field {
+  display: grid;
+  gap: 8px;
+}
+
+.mnpk-form-field span {
+  color: var(--mnpk-heading);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.mnpk-form-field input,
+.mnpk-form-field select,
+.mnpk-form-field textarea {
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 14px;
+  border: 1px solid var(--mnpk-border);
+  border-radius: 14px;
+  background: var(--mnpk-surface);
+  color: var(--mnpk-text);
+}
+
+.mnpk-checkout-total-box,
+.mnpk-payment-element {
+  margin-top: 18px;
+}
+
+.mnpk-payment-element {
+  min-height: 180px;
+  padding: 12px;
+  border: 1px solid var(--mnpk-border);
+  border-radius: 16px;
+  background: var(--mnpk-surface);
+}
+
+.mnpk-checkout-page-actions,
+.mnpk-checkout-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 18px;
+}
+
+
+/* =========================================================
+ * 08. mobile bookbar
+ * ========================================================= */
+
+.mnpk-mobile-bookbar {
+  position: sticky;
+  bottom: 16px;
+  z-index: 20;
+  display: none;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  margin: 0 16px 16px;
+  padding: 14px 16px;
+  border: 1px solid var(--mnpk-border);
+  border-radius: 18px;
+  background: var(--mnpk-surface);
+}
+
+.mnpk-mobile-bookbar__price {
+  display: block;
+  color: var(--mnpk-heading);
+  font-size: 20px;
+  font-weight: 900;
+}
+
+.mnpk-mobile-bookbar__sub {
+  display: block;
+  margin-top: 4px;
+  color: var(--mnpk-muted);
+  font-size: 12px;
+}
+
+.mnpk-mobile-bookbar__button {
+  width: auto;
+  min-width: 96px;
+}
+
+
+/* =========================================================
+ * 09. responsive
+ * ========================================================= */
+
+@media (max-width: 1100px) {
+  .mnpk-main-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 320px);
+    gap: 22px;
+  }
+}
+
+@media (max-width: 980px) {
+  .mnpk-main-grid,
+  .mnpk-checkout-layout,
+  .mnpk-checkout-layout--page {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .mnpk-sidebar,
+  .mnpk-checkout-summary,
+  .mnpk-booking-card {
+    position: static;
+  }
+}
+
+@media (max-width: 767px) {
+  .mnpk-single-page {
+    padding-bottom: 96px;
+  }
+
+  .mnpk-head,
+  .mnpk-checkout-page-head {
+    padding: 22px 0 14px;
+  }
+
+  .mnpk-head__row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .mnpk-title,
+  .mnpk-checkout-page__title,
+  .mnpk-checkout-screen__title {
+    font-size: clamp(26px, 8vw, 34px);
+  }
+
+  .mnpk-hero {
+    padding-bottom: 24px;
+  }
+
+  .mnpk-hero__inner {
+    padding-inline: 10px;
+  }
+
+  .mnpk-gallery-desktop {
+    display: none;
+  }
+
+  .mnpk-gallery-mobile {
+    display: block;
+  }
+
+  .mnpk-gallery-swiper .swiper-slide {
+    height: 62vw;
+    min-height: 240px;
+    max-height: 420px;
+  }
+
+  .mnpk-main {
+    padding-bottom: 28px;
+  }
+
+  .mnpk-card,
+  .mnpk-booking-card,
+  .mnpk-checkout-stay-card__body,
+  .mnpk-checkout-payment-card,
+  .mnpk-summary-box {
+    padding: 16px;
+  }
+
+  .mnpk-overview-grid,
+  .mnpk-form-grid,
+  .mnpk-checkout-page-actions,
+  .mnpk-checkout-actions {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .mnpk-checkout-page-main {
+    padding-bottom: 28px;
+  }
+
+  .mnpk-checkout-summary > * + * {
+    margin-top: 10px;
+  }
+
+  .mnpk-checkout-row-head {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 10px;
+  }
+
+  .mnpk-checkout-row-head h2,
+  .mnpk-checkout-row-head h3 {
+    font-size: 18px;
+  }
+
+  .mnpk-mobile-bookbar {
+    display: grid;
+  }
+
+  .mnpk-booking-card {
+    display: none;
+  }
+}
+
+@media (max-width: 420px) {
+  .mnpk-checkout-row-head {
+    grid-template-columns: 1fr;
+  }
+
+  .mnpk-checkout-row-head .mnpk-link-button,
+  .mnpk-checkout-row-head button {
+    width: fit-content;
+  }
+
+  .mnpk-field-button {
+    grid-template-columns: 1fr;
+  }
+}
+

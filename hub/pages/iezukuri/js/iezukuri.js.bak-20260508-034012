@@ -1,0 +1,1240 @@
+/**
+ * =========================================================
+ * IEZUKURI / CUSTOMHOME UI SCRIPT
+ * =========================================================
+ *
+ * このファイルの役割:
+ * 1. 家づくりページのドロワーメニュー開閉
+ * 2. ローカルナビのスムーススクロール
+ * 3. スクロール位置に応じたローカルナビの現在地表示
+ * 4. Hero下〜CTA手前までローカルナビを固定表示する制御
+ * 5. 施工事例「もっと見る」ボタンの展開/収納
+ * 6. CTA内のSwiper初期化
+ * 7. 間取り詳細ページの図面タブ切り替え
+ * 8. 間取り画像のLightboxモーダル表示
+ *
+ * 注意:
+ * - /iezukuri/ トップの「3カードを押して中身をAJAXで切り替える処理」とは別物
+ * - このコードは主に、既にHTMLに出力されている data-* 属性や class を拾って動かす
+ * - PHPテンプレート側が対応する属性を出していない場合、このJSは動かない
+ */
+
+/* =========================================================
+ * 01. 家づくりページ共通UI
+ * =========================================================
+ *
+ * 役割:
+ * - ページ読み込み後に、家づくりページ内のUI部品をまとめて初期化する
+ *
+ * 紐づく主なHTML:
+ * - .hub-customhome-page
+ *   → 家づくりページ全体の親要素
+ *
+ * - .ch-site-header
+ *   → 家づくり用ヘッダー
+ *
+ * - [data-customhome-cta]
+ *   → CTAセクション
+ *
+ * - [data-customhome-localnav]
+ *   → ローカルナビ
+ *
+ * - [data-ch-menu-toggle]
+ *   → メニュー開閉ボタン
+ *
+ * - [data-ch-menu-drawer]
+ *   → スマホ/ドロワーメニュー
+ *
+ * - [data-customhome-more-btn]
+ *   → 施工事例「もっと見る」ボタン
+ *
+ * - #customhome-works-more
+ *   → 追加表示する施工事例の入れ物
+ *
+ * - [data-customhome-cta-swiper]
+ *   → CTA内のSwiper対象
+ */
+document.addEventListener('DOMContentLoaded', function () {
+  /**
+   * body
+   *
+   * ドロワーメニュー開閉時に
+   * .is-customhome-drawer-open を付け外しする
+   */
+  var body = document.body;
+
+  /**
+   * 家づくりページ全体の親要素
+   *
+   * data-localnav-mode を読むために使う
+   */
+  var page = document.querySelector('.hub-customhome-page');
+
+  /**
+   * 家づくり用ヘッダー
+   *
+   * ローカルナビのスクロール位置計算で、
+   * ヘッダー高さを差し引くために使う
+   */
+  var header = document.querySelector('.ch-site-header');
+
+  /**
+   * CTAセクション
+   *
+   * ローカルナビをどこまで固定表示するかの終点計算に使う
+   */
+  var cta = document.querySelector('[data-customhome-cta]');
+
+  /**
+   * ローカルナビ
+   *
+   * クリック時のスムーススクロール、
+   * スクロール位置に応じた active 表示、
+   * 固定表示の制御に使う
+   */
+  var localNav = document.querySelector('[data-customhome-localnav]');
+
+  /**
+   * ドロワーメニューを開閉するボタン
+   *
+   * 紐づくHTML:
+   * <button data-ch-menu-toggle aria-expanded="false">
+   */
+  var menuToggle = document.querySelector('[data-ch-menu-toggle]');
+
+  /**
+   * ドロワーメニュー本体
+   *
+   * 紐づくHTML:
+   * <div data-ch-menu-drawer hidden>
+   */
+  var drawer = document.querySelector('[data-ch-menu-drawer]');
+
+  /**
+   * ローカルナビの固定表示モード
+   *
+   * HTML側:
+   * <main class="hub-customhome-page" data-localnav-mode="hero_to_cta">
+   *
+   * 現在の想定:
+   * - hero_to_cta:
+   *   Heroを過ぎたら固定表示し、CTA手前で止める
+   */
+  var localNavMode = page ? page.getAttribute('data-localnav-mode') : 'hero_to_cta';
+
+  /* =========================================================
+   * 01-01. ドロワーメニューを開く
+   * =========================================================
+   *
+   * 役割:
+   * - menuToggle の aria-expanded を true にする
+   * - drawer.hidden を false にする
+   * - body に .is-customhome-drawer-open を付ける
+   *
+   * 紐づくCSS:
+   * - body.is-customhome-drawer-open
+   * - [data-ch-menu-drawer]
+   */
+  function openDrawer() {
+    if (!menuToggle || !drawer) return;
+    menuToggle.setAttribute('aria-expanded', 'true');
+    drawer.hidden = false;
+    body.classList.add('is-customhome-drawer-open');
+  }
+
+  /* =========================================================
+   * 01-02. ドロワーメニューを閉じる
+   * =========================================================
+   *
+   * 役割:
+   * - menuToggle の aria-expanded を false にする
+   * - drawer.hidden を true にする
+   * - body から .is-customhome-drawer-open を外す
+   */
+  function closeDrawer() {
+    if (!menuToggle || !drawer) return;
+    menuToggle.setAttribute('aria-expanded', 'false');
+    drawer.hidden = true;
+    body.classList.remove('is-customhome-drawer-open');
+  }
+
+  /**
+   * ドロワーメニューのクリック操作
+   *
+   * 動き:
+   * - 開閉ボタンを押す → open / close を切り替え
+   * - drawer背景をクリック → 閉じる
+   * - drawer内のリンクをクリック → 閉じる
+   */
+  if (menuToggle && drawer) {
+    menuToggle.addEventListener('click', function () {
+      if (menuToggle.getAttribute('aria-expanded') === 'true') {
+        closeDrawer();
+      } else {
+        openDrawer();
+      }
+    });
+
+    drawer.addEventListener('click', function (event) {
+      if (event.target === drawer) closeDrawer();
+    });
+
+    drawer.querySelectorAll('a').forEach(function (link) {
+      link.addEventListener('click', closeDrawer);
+    });
+  }
+
+  /* =========================================================
+   * 01-03. ローカルナビのリンクから hash を取得
+   * =========================================================
+   *
+   * 役割:
+   * - 同じページ内リンクだけを対象にする
+   * - /iezukuri/#customhome-feature のようなリンクから
+   *   #customhome-feature だけを取り出す
+   *
+   * 紐づくHTML:
+   * - data-customhome-localnav 内の a[href="#..."]
+   */
+  function getHashFromLink(link) {
+    try {
+      var url = new URL(link.href, window.location.origin);
+      if (url.pathname === window.location.pathname) {
+        return url.hash || '';
+      }
+    } catch (e) {}
+    return '';
+  }
+
+  /* =========================================================
+   * 01-04. ローカルナビの現在地表示
+   * =========================================================
+   *
+   * 役割:
+   * - 現在表示しているセクションに対応するリンクへ .is-active を付ける
+   *
+   * 紐づくCSS:
+   * - [data-customhome-localnav] a.is-active
+   * - [data-customhome-localnav] li.is-active
+   */
+  function setActive(hash) {
+    if (!localNav) return;
+    localNav.querySelectorAll('a').forEach(function (link) {
+      var isActive = getHashFromLink(link) === hash;
+      link.classList.toggle('is-active', isActive);
+      if (link.parentElement) {
+        link.parentElement.classList.toggle('is-active', isActive);
+      }
+    });
+  }
+
+  /**
+   * ローカルナビクリック時のスムーススクロール
+   *
+   * 動き:
+   * - ローカルナビ内リンクをクリック
+   * - 対応するセクションまでスクロール
+   * - ヘッダー高さ + ローカルナビ高さ分だけ上を空ける
+   *
+   * 紐づくHTML:
+   * - #customhome-feature
+   * - #customhome-works
+   * - #customhome-flow
+   * - #customhome-company
+   * - #customhome-contact
+   */
+  if (localNav) {
+    localNav.querySelectorAll('a').forEach(function (link) {
+      link.addEventListener('click', function (event) {
+        var hash = getHashFromLink(link);
+        if (!hash) return;
+
+        var target = document.querySelector(hash);
+        if (!target) return;
+
+        event.preventDefault();
+
+        var headerHeight = header ? header.offsetHeight : 0;
+        var navHeight = localNav ? localNav.offsetHeight : 0;
+        var top =
+          target.getBoundingClientRect().top + window.pageYOffset - headerHeight - navHeight - 18;
+
+        window.scrollTo({ top: top, behavior: 'smooth' });
+        setActive(hash);
+      });
+    });
+  }
+
+  /**
+   * ローカルナビの現在地監視対象セクション
+   *
+   * このIDを持つセクションが画面内に入ると、
+   * 対応するローカルナビリンクに .is-active が付く
+   */
+  var sections = [];
+  [
+    '#customhome-feature',
+    '#customhome-works',
+    '#customhome-flow',
+    '#customhome-company',
+    '#customhome-contact',
+  ].forEach(function (hash) {
+    var el = document.querySelector(hash);
+    if (el) sections.push(el);
+  });
+
+  /**
+   * スクロール位置に応じてローカルナビの active を更新する
+   *
+   * IntersectionObserver:
+   * - セクションが画面の中央付近に入ったら発火
+   */
+  if ('IntersectionObserver' in window && sections.length) {
+    var observer = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            setActive('#' + entry.target.id);
+          }
+        });
+      },
+      {
+        root: null,
+        rootMargin: '-20% 0px -60% 0px',
+        threshold: 0.15,
+      },
+    );
+
+    sections.forEach(function (section) {
+      observer.observe(section);
+    });
+  }
+
+  /* =========================================================
+   * 01-05. ローカルナビの固定表示制御
+   * =========================================================
+   *
+   * 役割:
+   * - Heroを過ぎたら body に .has-past-hero を付ける
+   * - CTA手前まで来たら .has-past-hero を外す
+   *
+   * 紐づくCSS:
+   * - body.has-past-hero [data-customhome-localnav]
+   * - body.has-past-hero .ch-site-header
+   *
+   * 注意:
+   * - 実際の固定表示デザインはCSS側
+   * - JSは body に状態クラスを付けるだけ
+   */
+  function syncLocalNavVisibility() {
+    if (!localNav || !header) return;
+
+    var headerHeight = header.offsetHeight;
+
+    /**
+     * fixedStartY:
+     * ローカルナビを固定開始するスクロール位置
+     *
+     * 初回だけ計算して data-fixed-start-y に保存する
+     */
+    var startY = localNav.dataset.fixedStartY ? parseFloat(localNav.dataset.fixedStartY) : null;
+    if (startY === null || Number.isNaN(startY)) {
+      startY = localNav.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+      localNav.dataset.fixedStartY = String(startY);
+    }
+
+    var shouldFix = window.pageYOffset >= startY;
+    var shouldStop = false;
+
+    /**
+     * hero_to_cta モード:
+     * CTAまでずっと固定すると邪魔なので、
+     * CTAまでの距離の55%地点で固定を止める
+     */
+    if (localNavMode === 'hero_to_cta' && cta) {
+      var ctaY = cta.getBoundingClientRect().top + window.pageYOffset;
+      var endY = startY + (ctaY - startY) * 0.55;
+      shouldStop = window.pageYOffset >= endY;
+    }
+
+    body.classList.toggle('has-past-hero', shouldFix && !shouldStop);
+  }
+
+  /**
+   * スクロール/リサイズ時に固定表示状態を更新する
+   */
+  window.addEventListener('scroll', syncLocalNavVisibility, { passive: true });
+  window.addEventListener('resize', function () {
+    if (localNav) delete localNav.dataset.fixedStartY;
+    syncLocalNavVisibility();
+  });
+  syncLocalNavVisibility();
+
+  /* =========================================================
+   * 01-06. 施工事例「もっと見る」ボタン
+   * =========================================================
+   *
+   * 役割:
+   * - hidden の .ch-work-card を4件ずつ表示する
+   * - 全部表示されたらボタン文言を「施工事例を閉じる」に変える
+   * - もう一度押すと追加分を閉じる
+   *
+   * 紐づくHTML:
+   * - [data-customhome-more-btn]
+   * - #customhome-works-more
+   * - .ch-work-card[hidden]
+   *
+   * 紐づくCSS:
+   * - #customhome-works-more.is-visible
+   * - .is-loading
+   */
+  var moreButton = document.querySelector('[data-customhome-more-btn]');
+  var morePanel = document.getElementById('customhome-works-more');
+
+  if (moreButton && morePanel) {
+    moreButton.addEventListener('click', function () {
+      var label = moreButton.querySelector('.ch-more-btn__label');
+      var hiddenItems = Array.prototype.slice.call(
+        morePanel.querySelectorAll('.ch-work-card[hidden]'),
+      );
+      var isExpanded = moreButton.getAttribute('aria-expanded') === 'true';
+
+      /**
+       * 既に全部表示済みで、開いた状態なら閉じる
+       */
+      if (hiddenItems.length === 0 && isExpanded) {
+        morePanel.classList.remove('is-visible');
+        setTimeout(function () {
+          morePanel.hidden = true;
+          morePanel.querySelectorAll('.ch-work-card').forEach(function (card) {
+            card.hidden = true;
+          });
+          moreButton.setAttribute('aria-expanded', 'false');
+          if (label) label.textContent = '施工事例をもっと見る';
+        }, 180);
+        return;
+      }
+
+      /**
+       * 読み込み中っぽい演出
+       * 実際にAJAX取得しているわけではない
+       */
+      moreButton.classList.add('is-loading');
+      if (label) label.textContent = '読み込み中...';
+
+      setTimeout(function () {
+        morePanel.hidden = false;
+        morePanel.classList.add('is-visible');
+
+        /**
+         * hidden の施工事例カードを4件だけ表示する
+         */
+        hiddenItems.slice(0, 4).forEach(function (card) {
+          card.hidden = false;
+        });
+
+        moreButton.classList.remove('is-loading');
+        moreButton.setAttribute('aria-expanded', 'true');
+
+        var remain = morePanel.querySelectorAll('.ch-work-card[hidden]').length;
+        if (label) {
+          label.textContent = remain > 0 ? 'さらに施工事例を読む' : '施工事例を閉じる';
+        }
+      }, 260);
+    });
+  }
+
+  /* =========================================================
+   * 01-07. CTA Swiper 初期化
+   * =========================================================
+   *
+   * 役割:
+   * - CTA内の画像/動画スライダーをSwiperで動かす
+   * - 管理画面などから出した data-* 設定に応じて、
+   *   ナビ矢印・ページャー・動画controlsを切り替える
+   *
+   * 紐づくHTML:
+   * - [data-customhome-cta-swiper]
+   * - data-swiper-enabled
+   * - data-swiper-navigation
+   * - data-swiper-pagination
+   * - data-video-controls
+   * - .swiper
+   * - .swiper-slide
+   * - .swiper-button-prev
+   * - .swiper-button-next
+   * - .swiper-pagination
+   *
+   * 外部依存:
+   * - Swiper
+   *
+   * 注意:
+   * - Swiper が読み込まれていない場合は何もしない
+   * - スライドが1枚以下ならSwiperを破棄して止める
+   */
+  document.querySelectorAll('[data-customhome-cta-swiper]').forEach(function (host) {
+    var enabled = (host.getAttribute('data-swiper-enabled') || '1') === '1';
+    var navOn = (host.getAttribute('data-swiper-navigation') || '1') === '1';
+    var pagerOn = (host.getAttribute('data-swiper-pagination') || '1') === '1';
+    var videoControls = (host.getAttribute('data-video-controls') || '0') === '1';
+
+    /**
+     * 動画controlsの表示/非表示
+     */
+    host.querySelectorAll('video').forEach(function (video) {
+      if (videoControls) {
+        video.setAttribute('controls', 'controls');
+      } else {
+        video.removeAttribute('controls');
+      }
+    });
+
+    /**
+     * Swiper本体が読み込まれていない場合は終了
+     */
+    if (typeof Swiper === 'undefined') return;
+
+    /**
+     * Swiper対象要素を取得
+     *
+     * host自体が .swiper なら host を使う
+     * 違う場合は中の .swiper を探す
+     */
+    var target = host.classList.contains('swiper') ? host : host.querySelector('.swiper');
+    if (!target) target = host;
+
+    var slides = target.querySelectorAll('.swiper-slide');
+    var prevEl = target.querySelector('.swiper-button-prev');
+    var nextEl = target.querySelector('.swiper-button-next');
+    var paginationEl = target.querySelector('.swiper-pagination');
+
+    /**
+     * 矢印・ページャーの表示制御
+     *
+     * スライドが2枚以上ある時だけ表示する
+     */
+    if (prevEl) prevEl.style.display = enabled && navOn && slides.length > 1 ? '' : 'none';
+    if (nextEl) nextEl.style.display = enabled && navOn && slides.length > 1 ? '' : 'none';
+    if (paginationEl)
+      paginationEl.style.display = enabled && pagerOn && slides.length > 1 ? '' : 'none';
+
+    /**
+     * 無効設定、または1枚以下ならSwiperを止める
+     */
+    if (!enabled || slides.length <= 1) {
+      if (target.swiper) {
+        try {
+          target.swiper.destroy(true, true);
+        } catch (e) {}
+      }
+      return;
+    }
+
+    /**
+     * 既にSwiper化されていたら一度破棄して作り直す
+     */
+    if (target.swiper) {
+      try {
+        target.swiper.destroy(true, true);
+      } catch (e) {}
+    }
+
+    /**
+     * Swiper初期化
+     */
+    new Swiper(target, {
+      loop: false,
+      slidesPerView: 1,
+      speed: 600,
+      autoHeight: false,
+      watchOverflow: true,
+      navigation:
+        navOn && prevEl && nextEl
+          ? {
+              nextEl: nextEl,
+              prevEl: prevEl,
+            }
+          : false,
+      pagination:
+        pagerOn && paginationEl
+          ? {
+              el: paginationEl,
+              clickable: true,
+            }
+          : false,
+    });
+  });
+});
+
+/* =========================================================
+ * 02. IEZUKURI PLAN DETAIL FINAL JS
+ * =========================================================
+ *
+ * 役割:
+ * - 間取り詳細ページの「平面図 / 配置図 / 2F」などのタブ切り替え
+ * - 図面・施工画像をモーダルで拡大表示する
+ * - モーダル内で前へ/次へを切り替える
+ * - Esc / ← / → キー操作に対応する
+ *
+ * 紐づくHTML:
+ * - [data-iez-plan-drawing-root]
+ *   → 図面タブ全体の親
+ *
+ * - [data-iez-plan-tab]
+ *   → タブボタン
+ *
+ * - [data-iez-plan-panel]
+ *   → タブに対応する表示パネル
+ *
+ * - [data-iez-plan-open]
+ *   → モーダルを開く画像リンク/ボタン
+ *
+ * - [data-iez-plan-card]
+ *   → 画像グループの親カード
+ *
+ * - data-iez-plan-lightbox
+ *   → Lightbox用の画像一覧JSON
+ *
+ * - [data-iez-plan-modal-root]
+ *   → モーダル全体
+ *
+ * - [data-iez-plan-image]
+ *   → モーダル内の画像
+ *
+ * - [data-iez-plan-title]
+ *   → モーダル内のタイトル
+ *
+ * - [data-iez-plan-next]
+ *   → 次へボタン
+ *
+ * - [data-iez-plan-prev]
+ *   → 前へボタン
+ *
+ * - [data-iez-plan-close]
+ *   → 閉じるボタン
+ *
+ * 想定テンプレート:
+ * - single-iez_plan.php
+ * - hub/pages/iezukuri/template-parts/subpage/blocks/block-plan-viewer.php
+ * - または data-iez-plan-* を出している間取り詳細用テンプレート
+ *
+ * 紐づくCSS:
+ * - .is-active
+ *   → 現在のタブ/パネル表示
+ *
+ * - [data-iez-plan-modal-root].is-open
+ *   → モーダル表示状態
+ */
+/* =========================================================
+ * IEZUKURI PLAN DETAIL FINAL JS
+ * - 平面図 / 配置図 / 2F タブ切り替え
+ * - Lightbox 前へ / 次へ
+ * ========================================================= */
+(function () {
+  /**
+   * 現在モーダルで表示している画像番号
+   */
+  var currentIndex = 0;
+
+  /**
+   * 現在のLightbox画像一覧
+   *
+   * data-iez-plan-lightbox に入っているJSONを読み込んで使う
+   *
+   * 想定形式:
+   * [
+   *   { "src": "画像URL", "title": "画像タイトル" }
+   * ]
+   */
+  var currentItems = [];
+
+  /**
+   * モーダル本体を取得する
+   *
+   * 紐づくHTML:
+   * <div data-iez-plan-modal-root aria-hidden="true">
+   */
+  function getModal() {
+    return document.querySelector('[data-iez-plan-modal-root]');
+  }
+
+  /* =========================================================
+   * 02-01. モーダル内の画像を表示する
+   * =========================================================
+   *
+   * 役割:
+   * - currentItems の index 番目の画像を表示する
+   * - index が範囲外ならループさせる
+   * - タイトルに「画像名 / 現在番号 / 総数」を表示する
+   */
+  function showImage(index) {
+    var modal = getModal();
+    if (!modal || !currentItems.length) return;
+
+    var image = modal.querySelector('[data-iez-plan-image]');
+    var title = modal.querySelector('[data-iez-plan-title]');
+
+    if (!image) return;
+
+    /**
+     * 先頭より前なら最後へ
+     * 最後より後なら先頭へ
+     */
+    if (index < 0) index = currentItems.length - 1;
+    if (index >= currentItems.length) index = 0;
+
+    currentIndex = index;
+
+    /**
+     * モーダル画像を差し替える
+     */
+    image.src = currentItems[currentIndex].src;
+    image.alt = currentItems[currentIndex].title || '画像';
+
+    /**
+     * モーダルタイトルを更新する
+     */
+    if (title) {
+      title.textContent =
+        (currentItems[currentIndex].title || '画像') +
+        ' / ' +
+        (currentIndex + 1) +
+        ' / ' +
+        currentItems.length;
+    }
+  }
+
+  /* =========================================================
+   * 02-02. モーダルを閉じる
+   * =========================================================
+   *
+   * 役割:
+   * - .is-open を外す
+   * - aria-hidden を true に戻す
+   * - 画像src/altを空にする
+   * - currentIndex/currentItems をリセットする
+   */
+  function closeModal() {
+    var modal = getModal();
+    if (!modal) return;
+
+    var image = modal.querySelector('[data-iez-plan-image]');
+
+    modal.classList.remove('is-open');
+    modal.setAttribute('aria-hidden', 'true');
+
+    if (image) {
+      image.removeAttribute('src');
+      image.removeAttribute('alt');
+    }
+
+    currentIndex = 0;
+    currentItems = [];
+  }
+
+  /**
+   * クリックイベントを document でまとめて受ける
+   *
+   * 理由:
+   * - 後からHTMLが追加されても data-* 属性が合えば動く
+   * - タブ、モーダル、前へ次へ、閉じるを1箇所で処理する
+   */
+  document.addEventListener('click', function (event) {
+    /**
+     * 図面タブ切り替え
+     *
+     * 紐づくHTML:
+     * - [data-iez-plan-tab="floor"]
+     * - [data-iez-plan-panel="floor"]
+     *
+     * 動き:
+     * - 押したタブに .is-active
+     * - 対応するパネルに .is-active
+     */
+    var tab = event.target.closest('[data-iez-plan-tab]');
+
+    if (tab) {
+      event.preventDefault();
+
+      var key = tab.getAttribute('data-iez-plan-tab');
+      var root =
+        tab.closest('[data-iez-plan-drawing-root]') ||
+        tab.closest('.iez-plan-detail-board__drawing') ||
+        tab.closest('.iez-plan-board__drawing') ||
+        tab.closest('.iez-plan-drawing');
+
+      if (!root || !key) return;
+
+      root.querySelectorAll('[data-iez-plan-tab]').forEach(function (button) {
+        button.classList.toggle('is-active', button === tab);
+      });
+
+      root.querySelectorAll('[data-iez-plan-panel]').forEach(function (panel) {
+        panel.classList.toggle('is-active', panel.getAttribute('data-iez-plan-panel') === key);
+      });
+
+      return;
+    }
+
+    /**
+     * Lightboxモーダルを開く
+     *
+     * 紐づくHTML:
+     * - [data-iez-plan-open]
+     * - data-plan-src
+     * - data-plan-title
+     * - 親の [data-iez-plan-card]
+     * - 親カードの data-iez-plan-lightbox
+     *
+     * 動き:
+     * - 親カードから画像一覧JSONを読む
+     * - クリックした画像の位置を探す
+     * - モーダルを開いて該当画像を表示する
+     */
+    var open = event.target.closest('[data-iez-plan-open]');
+
+    if (open) {
+      event.preventDefault();
+
+      var card = open.closest('[data-iez-plan-card]');
+      var modal = getModal();
+
+      if (!card || !modal) return;
+
+      /**
+       * 親カードに入っているLightbox用JSONを読む
+       */
+      try {
+        currentItems = JSON.parse(card.getAttribute('data-iez-plan-lightbox') || '[]');
+      } catch (e) {
+        currentItems = [];
+      }
+
+      var src = open.getAttribute('data-plan-src') || '';
+      var title = open.getAttribute('data-plan-title') || '画像';
+
+      /**
+       * クリックされた画像が一覧の何番目か探す
+       */
+      var index = currentItems.findIndex(function (item) {
+        return item.src === src;
+      });
+
+      /**
+       * JSONに無い画像でも、data-plan-src があれば単体表示する
+       */
+      if (index < 0 && src) {
+        currentItems = [{ src: src, title: title }];
+        index = 0;
+      }
+
+      if (!currentItems.length) return;
+
+      /**
+       * モーダルを表示状態にする
+       *
+       * 紐づくCSS:
+       * [data-iez-plan-modal-root].is-open
+       */
+      modal.classList.add('is-open');
+      modal.setAttribute('aria-hidden', 'false');
+
+      showImage(index);
+      return;
+    }
+
+    /**
+     * モーダル「次へ」
+     *
+     * 紐づくHTML:
+     * [data-iez-plan-next]
+     */
+    if (event.target.closest('[data-iez-plan-next]')) {
+      event.preventDefault();
+      showImage(currentIndex + 1);
+      return;
+    }
+
+    /**
+     * モーダル「前へ」
+     *
+     * 紐づくHTML:
+     * [data-iez-plan-prev]
+     */
+    if (event.target.closest('[data-iez-plan-prev]')) {
+      event.preventDefault();
+      showImage(currentIndex - 1);
+      return;
+    }
+
+    /**
+     * モーダルを閉じる
+     *
+     * 紐づくHTML:
+     * [data-iez-plan-close]
+     */
+    if (event.target.closest('[data-iez-plan-close]')) {
+      event.preventDefault();
+      closeModal();
+    }
+  });
+
+  /**
+   * キーボード操作
+   *
+   * 対象:
+   * - モーダルが開いている時だけ
+   *
+   * 操作:
+   * - Escape    → 閉じる
+   * - ArrowRight → 次へ
+   * - ArrowLeft  → 前へ
+   */
+  document.addEventListener('keydown', function (event) {
+    var modal = getModal();
+    if (!modal || !modal.classList.contains('is-open')) return;
+
+    if (event.key === 'Escape') {
+      closeModal();
+    }
+
+    if (event.key === 'ArrowRight') {
+      event.preventDefault();
+      showImage(currentIndex + 1);
+    }
+
+    if (event.key === 'ArrowLeft') {
+      event.preventDefault();
+      showImage(currentIndex - 1);
+    }
+  });
+})();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* === stack plan panels START ===
+ * 選んだ順にパネルを下へ積む。
+ * 残りカードは「各パネル内」の ch-service-next だけを使う。
+ * 外側に ch-service-remaining は作らない。
+ */
+(function () {
+  'use strict';
+
+  function q(selector, root) {
+    return (root || document).querySelector(selector);
+  }
+
+  function qa(selector, root) {
+    return Array.prototype.slice.call((root || document).querySelectorAll(selector));
+  }
+
+  function pad(num) {
+    return String(num).padStart(2, '0');
+  }
+
+  function htmlToElement(html) {
+    var wrap = document.createElement('div');
+    wrap.innerHTML = html.trim();
+    return wrap.firstElementChild;
+  }
+
+  function setupPlanStack() {
+    var section = q('.ch-top-services');
+    var initialGrid = q('[data-iez-service-tabs]');
+    var source = q('[data-iez-service-panel-output]');
+
+    if (!section || !initialGrid || !source) {
+      return;
+    }
+
+    if (section.dataset.iezStackReady === '1') {
+      return;
+    }
+
+    var radios = qa('.ch-service-panel-radio');
+    var sourcePanels = qa('.ch-service-panel', source);
+
+    if (!radios.length || !sourcePanels.length) {
+      return;
+    }
+
+    section.dataset.iezStackReady = '1';
+
+    /* ブラウザのradio復元で、初期から選択済みに見えるのを防ぐ */
+    radios.forEach(function (radio) {
+      radio.checked = false;
+    });
+
+    var radioIds = radios.map(function (radio) {
+      return radio.id;
+    });
+
+    var panelTemplates = sourcePanels.map(function (panel) {
+      return panel.outerHTML;
+    });
+
+    /* 元の radio 切替用パネルはテンプレートとして使うだけなので削除 */
+    source.remove();
+
+    var stack = document.createElement('div');
+    stack.className = 'ch-service-stack';
+    stack.setAttribute('data-iez-service-stack', '');
+
+    initialGrid.insertAdjacentElement('afterend', stack);
+
+    var selected = [];
+
+    function setPanelNumber(panel, order) {
+      var num = q('.ch-service-panel__num', panel);
+      if (num) {
+        num.textContent = pad(order);
+      }
+    }
+
+    function indexFromLabel(label) {
+      var forId = label.getAttribute('for');
+      return radioIds.indexOf(forId);
+    }
+
+    function cleanupNextCards(panel) {
+      var nextCards = qa('.ch-service-next-card', panel);
+      var nextOrder = selected.length + 1;
+
+      nextCards.forEach(function (card) {
+        var label = q('label', card);
+        var index = label ? indexFromLabel(label) : -1;
+
+        if (index === -1 || selected.indexOf(index) !== -1) {
+          card.remove();
+          return;
+        }
+
+        if (label) {
+          label.setAttribute('data-iez-stack-card', String(index));
+        }
+
+        /*
+         * 残りカードは固定の 02 / 03 にしない。
+         * どれを押しても「次に追加される番号」を表示する。
+         */
+        var num = q('.ch-service-next-card__num', card);
+        if (num) {
+          num.textContent = '次は ' + pad(nextOrder);
+        }
+      });
+
+      var remaining = qa('.ch-service-next-card', panel);
+      var nextSection = q('.ch-service-next', panel);
+
+      if (nextSection && !remaining.length) {
+        nextSection.remove();
+      }
+    }
+
+    function cleanupAllNextCards() {
+      qa('.ch-service-panel', stack).forEach(function (panel) {
+        cleanupNextCards(panel);
+      });
+    }
+
+    function scrollTo(el) {
+      window.requestAnimationFrame(function () {
+        window.scrollTo({
+          top: el.getBoundingClientRect().top + window.pageYOffset - 100,
+          behavior: 'smooth'
+        });
+      });
+    }
+
+    function selectPlan(index) {
+      if (selected.indexOf(index) !== -1) {
+        var existing = q('.ch-service-panel[data-iez-panel-index="' + index + '"]', stack);
+        if (existing) {
+          scrollTo(existing);
+        }
+        return;
+      }
+
+      var html = panelTemplates[index];
+      if (!html) {
+        return;
+      }
+
+      selected.push(index);
+      section.classList.add('has-plan-stack');
+
+      var panel = htmlToElement(html);
+      panel.dataset.iezPanelIndex = String(index);
+
+      setPanelNumber(panel, selected.length);
+
+      stack.appendChild(panel);
+      cleanupAllNextCards();
+      scrollTo(panel);
+    }
+
+    section.addEventListener('click', function (event) {
+      var label = event.target.closest('[data-iez-service-card], [data-iez-stack-card], .ch-service-next-card__select');
+
+      if (!label || !section.contains(label)) {
+        return;
+      }
+
+      var index = indexFromLabel(label);
+
+      if (index === -1) {
+        return;
+      }
+
+      event.preventDefault();
+      selectPlan(index);
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupPlanStack);
+  } else {
+    setupPlanStack();
+  }
+})();
+/* === stack plan panels END === */
+
+/* === CH SERVICE MEDIA SWIPER START ===
+ * /iezukuri top service panel
+ *
+ * 既存HTMLの画像群を、各カラムごとに
+ * main swiper + thumbs swiper へ変換する。
+ * ========================================================= */
+(function () {
+  function collectImageBlocks(media) {
+    return Array.from(media.querySelectorAll(':scope > .ch-service-panel-media__image, :scope > .ch-service-panel-media__floor > .ch-service-panel-media__image'));
+  }
+
+  function getLabel(media, index) {
+    if (media.classList.contains('ch-service-panel-media--floor')) {
+      return ['1F', '2F', '配置図'][index] || String(index + 1);
+    }
+
+    return String(index + 1);
+  }
+
+  function buildMediaSwiper(media) {
+    if (!media || media.dataset.mediaSwiperReady === '1') {
+      return;
+    }
+
+    var blocks = collectImageBlocks(media);
+    var images = blocks.map(function (block) {
+      return block.querySelector('img');
+    }).filter(Boolean);
+
+    if (!images.length || typeof window.Swiper === 'undefined') {
+      return;
+    }
+
+    media.dataset.mediaSwiperReady = '1';
+
+    var main = document.createElement('div');
+    main.className = 'swiper ch-service-media-main-swiper';
+    main.innerHTML = '<div class="swiper-wrapper"></div>';
+
+    var thumbs = document.createElement('div');
+    thumbs.className = 'swiper ch-service-media-thumbs-swiper';
+    thumbs.innerHTML = '<div class="swiper-wrapper"></div>';
+
+    var mainWrap = main.querySelector('.swiper-wrapper');
+    var thumbWrap = thumbs.querySelector('.swiper-wrapper');
+
+    images.forEach(function (img, index) {
+      var mainSlide = document.createElement('div');
+      mainSlide.className = 'swiper-slide';
+
+      var mainImg = img.cloneNode(true);
+      mainImg.removeAttribute('width');
+      mainImg.removeAttribute('height');
+
+      mainSlide.appendChild(mainImg);
+      mainWrap.appendChild(mainSlide);
+
+      var thumbSlide = document.createElement('div');
+      thumbSlide.className = 'swiper-slide';
+
+      var thumbImg = img.cloneNode(true);
+      thumbImg.removeAttribute('width');
+      thumbImg.removeAttribute('height');
+      thumbImg.alt = getLabel(media, index);
+
+      thumbSlide.appendChild(thumbImg);
+
+      if (media.classList.contains('ch-service-panel-media--floor')) {
+        var label = document.createElement('span');
+        label.className = 'ch-service-media-thumb-label';
+        label.textContent = getLabel(media, index);
+        thumbSlide.appendChild(label);
+      }
+
+      thumbWrap.appendChild(thumbSlide);
+    });
+
+    var title = media.querySelector(':scope > .ch-service-panel-media__title');
+    if (title) {
+      title.insertAdjacentElement('afterend', main);
+      main.insertAdjacentElement('afterend', thumbs);
+    } else {
+      media.insertBefore(main, media.firstChild);
+      main.insertAdjacentElement('afterend', thumbs);
+    }
+
+    blocks.forEach(function (block) {
+      block.remove();
+    });
+
+    Array.from(media.querySelectorAll(':scope > .ch-service-panel-media__floor')).forEach(function (floor) {
+      floor.remove();
+    });
+
+    if (images.length < 2) {
+      thumbs.hidden = true;
+      return;
+    }
+
+    var thumbsSwiper = new window.Swiper(thumbs, {
+      slidesPerView: 'auto',
+      spaceBetween: 8,
+      watchSlidesProgress: true,
+      freeMode: true
+    });
+
+    new window.Swiper(main, {
+      slidesPerView: 1,
+      spaceBetween: 0,
+      autoHeight: true,
+      thumbs: {
+        swiper: thumbsSwiper
+      }
+    });
+  }
+
+  function init() {
+    document.querySelectorAll('.ch-service-panel-media').forEach(buildMediaSwiper);
+  }
+
+  document.addEventListener('DOMContentLoaded', init);
+  window.addEventListener('load', init);
+  document.addEventListener('click', function () {
+    window.setTimeout(init, 80);
+  });
+})();
+/* === CH SERVICE MEDIA SWIPER END === */

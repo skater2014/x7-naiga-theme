@@ -1,0 +1,101 @@
+<?php
+/**
+ * /iezukuri トップLP
+ * 選択テーマ別「このプランで暮らしがどう変わるか」
+ *
+ * PC:
+ * - table表示
+ *
+ * SP:
+ * - card表示
+ *
+ * データ:
+ * - section-feature-life-change-data.php
+ */
+
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+$life_change_file = __DIR__ . '/section-feature-life-change-data.php';
+
+if (!file_exists($life_change_file)) {
+    return;
+}
+
+$plan_life_change_data = require $life_change_file;
+
+if (!is_array($plan_life_change_data)) {
+    return;
+}
+
+$term = '';
+
+if (isset($item) && is_array($item) && !empty($item['term'])) {
+    $term = (string) $item['term'];
+}
+
+if ($term === '' || empty($plan_life_change_data[$term])) {
+    return;
+}
+
+$life_change = $plan_life_change_data[$term];
+
+$heading = $life_change['heading'] ?? '';
+$subheading = $life_change['subheading'] ?? '';
+$lead = $life_change['lead'] ?? '';
+$rows = $life_change['items'] ?? array();
+
+if (empty($rows) || !is_array($rows)) {
+    return;
+}
+?>
+
+<section class="ch-life-change" data-ch-life-change data-life-limit="5" aria-label="<?php echo esc_attr($heading); ?>">
+    <div class="ch-life-change__head">
+        <?php if ($heading !== '') : ?>
+            <p class="ch-life-change__eyebrow"><?php echo esc_html($heading); ?></p>
+        <?php endif; ?>
+
+        <?php if ($subheading !== '') : ?>
+            <h4 class="ch-life-change__title"><?php echo esc_html($subheading); ?></h4>
+        <?php endif; ?>
+
+        <?php if ($lead !== '') : ?>
+            <p class="ch-life-change__lead"><?php echo esc_html($lead); ?></p>
+        <?php endif; ?>
+    </div>
+
+    <div class="ch-life-change-table-wrap">
+        <table class="ch-life-change-table">
+            <thead>
+                <tr>
+                    <th>項目</th>
+                    <th>Before：今の悩み</th>
+                    <th>Action：計画・改善すること</th>
+                    <th>After：暮らしの変化</th>
+                    <th>写真で見せるもの</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($rows as $row) : ?>
+                    <tr>
+                        <th><?php echo esc_html($row['item'] ?? ''); ?></th>
+                        <td><?php echo esc_html($row['before'] ?? ''); ?></td>
+                        <td><?php echo esc_html($row['action'] ?? ''); ?></td>
+                        <td><?php echo esc_html($row['after'] ?? ''); ?></td>
+                        <td>
+                            <div class="ch-life-change-photo">
+                                <span class="ch-life-change-photo__thumb" aria-hidden="true"></span>
+                                <span class="ch-life-change-photo__body">
+                                    <strong><?php echo esc_html($row['photo_title'] ?? ''); ?></strong>
+                                    <small><?php echo esc_html($row['photo_point'] ?? ''); ?></small>
+                                </span>
+                            </div>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+</section>

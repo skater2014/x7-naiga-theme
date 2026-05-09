@@ -1,0 +1,314 @@
+/* モーダル全体のスタイル */
+.modal-loan {
+    display: none; /* デフォルトは非表示 */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* 背景の透過 */
+    z-index: 10000;
+    justify-content: center;
+    align-items: center;
+    overflow-y: auto; /* モバイルでの縦スクロール */
+    padding: 0; /* 全画面表示なので余白をなくす */
+}
+
+/* PC用のスタイル（デフォルト） */
+.modal-loan-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    width: 30%; /* PCでは横幅600pxに制限 */
+    height: auto; /* PCでは高さをコンテンツに合わせる */
+    box-sizing: border-box;
+    overflow-y: auto;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+/* モバイル用のスタイル */
+@media (max-width: 768px) {
+    .modal-loan-content {
+        width: 100%; /* モバイルでは横幅を画面幅いっぱいに */
+        height: 100vh; /* モバイルでは高さを画面高さいっぱいに */
+        padding: 15px; /* モバイルでは少し小さめのパディング */
+        border-radius: 0; /* モバイルでは角を丸めない */
+        overflow: hidden; /* モバイルではスクロールを無効にする */
+    }
+}
+
+/* タブレット用のスタイル */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .modal-loan-content {
+        width: 50%; /* タブレットでは横幅を50%に設定 */
+        height: auto; /* タブレットでは高さを自動調整 */
+        padding: 20px; /* タブレットでは通常のパディング */
+        border-radius: 10px; /* 角を丸める */
+        overflow-y: auto; /* スクロール可能に */
+    }
+
+    .loan-cta-button {
+        width: 60%; /* ボタン幅を画面いっぱいに */
+        font-size: 14px; /* ボタンのフォントサイズ調整 */
+    }
+
+    .modal-loan-headline {
+        font-size: 24px; /* 見出しのフォントサイズ調整 */
+    }
+
+    .close-modal {
+        font-size: 28px; /* 閉じるボタンをタブレット向けに少し小さく */
+        padding: 14px; /* ボタンのパディング調整 */
+    }
+}
+
+/* モーダルが表示されるときのアニメーション */
+.modal-loan.show .modal-loan-content {
+    transform: scale(1); /* アニメーションなし */
+}
+
+/* 閉じるボタンのスタイル */
+.close-modal {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    font-size: 24px; /* ボタンを目立たせる */
+    color: #333;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 12px;
+    transition: color 0.3s ease;
+}
+
+.close-modal:hover {
+    color: #e74c3c;
+}
+
+/* モーダル内のローンシミュレーションフォームデザイン */
+.modal-loan-panel {
+    text-align: center;
+    flex-grow: 0; /* フレックスコンテナ内でスペースを最大化 */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* 垂直方向に中央寄せ */
+}
+
+/* モバイルとデスクトップの共通スタイル */
+.cta-container {
+    display: flex;
+    align-items: center; /* 垂直方向に中央揃え */
+    gap: 10px; /* 価格とボタンの間隔 */
+    justify-content: space-between; /* 横並び */
+    width: 100%;
+}
+
+.cta-container .loan_simulation_modal {
+    margin-left: 10px; /* ボタンと価格の間にスペースを追加 */
+}
+
+.loan-cta-button {
+    font-size: 14px; /* ボタンのフォントサイズ */
+    padding: 10px; /* ボタン内の余白 */
+}
+
+/* モバイル用スタイル (幅768px以下) */
+@media (max-width: 768px) {
+    .modal-loan-content {
+        width: 100%; /* モバイルで画面幅いっぱいに */
+        height: 100vh; /* モバイルで画面高さいっぱいに */
+        padding: 20px; /* 適切なパディングを追加 */
+        border-radius: 0; /* 角を丸めない */
+        overflow: hidden; /* スクロールを無効にする */
+    }
+
+    .loan-cta-button {
+        width: 60%; /* ボタン幅を調整 */
+        font-size: 12px; /* ボタンのフォントサイズを小さく */
+    }
+
+    .modal-loan-headline {
+        font-size: 22px; /* 見出しフォントサイズ */
+    }
+
+    .close-modal {
+        font-size: 30px; /* 閉じるボタンを大きく */
+        padding: 16px; /* ボタンを押しやすく */
+    }
+
+    .cta-container {
+        flex-wrap: wrap; /* 必要に応じて折り返す */
+    }
+}
+
+/* 狭い画面用の微調整 (幅767px以下) */
+@media (max-width: 767px) {
+    .loan-cta-button {
+        margin-left: 10px; /* ボタンと価格の間にスペース */
+    }
+}
+
+/* dl, dt, dd のレイアウト */
+dl {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 5px;
+}
+
+dl dt {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    flex-basis: 35%;
+    margin-bottom: 5px;
+}
+
+dl dd {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px; /* プラス・マイナスボタン間の間隔 */
+    flex-basis: 60%;
+}
+
+/* プラス・マイナスボタン */
+button.minus, button.plus {
+    background-color: #3498db;
+    color: white;
+    font-size: 16px; /* ボタンサイズ調整 */
+    border: none;
+    padding: 8px 10px;
+    cursor: pointer;
+    border-radius: 8px;
+    width: 30%; /* ボタン幅を45%に */
+    transition: background-color 0.3s ease, transform 0.2s;
+    box-sizing: border-box;
+}
+
+button.minus:hover, button.plus:hover {
+    background-color: #2980b9;
+    transform: scale(1.1);
+}
+
+/* 入力フィールドを100%幅に調整 */
+input.loan {
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+    font-size: 18px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    transition: border-color 0.3s ease;
+    box-sizing: border-box; /* paddingを含めて100%幅 */
+}
+
+input.loan:focus {
+    border-color: #3498db;
+}
+
+/* 計算結果表示 */
+#answer {
+    margin-top: 20px;
+}
+
+#answer dt {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+
+#answer dd input {
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+    font-size: 18px;
+    border: none;
+    background-color: #f0f0f0;
+    box-sizing: border-box;
+}
+
+/* レスポンシブ対応: デバイス幅768px以下 */
+@media (max-width: 768px) {
+    dl dt, dl dd {
+        flex-basis: 100%;
+        margin-bottom: 10px;
+    }
+}
+
+/* ddラベルのスタイル */
+dd label {
+    color: #333;
+    font-size: 16px;
+}
+
+/* 入力フィールドのデザイン */
+input.loan {
+    width: 100%;
+    padding: 10px;
+    font-size: 18px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    transition: border-color 0.3s ease;
+    box-sizing: border-box; /* paddingを含めて100%幅 */
+}
+
+/* 入力フィールドにフォーカスがあたったときのスタイル */
+input.loan:focus {
+    border-color: #3498db; /* フォーカス時に青色の枠 */
+    outline: none; /* フォーカス時の外枠を非表示 */
+}
+
+/* 単位（万円や%）の表示 */
+input.loan[data-unit] {
+    display: inline-block;
+    margin-left: 10px;
+    font-size: 14px;
+    height: 40px;
+}
+
+/* 数値入力時のスタイル */
+input.loan[type="number"] {
+    -moz-appearance: textfield; /* Firefoxのスピナーを非表示 */
+    appearance: textfield; /* 他のブラウザでのスピナー非表示 */
+}
+
+input.loan::-webkit-outer-spin-button,
+input.loan::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* 入力フィールドのスタイル（ボーダーやカラー） */
+input.loan:disabled {
+    background-color: #f5f5f5;
+    border: 1px solid #ddd;
+}
+
+/* エラーメッセージや警告用の入力フィールド */
+input.loan.error {
+    border-color: #e74c3c; /* エラー時は赤い枠 */
+    background-color: #fce4e4; /* エラー時に背景を薄く赤に */
+}
+
+/* ボタンと入力フィールドの整列 */
+button.minus, button.plus {
+    background-color: #3498db;
+    color: white;
+    font-size: 16px;
+    border: none;
+    padding: 8px 10px;
+    cursor: pointer;
+    border-radius: 8px;
+    width: 30%;
+    transition: background-color 0.3s ease, transform 0.2s;
+    box-sizing: border-box;
+}
+
+button.minus:hover, button.plus:hover {
+    background-color: #2980b9;
+    transform: scale(1.1);
+}
+

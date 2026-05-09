@@ -1,0 +1,129 @@
+/* =========================================================
+ * /iezukuri/contact
+ * 読み込み: hub/pages/iezukuri/inc/enqueue.php
+ *
+ * 役割:
+ * - FAQ共通パーツの見た目
+ * - contactフォーム共通パーツの外枠
+ *
+ * 注意:
+ * - input / select / textarea などフォーム内部は触らない
+ * - フォーム本体のデザインは css/customer-info-form.css を使う
+ * ========================================================= */
+
+.iez-contact-template .ch-shell {
+  width: min(1080px, calc(100% - 40px));
+  margin-inline: auto;
+}
+
+.iez-common-faq {
+  width: 100%;
+  margin: 0 auto 32px;
+  padding: clamp(22px, 3vw, 34px);
+  border: 1px solid rgba(48, 38, 26, 0.12);
+  border-radius: 24px;
+  background: #fff;
+  box-shadow: 0 16px 42px rgba(32, 24, 16, 0.07);
+}
+
+.iez-common-faq__title {
+  margin: 0 0 18px;
+  font-size: clamp(22px, 2.6vw, 30px);
+  line-height: 1.4;
+  letter-spacing: 0.04em;
+}
+
+.iez-common-faq__list {
+  display: grid;
+  gap: 12px;
+}
+
+.iez-common-faq__item {
+  border: 1px solid rgba(48, 38, 26, 0.14);
+  border-radius: 16px;
+  background: #f7f1e6;
+  overflow: hidden;
+}
+
+.iez-common-faq__item summary {
+  cursor: pointer;
+  padding: 16px 18px;
+  font-weight: 700;
+  line-height: 1.6;
+}
+
+.iez-common-faq__answer {
+  padding: 0 18px 18px;
+  line-height: 1.85;
+}
+
+.iez-common-faq__answer p {
+  margin: 0;
+}
+
+.iez-common-contact-form {
+  width: 100%;
+  margin: 32px auto 0;
+}
+
+.iez-common-contact-form .customer-info-page {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+}
+
+@media (max-width: 720px) {
+  .iez-contact-template .ch-shell {
+    width: min(100% - 24px, 1080px);
+  }
+
+  .iez-common-faq {
+    padding: 20px;
+    border-radius: 20px;
+  }
+}
+
+/* =========================================================
+ * /iezukuri/contact spacing tune
+ * FAQ とフォームの見た目バランスだけ調整
+ * フォーム内部は customer-info-form.css に任せる
+ * ========================================================= */
+
+.iez-contact-template {
+  padding-top: clamp(32px, 5vw, 56px);
+}
+
+.iez-contact-template .ch-shell {
+  width: min(1080px, calc(100% - 40px));
+  margin-inline: auto;
+}
+
+.iez-common-faq {
+  margin-bottom: 28px;
+}
+
+.iez-common-contact-form {
+  margin-top: 0;
+}
+
+.iez-common-contact-form .customer-info-card {
+  margin-top: 0;
+}
+
+@media (max-width: 720px) {
+  .iez-contact-template {
+    padding-top: 28px;
+  }
+
+  .iez-common-faq {
+    margin-bottom: 22px;
+  }
+}
+
+/* contact hero: 顔が切れすぎないように画像位置だけ調整 */
+body.iezukuri-subpage--contact .iez-hero__image,
+body.iezukuri-subpage--contact .iez-hero__slide img {
+  object-position: center 38% !important;
+}

@@ -1,0 +1,30 @@
+{
+  "plan_slug": "two-story",
+  "post_type": "iez_plan",
+  "taxonomy": {
+    "iez_plan_type": [
+      "two-story"
+    ]
+  },
+  "meta_mapping": {
+    "two-story_01_work_exterior_v01.png": [
+      "_ch_plan_exterior_image_id",
+      "_thumbnail_id"
+    ],
+    "two-story_05_plan_1f_v01.png": [
+      "_ch_plan_1f_image_id"
+    ],
+    "two-story_05_plan_2f_v01.png": [
+      "_ch_plan_2f_image_id"
+    ],
+    "two-story_06_plan_site_v01.png": [
+      "_ch_plan_site_image_id"
+    ]
+  },
+  "notes": [
+    "2階建て住宅用の外観・1F平面図・2F平面図・配置図です。",
+    "WordPressでは uploads に置くだけではなく、wp media import で attachment ID を作成して _ch_plan_ 系メタキーへ保存してください。",
+    "画像はLP/詳細ページ用の説明イメージです。実施設計図ではありません。"
+  ],
+  "created_at": "2026-05-07T22:26:06"
+}

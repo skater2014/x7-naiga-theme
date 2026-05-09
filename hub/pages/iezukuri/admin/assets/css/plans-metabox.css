@@ -1,0 +1,251 @@
+/* =========================================================
+ * hub/pages/iezukuri/admin/assets/css/plans-metabox.css
+ *
+ * 対象:
+ * - WordPress管理画面
+ * - 投稿タイプ: iez_plan
+ * - 間取りプラン編集画面
+ *
+ * 役割:
+ * - plans-metabox.php から分離した管理画面用CSS
+ *
+ * 注意:
+ * - 公開ページ /iezukuri/plans/ には読み込まない
+ * - 詳細ページ /iezukuri/plan/{slug}/ には読み込まない
+ * ========================================================= */
+
+.iez-plan-admin {
+  display: grid;
+  gap: 22px;
+}
+
+.iez-plan-admin__section {
+  padding: 18px;
+  border: 1px solid #dcdcde;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.iez-plan-admin__section h3 {
+  margin: 0 0 14px;
+  font-size: 15px;
+}
+
+.iez-plan-admin__field {
+  margin: 0 0 16px;
+}
+
+.iez-plan-admin__field label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 700;
+}
+
+.iez-plan-admin__field input[type='text'],
+.iez-plan-admin__field textarea,
+.iez-plan-admin__field select {
+  width: 100%;
+}
+
+.iez-plan-admin__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.iez-plan-media-box {
+  padding: 14px;
+  border: 1px solid #dcdcde;
+  border-radius: 10px;
+  background: #f6f7f7;
+}
+
+.iez-plan-media-box__title {
+  margin: 0 0 4px;
+  font-weight: 700;
+}
+
+.iez-plan-media-box__desc {
+  display: block;
+  margin-bottom: 10px;
+  color: #646970;
+  font-size: 12px;
+}
+
+.iez-plan-media-box__preview,
+.iez-plan-gallery-admin__preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  min-height: 150px;
+  padding: 12px;
+  margin-bottom: 12px;
+  border: 1px dashed #c3c4c7;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.iez-plan-media-box__preview {
+  justify-content: center;
+}
+
+.iez-plan-media-box__preview img {
+  max-width: 100%;
+  max-height: 220px;
+  width: auto;
+  height: auto;
+}
+
+.iez-plan-gallery-admin__preview img {
+  width: 120px;
+  height: 86px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #dcdcde;
+}
+
+.iez-plan-admin__empty {
+  color: #646970;
+  font-size: 13px;
+}
+
+.iez-plan-admin__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+@media (max-width: 960px) {
+  .iez-plan-admin__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =========================================================
+ * 画像表示名入力
+ * ========================================================= */
+
+.iez-plan-gallery-admin__item {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 170px;
+  margin: 0 12px 14px 0;
+  vertical-align: top;
+}
+
+.iez-plan-gallery-admin__item img {
+  width: 100%;
+  height: 96px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.iez-plan-admin__image-label {
+  display: grid;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #374151;
+}
+
+.iez-plan-admin__image-label input {
+  width: 100%;
+  min-height: 32px;
+  border-radius: 6px;
+}
+
+
+/* =========================================================
+ * 画像表示名入力
+ * ========================================================= */
+
+.iez-plan-gallery-admin__item {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 170px;
+  margin: 0 12px 14px 0;
+  vertical-align: top;
+}
+
+.iez-plan-gallery-admin__item img {
+  width: 100%;
+  height: 96px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.iez-plan-admin__image-label {
+  display: grid;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #374151;
+}
+
+.iez-plan-admin__image-label input {
+  width: 100%;
+  min-height: 32px;
+  border-radius: 6px;
+}
+
+/* IEZ_PLAN_IMAGE_LABEL_FIELDS_START */
+/* =========================================================
+ * 画像表示名入力
+ * ========================================================= */
+
+[data-iez-plan-media-preview],
+[data-iez-plan-gallery-preview] {
+  cursor: pointer;
+}
+
+[data-iez-plan-image-label-input],
+.iez-plan-admin__image-label,
+[data-iez-plan-media-clear],
+[data-iez-plan-gallery-clear] {
+  cursor: auto;
+}
+
+.iez-plan-gallery-admin__item {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 170px;
+  margin: 0 12px 14px 0;
+  vertical-align: top;
+}
+
+.iez-plan-gallery-admin__item img {
+  width: 100%;
+  height: 96px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+[data-iez-plan-media-preview] .iez-plan-admin__image-label {
+  display: grid;
+  width: min(420px, 100%);
+  margin: 10px auto 0;
+}
+
+.iez-plan-admin__image-label {
+  display: grid;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #374151;
+}
+
+.iez-plan-admin__image-label input {
+  width: 100%;
+  min-height: 32px;
+  border-radius: 6px;
+  cursor: text;
+}
+
+.iez-plan-admin__image-label span {
+  line-height: 1.4;
+}
+/* IEZ_PLAN_IMAGE_LABEL_FIELDS_END */

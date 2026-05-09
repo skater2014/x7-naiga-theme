@@ -1,0 +1,48 @@
+/**
+ * =========================================================
+ * Hub vars: construction
+ * =========================================================
+ */
+body.hub-page.hub-context-construction {
+  --hub-bg: #f8f2e9;
+  --hub-surface: #ffffff;
+  --hub-surface-2: #f3eadf;
+  --hub-border: rgba(85, 61, 35, 0.12);
+  --hub-shadow: 0 12px 28px rgba(55, 38, 21, 0.08);
+
+  --hub-text: #352c23;
+  --hub-text-soft: #6f6356;
+  --hub-heading: #2a221a;
+
+  --hub-accent: #b67d43;
+  --hub-accent-strong: #8d5f31;
+  --hub-accent-soft: #efddca;
+}
+
+:is(
+  body.dark-mode,
+  body.is-dark,
+  body.theme-dark,
+  body.dark-theme,
+  body.dark,
+  body[data-theme='dark'],
+  html.dark body,
+  html.is-dark body,
+  html.theme-dark body,
+  html.dark-theme body,
+  html[data-theme='dark'] body
+).hub-page.hub-context-construction {
+  --hub-bg: #151312;
+  --hub-surface: #201b18;
+  --hub-surface-2: #29231f;
+  --hub-border: rgba(233, 214, 190, 0.10);
+  --hub-shadow: 0 14px 36px rgba(0, 0, 0, 0.36);
+
+  --hub-text: #efe2d4;
+  --hub-text-soft: #bcae9f;
+  --hub-heading: #fbf2ea;
+
+  --hub-accent: #cb9154;
+  --hub-accent-strong: #e1ad76;
+  --hub-accent-soft: rgba(203, 145, 84, 0.16);
+}

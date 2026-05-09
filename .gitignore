@@ -1,0 +1,39 @@
+# Mac / editor
+.DS_Store
+.vscode/
+.idea/
+
+# Node
+node_modules/
+.npm/
+.cache/
+
+# Logs / temp
+*.log
+*.tmp
+*.swp
+
+# DB dumps / exports
+*.sql
+*.sql.*
+*.dump
+backup.sql.new
+
+# Generated reports / work folders
+_reports/
+_tmp/
+_work/
+_trash/
+_trash_theme_candidates_*/
+
+# Local backups
+_backup/
+backup/
+backups/
+*.bak
+*.backup
+*.orig
+*.broken
+*.BROKEN_NOW*
+*.before*
+*.disabled*

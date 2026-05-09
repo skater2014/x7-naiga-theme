@@ -1,0 +1,714 @@
+
+/* =========================================================
+ * Customer Information Form Design Repair
+ * Template:
+ * - page-customer-info-form.php
+ *
+ * 実HTML:
+ * - .customer-info-page
+ * - .customer-info-form-wrap
+ * - .customer-info-card
+ * - .customer-info-grid
+ * - .customer-info-field
+ *
+ * 方針:
+ * - page-wrapper ではなく customer-info-* を直接整える
+ * - contact は minpaku ではない
+ * - CSS管理場所は css/customer-info-form.css
+ * ========================================================= */
+
+body.page-template-page-customer-info-form {
+  --cif-bg: #f7f3eb;
+  --cif-surface: #ffffff;
+  --cif-soft: #fbfaf6;
+  --cif-text: #182638;
+  --cif-muted: #647184;
+  --cif-border: rgba(24, 38, 56, 0.14);
+  --cif-accent: #2f7fc4;
+  --cif-gold: #c49a5a;
+  --cif-danger: #d14d4d;
+  --cif-shadow: 0 22px 54px rgba(35, 45, 58, 0.12);
+
+  background: var(--cif-bg);
+  color: var(--cif-text);
+}
+
+body.dark-mode.page-template-page-customer-info-form,
+body.is-dark.page-template-page-customer-info-form,
+body.theme-dark.page-template-page-customer-info-form,
+body.dark-theme.page-template-page-customer-info-form,
+body.dark.page-template-page-customer-info-form,
+html.dark body.page-template-page-customer-info-form,
+html.is-dark body.page-template-page-customer-info-form,
+html.theme-dark body.page-template-page-customer-info-form,
+html.dark-theme body.page-template-page-customer-info-form {
+  --cif-bg: #1d1d1d;
+  --cif-surface: #1f2b37;
+  --cif-soft: #17222d;
+  --cif-text: #f4f7fb;
+  --cif-muted: #c8d2dc;
+  --cif-border: rgba(226, 238, 248, 0.16);
+  --cif-accent: #7dbcf0;
+  --cif-gold: #d7ad6d;
+  --cif-danger: #ff7d7d;
+  --cif-shadow: 0 22px 54px rgba(0, 0, 0, 0.34);
+
+  background: var(--cif-bg);
+  color: var(--cif-text);
+}
+
+body.page-template-page-customer-info-form .customer-info-page {
+  background:
+    radial-gradient(circle at 16% 0%, rgba(47, 127, 196, 0.12), transparent 34%),
+    var(--cif-bg);
+  color: var(--cif-text);
+  padding: clamp(40px, 7vw, 92px) 0 clamp(70px, 9vw, 120px);
+}
+
+body.page-template-page-customer-info-form .customer-info-form-wrap {
+  width: min(980px, calc(100% - 40px));
+  margin-inline: auto;
+}
+
+body.page-template-page-customer-info-form .customer-info-step {
+  width: 100%;
+}
+
+body.page-template-page-customer-info-form .customer-info-card {
+  border: 1px solid var(--cif-border);
+  border-radius: 30px;
+  background: var(--cif-surface);
+  color: var(--cif-text);
+  box-shadow: var(--cif-shadow);
+  padding: clamp(24px, 4vw, 48px);
+  overflow: hidden;
+}
+
+body.page-template-page-customer-info-form .customer-info-card__header {
+  margin-bottom: clamp(22px, 4vw, 38px);
+  text-align: center;
+}
+
+body.page-template-page-customer-info-form .customer-info-card__eyebrow {
+  margin: 0 0 10px;
+  color: var(--cif-gold);
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+body.page-template-page-customer-info-form .customer-info-card__header h2,
+body.page-template-page-customer-info-form .customer-info-card--thanks h2 {
+  margin: 0;
+  color: var(--cif-text);
+  font-size: clamp(28px, 4vw, 46px);
+  line-height: 1.18;
+  letter-spacing: -0.04em;
+}
+
+body.page-template-page-customer-info-form .customer-info-card__header p,
+body.page-template-page-customer-info-form .customer-info-note,
+body.page-template-page-customer-info-form .customer-info-subnote,
+body.page-template-page-customer-info-form .customer-info-help,
+body.page-template-page-customer-info-form .customer-info-count {
+  color: var(--cif-muted);
+  line-height: 1.85;
+}
+
+body.page-template-page-customer-info-form .customer-info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px 20px;
+}
+
+body.page-template-page-customer-info-form .customer-info-field {
+  display: grid;
+  gap: 8px;
+}
+
+body.page-template-page-customer-info-form .customer-info-field.is-full,
+body.page-template-page-customer-info-form .customer-info-field--gender {
+  grid-column: 1 / -1;
+}
+
+body.page-template-page-customer-info-form .customer-info-field label,
+body.page-template-page-customer-info-form .customer-info-field legend {
+  color: var(--cif-text);
+  font-weight: 800;
+  line-height: 1.5;
+}
+
+body.page-template-page-customer-info-form .required {
+  display: inline-flex;
+  align-items: center;
+  min-height: 20px;
+  margin-left: 6px;
+  padding: 0 8px;
+  border-radius: 999px;
+  background: rgba(209, 77, 77, 0.12);
+  color: var(--cif-danger);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+body.page-template-page-customer-info-form :is(
+  .customer-info-field input[type="text"],
+  .customer-info-field input[type="email"],
+  .customer-info-field input[type="tel"],
+  .customer-info-field input[type="number"],
+  .customer-info-field textarea,
+  .customer-info-field select
+) {
+  width: 100%;
+  min-height: 50px;
+  box-sizing: border-box;
+  border: 1px solid var(--cif-border);
+  border-radius: 16px;
+  background: var(--cif-soft);
+  color: var(--cif-text);
+  padding: 12px 14px;
+  font-size: 16px;
+}
+
+body.page-template-page-customer-info-form .customer-info-field textarea {
+  min-height: 150px;
+  resize: vertical;
+}
+
+body.page-template-page-customer-info-form :is(
+  .customer-info-field input:focus,
+  .customer-info-field textarea:focus,
+  .customer-info-field select:focus
+) {
+  outline: none;
+  border-color: var(--cif-accent);
+  box-shadow: 0 0 0 3px rgba(47, 127, 196, 0.16);
+}
+
+body.page-template-page-customer-info-form .gender-selection {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+body.page-template-page-customer-info-form .gender-selection__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 46px;
+  padding: 0 16px;
+  border: 1px solid var(--cif-border);
+  border-radius: 999px;
+  background: var(--cif-soft);
+  color: var(--cif-text);
+  cursor: pointer;
+}
+
+body.page-template-page-customer-info-form .customer-info-note {
+  margin: 24px 0 0;
+  padding: 16px 18px;
+  border-radius: 18px;
+  background: var(--cif-soft);
+}
+
+body.page-template-page-customer-info-form .customer-info-actions,
+body.page-template-page-customer-info-form .customer-info-confirm__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 26px;
+}
+
+body.page-template-page-customer-info-form .customer-info-actions--center {
+  justify-content: center;
+}
+
+body.page-template-page-customer-info-form :is(.customer-info-actions, .customer-info-confirm__actions) .btn,
+body.page-template-page-customer-info-form button.btn,
+body.page-template-page-customer-info-form .button2 {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 50px;
+  padding: 0 24px;
+  border: 1px solid var(--cif-accent);
+  border-radius: 999px;
+  background: var(--cif-accent);
+  color: #fff;
+  font-weight: 900;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+body.page-template-page-customer-info-form .button2.is-secondary {
+  background: transparent;
+  color: var(--cif-accent);
+}
+
+body.page-template-page-customer-info-form .customer-info-confirm__list {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+}
+
+body.page-template-page-customer-info-form .customer-info-confirm__row {
+  display: grid;
+  grid-template-columns: 180px minmax(0, 1fr);
+  gap: 12px;
+  padding: 14px 16px;
+  border: 1px solid var(--cif-border);
+  border-radius: 16px;
+  background: var(--cif-soft);
+}
+
+body.page-template-page-customer-info-form .customer-info-confirm__row dt {
+  color: var(--cif-muted);
+  font-weight: 800;
+}
+
+body.page-template-page-customer-info-form .customer-info-confirm__row dd {
+  margin: 0;
+  color: var(--cif-text);
+}
+
+body.page-template-page-customer-info-form .customer-info-thanks__icon {
+  display: grid;
+  place-items: center;
+  width: 74px;
+  height: 74px;
+  margin: 0 auto 22px;
+  border-radius: 50%;
+  background: var(--cif-accent);
+  color: #fff;
+  font-size: 34px;
+  font-weight: 900;
+}
+
+body.page-template-page-customer-info-form .customer-info-card--thanks {
+  text-align: center;
+}
+
+@media (max-width: 760px) {
+  body.page-template-page-customer-info-form .customer-info-form-wrap {
+    width: min(100% - 24px, 980px);
+  }
+
+  body.page-template-page-customer-info-form .customer-info-card {
+    border-radius: 22px;
+    padding: 20px;
+  }
+
+  body.page-template-page-customer-info-form .customer-info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  body.page-template-page-customer-info-form .customer-info-confirm__row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =========================================================
+ * Customer Info Form - background responsibility fix
+ *
+ * 目的:
+ * - body / 外側背景は style.css のライト/ダークモードに任せる
+ * - customer-info-form.css はフォーム内部だけ整える
+ * - cream 背景をここで塗らない
+ * ========================================================= */
+
+body.page-template-page-customer-info-form {
+  background: var(--color-bg, inherit) !important;
+}
+
+body.page-template-page-customer-info-form .page-wrapper {
+  background: transparent !important;
+}
+
+body.page-template-page-customer-info-form .customer-info-page {
+  background: transparent !important;
+  color: inherit;
+}
+
+/* 中のフォームカードだけ管理 */
+body.page-template-page-customer-info-form .customer-info-form-wrap {
+  width: min(980px, calc(100% - 40px));
+  margin-inline: auto;
+}
+
+body.page-template-page-customer-info-form .customer-info-card {
+  border: 1px solid var(--color-border, rgba(24, 38, 56, 0.14));
+  border-radius: 30px;
+  background: var(--color-surface, #fff);
+  color: var(--color-text, #182638);
+  box-shadow: 0 22px 54px rgba(35, 45, 58, 0.12);
+  padding: clamp(24px, 4vw, 48px);
+  overflow: hidden;
+}
+
+body.dark-mode.page-template-page-customer-info-form .customer-info-card,
+body.is-dark.page-template-page-customer-info-form .customer-info-card,
+body.theme-dark.page-template-page-customer-info-form .customer-info-card,
+body.dark-theme.page-template-page-customer-info-form .customer-info-card,
+body.dark.page-template-page-customer-info-form .customer-info-card,
+html.dark body.page-template-page-customer-info-form .customer-info-card,
+html.is-dark body.page-template-page-customer-info-form .customer-info-card,
+html.theme-dark body.page-template-page-customer-info-form .customer-info-card,
+html.dark-theme body.page-template-page-customer-info-form .customer-info-card {
+  background: var(--color-surface, #1c1c1c);
+  color: var(--color-text, #ddd);
+  border-color: var(--color-border, #333);
+  box-shadow: 0 22px 54px rgba(0, 0, 0, 0.34);
+}
+
+body.page-template-page-customer-info-form .customer-info-card__header {
+  margin-bottom: clamp(22px, 4vw, 38px);
+  text-align: center;
+}
+
+body.page-template-page-customer-info-form .customer-info-card__eyebrow {
+  margin: 0 0 10px;
+  color: var(--color-accent-blue, #2f7fc4);
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+body.page-template-page-customer-info-form .customer-info-card__header h2,
+body.page-template-page-customer-info-form .customer-info-card--thanks h2 {
+  margin: 0;
+  color: inherit;
+  font-size: clamp(28px, 4vw, 46px);
+  line-height: 1.18;
+  letter-spacing: -0.04em;
+}
+
+body.page-template-page-customer-info-form .customer-info-card__header p,
+body.page-template-page-customer-info-form .customer-info-note,
+body.page-template-page-customer-info-form .customer-info-subnote,
+body.page-template-page-customer-info-form .customer-info-help,
+body.page-template-page-customer-info-form .customer-info-count {
+  color: var(--color-muted, #647184);
+  line-height: 1.85;
+}
+
+body.page-template-page-customer-info-form .customer-info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px 20px;
+}
+
+body.page-template-page-customer-info-form .customer-info-field {
+  display: grid;
+  gap: 8px;
+}
+
+body.page-template-page-customer-info-form .customer-info-field.is-full,
+body.page-template-page-customer-info-form .customer-info-field--gender {
+  grid-column: 1 / -1;
+}
+
+body.page-template-page-customer-info-form .customer-info-field label,
+body.page-template-page-customer-info-form .customer-info-field legend {
+  color: inherit;
+  font-weight: 800;
+  line-height: 1.5;
+}
+
+body.page-template-page-customer-info-form .required {
+  display: inline-flex;
+  align-items: center;
+  min-height: 20px;
+  margin-left: 6px;
+  padding: 0 8px;
+  border-radius: 999px;
+  background: rgba(209, 77, 77, 0.12);
+  color: #d14d4d;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+body.page-template-page-customer-info-form :is(
+  .customer-info-field input[type="text"],
+  .customer-info-field input[type="email"],
+  .customer-info-field input[type="tel"],
+  .customer-info-field input[type="number"],
+  .customer-info-field textarea,
+  .customer-info-field select
+) {
+  width: 100%;
+  min-height: 50px;
+  box-sizing: border-box;
+  border: 1px solid var(--color-border, rgba(24, 38, 56, 0.14));
+  border-radius: 16px;
+  background: var(--color-surface-2, #fbfaf6);
+  color: var(--color-text, #182638);
+  padding: 12px 14px;
+  font-size: 16px;
+}
+
+body.dark-mode.page-template-page-customer-info-form :is(
+  .customer-info-field input[type="text"],
+  .customer-info-field input[type="email"],
+  .customer-info-field input[type="tel"],
+  .customer-info-field input[type="number"],
+  .customer-info-field textarea,
+  .customer-info-field select
+),
+body.dark-theme.page-template-page-customer-info-form :is(
+  .customer-info-field input[type="text"],
+  .customer-info-field input[type="email"],
+  .customer-info-field input[type="tel"],
+  .customer-info-field input[type="number"],
+  .customer-info-field textarea,
+  .customer-info-field select
+) {
+  background: var(--color-surface-2, #202020);
+  color: var(--color-text, #ddd);
+  border-color: var(--color-border, #333);
+}
+
+body.page-template-page-customer-info-form .customer-info-field textarea {
+  min-height: 150px;
+  resize: vertical;
+}
+
+body.page-template-page-customer-info-form .gender-selection {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+body.page-template-page-customer-info-form .gender-selection__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 46px;
+  padding: 0 16px;
+  border: 1px solid var(--color-border, rgba(24, 38, 56, 0.14));
+  border-radius: 999px;
+  background: var(--color-surface-2, #fbfaf6);
+  color: inherit;
+  cursor: pointer;
+}
+
+body.page-template-page-customer-info-form .customer-info-actions,
+body.page-template-page-customer-info-form .customer-info-confirm__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 26px;
+}
+
+body.page-template-page-customer-info-form .customer-info-actions--center {
+  justify-content: center;
+}
+
+body.page-template-page-customer-info-form :is(.customer-info-actions, .customer-info-confirm__actions) .btn,
+body.page-template-page-customer-info-form button.btn,
+body.page-template-page-customer-info-form .button2 {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 50px;
+  padding: 0 24px;
+  border: 1px solid var(--color-accent-blue, #2f7fc4);
+  border-radius: 999px;
+  background: var(--color-accent-blue, #2f7fc4);
+  color: #fff;
+  font-weight: 900;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+body.page-template-page-customer-info-form .button2.is-secondary {
+  background: transparent;
+  color: var(--color-accent-blue, #2f7fc4);
+}
+
+@media (max-width: 760px) {
+  body.page-template-page-customer-info-form .customer-info-form-wrap {
+    width: min(100% - 24px, 980px);
+  }
+
+  body.page-template-page-customer-info-form .customer-info-card {
+    border-radius: 22px;
+    padding: 20px;
+  }
+
+  body.page-template-page-customer-info-form .customer-info-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =========================================================
+ * Customer Info Form - dark content tone fix
+ *
+ * 目的:
+ * - body / 外側背景は style.css に任せる
+ * - 中のフォームカードだけ暗すぎる状態を調整
+ * - ダークモード時のみ変更
+ * ========================================================= */
+
+body.dark-mode.page-template-page-customer-info-form .customer-info-card,
+body.is-dark.page-template-page-customer-info-form .customer-info-card,
+body.theme-dark.page-template-page-customer-info-form .customer-info-card,
+body.dark-theme.page-template-page-customer-info-form .customer-info-card,
+body.dark.page-template-page-customer-info-form .customer-info-card,
+html.dark body.page-template-page-customer-info-form .customer-info-card,
+html.is-dark body.page-template-page-customer-info-form .customer-info-card,
+html.theme-dark body.page-template-page-customer-info-form .customer-info-card,
+html.dark-theme body.page-template-page-customer-info-form .customer-info-card {
+  background: #2a3037 !important;
+  color: #f4f7fb !important;
+  border-color: rgba(226, 238, 248, 0.2) !important;
+  box-shadow: 0 22px 54px rgba(0, 0, 0, 0.22) !important;
+}
+
+body.dark-mode.page-template-page-customer-info-form .customer-info-card__header p,
+body.is-dark.page-template-page-customer-info-form .customer-info-card__header p,
+body.theme-dark.page-template-page-customer-info-form .customer-info-card__header p,
+body.dark-theme.page-template-page-customer-info-form .customer-info-card__header p,
+body.dark.page-template-page-customer-info-form .customer-info-card__header p,
+body.dark-mode.page-template-page-customer-info-form .customer-info-note,
+body.is-dark.page-template-page-customer-info-form .customer-info-note,
+body.theme-dark.page-template-page-customer-info-form .customer-info-note,
+body.dark-theme.page-template-page-customer-info-form .customer-info-note,
+body.dark.page-template-page-customer-info-form .customer-info-note,
+body.dark-mode.page-template-page-customer-info-form .customer-info-subnote,
+body.is-dark.page-template-page-customer-info-form .customer-info-subnote,
+body.theme-dark.page-template-page-customer-info-form .customer-info-subnote,
+body.dark-theme.page-template-page-customer-info-form .customer-info-subnote,
+body.dark.page-template-page-customer-info-form .customer-info-subnote,
+body.dark-mode.page-template-page-customer-info-form .customer-info-help,
+body.is-dark.page-template-page-customer-info-form .customer-info-help,
+body.theme-dark.page-template-page-customer-info-form .customer-info-help,
+body.dark-theme.page-template-page-customer-info-form .customer-info-help,
+body.dark.page-template-page-customer-info-form .customer-info-help,
+body.dark-mode.page-template-page-customer-info-form .customer-info-count,
+body.is-dark.page-template-page-customer-info-form .customer-info-count,
+body.theme-dark.page-template-page-customer-info-form .customer-info-count,
+body.dark-theme.page-template-page-customer-info-form .customer-info-count,
+body.dark.page-template-page-customer-info-form .customer-info-count {
+  color: #d4dde7 !important;
+}
+
+body.dark-mode.page-template-page-customer-info-form :is(
+  .customer-info-field input[type="text"],
+  .customer-info-field input[type="email"],
+  .customer-info-field input[type="tel"],
+  .customer-info-field input[type="number"],
+  .customer-info-field textarea,
+  .customer-info-field select
+),
+body.is-dark.page-template-page-customer-info-form :is(
+  .customer-info-field input[type="text"],
+  .customer-info-field input[type="email"],
+  .customer-info-field input[type="tel"],
+  .customer-info-field input[type="number"],
+  .customer-info-field textarea,
+  .customer-info-field select
+),
+body.theme-dark.page-template-page-customer-info-form :is(
+  .customer-info-field input[type="text"],
+  .customer-info-field input[type="email"],
+  .customer-info-field input[type="tel"],
+  .customer-info-field input[type="number"],
+  .customer-info-field textarea,
+  .customer-info-field select
+),
+body.dark-theme.page-template-page-customer-info-form :is(
+  .customer-info-field input[type="text"],
+  .customer-info-field input[type="email"],
+  .customer-info-field input[type="tel"],
+  .customer-info-field input[type="number"],
+  .customer-info-field textarea,
+  .customer-info-field select
+),
+body.dark.page-template-page-customer-info-form :is(
+  .customer-info-field input[type="text"],
+  .customer-info-field input[type="email"],
+  .customer-info-field input[type="tel"],
+  .customer-info-field input[type="number"],
+  .customer-info-field textarea,
+  .customer-info-field select
+) {
+  background: #f4f6f8 !important;
+  color: #182638 !important;
+  border-color: rgba(226, 238, 248, 0.34) !important;
+}
+
+body.dark-mode.page-template-page-customer-info-form .gender-selection__item,
+body.is-dark.page-template-page-customer-info-form .gender-selection__item,
+body.theme-dark.page-template-page-customer-info-form .gender-selection__item,
+body.dark-theme.page-template-page-customer-info-form .gender-selection__item,
+body.dark.page-template-page-customer-info-form .gender-selection__item {
+  background: #343b44 !important;
+  color: #f4f7fb !important;
+  border-color: rgba(226, 238, 248, 0.22) !important;
+}
+
+body.dark-mode.page-template-page-customer-info-form .customer-info-note,
+body.is-dark.page-template-page-customer-info-form .customer-info-note,
+body.theme-dark.page-template-page-customer-info-form .customer-info-note,
+body.dark-theme.page-template-page-customer-info-form .customer-info-note,
+body.dark.page-template-page-customer-info-form .customer-info-note {
+  background: #343b44 !important;
+  border: 1px solid rgba(226, 238, 248, 0.18) !important;
+}
+
+
+/* =========================================================
+ * Customer Info Form - confirmation dl conflict fix
+ *
+ * 原因:
+ * - css/loan-simulation.css のグローバル dl 指定が
+ *   .customer-info-confirm__list に干渉している
+ *
+ * 方針:
+ * - loan-simulation.css はここでは触らない
+ * - /contact の確認画面だけ正しい grid に戻す
+ * ========================================================= */
+
+body.page-template-page-customer-info-form .customer-info-confirm__list {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 10px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  align-items: stretch !important;
+  justify-content: initial !important;
+  flex-wrap: nowrap !important;
+}
+
+body.page-template-page-customer-info-form .customer-info-confirm__row {
+  display: grid !important;
+  grid-template-columns: 180px minmax(0, 1fr) !important;
+  gap: 12px !important;
+  align-items: start !important;
+  margin: 0 !important;
+  padding: 14px 16px !important;
+  border: 1px solid var(--cif-card-border, rgba(226, 238, 248, 0.22)) !important;
+  border-radius: 16px !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+}
+
+body.page-template-page-customer-info-form .customer-info-confirm__row dt {
+  margin: 0 !important;
+  color: var(--cif-card-muted, #d4dde7) !important;
+  font-weight: 800 !important;
+}
+
+body.page-template-page-customer-info-form .customer-info-confirm__row dd {
+  margin: 0 !important;
+  color: var(--cif-card-text, #f4f7fb) !important;
+  min-width: 0 !important;
+  word-break: break-word !important;
+}
+
+@media (max-width: 760px) {
+  body.page-template-page-customer-info-form .customer-info-confirm__row {
+    grid-template-columns: 1fr !important;
+  }
+}

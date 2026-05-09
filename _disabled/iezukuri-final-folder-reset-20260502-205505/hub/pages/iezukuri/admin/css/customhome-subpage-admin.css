@@ -1,0 +1,781 @@
+/* =========================================================
+ * Customhome Subpage Admin UI
+ * 目的:
+ * - サブページ編集画面の縦長メタボックスを見やすくする
+ * - Hub/親用メタボックスを消した後、子ページ用フィールドを2カラム化
+ * ========================================================= */
+
+#naigai_ch_subpage_layout_fields .inside,
+#naigai_ch_subpage_cta_background .inside,
+#naigai_ch_subpage_display_controls .inside {
+  padding: 16px 18px 20px;
+}
+
+#naigai_ch_subpage_layout_fields .form-table,
+#naigai_ch_subpage_cta_background .form-table {
+  margin-top: 0;
+}
+
+#naigai_ch_subpage_layout_fields .form-table tbody,
+#naigai_ch_subpage_cta_background .form-table tbody {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(280px, 1fr));
+  gap: 12px 18px;
+}
+
+#naigai_ch_subpage_layout_fields .form-table tr,
+#naigai_ch_subpage_cta_background .form-table tr {
+  display: block;
+  margin: 0;
+  padding: 12px;
+  border: 1px solid #dcdcde;
+  border-radius: 10px;
+  background: #fff;
+}
+
+#naigai_ch_subpage_layout_fields .form-table th,
+#naigai_ch_subpage_layout_fields .form-table td,
+#naigai_ch_subpage_cta_background .form-table th,
+#naigai_ch_subpage_cta_background .form-table td {
+  display: block;
+  width: 100%;
+  padding: 0;
+}
+
+#naigai_ch_subpage_layout_fields .form-table th,
+#naigai_ch_subpage_cta_background .form-table th {
+  margin-bottom: 7px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #1d2327;
+}
+
+#naigai_ch_subpage_layout_fields input.regular-text,
+#naigai_ch_subpage_layout_fields input[type="url"],
+#naigai_ch_subpage_layout_fields textarea,
+#naigai_ch_subpage_layout_fields select,
+#naigai_ch_subpage_cta_background input.regular-text,
+#naigai_ch_subpage_cta_background input[type="url"],
+#naigai_ch_subpage_cta_background textarea,
+#naigai_ch_subpage_cta_background select {
+  width: 100%;
+  max-width: 100%;
+}
+
+#naigai_ch_subpage_layout_fields textarea,
+#naigai_ch_subpage_cta_background textarea {
+  min-height: 78px;
+}
+
+#naigai_ch_subpage_layout_fields h3,
+#naigai_ch_subpage_cta_background h3 {
+  padding: 10px 12px;
+  margin: 18px 0 12px;
+  border-left: 4px solid #2271b1;
+  background: #f0f6fc;
+  border-radius: 6px;
+}
+
+.naigai-ch-layout-field-group {
+  padding: 0;
+}
+
+.naigai-ch-layout-field-group-empty {
+  grid-column: 1 / -1;
+}
+
+.naigai-ch-layout-image-preview img,
+.naigai-ch-sub-cta-preview img {
+  max-width: 160px;
+  height: auto;
+  border: 1px solid #dcdcde;
+  border-radius: 8px;
+  background: #f6f7f7;
+}
+
+.naigai-ch-sub-cta-preview {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.naigai-ch-sub-cta-preview__item {
+  width: 140px;
+  padding: 8px;
+  border: 1px solid #dcdcde;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.naigai-ch-sub-cta-preview__item img {
+  width: 100%;
+  height: 82px;
+  object-fit: cover;
+}
+
+.naigai-ch-sub-cta-preview__item code {
+  display: block;
+  margin-top: 6px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 1100px) {
+  #naigai_ch_subpage_layout_fields .form-table tbody,
+  #naigai_ch_subpage_cta_background .form-table tbody {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =========================================================
+ * CUSTOMHOME SUBPAGE ADMIN ORGANIZE FINAL
+ * - /iezukuri サブページ管理画面を整理
+ * ========================================================= */
+
+body.post-php #naigai_ch_builder_mode,
+body.post-php #naigai_ch_section_builder,
+body.post-php #naigai_ch_subpage_layout_fields,
+body.post-php #naigai_ch_subpage_cta_background {
+  border: 1px solid #d7dee7;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(25, 35, 45, 0.04);
+}
+
+#naigai_ch_builder_mode .postbox-header,
+#naigai_ch_section_builder .postbox-header,
+#naigai_ch_subpage_layout_fields .postbox-header,
+#naigai_ch_subpage_cta_background .postbox-header {
+  background: #f5f8fb;
+}
+
+#naigai_ch_builder_mode .hndle,
+#naigai_ch_section_builder .hndle,
+#naigai_ch_subpage_layout_fields .hndle,
+#naigai_ch_subpage_cta_background .hndle {
+  font-weight: 800;
+}
+
+#naigai_ch_section_builder .inside {
+  padding: 16px 18px 20px;
+}
+
+.naigai-ch-builder__toolbar {
+  padding: 12px;
+  border: 1px solid #dcdcde;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.naigai-ch-builder-card {
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.naigai-ch-builder-card:hover {
+  border-color: #2271b1 !important;
+  box-shadow: 0 8px 22px rgba(34, 113, 177, 0.08);
+}
+
+/* CTA / layout fields の長さを抑える */
+#naigai_ch_subpage_layout_fields .form-table tbody,
+#naigai_ch_subpage_cta_background .form-table tbody {
+  align-items: start;
+}
+
+#naigai_ch_subpage_cta_background .form-table tr,
+#naigai_ch_subpage_layout_fields .form-table tr {
+  min-height: auto;
+}
+
+/* 説明文を読みやすく */
+#naigai_ch_section_builder .description,
+#naigai_ch_subpage_cta_background .description,
+#naigai_ch_subpage_layout_fields .description {
+  color: #646970;
+  line-height: 1.7;
+}
+
+/* =========================================================
+ * CUSTOMHOME SUBPAGE ADMIN ORGANIZE FINAL END
+ * ========================================================= */
+
+/* =========================================================
+ * CUSTOMHOME ADMIN FULL ORGANIZE
+ * 全サブページ:
+ * - Hero → 表示順 → 本文 → FAQ/Form → CTA の流れで見やすくする
+ * contact:
+ * - CTA背景画像/動画ではなく、フォーム/Flow設定を強調
+ * ========================================================= */
+
+#naigai_ch_builder_mode,
+#naigai_ch_section_builder,
+#naigai_ch_subpage_layout_fields,
+#naigai_ch_contact_admin_fields,
+#naigai_ch_subpage_cta_background {
+  border: 1px solid #d7dee7;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(25, 35, 45, 0.05);
+}
+
+#naigai_ch_builder_mode .postbox-header,
+#naigai_ch_section_builder .postbox-header,
+#naigai_ch_subpage_layout_fields .postbox-header,
+#naigai_ch_contact_admin_fields .postbox-header,
+#naigai_ch_subpage_cta_background .postbox-header {
+  background: linear-gradient(90deg, #f5f8fb, #fff);
+  border-bottom: 1px solid #d7dee7;
+}
+
+#naigai_ch_builder_mode .hndle,
+#naigai_ch_section_builder .hndle,
+#naigai_ch_subpage_layout_fields .hndle,
+#naigai_ch_contact_admin_fields .hndle,
+#naigai_ch_subpage_cta_background .hndle {
+  font-weight: 800;
+  color: #1f2d3d;
+}
+
+.naigai-admin-guide {
+  padding: 12px 14px;
+  margin: 0 0 14px;
+  border: 1px solid #c7d7ea;
+  border-left: 5px solid #2271b1;
+  border-radius: 10px;
+  background: #f6f9fc;
+}
+
+.naigai-admin-guide p {
+  margin: 6px 0 0;
+  color: #506070;
+}
+
+.naigai-admin-section {
+  padding: 16px;
+  margin: 0 0 16px;
+  border: 1px solid #dcdcde;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.naigai-admin-section h3 {
+  margin: 0 0 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eef1f4;
+  color: #1f2d3d;
+}
+
+.naigai-admin-subcard {
+  padding: 12px;
+  margin: 12px 0;
+  border: 1px dashed #cfd8e3;
+  border-radius: 10px;
+  background: #fbfcfe;
+}
+
+.naigai-admin-subcard h4 {
+  margin: 0 0 10px;
+  color: #2271b1;
+}
+
+.naigai-admin-field {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 12px;
+  align-items: start;
+  margin: 0 0 12px;
+}
+
+.naigai-admin-field label {
+  font-weight: 700;
+  color: #1f2d3d;
+  padding-top: 6px;
+}
+
+.naigai-admin-field input.regular-text,
+.naigai-admin-field textarea,
+.naigai-admin-field select {
+  width: min(100%, 680px);
+}
+
+.naigai-ch-builder-card {
+  border-radius: 12px !important;
+}
+
+.naigai-ch-builder-card strong {
+  font-size: 14px;
+}
+
+@media (max-width: 782px) {
+  .naigai-admin-field {
+    grid-template-columns: 1fr;
+  }
+
+  .naigai-admin-field label {
+    padding-top: 0;
+  }
+}
+
+/* =========================================================
+ * CUSTOMHOME ADMIN FULL ORGANIZE END
+ * ========================================================= */
+
+/* =========================================================
+ * CUSTOMHOME ADMIN ORDER FINAL
+ * - ①表示方式 → ②順番 → ③本文/フォーム → ④CTA の順に見せる
+ * ========================================================= */
+
+#naigai_ch_builder_mode,
+#naigai_ch_section_builder,
+#naigai_ch_subpage_layout_fields,
+#naigai_ch_contact_admin_fields,
+#naigai_ch_subpage_cta_background {
+  border: 1px solid #d7dee7;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(25, 35, 45, 0.05);
+}
+
+#naigai_ch_builder_mode .postbox-header,
+#naigai_ch_section_builder .postbox-header,
+#naigai_ch_subpage_layout_fields .postbox-header,
+#naigai_ch_contact_admin_fields .postbox-header,
+#naigai_ch_subpage_cta_background .postbox-header {
+  background: linear-gradient(90deg, #f5f8fb, #ffffff);
+  border-bottom: 1px solid #d7dee7;
+}
+
+#naigai_ch_builder_mode .hndle,
+#naigai_ch_section_builder .hndle,
+#naigai_ch_subpage_layout_fields .hndle,
+#naigai_ch_contact_admin_fields .hndle,
+#naigai_ch_subpage_cta_background .hndle {
+  font-weight: 800;
+  color: #1f2d3d;
+}
+
+#naigai_ch_builder_mode .inside,
+#naigai_ch_section_builder .inside,
+#naigai_ch_subpage_layout_fields .inside,
+#naigai_ch_contact_admin_fields .inside,
+#naigai_ch_subpage_cta_background .inside {
+  padding: 16px 18px 20px;
+}
+
+.naigai-admin-guide {
+  padding: 12px 14px;
+  margin: 0 0 14px;
+  border: 1px solid #c7d7ea;
+  border-left: 5px solid #2271b1;
+  border-radius: 10px;
+  background: #f6f9fc;
+}
+
+.naigai-admin-guide p {
+  margin: 6px 0 0;
+  color: #506070;
+}
+
+.naigai-admin-section {
+  padding: 16px;
+  margin: 0 0 16px;
+  border: 1px solid #dcdcde;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.naigai-admin-section h3 {
+  margin: 0 0 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eef1f4;
+  color: #1f2d3d;
+}
+
+.naigai-admin-subcard {
+  padding: 12px;
+  margin: 12px 0;
+  border: 1px dashed #cfd8e3;
+  border-radius: 10px;
+  background: #fbfcfe;
+}
+
+.naigai-admin-subcard h4 {
+  margin: 0 0 10px;
+  color: #2271b1;
+}
+
+.naigai-admin-field {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 12px;
+  align-items: start;
+  margin: 0 0 12px;
+}
+
+.naigai-admin-field label {
+  font-weight: 700;
+  color: #1f2d3d;
+  padding-top: 6px;
+}
+
+.naigai-admin-field input.regular-text,
+.naigai-admin-field textarea,
+.naigai-admin-field select {
+  width: min(100%, 680px);
+}
+
+.naigai-ch-builder__toolbar {
+  padding: 12px;
+  border: 1px solid #dcdcde;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.naigai-ch-builder-card {
+  border-radius: 12px !important;
+  border-color: #d7dee7 !important;
+}
+
+.naigai-ch-builder-card:hover {
+  border-color: #2271b1 !important;
+  box-shadow: 0 8px 22px rgba(34, 113, 177, 0.08);
+}
+
+.naigai-ch-builder-card strong {
+  font-size: 14px;
+}
+
+@media (max-width: 782px) {
+  .naigai-admin-field {
+    grid-template-columns: 1fr;
+  }
+
+  .naigai-admin-field label {
+    padding-top: 0;
+  }
+}
+
+/* =========================================================
+ * CUSTOMHOME ADMIN ORDER FINAL END
+ * ========================================================= */
+
+/* =========================================================
+ * CUSTOMHOME TAB EDITOR RESET FINAL
+ * 目的:
+ * - 古いメタボックスをバラバラに見せず、1つのタブUIに再描画する
+ * ========================================================= */
+
+.naigai-ch-tab-editor {
+  margin: 18px 0 24px;
+  border: 1px solid #d7dee7;
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 16px 42px rgba(25, 35, 45, 0.08);
+  overflow: hidden;
+}
+
+.naigai-ch-tab-editor__head {
+  padding: 22px 24px;
+  background: linear-gradient(135deg, #f6f9fc, #ffffff);
+  border-bottom: 1px solid #d7dee7;
+}
+
+.naigai-ch-tab-editor__eyebrow {
+  margin: 0 0 6px;
+  color: #2271b1;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+}
+
+.naigai-ch-tab-editor__head h2 {
+  margin: 0;
+  color: #1f2d3d;
+  font-size: 22px;
+}
+
+.naigai-ch-tab-editor__head p {
+  margin: 8px 0 0;
+  color: #5f6f7f;
+}
+
+.naigai-ch-tab-editor__nav {
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+  border-bottom: 1px solid #d7dee7;
+  background: #f8fafc;
+}
+
+.naigai-ch-tab-editor__tab {
+  appearance: none;
+  border: 0;
+  border-right: 1px solid #d7dee7;
+  background: transparent;
+  padding: 14px 18px;
+  cursor: pointer;
+  color: #44566a;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.naigai-ch-tab-editor__tab:hover,
+.naigai-ch-tab-editor__tab.is-active {
+  background: #ffffff;
+  color: #0f5f9f;
+}
+
+.naigai-ch-tab-editor__tab.is-active {
+  box-shadow: inset 0 -3px 0 #2271b1;
+}
+
+.naigai-ch-tab-editor__body {
+  padding: 20px;
+}
+
+.naigai-ch-tab-editor__panel {
+  display: none;
+}
+
+.naigai-ch-tab-editor__panel.is-active {
+  display: block;
+}
+
+.naigai-ch-tab-editor__guide {
+  margin: 0 0 16px;
+  padding: 14px 16px;
+  border: 1px solid #c7d7ea;
+  border-left: 5px solid #2271b1;
+  border-radius: 12px;
+  background: #f6f9fc;
+}
+
+.naigai-ch-tab-editor__guide strong {
+  display: block;
+  color: #1f2d3d;
+}
+
+.naigai-ch-tab-editor__guide p {
+  margin: 6px 0 0;
+  color: #5f6f7f;
+}
+
+.naigai-ch-tab-editor__empty {
+  padding: 16px;
+  border: 1px dashed #cfd8e3;
+  border-radius: 12px;
+  color: #6c7781;
+  background: #fbfcfe;
+}
+
+.naigai-ch-tab-editor .postbox {
+  margin: 0 0 16px !important;
+  border: 1px solid #d7dee7 !important;
+  border-radius: 14px !important;
+  box-shadow: none !important;
+  overflow: hidden;
+}
+
+.naigai-ch-tab-editor .postbox .postbox-header {
+  background: #f8fafc;
+}
+
+.naigai-ch-tab-editor .postbox .hndle {
+  font-weight: 800;
+  color: #1f2d3d;
+}
+
+.naigai-ch-tab-editor .postbox .inside {
+  padding: 16px 18px 20px;
+}
+
+.naigai-ch-tab-editor .form-table th {
+  width: 190px;
+  color: #1f2d3d;
+}
+
+.naigai-ch-tab-editor textarea.large-text,
+.naigai-ch-tab-editor input.regular-text,
+.naigai-ch-tab-editor select {
+  max-width: 720px;
+  width: 100%;
+}
+
+.naigai-ch-tab-editor-active #normal-sortables > .postbox[id^="naigai_ch_"],
+.naigai-ch-tab-editor-active #side-sortables > .postbox[id^="naigai_ch_"] {
+  display: none;
+}
+
+.naigai-ch-tab-editor-active .naigai-ch-tab-editor .postbox[id^="naigai_ch_"] {
+  display: block;
+}
+
+@media (max-width: 782px) {
+  .naigai-ch-tab-editor__body {
+    padding: 14px;
+  }
+
+  .naigai-ch-tab-editor .form-table th,
+  .naigai-ch-tab-editor .form-table td {
+    display: block;
+    width: 100%;
+  }
+}
+
+/* =========================================================
+ * CUSTOMHOME TAB EDITOR RESET FINAL END
+ * ========================================================= */
+
+/* =========================================================
+ * SECTION CONTROL ADMIN
+ * ========================================================= */
+
+.naigai-section-check {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 12px;
+  margin: 10px 0;
+  border: 1px solid #d7dee7;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.naigai-section-check input {
+  margin-top: 5px;
+}
+
+.naigai-section-check__main {
+  display: grid;
+  gap: 4px;
+}
+
+.naigai-section-check__main strong {
+  color: #0f5f9f;
+  font-size: 13px;
+  letter-spacing: 0.05em;
+}
+
+.naigai-section-check__main em {
+  color: #1f2d3d;
+  font-style: normal;
+  font-weight: 700;
+}
+
+.naigai-section-check__main small {
+  color: #667085;
+  line-height: 1.6;
+}
+
+/* =========================================================
+ * SECTION CONTROL ADMIN END
+ * ========================================================= */
+
+/* CLEAN CUSTOMHOME TAB EDITOR */
+.naigai-ch-tab-editor {
+  margin: 20px 0 28px;
+  border: 1px solid #d7dee7;
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 16px 42px rgba(25, 35, 45, 0.08);
+  overflow: hidden;
+}
+
+.naigai-ch-tab-editor__head {
+  padding: 22px 24px;
+  background: linear-gradient(135deg, #f6f9fc, #fff);
+  border-bottom: 1px solid #d7dee7;
+}
+
+.naigai-ch-tab-editor__eyebrow {
+  margin: 0 0 6px;
+  color: #2271b1;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: .12em;
+}
+
+.naigai-ch-tab-editor__head h2 {
+  margin: 0;
+  font-size: 22px;
+  color: #1f2d3d;
+}
+
+.naigai-ch-tab-editor__head p {
+  margin: 8px 0 0;
+  color: #5f6f7f;
+}
+
+.naigai-ch-tab-editor__nav {
+  display: flex;
+  overflow-x: auto;
+  border-bottom: 1px solid #d7dee7;
+  background: #f8fafc;
+}
+
+.naigai-ch-tab-editor__tab {
+  border: 0;
+  border-right: 1px solid #d7dee7;
+  background: transparent;
+  padding: 14px 18px;
+  cursor: pointer;
+  color: #44566a;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.naigai-ch-tab-editor__tab.is-active {
+  background: #fff;
+  color: #0f5f9f;
+  box-shadow: inset 0 -3px 0 #2271b1;
+}
+
+.naigai-ch-tab-editor__body {
+  padding: 20px;
+}
+
+.naigai-ch-tab-editor__panel {
+  display: none;
+}
+
+.naigai-ch-tab-editor__panel.is-active {
+  display: block;
+}
+
+.naigai-ch-tab-editor__guide {
+  margin: 0 0 16px;
+  padding: 14px 16px;
+  border: 1px solid #c7d7ea;
+  border-left: 5px solid #2271b1;
+  border-radius: 12px;
+  background: #f6f9fc;
+}
+
+.naigai-ch-tab-editor__guide strong {
+  display: block;
+  color: #1f2d3d;
+}
+
+.naigai-ch-tab-editor__guide p {
+  margin: 6px 0 0;
+  color: #5f6f7f;
+}
+
+.naigai-ch-tab-editor .postbox {
+  margin: 0 0 16px !important;
+  border: 1px solid #d7dee7 !important;
+  border-radius: 14px !important;
+  box-shadow: none !important;
+  overflow: hidden;
+}
+
+body.naigai-ch-tab-editor-active #normal-sortables > .postbox[id^="naigai_ch_"],
+body.naigai-ch-tab-editor-active #side-sortables > .postbox[id^="naigai_ch_"] {
+  display: none !important;
+}
+
+body.naigai-ch-tab-editor-active .naigai-ch-tab-editor .postbox[id^="naigai_ch_"] {
+  display: block !important;
+}
+/* CLEAN CUSTOMHOME TAB EDITOR END */

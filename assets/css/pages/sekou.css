@@ -1,0 +1,457 @@
+/* =========================================================
+ * 施工実例ページ
+ * - 見出し帯ではなくセクション全体をカード化
+ * - 各セクションのボタンは削除
+ * - 最後のCTAだけを強い導線にする
+ * ========================================================= */
+
+body:has(.sekou-page) {
+  background: #edf2f6 !important;
+}
+
+body.dark-mode:has(.sekou-page),
+body.is-dark:has(.sekou-page),
+body.theme-dark:has(.sekou-page),
+body.dark-theme:has(.sekou-page),
+body.dark:has(.sekou-page),
+body[data-theme='dark']:has(.sekou-page) {
+  background: #09131a !important;
+}
+
+:where(
+  #content,
+  #primary,
+  #main,
+  .site-content,
+  .content-area,
+  .site-main,
+  .page-wrapper,
+  .entry-content,
+  .post-content,
+  .inside-article,
+  article,
+  .page
+):has(.sekou-page) {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+}
+
+.sekou-page {
+  --sekou-content: 1180px;
+  --sekou-bg: #edf2f6;
+  --sekou-surface: #ffffff;
+  --sekou-surface-2: #f5f8fb;
+  --sekou-panel: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.92) 0%,
+    rgba(248, 251, 253, 0.96) 100%
+  );
+  --sekou-panel-border: rgba(27, 56, 72, 0.1);
+  --sekou-panel-shadow: 0 22px 54px rgba(20, 34, 48, 0.08);
+  --sekou-line: rgba(36, 72, 93, 0.18);
+  --sekou-text: #1b2731;
+  --sekou-text-soft: #667887;
+  --sekou-accent: #6d97b3;
+  --sekou-accent-dark: #547b95;
+  --sekou-radius: 28px;
+  --sekou-card-radius: 24px;
+
+  position: relative;
+  isolation: isolate;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  color: var(--sekou-text);
+  background:
+    radial-gradient(circle at top, rgba(109, 151, 179, 0.12), transparent 34%), var(--sekou-bg);
+  box-shadow: 0 0 0 100vmax var(--sekou-bg);
+  clip-path: inset(0 -100vmax);
+  padding-bottom: 1px;
+}
+
+body.dark-mode .sekou-page,
+body.is-dark .sekou-page,
+body.theme-dark .sekou-page,
+body.dark-theme .sekou-page,
+body.dark .sekou-page,
+body[data-theme='dark'] .sekou-page {
+  --sekou-bg: #09131a;
+  --sekou-surface: #16242d;
+  --sekou-surface-2: #10202a;
+  --sekou-panel: linear-gradient(180deg, rgba(17, 31, 41, 0.94) 0%, rgba(12, 25, 34, 0.98) 100%);
+  --sekou-panel-border: rgba(125, 167, 193, 0.14);
+  --sekou-panel-shadow: 0 22px 54px rgba(0, 0, 0, 0.28);
+  --sekou-line: rgba(125, 167, 193, 0.26);
+  --sekou-text: #eff5f8;
+  --sekou-text-soft: #b7c6cf;
+  --sekou-accent: #86abc3;
+  --sekou-accent-dark: #6e96b2;
+}
+
+.sekou-page,
+.sekou-page *,
+.sekou-page *::before,
+.sekou-page *::after {
+  box-sizing: border-box;
+}
+
+.sekou-shell {
+  width: min(var(--sekou-content), calc(100% - 32px));
+  margin-inline: auto;
+}
+
+.sekou-page img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.sekou-kicker {
+  display: inline-block;
+  margin: 0 0 14px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--sekou-text-soft);
+}
+
+.sekou-heading,
+.sekou-band-title,
+.sekou-cta__title,
+.sekou-hero__title {
+  margin: 0;
+  color: var(--sekou-text);
+}
+
+.sekou-section {
+  padding: 36px 0;
+}
+
+.sekou-section--intro {
+  padding-top: 28px;
+}
+
+.sekou-hero {
+  position: relative;
+  min-height: clamp(360px, 48vw, 600px);
+  display: grid;
+  align-items: end;
+  isolation: isolate;
+  overflow: hidden;
+  background: linear-gradient(135deg, #dbe6ee 0%, #eef4f8 55%, #f8fbfd 100%);
+}
+
+body.dark-mode .sekou-hero,
+body.is-dark .sekou-hero,
+body.theme-dark .sekou-hero,
+body.dark-theme .sekou-hero,
+body.dark .sekou-hero,
+body[data-theme='dark'] .sekou-hero {
+  background: linear-gradient(135deg, #14212a 0%, #1a2934 55%, #20323e 100%);
+}
+
+.sekou-hero__media,
+.sekou-hero__media picture,
+.sekou-hero__media img,
+.sekou-hero__overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.sekou-hero__media img {
+  object-fit: cover;
+  object-position: center center;
+}
+
+.sekou-hero__overlay {
+  z-index: 1;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.08) 0%,
+    rgba(237, 242, 246, 0.62) 72%,
+    rgba(237, 242, 246, 0.98) 100%
+  );
+}
+
+body.dark-mode .sekou-hero__overlay,
+body.is-dark .sekou-hero__overlay,
+body.theme-dark .sekou-hero__overlay,
+body.dark-theme .sekou-hero__overlay,
+body.dark .sekou-hero__overlay,
+body[data-theme='dark'] .sekou-hero__overlay {
+  background: linear-gradient(
+    180deg,
+    rgba(9, 19, 26, 0.06) 0%,
+    rgba(9, 19, 26, 0.72) 72%,
+    rgba(9, 19, 26, 0.96) 100%
+  );
+}
+
+.sekou-hero__inner {
+  position: relative;
+  z-index: 2;
+  padding: 120px 0 78px;
+  text-align: center;
+}
+
+.sekou-hero__title {
+  font-size: clamp(2.2rem, 5vw, 4rem);
+  line-height: 1.08;
+}
+
+.sekou-hero__lead {
+  width: min(760px, 100%);
+  margin: 18px auto 0;
+  color: var(--sekou-text-soft);
+  font-size: clamp(1rem, 1.7vw, 1.15rem);
+  line-height: 1.9;
+}
+
+.sekou-intro-card,
+.sekou-panel {
+  position: relative;
+  padding: clamp(24px, 4vw, 40px);
+  border: 1px solid var(--sekou-panel-border);
+  border-radius: var(--sekou-radius);
+  background: var(--sekou-panel);
+  box-shadow: var(--sekou-panel-shadow);
+  backdrop-filter: blur(6px);
+}
+
+.sekou-intro-card {
+  text-align: center;
+}
+
+.sekou-heading {
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+  line-height: 1.2;
+}
+
+.sekou-intro__text,
+.sekou-band-copy {
+  width: min(820px, 100%);
+  margin: 16px auto 0;
+  color: var(--sekou-text-soft);
+  font-size: clamp(1rem, 1.45vw, 1.08rem);
+  line-height: 1.95;
+}
+
+.sekou-band-head {
+  margin-bottom: 28px;
+  text-align: center;
+}
+
+.sekou-band-title-row {
+  display: grid;
+  grid-template-columns: minmax(24px, 1fr) auto minmax(24px, 1fr);
+  align-items: center;
+  gap: 24px;
+}
+
+.sekou-band-line {
+  display: block;
+  height: 1px;
+  background: var(--sekou-line);
+}
+
+.sekou-band-title {
+  font-size: clamp(1.9rem, 3.2vw, 3rem);
+  line-height: 1.15;
+  letter-spacing: 0.02em;
+}
+
+.sekou-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 18px;
+  align-items: stretch;
+}
+
+.sekou-thumb {
+  margin: 0;
+  padding: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(36, 72, 93, 0.1);
+  border-radius: var(--sekou-card-radius);
+  background: var(--sekou-surface);
+  box-shadow: 0 10px 26px rgba(16, 28, 40, 0.08);
+}
+
+body.dark-mode .sekou-thumb,
+body.is-dark .sekou-thumb,
+body.theme-dark .sekou-thumb,
+body.dark-theme .sekou-thumb,
+body.dark .sekou-thumb,
+body[data-theme='dark'] .sekou-thumb {
+  border-color: rgba(125, 167, 193, 0.1);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.2);
+}
+
+.sekou-thumb img {
+  border-radius: 18px;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  object-position: center;
+}
+
+.sekou-section-action {
+  display: none;
+}
+
+.sekou-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7em;
+  min-width: 300px;
+  min-height: 56px;
+  padding: 14px 24px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: var(--sekou-accent);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.4;
+  text-decoration: none;
+  transition:
+    background 0.25s ease,
+    transform 0.25s ease;
+}
+
+.sekou-btn::after {
+  content: '›';
+  font-size: 1.25em;
+  line-height: 1;
+}
+
+.sekou-btn:hover,
+.sekou-btn:focus-visible {
+  background: var(--sekou-accent-dark);
+  transform: translateY(-1px);
+}
+
+.sekou-section--cta {
+  padding-top: 18px;
+  padding-bottom: 72px;
+}
+
+.sekou-cta {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--sekou-panel-border);
+  border-radius: 32px;
+  background: var(--sekou-surface);
+  box-shadow: var(--sekou-panel-shadow);
+}
+
+.sekou-cta__media,
+.sekou-cta__media img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.sekou-cta__media img {
+  object-fit: cover;
+}
+
+.sekou-cta__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(15, 30, 41, 0.9) 0%,
+    rgba(15, 30, 41, 0.66) 58%,
+    rgba(15, 30, 41, 0.24) 100%
+  );
+}
+
+.sekou-cta__inner {
+  position: relative;
+  z-index: 1;
+  width: min(720px, 100%);
+  padding: 56px 42px;
+}
+
+.sekou-cta .sekou-kicker,
+.sekou-cta .sekou-cta__title,
+.sekou-cta .sekou-cta__text {
+  color: #fff;
+}
+
+.sekou-cta__title {
+  font-size: clamp(1.9rem, 3vw, 2.8rem);
+  line-height: 1.2;
+}
+
+.sekou-cta__text {
+  margin: 16px 0 0;
+  font-size: 1rem;
+  line-height: 1.9;
+}
+
+.sekou-cta__actions {
+  margin-top: 24px;
+}
+
+@media (max-width: 1024px) {
+  .sekou-gallery {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 767px) {
+  .sekou-shell {
+    width: calc(100% - 20px);
+  }
+
+  .sekou-section {
+    padding: 28px 0;
+  }
+
+  .sekou-hero__inner {
+    padding: 96px 0 54px;
+  }
+
+  .sekou-band-title-row {
+    gap: 12px;
+  }
+
+  .sekou-band-title {
+    font-size: 2rem;
+  }
+
+  .sekou-gallery {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .sekou-thumb {
+    padding: 10px;
+  }
+
+  .sekou-thumb img {
+    aspect-ratio: 4 / 3;
+  }
+
+  .sekou-btn {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .sekou-cta__inner {
+    width: 100%;
+    padding: 34px 22px;
+  }
+}

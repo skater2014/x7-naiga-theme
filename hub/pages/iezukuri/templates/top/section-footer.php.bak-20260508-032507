@@ -1,0 +1,59 @@
+<?php
+/**
+ * hub/pages/iezukuri/templates/top/section-footer.php
+ *
+ * /iezukuri/ トップ下部のLP用フッター。
+ */
+
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+$company_name = '株式会社 内外建設';
+$company_url  = home_url('/iezukuri/company/');
+$contact_url  = home_url('/iezukuri/contact/');
+$address      = '〒325-0302 栃木県那須郡那須町高久丙';
+$phone        = '0287-00-1234';
+?>
+
+<footer class="ch-lp-footer" aria-label="家づくりフッター">
+    <div class="ch-shell">
+        <div class="ch-lp-footer__cta">
+            <div>
+                <p class="ch-eyebrow">Contact</p>
+                <h2>家づくりのご相談・資料請求はこちら</h2>
+                <p>土地、予算、間取り、リフォームまで。まずは状況を整理するところからご相談ください。</p>
+            </div>
+
+            <div class="ch-lp-footer__cta-actions">
+                <a class="ch-btn ch-btn--primary" href="<?php echo esc_url($contact_url); ?>">相談・お問い合わせ</a>
+                <a class="ch-btn ch-btn--ghost-dark" href="<?php echo esc_url(home_url('/iezukuri/plans/')); ?>">間取りを見る</a>
+            </div>
+        </div>
+
+        <div class="ch-lp-footer__grid">
+            <div class="ch-lp-footer__company">
+                <h3><?php echo esc_html($company_name); ?></h3>
+                <p><?php echo esc_html($address); ?></p>
+                <p>TEL：<?php echo esc_html($phone); ?></p>
+                <a href="<?php echo esc_url($company_url); ?>">会社概要を見る</a>
+            </div>
+
+            <nav class="ch-lp-footer__nav" aria-label="家づくりメニュー">
+                <h3>家づくりメニュー</h3>
+                <a href="<?php echo esc_url(home_url('/iezukuri/concept/')); ?>">家づくりの考え方</a>
+                <a href="<?php echo esc_url(home_url('/iezukuri/design-policy/')); ?>">設計方針</a>
+                <a href="<?php echo esc_url(home_url('/iezukuri/plans/')); ?>">間取り・プラン</a>
+                <a href="<?php echo esc_url(home_url('/iezukuri/works/')); ?>">暮らしのポイント</a>
+            </nav>
+
+            <nav class="ch-lp-footer__nav" aria-label="住まいの種類">
+                <h3>住まいの種類</h3>
+                <a href="<?php echo esc_url(home_url('/iezukuri/new-house/')); ?>">新築住宅</a>
+                <a href="<?php echo esc_url(home_url('/iezukuri/two-family/')); ?>">二世帯住宅</a>
+                <a href="<?php echo esc_url(home_url('/iezukuri/renovation/')); ?>">住宅リフォーム</a>
+                <a href="<?php echo esc_url($contact_url); ?>">相談する</a>
+            </nav>
+        </div>
+    </div>
+</footer>

@@ -1,0 +1,6 @@
+No syntax errors detected in iezukuri/inc/loader.php
+No syntax errors detected in iezukuri/inc/admin/admin-page.php
+No syntax errors detected in iezukuri/inc/admin/meta-box.php
+No syntax errors detected in iezukuri/inc/admin/hero-fields.php
+No syntax errors detected in iezukuri/inc/enqueue.php
+No syntax errors detected in iezukuri/inc/helpers.php

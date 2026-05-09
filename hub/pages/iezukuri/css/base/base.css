@@ -1,0 +1,166 @@
+/* =========================================================
+ * hub/pages/iezukuri/css/base/base.css
+ *
+ * 家づくりページ共通カラー
+ *
+ * 対象:
+ * - /iezukuri/
+ * - /iezukuri/ 配下のサブページ
+ * - 新築住宅 / 中古住宅 / 二世帯住宅 など
+ *
+ * 役割:
+ * - 色だけを一元管理する
+ * - レイアウトはここに書かない
+ * - ページ個別CSSはこの変数を参照する
+ *
+ * 既存テーマ色の整理:
+ * - 背景: #f5f2ec
+ * - 薄い背景: #fbfaf7 / #f7f3ec / #f3eee7
+ * - 本文: #241910 / #2b2119
+ * - 補助文: #4d4036 / #5b4b3d / #6a5a4a
+ * - アクセント: #8a6a45 / #7a5b3c
+ * - 濃色: #24160f / #1d1712
+ * ========================================================= */
+
+:root {
+  /* base */
+  --iezukuri-bg: #f5f2ec;
+  --iezukuri-surface: #ffffff;
+  --iezukuri-surface-soft: #fbfaf7;
+  --iezukuri-surface-warm: #f7f3ec;
+  --iezukuri-surface-muted: #f3eee7;
+
+  /* text */
+  --iezukuri-text: #241910;
+  --iezukuri-text-strong: #2b2119;
+  --iezukuri-text-soft: #4d4036;
+  --iezukuri-muted: #5b4b3d;
+  --iezukuri-muted-2: #6a5a4a;
+
+  /* brand / accent */
+  --iezukuri-accent: #8a6a45;
+  --iezukuri-accent-2: #7a5b3c;
+  --iezukuri-accent-soft: #dfd0bd;
+
+  /* dark blocks */
+  --iezukuri-dark: #24160f;
+  --iezukuri-dark-2: #1d1712;
+  --iezukuri-dark-rgb: 36, 22, 15;
+
+  /* lines / shadow */
+  --iezukuri-border: rgba(36, 25, 16, 0.14);
+  --iezukuri-border-strong: rgba(36, 25, 16, 0.22);
+  --iezukuri-shadow: 0 18px 46px rgba(36, 25, 16, 0.10);
+  --iezukuri-shadow-soft: 0 12px 28px rgba(36, 25, 16, 0.07);
+
+  /* buttons */
+  --iezukuri-btn-bg: var(--iezukuri-dark);
+  --iezukuri-btn-text: #ffffff;
+  --iezukuri-btn-sub-bg: var(--iezukuri-surface-warm);
+  --iezukuri-btn-sub-text: var(--iezukuri-muted);
+
+  /* plan detail */
+  --iezukuri-plan-back-bg: #fffdf8;
+  --iezukuri-plan-back-text: #6f5434;
+
+  --iezukuri-plan-action-bg: #8a6a45;
+  --iezukuri-plan-action-bg-hover: #765536;
+  --iezukuri-plan-action-text: #ffffff;
+
+  --iezukuri-plan-chip-bg: #efe6d8;
+  --iezukuri-plan-chip-text: #6f5434;
+
+  --iezukuri-plan-related-bg: #ffffff;
+  --iezukuri-plan-related-bg-alt: #fbf7ef;
+  --iezukuri-plan-related-title: #241910;
+  --iezukuri-plan-related-meta: #6a5a4a;
+
+  --iezukuri-plan-lightbox-overlay: rgba(68, 54, 39, 0.58);
+  --iezukuri-plan-lightbox-control-bg: #fffaf2;
+  --iezukuri-plan-lightbox-control-text: #7a5b3c;
+
+  /* hero */
+  --iezukuri-hero-dark: rgba(10, 8, 6, 0.72);
+  --iezukuri-hero-panel: rgba(36, 22, 15, 0.88);
+
+  /* aliases for customhome / hub pages */
+  --ch-bg: var(--iezukuri-bg);
+  --ch-surface: var(--iezukuri-surface);
+  --ch-surface-soft: var(--iezukuri-surface-soft);
+  --ch-text: var(--iezukuri-text);
+  --ch-muted: var(--iezukuri-muted);
+  --ch-border: var(--iezukuri-border);
+  --ch-accent: var(--iezukuri-accent);
+  --ch-accent-dark: var(--iezukuri-accent-2);
+  --ch-shadow: var(--iezukuri-shadow);
+
+  --hub-bg: var(--iezukuri-bg);
+  --hub-surface: var(--iezukuri-surface);
+  --hub-surface-soft: var(--iezukuri-surface-soft);
+  --hub-text: var(--iezukuri-text);
+  --hub-muted: var(--iezukuri-muted);
+  --hub-border: var(--iezukuri-border);
+  --hub-accent: var(--iezukuri-accent);
+  --hub-accent-dark: var(--iezukuri-accent-2);
+}
+
+/* 家づくりページだけに使う基本背景 */
+body.iezukuri-page,
+body.iezukuri-subpage,
+body.page-template-template-iezukuri-subpage,
+body.page-template-template-iezukuri-subpage-php,
+body.page-template-hub-pages-iezukuri-templates-template-iezukuri-new-house,
+body.page-template-hub-pages-iezukuri-templates-template-iezukuri-new-house-php {
+  background: var(--iezukuri-bg);
+  color: var(--iezukuri-text);
+}
+
+/* 共通ボタンの最低限トークン。細かい形は各ページCSS側で管理 */
+.iezukuri-btn,
+.ch-btn,
+.nh-btn {
+  --page-btn-bg: var(--iezukuri-btn-bg);
+  --page-btn-text: var(--iezukuri-btn-text);
+}
+
+
+/* =========================================================
+ * IEZUKURI LIGHTBOX COLOR TOKENS START
+ * 役割:
+ * - 色・影・背景・境界線だけ管理
+ * - レイアウト、幅、位置、余白は subpage.css 側で管理
+ * ========================================================= */
+
+body.iezukuri-page,
+body.iezukuri-subpage,
+body.single-iez_plan {
+  --iez-lb-transparent: transparent;
+  --iez-lb-overlay: rgba(10, 12, 16, 0.72);
+  --iez-lb-surface: #fff;
+  --iez-lb-surface-soft: rgba(255, 255, 255, 0.94);
+  --iez-lb-surface-strong: rgba(255, 255, 255, 0.96);
+  --iez-lb-surface-muted: rgba(255, 255, 255, 0.88);
+  --iez-lb-text: #211b16;
+  --iez-lb-accent: #211b16;
+  --iez-lb-on-accent: #fff;
+  --iez-lb-border-glass: rgba(255, 255, 255, 0.34);
+  --iez-lb-border-active: #fff;
+  --iez-lb-shadow-float: 0 12px 34px rgba(0, 0, 0, 0.24);
+  --iez-lb-shadow-modal: 0 28px 90px rgba(0, 0, 0, 0.28);
+  --iez-lb-shadow-chip: 0 10px 28px rgba(0, 0, 0, 0.18);
+}
+
+:is(body.dark-mode, body.is-dark, body.theme-dark).iezukuri-page,
+:is(body.dark-mode, body.is-dark, body.theme-dark).iezukuri-subpage,
+:is(body.dark-mode, body.is-dark, body.theme-dark).single-iez_plan {
+  --iez-lb-overlay: rgba(4, 6, 10, 0.78);
+  --iez-lb-surface: #f7f3ec;
+  --iez-lb-surface-soft: rgba(247, 243, 236, 0.94);
+  --iez-lb-surface-strong: rgba(247, 243, 236, 0.96);
+  --iez-lb-surface-muted: rgba(247, 243, 236, 0.88);
+  --iez-lb-text: #211b16;
+  --iez-lb-accent: #211b16;
+  --iez-lb-on-accent: #fff;
+}
+
+/* IEZUKURI LIGHTBOX COLOR TOKENS END */

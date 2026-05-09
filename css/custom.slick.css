@@ -1,0 +1,44 @@
+/* Custom Slick Slider Styles */
+
+/* アローボタンのデザイン変更 */
+.slick-prev,
+.slick-next {
+    font-size: 30px;
+    line-height: 1;
+    color: #fff;
+    background-color: #3498db;
+    border-radius: 50%;
+    padding: 10px;
+    opacity: 0.8;
+}
+
+.slick-prev:hover,
+.slick-next:hover {
+    opacity: 1;
+}
+
+/* ドットのスタイル変更 */
+.slick-dots {
+    bottom: 20px;
+}
+
+.slick-dots li {
+    margin: 0 5px;
+}
+
+.slick-dots li button {
+    font-size: 12px;
+    line-height: 1;
+    color: #fff;
+    background-color: #3498db;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+}
+
+.slick-dots li.slick-active button {
+    background-color: #fff;
+    color: #3498db;
+}

@@ -1,0 +1,16 @@
+body.hub-page.hub-context-front {
+  --hub-bg: #f7f5ef;
+  --hub-surface: #ffffff;
+  --hub-surface-2: #f3efe6;
+  --hub-surface-3: #ece3d6;
+  --hub-border: rgba(53, 39, 21, 0.1);
+  --hub-shadow: 0 14px 32px rgba(45, 34, 18, 0.08);
+  --hub-shadow-lg: 0 22px 56px rgba(45, 34, 18, 0.12);
+  --hub-text: #2d2f34;
+  --hub-text-soft: #646770;
+  --hub-heading: #202734;
+  --hub-accent: #b2864d;
+  --hub-accent-strong: #8e6839;
+  --hub-accent-soft: #efe1cf;
+}
+

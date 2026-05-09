@@ -1,0 +1,1409 @@
+/* =========================================================
+ * /fudousan 専用CSS
+ * 管理場所:
+ * hub/pages/fudousan/css/fudousan.css
+ *
+ * 方針:
+ * - /fudousan の見た目はこのCSSで一元管理
+ * - JSは触らない
+ * - Isotope 用クラスは残す:
+ *   .home-cats-selection / .home-posts / .archive-post-box
+ * - 予約・地図用クラスは残す:
+ *   .store-reserve-link / .google-location-trigger
+ * - hero CTA は常に右側画像/青パネルの下
+ * - padding / card / radius / dark mode を統一
+ * ========================================================= */
+
+/* =========================================================
+ * 01. theme variables
+ * ========================================================= */
+
+.fudousan-page {
+  --fudo-page-bg: #f6f2ea;
+  --fudo-panel-bg: #ffffff;
+  --fudo-panel-bg-soft: #fbf8f2;
+  --fudo-card-bg: #ffffff;
+  --fudo-card-bg-soft: #f8fbfd;
+
+  --fudo-text: #24313f;
+  --fudo-heading: #102236;
+  --fudo-muted: #657584;
+
+  --fudo-border: rgba(16, 34, 54, 0.13);
+  --fudo-border-strong: rgba(16, 34, 54, 0.22);
+
+  --fudo-blue: #1e5f9d;
+  --fudo-blue-strong: #0057bf;
+  --fudo-blue-soft: rgba(0, 87, 191, 0.09);
+  --fudo-gold: #ad7b36;
+
+  --fudo-shell: min(1180px, calc(100% - 48px));
+  --fudo-shell-narrow: min(980px, calc(100% - 48px));
+
+  --fudo-section-gap: clamp(28px, 4vw, 52px);
+  --fudo-panel-pad: clamp(24px, 3vw, 34px);
+  --fudo-card-pad: 18px;
+  --fudo-card-gap: 24px;
+
+  --fudo-radius-sm: 14px;
+  --fudo-radius: 18px;
+  --fudo-radius-lg: 24px;
+
+  --fudo-shadow-panel: 0 12px 32px rgba(16, 34, 54, 0.07);
+  --fudo-shadow-card: 0 10px 26px rgba(16, 34, 54, 0.075);
+
+  min-width: 0;
+  overflow-x: clip;
+  background: transparent;
+  color: var(--fudo-text);
+}
+
+:is(
+    body.dark-mode,
+    body.is-dark,
+    body.theme-dark,
+    body.dark-theme,
+    body.dark,
+    body[data-theme='dark'],
+    html.dark body,
+    html.is-dark body,
+    html.theme-dark body,
+    html.dark-theme body,
+    html[data-theme='dark'] body
+  )
+  .fudousan-page {
+  --fudo-page-bg: #101820;
+  --fudo-panel-bg: #151f2a;
+  --fudo-panel-bg-soft: #121c26;
+  --fudo-card-bg: #17212b;
+  --fudo-card-bg-soft: #1d2a36;
+
+  --fudo-text: #eaf0f4;
+  --fudo-heading: #f7fafc;
+  --fudo-muted: #aebdca;
+
+  --fudo-border: rgba(235, 245, 255, 0.13);
+  --fudo-border-strong: rgba(235, 245, 255, 0.23);
+
+  --fudo-blue: #a7d7ff;
+  --fudo-blue-strong: #78b7ee;
+  --fudo-blue-soft: rgba(158, 211, 255, 0.13);
+  --fudo-gold: #ffd991;
+
+  --fudo-shadow-panel: 0 14px 40px rgba(0, 0, 0, 0.34);
+  --fudo-shadow-card: 0 12px 32px rgba(0, 0, 0, 0.32);
+}
+
+/* =========================================================
+ * 02. page background
+ * ========================================================= */
+
+body.hub-page.hub-context-realestate,
+body.page-template-template-realestate-hub,
+body.page-template-template-realestate-hub-php {
+  background: var(--fudo-page-bg, #f6f2ea) !important;
+}
+
+body.hub-page.hub-context-realestate
+  :is(.page-wrapper, #page, #wrapper, main, .site, .site-content):has(.fudousan-page),
+body.page-template-template-realestate-hub
+  :is(.page-wrapper, #page, #wrapper, main, .site, .site-content):has(.fudousan-page),
+body.page-template-template-realestate-hub-php
+  :is(.page-wrapper, #page, #wrapper, main, .site, .site-content):has(.fudousan-page) {
+  background: transparent !important;
+}
+
+:is(
+  body.dark-mode,
+  body.is-dark,
+  body.theme-dark,
+  body.dark-theme,
+  body.dark,
+  body[data-theme='dark'],
+  html.dark body,
+  html.is-dark body,
+  html.theme-dark body,
+  html.dark-theme body,
+  html[data-theme='dark'] body
+):has(.fudousan-page) {
+  background: #101820 !important;
+}
+
+/* =========================================================
+ * 03. local reset
+ * ========================================================= */
+
+.fudousan-page,
+.fudousan-page *,
+.fudousan-page *::before,
+.fudousan-page *::after {
+  box-sizing: border-box;
+}
+
+.fudousan-page a {
+  color: inherit;
+}
+
+.fudousan-page img,
+.fudousan-page iframe,
+.fudousan-page video,
+.fudousan-page lite-youtube,
+.fudousan-page lite-vimeo {
+  max-width: 100%;
+}
+
+.fudousan-page img,
+.fudousan-page video {
+  height: auto;
+}
+
+.fudousan-page .fudo-shell {
+  width: var(--fudo-shell);
+  max-width: 100%;
+  margin-inline: auto;
+}
+
+/* =========================================================
+ * 04. typography / buttons
+ * ========================================================= */
+
+.fudousan-page :is(h1, h2, h3, h4, strong) {
+  color: var(--fudo-heading);
+}
+
+.fudousan-page p {
+  color: var(--fudo-muted);
+}
+
+.fudousan-page .fudo-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 12px;
+  color: var(--fudo-blue-strong);
+  font-size: 0.76rem;
+  font-weight: 900;
+  letter-spacing: 0.13em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.fudousan-page .fudo-kicker::before {
+  content: '';
+  width: 30px;
+  height: 2px;
+  border-radius: 999px;
+  background: currentColor;
+  opacity: 0.7;
+}
+
+.fudousan-page .fudo-btn,
+.fudousan-page .fudo-card-btn,
+.fudousan-page .fudo-empty-card__inner a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  min-height: 44px;
+  padding: 0 18px;
+  border: 1px solid var(--fudo-border);
+  border-radius: 999px;
+  background: var(--fudo-card-bg-soft);
+  color: var(--fudo-blue);
+  font-size: 0.88rem;
+  font-weight: 900;
+  line-height: 1.2;
+  text-align: center;
+  text-decoration: none;
+  box-shadow: none;
+  cursor: pointer;
+  transition:
+    transform 0.18s ease,
+    border-color 0.18s ease,
+    background 0.18s ease,
+    color 0.18s ease;
+}
+
+.fudousan-page .fudo-btn:hover,
+.fudousan-page .fudo-card-btn:hover,
+.fudousan-page .fudo-empty-card__inner a:hover {
+  transform: translateY(-2px);
+  border-color: var(--fudo-border-strong);
+}
+
+.fudousan-page .fudo-btn--primary,
+.fudousan-page .fudo-post-card .store-reserve-link {
+  border-color: var(--fudo-blue-strong);
+  background: var(--fudo-blue-strong);
+  color: #fff;
+}
+
+.fudousan-page .fudo-btn--ghost {
+  background: var(--fudo-card-bg-soft);
+  border-color: var(--fudo-border);
+  color: var(--fudo-blue);
+}
+
+/* =========================================================
+ * 05. section panels
+ * ========================================================= */
+
+.fudousan-page {
+  padding: 32px 0 72px;
+}
+
+.fudousan-page .fudo-hero,
+.fudousan-page .fudo-entry,
+.fudousan-page .fudo-list-section,
+.fudousan-page .fudo-cta {
+  margin: 0 0 var(--fudo-section-gap);
+  padding: 0;
+  background: transparent;
+}
+
+.fudousan-page .fudo-cta {
+  margin-bottom: 0;
+}
+
+/* shell は幅だけ。paddingを持たせない */
+.fudousan-page .fudo-shell,
+.fudousan-page .fudo-hero > .fudo-shell,
+.fudousan-page .fudo-entry > .fudo-shell,
+.fudousan-page .fudo-list-section > .fudo-shell,
+.fudousan-page .fudo-cta > .fudo-shell {
+  width: var(--fudo-shell);
+  max-width: 100%;
+  margin-inline: auto;
+  padding: 0;
+}
+
+/* 面を持つ場所だけ padding */
+.fudousan-page .fudo-hero > .fudo-shell,
+.fudousan-page .fudo-entry > .fudo-shell,
+.fudousan-page .fudo-list-section > .fudo-shell {
+  padding: var(--fudo-panel-pad);
+  border: 1px solid var(--fudo-border);
+  border-radius: var(--fudo-radius-lg);
+  background: var(--fudo-panel-bg);
+  box-shadow: var(--fudo-shadow-panel);
+}
+
+/* 古い装飾を停止 */
+.fudousan-page .fudo-hero::before,
+.fudousan-page .fudo-hero__panel::before,
+.fudousan-page .fudo-hero__panel::after,
+.fudousan-page .fudo-entry-card {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
+  min-height: 210px;
+  padding: 24px;
+  overflow: hidden;
+  border: 1px solid var(--fudo-border);
+  border-radius: var(--fudo-radius);
+  background: var(--fudo-surface);
+  color: var(--fudo-text);
+  text-decoration: none;
+  box-shadow: var(--fudo-shadow-sm);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+/* =========================================================
+ * 06. hero
+ * CTA は常に右側ビジュアルの下
+ * ========================================================= */
+
+.fudousan-page .fudo-hero__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(320px, 420px);
+  grid-template-areas:
+    'body visual'
+    'body actions';
+  gap: 18px;
+  align-items: start;
+}
+
+.fudousan-page .fudo-hero__body {
+  grid-area: body;
+  min-width: 0;
+  padding: 0;
+}
+
+.fudousan-page .fudo-hero__panel {
+  grid-area: visual;
+  display: grid;
+  align-content: end;
+  min-height: 260px;
+  padding: 24px;
+  overflow: hidden;
+  border: 1px solid transparent;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #0057bf, #2b7dd7);
+  color: #fff;
+  box-shadow: none;
+}
+
+.fudousan-page .fudo-hero__actions {
+  grid-area: actions;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin: 0;
+}
+
+.fudousan-page .fudo-hero__actions .fudo-btn {
+  width: 100%;
+}
+
+.fudousan-page .fudo-hero__body h1 {
+  max-width: 760px;
+  margin: 0 0 14px;
+  color: var(--fudo-heading);
+  font-size: clamp(2rem, 3.4vw, 3.2rem);
+  line-height: 1.12;
+  letter-spacing: -0.035em;
+}
+
+.fudousan-page .fudo-hero__body p:not(.fudo-kicker) {
+  max-width: 42em;
+  margin: 0;
+  color: var(--fudo-muted);
+  font-size: clamp(0.98rem, 1.25vw, 1.06rem);
+  line-height: 1.82;
+}
+
+.fudousan-page .fudo-hero__panel p,
+.fudousan-page .fudo-hero__panel strong {
+  color: #fff;
+}
+
+.fudousan-page .fudo-hero__panel p {
+  margin: 0 0 10px;
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.07em;
+}
+
+.fudousan-page .fudo-hero__panel strong {
+  display: block;
+  max-width: 340px;
+  font-size: clamp(1.25rem, 2vw, 1.65rem);
+  line-height: 1.45;
+}
+
+/* =========================================================
+ * 07. section heads
+ * ========================================================= */
+
+.fudousan-page .fudo-section-head {
+  max-width: none;
+  margin: 0 0 22px;
+  text-align: left;
+}
+
+/*
+ * fudo-section-head--row
+ * ---------------------------------------------------------
+ * 役割:
+ * - 一覧セクションの見出しと補足文を置くための行。
+ *
+ * 今回の整理:
+ * - 以前は見出し左 / 補足右の2カラム想定で grid を使っていた。
+ * - 現在は .fudo-section-note を非表示にしており、横並びにする必要が薄い。
+ * - モバイルでも崩れにくいよう、ここで通常の縦積みに統一する。
+ *
+ * 注意:
+ * - この指定は見出し周りだけ。
+ * - 物件カードの横並びは 10. isotope grid が担当する。
+ */
+.fudousan-page .fudo-section-head--row {
+  display: block;
+  grid-template-columns: none;
+  gap: 0;
+  align-items: initial;
+}
+
+.fudousan-page .fudo-section-head--row > * + * {
+  margin-top: 14px;
+}
+
+.fudousan-page .fudo-section-head h2 {
+  margin: 0;
+  color: var(--fudo-heading);
+  font-size: clamp(1.7rem, 2.8vw, 2.45rem);
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+}
+
+.fudousan-page .fudo-section-note {
+  display: none;
+}
+
+/* =========================================================
+ * 08. purpose cards
+ * ========================================================= */
+
+.fudousan-page .fudo-entry-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+  align-items: stretch;
+}
+
+.fudousan-page .fudo-entry-card {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
+  min-height: 164px;
+  padding: var(--fudo-card-pad);
+  overflow: hidden;
+  border: 1px solid var(--fudo-border);
+  border-radius: var(--fudo-radius);
+  background: var(--fudo-card-bg);
+  color: var(--fudo-text);
+  text-decoration: none;
+  box-shadow: none;
+  transition:
+    transform 0.18s ease,
+    border-color 0.18s ease,
+    background 0.18s ease;
+}
+
+.fudousan-page .fudo-entry-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--fudo-border-strong);
+  background: var(--fudo-card-bg-soft);
+}
+
+.fudousan-page .fudo-entry-card__icon {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  margin-bottom: 12px;
+  border-radius: 14px;
+  background: var(--fudo-blue-soft);
+  color: var(--fudo-blue);
+}
+
+.fudousan-page .fudo-entry-card__icon svg {
+  display: block;
+  width: 27px;
+  height: 27px;
+  fill: none !important;
+  stroke: currentColor !important;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.fudousan-page .fudo-entry-card__icon svg * {
+  fill: none !important;
+  stroke: currentColor !important;
+}
+
+.fudousan-page .fudo-entry-card__title {
+  margin: 0 0 8px;
+  color: var(--fudo-heading);
+  font-size: 1rem;
+  font-weight: 900;
+  line-height: 1.45;
+}
+
+.fudousan-page .fudo-entry-card__text {
+  color: var(--fudo-muted);
+  font-size: 0.86rem;
+  font-weight: 700;
+  line-height: 1.65;
+}
+
+.fudousan-page .fudo-entry-card__arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-self: start;
+  align-self: end;
+  gap: 8px;
+  margin-top: 18px;
+  color: var(--fudo-blue);
+  font-size: 0.88rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+/* =========================================================
+ * 09. tabs
+ * ========================================================= */
+
+.fudousan-page .home-cats-selection {
+  margin: 0 0 22px;
+  padding: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
+.fudousan-page .home-cats-selection ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.fudousan-page .home-cats-selection li {
+  list-style: none;
+}
+
+.fudousan-page .home-cats-selection a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 0 17px;
+  border: 1px solid var(--fudo-border);
+  border-radius: 999px;
+  background: var(--fudo-card-bg-soft);
+  color: var(--fudo-heading);
+  font-size: 0.86rem;
+  font-weight: 900;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+  box-shadow: none;
+}
+
+.fudousan-page .home-cats-selection a.active,
+.fudousan-page .home-cats-selection a:hover {
+  background: var(--fudo-blue-strong);
+  border-color: var(--fudo-blue-strong);
+  color: #fff;
+}
+
+/* =========================================================
+ * 10. isotope grid
+ * =========================================================
+ *
+ * 対象:
+ * - /fudousan/ の物件カード一覧
+ * - .home-posts.archive-posts.fudo-posts
+ * - .archive-post-box
+ *
+ * 役割:
+ * - Isotope公式の考え方に合わせて、カード幅はCSSで固定する。
+ * - JS側は itemSelector と filter だけを担当する。
+ * - .fudo-isotope-ready の有無でカード幅を切り替えない。
+ *
+ * なぜこうするか:
+ * - 以前は「Isotope起動前はCSS Grid」「起動後は別width」にしていた。
+ * - その切替で、Isotopeが計算した位置とCSS幅がズレた。
+ * - 結果として、画像が上から落ちる・斜め上から来るように見えた。
+ *
+ * 重要:
+ * - .archive-post-box 本体に transform transition をかけない。
+ * - Isotope は item の位置を管理するため、item本体の transform と相性が悪い。
+ * - hover演出をしたい場合は、カード内の画像だけに限定する。
+ * ========================================================= */
+
+.fudousan-page .home-posts.archive-posts.fudo-posts,
+.fudousan-page .fudo-posts.home-posts {
+  position: relative;
+  display: block;
+  width: 100%;
+  min-width: 0;
+  margin: 0 auto;
+  padding: 0;
+  overflow: visible;
+  clear: both;
+  overflow-anchor: none;
+}
+
+.fudousan-page .home-posts.archive-posts.fudo-posts::after,
+.fudousan-page .fudo-posts.home-posts::after {
+  content: '';
+  display: block;
+  clear: both;
+}
+
+/*
+ * Isotope item width
+ * ---------------------------------------------------------
+ * 役割:
+ * - Isotopeが配置計算に使うカード幅。
+ * - 起動前/起動後で変えない。
+ * - 3カラム: 31.333% + 左右margin 1%
+ */
+.fudousan-page .home-posts.archive-posts.fudo-posts .archive-post-box,
+.fudousan-page .fudo-posts.home-posts .archive-post-box {
+  float: none;
+  width: 31.333%;
+  max-width: 31.333%;
+  min-width: 0;
+  margin: 0 1% var(--fudo-card-gap);
+  box-sizing: border-box;
+}
+
+/*
+ * Isotope item safety
+ * ---------------------------------------------------------
+ * 役割:
+ * - Isotopeが display:none / position / left / top をインラインで管理する。
+ * - CSS側ではそれを上書きしない。
+ * - transformはIsotopeやブラウザのアニメーションに見える原因になるため、
+ *   item本体には指定しない。
+ */
+.fudousan-page .home-posts.archive-posts.fudo-posts .archive-post-box,
+.fudousan-page .fudo-posts.home-posts .archive-post-box {
+  transform: none;
+}
+
+/* =========================================================
+ * 11. property cards
+ * ========================================================= */
+
+.fudousan-page .fudo-post-card.archive-post-box,
+.fudousan-page .fudo-empty-card.archive-post-box {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--fudo-border);
+  border-radius: 20px;
+  background: var(--fudo-card-bg);
+  color: var(--fudo-text);
+  box-shadow: var(--fudo-shadow-card);
+
+  /*
+   * Isotope item本体には transform を使わない。
+   *
+   * 理由:
+   * - Isotopeは .archive-post-box の位置を管理する。
+   * - その要素自体に transform hover を入れると、
+   *   上から落ちる・斜めに動くような見え方の原因になる。
+   * - hover演出は画像内の scale だけに限定する。
+   */
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    background 0.18s ease;
+}
+
+.fudousan-page .fudo-post-card.archive-post-box:hover,
+.fudousan-page .fudo-empty-card.archive-post-box:hover {
+  border-color: var(--fudo-border-strong);
+  box-shadow: var(--fudo-shadow-card);
+}
+
+.fudousan-page .fudo-post-card__image,
+.fudousan-page .blog-post-image {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: var(--fudo-card-bg-soft);
+  color: inherit;
+  text-decoration: none;
+}
+
+.fudousan-page .fudo-post-card__image img,
+.fudousan-page .blog-post-image img,
+.fudousan-page .fudo-post-card__image iframe,
+.fudousan-page .fudo-post-card__image video,
+.fudousan-page .fudo-post-card__image lite-youtube,
+.fudousan-page .fudo-post-card__image lite-vimeo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  object-fit: cover;
+  transition: transform 0.35s ease;
+}
+
+.fudousan-page .fudo-post-card:hover .fudo-post-card__image img,
+.fudousan-page .fudo-post-card:hover .blog-post-image img {
+  transform: scale(1.03);
+}
+
+.fudousan-page .fudo-post-card__body {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-width: 0;
+  padding: 18px;
+}
+
+.fudousan-page .fudo-post-card__title {
+  min-height: 3.1em;
+  margin: 0 0 12px;
+  padding: 0 0 12px;
+  border-bottom: 1px solid var(--fudo-border);
+  color: var(--fudo-heading);
+  font-size: 1rem;
+  font-weight: 900;
+  line-height: 1.5;
+  letter-spacing: -0.01em;
+}
+
+.fudousan-page .fudo-post-card__title a {
+  display: -webkit-box;
+  overflow: hidden;
+  color: inherit;
+  text-decoration: none;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.fudousan-page .fudo-post-card__excerpt {
+  display: -webkit-box;
+  min-height: 5.1em;
+  overflow: hidden;
+  margin: 0 0 14px;
+  color: var(--fudo-muted);
+  font-size: 0.9rem;
+  line-height: 1.7;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+.fudousan-page .fudo-card-property,
+.fudousan-page .property-info-table,
+.fudousan-page .fudo-card-summary {
+  display: none;
+}
+
+.fudousan-page .fudo-card-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 12px;
+}
+
+.fudousan-page .fudo-card-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  max-width: 100%;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: var(--fudo-blue-soft);
+  color: var(--fudo-blue);
+  font-size: 0.72rem;
+  font-weight: 900;
+  line-height: 1.2;
+}
+
+.fudousan-page .fudo-card-badge small {
+  color: var(--fudo-muted);
+  font-size: 0.66rem;
+}
+
+.fudousan-page .fudo-post-card__facts {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.fudousan-page .fudo-post-card__facts,
+.fudousan-page .fudo-post-card__facts * {
+  text-align: left;
+}
+
+.fudousan-page .fudo-post-card__facts > div {
+  display: grid;
+  grid-template-columns: 84px minmax(0, 1fr);
+  gap: 10px;
+  align-items: start;
+  margin: 0;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--fudo-border);
+  background: transparent;
+}
+
+.fudousan-page .fudo-post-card__facts > div:last-child {
+  border-bottom: 0;
+}
+
+.fudousan-page .fudo-post-card__facts dt {
+  margin: 0;
+  color: var(--fudo-muted);
+  font-size: 0.74rem;
+  font-weight: 900;
+  line-height: 1.45;
+  white-space: nowrap;
+}
+
+.fudousan-page .fudo-post-card__facts dd {
+  justify-self: start;
+  min-width: 0;
+  margin: 0;
+  color: var(--fudo-heading);
+  font-size: 0.92rem;
+  font-weight: 900;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.fudousan-page .fudo-post-card__facts dd.is-price,
+.fudousan-page .fudo-post-card__facts dd.is-sold,
+.fudousan-page .fudo-post-card__facts .fudo-post-card__fact--price dd {
+  color: var(--fudo-gold);
+  font-size: 0.98rem;
+}
+
+/* =========================================================
+ * 12. card actions
+ * ========================================================= */
+
+.fudousan-page .fudo-post-card__actions {
+  display: grid;
+  grid-template-columns: 0.95fr 0.95fr 1.1fr;
+  gap: 7px;
+  align-items: stretch;
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px solid var(--fudo-border);
+}
+
+.fudousan-page .fudo-post-card .fudo-card-btn,
+.fudousan-page .google-location-trigger,
+.fudousan-page .store-reserve-link,
+.fudousan-page .js-home-reservation-cta {
+  display: inline-flex;
+  visibility: visible;
+  opacity: 1;
+}
+
+.fudousan-page .fudo-post-card .fudo-card-btn {
+  width: 100%;
+  min-width: 0;
+  min-height: 40px;
+  padding: 0 7px;
+  border-radius: 12px;
+  box-shadow: none;
+  font-size: 0.76rem;
+  font-weight: 900;
+  line-height: 1.12;
+  text-align: center;
+  white-space: nowrap;
+  word-break: keep-all;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fudousan-page .fudo-post-card .fudo-card-btn:not(.store-reserve-link) {
+  background: var(--fudo-card-bg-soft);
+  border-color: var(--fudo-border);
+  color: var(--fudo-blue);
+}
+
+.fudousan-page .store-reserve-link::before,
+.fudousan-page .store-reserve-link::after {
+  content: none !important;
+  display: none !important;
+}
+
+.fudousan-page .fudo-card-btn--map {
+  gap: 3px;
+}
+
+.fudousan-page .fudo-card-btn__map-mark {
+  flex: 0 0 auto;
+  font-size: 0.9em;
+  line-height: 1;
+}
+
+/* =========================================================
+ * 13. empty cards
+ * ========================================================= */
+
+.fudousan-page .fudo-empty-card__inner {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  min-height: 100%;
+  padding: 22px;
+}
+
+.fudousan-page .fudo-empty-card__label {
+  width: fit-content;
+  margin: 0;
+  padding: 6px 11px;
+  border-radius: 999px;
+  background: rgba(173, 123, 54, 0.14);
+  color: var(--fudo-gold);
+  font-size: 0.74rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.fudousan-page .fudo-empty-card h3 {
+  margin: 0;
+  color: var(--fudo-heading);
+  font-size: 1.08rem;
+  line-height: 1.45;
+}
+
+.fudousan-page .fudo-empty-card p:not(.fudo-empty-card__label) {
+  margin: 0;
+  color: var(--fudo-muted);
+  font-size: 0.9rem;
+  line-height: 1.75;
+}
+
+.fudousan-page .fudo-empty-card__inner a {
+  width: fit-content;
+  margin-top: 6px;
+}
+
+/* =========================================================
+ * 14. CTA bottom
+ * ========================================================= */
+
+.fudousan-page .fudo-cta > .fudo-shell {
+  width: var(--fudo-shell);
+}
+
+.fudousan-page .fudo-cta__panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: clamp(22px, 4vw, 44px);
+  align-items: center;
+  padding: var(--fudo-panel-pad);
+  border: 1px solid var(--fudo-border);
+  border-radius: var(--fudo-radius-lg);
+  background: var(--fudo-panel-bg);
+  box-shadow: var(--fudo-shadow-card);
+}
+
+.fudousan-page .fudo-cta__panel > div:first-child {
+  min-width: 0;
+}
+
+.fudousan-page .fudo-cta h2 {
+  margin: 0 0 10px;
+  color: var(--fudo-heading);
+  font-size: clamp(1.55rem, 2.7vw, 2.25rem);
+  line-height: 1.3;
+}
+
+.fudousan-page .fudo-cta p:not(.fudo-kicker) {
+  max-width: 62em;
+  margin: 0;
+  color: var(--fudo-muted);
+  line-height: 1.85;
+}
+
+.fudousan-page .fudo-cta__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 12px;
+  min-width: max-content;
+}
+
+/* =========================================================
+ * 15. modal helper
+ * ========================================================= */
+
+/*
+ * 予約モーダルは style.css / scripts.js の共通処理に任せる。
+ * /fudousan.css では #store-reservation-modal を触らない。
+ */
+
+body.hub-context-realestate .google-map-modal-header {
+  display: none !important;
+}
+
+body.hub-context-realestate .google-map-modal-content {
+  padding-top: 22px !important;
+}
+
+/* =========================================================
+ * 16. header top / lower navigation
+ * ========================================================= */
+
+/* header top: light = cream */
+body.hub-page.hub-context-realestate :is(.header__top, .header__top_under, .top-header) {
+  background: #f6f2ea !important;
+  color: #102236 !important;
+  border-color: rgba(16, 34, 54, 0.12) !important;
+}
+
+body.hub-page.hub-context-realestate
+  :is(.header__top, .header__top_under, .top-header)
+  :is(a, span, p, li, label, button, .color-mode-label) {
+  color: #102236 !important;
+}
+
+body.hub-page.hub-context-realestate
+  :is(.header__top, .header__top_under, .top-header)
+  :is(.search-form-container, .search-form-20, .search-form-30) {
+  background: #fbf8f2 !important;
+  color: #102236 !important;
+  border-color: #2b93ef !important;
+}
+
+body.hub-page.hub-context-realestate
+  :is(.header__top, .header__top_under, .top-header)
+  :is(input, select, textarea) {
+  background: #ffffff !important;
+  color: #102236 !important;
+  border-color: rgba(16, 34, 54, 0.16) !important;
+}
+
+/* header top: dark */
+:is(
+    body.dark-mode,
+    body.is-dark,
+    body.theme-dark,
+    body.dark-theme,
+    body.dark,
+    body[data-theme='dark'],
+    html.dark body,
+    html.is-dark body,
+    html.theme-dark body,
+    html.dark-theme body,
+    html[data-theme='dark'] body
+  ).hub-page.hub-context-realestate
+  :is(.header__top, .header__top_under, .top-header) {
+  background: #101820 !important;
+  color: #eaf0f4 !important;
+  border-color: rgba(235, 245, 255, 0.14) !important;
+}
+
+:is(
+    body.dark-mode,
+    body.is-dark,
+    body.theme-dark,
+    body.dark-theme,
+    body.dark,
+    body[data-theme='dark'],
+    html.dark body,
+    html.is-dark body,
+    html.theme-dark body,
+    html.dark-theme body,
+    html[data-theme='dark'] body
+  ).hub-page.hub-context-realestate
+  :is(.header__top, .header__top_under, .top-header)
+  :is(a, span, p, li, label, button, .color-mode-label) {
+  color: #eaf0f4 !important;
+}
+
+:is(
+    body.dark-mode,
+    body.is-dark,
+    body.theme-dark,
+    body.dark-theme,
+    body.dark,
+    body[data-theme='dark'],
+    html.dark body,
+    html.is-dark body,
+    html.theme-dark body,
+    html.dark-theme body,
+    html[data-theme='dark'] body
+  ).hub-page.hub-context-realestate
+  :is(.header__top, .header__top_under, .top-header)
+  :is(.search-form-container, .search-form-20, .search-form-30) {
+  background: #151f2a !important;
+  color: #eaf0f4 !important;
+  border-color: #2b93ef !important;
+}
+
+:is(
+    body.dark-mode,
+    body.is-dark,
+    body.theme-dark,
+    body.dark-theme,
+    body.dark,
+    body[data-theme='dark'],
+    html.dark body,
+    html.is-dark body,
+    html.theme-dark body,
+    html.dark-theme body,
+    html[data-theme='dark'] body
+  ).hub-page.hub-context-realestate
+  :is(.header__top, .header__top_under, .top-header)
+  :is(input, select, textarea) {
+  background: #101820 !important;
+  color: #eaf0f4 !important;
+  border-color: rgba(235, 245, 255, 0.18) !important;
+}
+
+:is(
+    body.dark-mode,
+    body.is-dark,
+    body.theme-dark,
+    body.dark-theme,
+    body.dark,
+    body[data-theme='dark'],
+    html.dark body,
+    html.is-dark body,
+    html.theme-dark body,
+    html.dark-theme body,
+    html[data-theme='dark'] body
+  ).hub-page.hub-context-realestate
+  :is(.header__top, .header__top_under, .top-header)
+  :is(input, select, textarea)::placeholder {
+  color: #aebdca !important;
+}
+
+/* lower nav: blue fixed */
+body.page-template-template-realestate-hub .navg_under,
+body.page-template-template-realestate-hub-php .navg_under,
+body.hub-page.hub-context-realestate .navg_under,
+:is(
+    body.dark-mode,
+    body.is-dark,
+    body.theme-dark,
+    body.dark-theme,
+    body.dark,
+    body[data-theme='dark'],
+    html.dark body,
+    html.is-dark body,
+    html.theme-dark body,
+    html.dark-theme body,
+    html[data-theme='dark'] body
+  ).page-template-template-realestate-hub
+  .navg_under,
+:is(
+    body.dark-mode,
+    body.is-dark,
+    body.theme-dark,
+    body.dark-theme,
+    body.dark,
+    body[data-theme='dark'],
+    html.dark body,
+    html.is-dark body,
+    html.theme-dark body,
+    html.dark-theme body,
+    html[data-theme='dark'] body
+  ).page-template-template-realestate-hub-php
+  .navg_under,
+:is(
+    body.dark-mode,
+    body.is-dark,
+    body.theme-dark,
+    body.dark-theme,
+    body.dark,
+    body[data-theme='dark'],
+    html.dark body,
+    html.is-dark body,
+    html.theme-dark body,
+    html.dark-theme body,
+    html[data-theme='dark'] body
+  ).hub-page.hub-context-realestate
+  .navg_under {
+  background: #0057bf !important;
+  color: #ffffff !important;
+}
+
+/* =========================================================
+ * 17. responsive
+ * ========================================================= */
+
+@media (max-width: 1180px) {
+  .fudousan-page {
+    --fudo-shell: min(100% - 40px, 1180px);
+    --fudo-shell-narrow: min(100% - 40px, 980px);
+    --fudo-card-gap: 22px;
+  }
+
+  .fudousan-page .fudo-entry-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .fudousan-page .home-posts.archive-posts.fudo-posts .archive-post-box,
+  .fudousan-page .fudo-posts.home-posts .archive-post-box {
+    width: 31.333%;
+    max-width: 31.333%;
+    margin: 0 1% var(--fudo-card-gap);
+  }
+}
+
+@media (max-width: 920px) {
+  .fudousan-page .fudo-hero__grid {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      'body'
+      'visual'
+      'actions';
+  }
+
+  .fudousan-page .fudo-entry-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .fudousan-page .fudo-cta__panel {
+    grid-template-columns: 1fr;
+  }
+
+  .fudousan-page .fudo-cta__actions {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 760px) {
+  .fudousan-page {
+    --fudo-shell: min(100% - 24px, 1180px);
+    --fudo-shell-narrow: min(100% - 24px, 980px);
+    --fudo-section-gap: 26px;
+    --fudo-panel-pad: 22px;
+    --fudo-card-gap: 20px;
+  }
+
+  .fudousan-page .home-cats-selection ul {
+    flex-wrap: nowrap;
+    width: max-content;
+    min-width: 100%;
+  }
+
+  .fudousan-page .home-posts.archive-posts.fudo-posts .archive-post-box,
+  .fudousan-page .fudo-posts.home-posts .archive-post-box {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 0 var(--fudo-card-gap);
+  }
+}
+
+@media (max-width: 460px) {
+  .fudousan-page {
+    --fudo-shell: min(100% - 20px, 1180px);
+    --fudo-shell-narrow: min(100% - 20px, 980px);
+  }
+
+  .fudousan-page .fudo-post-card__facts > div {
+    grid-template-columns: 74px minmax(0, 1fr);
+  }
+}
+
+/* === FUDOUSAN HERO MEDIA FINAL START ===
+ * /fudousan hero:
+ * 管理画面の画像 / mp4 / YouTube を表示する。
+ * Swiper化は JS 側。
+ * ========================================================= */
+.fudousan-page .fudo-hero__panel--media {
+  padding: 0;
+  overflow: hidden;
+  min-height: clamp(300px, 34vw, 520px);
+  background: #16120d;
+}
+
+.fudousan-page .fudo-hero-swiper,
+.fudousan-page .fudo-hero__single-media,
+.fudousan-page .fudo-hero-media-slide,
+.fudousan-page .fudo-hero__fallback {
+  width: 100%;
+  height: 100%;
+  min-height: clamp(300px, 34vw, 520px);
+}
+
+.fudousan-page .fudo-hero__image,
+.fudousan-page .fudo-hero__video,
+.fudousan-page .fudo-hero-media-slide lite-youtube,
+.fudousan-page .fudo-hero-media-slide lite-vimeo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: clamp(300px, 34vw, 520px);
+  object-fit: cover;
+}
+
+.fudousan-page .fudo-hero-media-slide--youtube {
+  background: #111;
+}
+
+.fudousan-page .fudo-hero__fallback {
+  display: grid;
+  place-items: center;
+  padding: 28px;
+  text-align: center;
+  color: #fff;
+  background: linear-gradient(135deg, rgba(28, 20, 12, 0.86), rgba(90, 62, 31, 0.72)), #2d2116;
+}
+
+.fudousan-page .fudo-hero__fallback-label {
+  margin: 0 0 8px;
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+.fudousan-page .fudo-hero-swiper__pagination {
+  bottom: 14px !important;
+}
+
+.fudousan-page .fudo-hero-swiper__pagination .swiper-pagination-bullet {
+  background: rgba(255, 255, 255, 0.75);
+  opacity: 1;
+}
+
+.fudousan-page .fudo-hero-swiper__pagination .swiper-pagination-bullet-active {
+  background: #fff;
+}
+
+.fudousan-page .fudo-hero-swiper__nav {
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.34);
+  backdrop-filter: blur(8px);
+}
+
+.fudousan-page .fudo-hero-swiper__nav::after {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+@media (max-width: 768px) {
+  .fudousan-page .fudo-hero__panel--media,
+  .fudousan-page .fudo-hero-swiper,
+  .fudousan-page .fudo-hero__single-media,
+  .fudousan-page .fudo-hero-media-slide,
+  .fudousan-page .fudo-hero__fallback,
+  .fudousan-page .fudo-hero__image,
+  .fudousan-page .fudo-hero__video,
+  .fudousan-page .fudo-hero-media-slide lite-youtube,
+  .fudousan-page .fudo-hero-media-slide lite-vimeo {
+    min-height: 280px;
+  }
+}
+/* === FUDOUSAN HERO MEDIA FINAL END === */
+
+/* =========================================================
+ * Google Map modal
+ * ---------------------------------------------------------
+ * 対象:
+ * - /fudousan/ の地図モーダル
+ * - js/front-map-modal.js が生成・操作する .google-map-modal
+ *
+ * 役割:
+ * - モーダル内の見出しが dark mode の共通 heading 色に引っ張られて
+ *   薄くなるのを防ぐ。
+ *
+ * 注意:
+ * - モーダル本体は .fudousan-page の外側に出ることがあるため、
+ *   .fudousan-page .google-map-modal-title ではなく
+ *   .google-map-modal .google-map-modal-title で指定する。
+ * ========================================================= */
+
+.google-map-modal .google-map-modal-title {
+  color: #111827;
+}
+
+.google-map-modal .google-map-modal-header {
+  color: #111827;
+}
+
+.google-map-modal .google-map-modal-content {
+  color: #1f2937;
+  background: #fff;
+}

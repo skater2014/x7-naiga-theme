@@ -1,0 +1,894 @@
+:root {
+  --iez-intro-brown: var(--iez-accent, #b08a4c);
+}
+
+.iez-intro-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  overflow: hidden;
+  background: #050705;
+  color: #fff;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity .9s ease, visibility .9s ease;
+}
+
+.iez-intro-overlay.is-ending {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.iez-intro-overlay.is-done {
+  display: none;
+}
+
+.iez-intro-overlay__visual {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: var(--iez-intro-nasu-ratio, 60%) calc(100% - var(--iez-intro-nasu-ratio, 60%));
+}
+
+.iez-intro-overlay__side {
+  position: relative;
+  overflow: hidden;
+  background: #111;
+}
+
+.iez-intro-overlay__side::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.iez-intro-overlay__side--nasu::after {
+  background:
+    linear-gradient(90deg, rgba(0,0,0,.50), rgba(0,0,0,.12) 45%, rgba(0,0,0,.32)),
+    linear-gradient(0deg, rgba(0,0,0,.58), transparent 58%);
+}
+
+.iez-intro-overlay__side--tokyo::after {
+  background:
+    linear-gradient(90deg, rgba(0,0,0,.22), rgba(0,0,0,.58)),
+    linear-gradient(0deg, rgba(0,0,0,.58), transparent 58%);
+}
+
+.iez-intro-overlay__slide {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  opacity: 0;
+  background-size: cover;
+  background-position: center;
+  transform: scale(1.04);
+  filter: saturate(.95) contrast(1.02) brightness(.92);
+  transition: opacity 1.2s ease;
+  animation: iezIntroKenBurns 8s linear infinite alternate;
+}
+
+.iez-intro-overlay__slide.is-active {
+  opacity: 1;
+}
+
+.iez-intro-overlay__slide.is-placeholder--nasu {
+  background: linear-gradient(135deg, #25452d, #101510);
+}
+
+.iez-intro-overlay__slide.is-placeholder--tokyo {
+  background: linear-gradient(135deg, #111827, #3a342f);
+}
+
+.iez-intro-overlay__caption {
+  position: absolute;
+  z-index: 5;
+  width: min(42vw, 520px);
+  color: #fff;
+  text-shadow: 0 14px 38px rgba(0,0,0,.78);
+}
+
+.iez-intro-overlay__caption.is-nasu {
+  left: clamp(28px, 5vw, 86px);
+  bottom: clamp(210px, 30vh, 340px);
+}
+
+.iez-intro-overlay__caption.is-tokyo {
+  left: clamp(24px, 4vw, 64px);
+  bottom: clamp(210px, 30vh, 340px);
+  width: min(30vw, 420px);
+}
+
+.iez-intro-overlay__caption p {
+  margin: 0 0 14px;
+  color: rgba(255,255,255,.78);
+  font-family: Arial, sans-serif;
+  font-size: clamp(10px, .8vw, 13px);
+  font-weight: 900;
+  letter-spacing: .34em;
+}
+
+.iez-intro-overlay__caption h2 {
+  margin: 0;
+  color: #fff;
+  font-family: "Hiragino Mincho ProN", "Yu Mincho", "YuMincho", serif;
+  font-size: clamp(30px, 3vw, 52px);
+  line-height: 1.16;
+  font-weight: 500;
+  letter-spacing: .05em;
+}
+
+.iez-intro-overlay__caption span {
+  display: block;
+  max-width: 26em;
+  margin-top: 18px;
+  color: rgba(255,255,255,.88);
+  font-size: clamp(13px, 1vw, 17px);
+  line-height: 1.9;
+  letter-spacing: .08em;
+}
+
+.iez-intro-overlay__center {
+  position: absolute;
+  z-index: 8;
+  left: 50%;
+  bottom: clamp(82px, 12vh, 150px);
+  width: min(calc(100% - 96px), 980px);
+  transform: translateX(-50%);
+  padding: 0;
+  text-align: center;
+  color: #fff;
+  text-shadow:
+    0 2px 8px rgba(0, 0, 0, .62),
+    0 18px 44px rgba(0, 0, 0, .78);
+}
+
+.iez-intro-overlay__center::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  left: 50%;
+  top: 50%;
+  width: min(980px, calc(100vw - 80px));
+  height: 170%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(ellipse at center, rgba(0,0,0,.42) 0%, rgba(0,0,0,.26) 42%, transparent 72%);
+  pointer-events: none;
+}
+
+.iez-intro-overlay__kicker {
+  margin: 0 0 12px;
+  color: var(--iez-intro-brown);
+  font-family: Arial, sans-serif;
+  font-size: clamp(10px, .8vw, 12px);
+  font-weight: 900;
+  letter-spacing: .32em;
+}
+
+.iez-intro-overlay__center h1 {
+  margin: 0;
+  color: #fff;
+  font-family: "Hiragino Mincho ProN", "Yu Mincho", "YuMincho", serif;
+  font-size: clamp(30px, 3.2vw, 54px);
+  line-height: 1.35;
+  font-weight: 500;
+  letter-spacing: .08em;
+}
+
+.iez-intro-overlay__center p:not(.iez-intro-overlay__kicker) {
+  margin: 18px auto 0;
+  max-width: 760px;
+  color: rgba(255,255,255,.88);
+  font-size: clamp(13px, 1vw, 16px);
+  line-height: 1.9;
+  letter-spacing: .08em;
+}
+
+.iez-intro-overlay__progress {
+  position: absolute;
+  z-index: 10;
+  left: 50%;
+  bottom: clamp(34px, 5vh, 56px);
+  width: min(420px, calc(100% - 96px));
+  height: 1px;
+  transform: translateX(-50%);
+  background: rgba(255,255,255,.28);
+  overflow: hidden;
+}
+
+.iez-intro-overlay__progress span {
+  display: block;
+  width: 0;
+  height: 100%;
+  background: rgba(255,255,255,.9);
+  box-shadow: 0 0 18px rgba(255,255,255,.78);
+  animation: iezIntroProgress var(--iez-intro-duration, 7.5s) linear forwards;
+}
+
+.iez-intro-overlay__sound,
+.iez-intro-overlay__skip {
+  position: absolute;
+  z-index: 12;
+  appearance: none;
+  cursor: pointer;
+  font-family: Arial, sans-serif;
+  letter-spacing: .08em;
+}
+
+.iez-intro-overlay__sound {
+  top: 22px;
+  right: 24px;
+  padding: 11px 16px;
+  border: 1px solid rgba(255,255,255,.34);
+  background: rgba(0,0,0,.44);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.iez-intro-overlay__skip {
+  right: 28px;
+  bottom: 28px;
+  padding: 8px 0;
+  border: 0;
+  border-bottom: 1px solid rgba(255,255,255,.5);
+  background: transparent;
+  color: rgba(255,255,255,.84);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+@keyframes iezIntroKenBurns {
+  from {
+    transform: scale(1.04) translate3d(0,0,0);
+  }
+
+  to {
+    transform: scale(1.11) translate3d(-1.8%, -1%, 0);
+  }
+}
+
+@keyframes iezIntroProgress {
+  from {
+    width: 0;
+  }
+
+  to {
+    width: 100%;
+  }
+}
+
+@media (max-width: 767px) {
+  .iez-intro-overlay__visual {
+    grid-template-columns: 1fr;
+  }
+
+  .iez-intro-overlay__side--tokyo {
+    display: none;
+  }
+
+  .iez-intro-overlay__caption.is-nasu {
+    left: 24px;
+    right: 24px;
+    bottom: 230px;
+    width: auto;
+  }
+
+  .iez-intro-overlay__center {
+    width: calc(100% - 32px);
+    bottom: 76px;
+  }
+
+  .iez-intro-overlay__center::before {
+    width: calc(100vw - 24px);
+  }
+
+  .iez-intro-overlay__center h1 {
+    font-size: clamp(25px, 7vw, 38px);
+  }
+}
+
+/* =========================================================
+ * intro tune: BGM button / image crop
+ * - 音あり自動再生が止まった時は「音をON」を目立たせる
+ * - Ken Burns のズームを弱めて、画像の切れすぎを抑える
+ * - 60:40分割でも見やすいように左右の焦点を調整
+ * ========================================================= */
+
+.iez-intro-overlay__sound.is-blocked {
+  border-color: rgba(214, 173, 96, .85);
+  background: rgba(176, 138, 76, .34);
+  box-shadow: 0 0 0 0 rgba(214, 173, 96, .45);
+  animation: iezIntroSoundPulse 1.7s ease-in-out infinite;
+}
+
+.iez-intro-overlay__sound.is-playing {
+  border-color: rgba(255,255,255,.48);
+  background: rgba(0,0,0,.50);
+}
+
+/* 画像が切れすぎる原因を減らす */
+.iez-intro-overlay__slide {
+  inset: 0 !important;
+  transform: scale(1.025);
+  background-size: cover;
+  background-repeat: no-repeat;
+  animation: iezIntroKenBurnsSoft 12s ease-in-out infinite alternate !important;
+}
+
+/* 那須側は広いので、暮らし・住宅が中央〜少し右に来る想定 */
+.iez-intro-overlay__side--nasu .iez-intro-overlay__slide {
+  background-position: center center;
+}
+
+/* 東京側は40%で細くなるため、主役を中央に寄せる */
+.iez-intro-overlay__side--tokyo .iez-intro-overlay__slide {
+  background-position: center center;
+}
+
+/* 左右の文字が主役の写真を潰しすぎないように少し上げる */
+.iez-intro-overlay__caption.is-nasu,
+.iez-intro-overlay__caption.is-tokyo {
+  bottom: clamp(230px, 32vh, 360px);
+}
+
+/* 中央メッセージの黒にじみを少し弱める */
+.iez-intro-overlay__center::before {
+  background:
+    radial-gradient(ellipse at center, rgba(0,0,0,.34) 0%, rgba(0,0,0,.20) 42%, transparent 72%) !important;
+}
+
+@keyframes iezIntroKenBurnsSoft {
+  from {
+    transform: scale(1.025) translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: scale(1.065) translate3d(-0.8%, -0.6%, 0);
+  }
+}
+
+@keyframes iezIntroSoundPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(214, 173, 96, .45);
+  }
+
+  70% {
+    box-shadow: 0 0 0 12px rgba(214, 173, 96, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(214, 173, 96, 0);
+  }
+}
+
+/* =========================================================
+ * intro burns effect from admin settings
+ * 推奨初期値:
+ * - 那須: zoom-in  1.00 -> 1.08 / x 0 / y -1
+ * - 東京: zoom-out 1.08 -> 1.00 / x 0 / y 0
+ * ========================================================= */
+
+.iez-intro-overlay__side--nasu .iez-intro-overlay__slide {
+  animation-name: iezIntroBurnsNasuAdmin !important;
+  animation-duration: var(--iez-motion-duration, 11000ms) !important;
+  animation-timing-function: var(--iez-motion-easing, ease-in-out) !important;
+  animation-iteration-count: infinite !important;
+  animation-direction: alternate !important;
+  animation-fill-mode: both !important;
+}
+
+.iez-intro-overlay__side--tokyo .iez-intro-overlay__slide {
+  animation-name: iezIntroBurnsTokyoAdmin !important;
+  animation-duration: var(--iez-motion-duration, 11000ms) !important;
+  animation-timing-function: var(--iez-motion-easing, ease-in-out) !important;
+  animation-iteration-count: infinite !important;
+  animation-direction: alternate !important;
+  animation-fill-mode: both !important;
+}
+
+@keyframes iezIntroBurnsNasuAdmin {
+  from {
+    transform: scale(var(--iez-nasu-scale-start, 1)) translate3d(0, 0, 0);
+  }
+
+  to {
+    transform:
+      scale(var(--iez-nasu-scale-end, 1.08))
+      translate3d(var(--iez-nasu-x, 0%), var(--iez-nasu-y, -1%), 0);
+  }
+}
+
+@keyframes iezIntroBurnsTokyoAdmin {
+  from {
+    transform: scale(var(--iez-tokyo-scale-start, 1.08)) translate3d(0, 0, 0);
+  }
+
+  to {
+    transform:
+      scale(var(--iez-tokyo-scale-end, 1))
+      translate3d(var(--iez-tokyo-x, 0%), var(--iez-tokyo-y, 0%), 0);
+  }
+}
+
+/* DEBUG: intro force visible */
+.iez-intro-overlay {
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  z-index: 9999999 !important;
+}
+
+.iez-intro-overlay.is-ending,
+.iez-intro-overlay.is-done {
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.iez-intro-overlay__slide.is-active {
+  opacity: 1 !important;
+}
+
+/* =========================================================
+ * intro final safety
+ * ========================================================= */
+
+.iez-intro-overlay {
+  display: block !important;
+  opacity: 1;
+  visibility: visible;
+  z-index: 9999999;
+}
+
+.iez-intro-overlay.is-ending {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .9s ease, visibility .9s ease;
+}
+
+.iez-intro-overlay.is-done {
+  display: none !important;
+}
+
+.iez-intro-overlay__slide {
+  inset: 0 !important;
+  opacity: 0;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  will-change: transform, opacity;
+}
+
+.iez-intro-overlay__slide.is-active {
+  opacity: 1 !important;
+}
+
+/* Burns: 変数が壊れても fallback で表示する */
+.iez-intro-overlay__side--nasu .iez-intro-overlay__slide {
+  animation: iezIntroBurnsNasuFinal var(--iez-motion-duration, 11000ms) var(--iez-motion-easing, ease-in-out) infinite alternate both !important;
+}
+
+.iez-intro-overlay__side--tokyo .iez-intro-overlay__slide {
+  animation: iezIntroBurnsTokyoFinal var(--iez-motion-duration, 11000ms) var(--iez-motion-easing, ease-in-out) infinite alternate both !important;
+}
+
+@keyframes iezIntroBurnsNasuFinal {
+  from {
+    transform: scale(var(--iez-nasu-scale-start, 1.00)) translate3d(0, 0, 0);
+  }
+
+  to {
+    transform:
+      scale(var(--iez-nasu-scale-end, 1.10))
+      translate3d(var(--iez-nasu-x, 0%), var(--iez-nasu-y, -1%), 0);
+  }
+}
+
+@keyframes iezIntroBurnsTokyoFinal {
+  from {
+    transform: scale(var(--iez-tokyo-scale-start, 1.10)) translate3d(0, 0, 0);
+  }
+
+  to {
+    transform:
+      scale(var(--iez-tokyo-scale-end, 1.00))
+      translate3d(var(--iez-tokyo-x, 0%), var(--iez-tokyo-y, 0%), 0);
+  }
+}
+
+.iez-intro-overlay__sound.is-blocked {
+  border-color: rgba(214, 173, 96, .85);
+  background: rgba(176, 138, 76, .34);
+  animation: iezIntroSoundPulse 1.7s ease-in-out infinite;
+}
+
+@keyframes iezIntroSoundPulse {
+  0% { box-shadow: 0 0 0 0 rgba(214, 173, 96, .45); }
+  70% { box-shadow: 0 0 0 12px rgba(214, 173, 96, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(214, 173, 96, 0); }
+}
+
+/* =========================================================
+ * intro final: image burns + text motion
+ * ========================================================= */
+
+.iez-intro-overlay {
+  display: block !important;
+  opacity: 1;
+  visibility: visible;
+  z-index: 9999999;
+}
+
+.iez-intro-overlay.is-ending {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .9s ease, visibility .9s ease;
+}
+
+.iez-intro-overlay.is-done {
+  display: none !important;
+}
+
+.iez-intro-overlay__slide {
+  inset: 0 !important;
+  opacity: 0;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  will-change: transform, opacity;
+}
+
+.iez-intro-overlay__slide.is-active {
+  opacity: 1 !important;
+}
+
+.iez-intro-overlay__side--nasu .iez-intro-overlay__slide {
+  animation: iezIntroBurnsNasuFinal var(--iez-motion-duration, 11000ms) var(--iez-motion-easing, ease-in-out) infinite alternate both !important;
+}
+
+.iez-intro-overlay__side--tokyo .iez-intro-overlay__slide {
+  animation: iezIntroBurnsTokyoFinal var(--iez-motion-duration, 11000ms) var(--iez-motion-easing, ease-in-out) infinite alternate both !important;
+}
+
+@keyframes iezIntroBurnsNasuFinal {
+  from {
+    transform: scale(var(--iez-nasu-scale-start, 1.00)) translate3d(0, 0, 0);
+  }
+
+  to {
+    transform:
+      scale(var(--iez-nasu-scale-end, 1.10))
+      translate3d(var(--iez-nasu-x, 0%), var(--iez-nasu-y, -1%), 0);
+  }
+}
+
+@keyframes iezIntroBurnsTokyoFinal {
+  from {
+    transform: scale(var(--iez-tokyo-scale-start, 1.10)) translate3d(0, 0, 0);
+  }
+
+  to {
+    transform:
+      scale(var(--iez-tokyo-scale-end, 1.00))
+      translate3d(var(--iez-tokyo-x, 0%), var(--iez-tokyo-y, 0%), 0);
+  }
+}
+
+/* text fade-up */
+.iez-intro-overlay__caption,
+.iez-intro-overlay__center {
+  opacity: 0;
+  transform: translate3d(0, var(--iez-text-y, 18px), 0);
+  will-change: opacity, transform;
+}
+
+.iez-intro-overlay.is-started .iez-intro-overlay__caption {
+  animation: iezIntroTextFadeUp var(--iez-text-motion-duration, 900ms) ease-out var(--iez-text-delay-side, 600ms) both;
+}
+
+.iez-intro-overlay.is-started .iez-intro-overlay__center {
+  animation: iezIntroTextFadeUp var(--iez-text-motion-duration, 900ms) ease-out var(--iez-text-delay-center, 900ms) both;
+}
+
+.iez-intro-overlay.is-started .iez-intro-overlay__center h1 {
+  animation: iezIntroTextLetterSoft 1200ms ease-out calc(var(--iez-text-delay-center, 900ms) + 180ms) both;
+}
+
+@keyframes iezIntroTextFadeUp {
+  from {
+    opacity: 0;
+    transform: translate3d(0, var(--iez-text-y, 18px), 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes iezIntroTextLetterSoft {
+  from {
+    opacity: .72;
+    letter-spacing: .16em;
+  }
+
+  to {
+    opacity: 1;
+    letter-spacing: .08em;
+  }
+}
+
+.iez-intro-overlay__sound.is-blocked {
+  border-color: rgba(214, 173, 96, .85);
+  background: rgba(176, 138, 76, .34);
+  animation: iezIntroSoundPulse 1.7s ease-in-out infinite;
+}
+
+@keyframes iezIntroSoundPulse {
+  0% { box-shadow: 0 0 0 0 rgba(214, 173, 96, .45); }
+  70% { box-shadow: 0 0 0 12px rgba(214, 173, 96, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(214, 173, 96, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .iez-intro-overlay__slide,
+  .iez-intro-overlay__caption,
+  .iez-intro-overlay__center,
+  .iez-intro-overlay__center h1 {
+    animation: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+}
+
+/* =========================================================
+ * intro final fix: layout / scroll lock / text motion
+ * ========================================================= */
+
+html.iez-intro-lock,
+body.iez-intro-lock {
+  overflow: hidden !important;
+  height: 100% !important;
+}
+
+.iez-intro-overlay {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+  display: block !important;
+  overflow: hidden !important;
+  z-index: 9999999 !important;
+  opacity: 1;
+  visibility: visible;
+  background: #050607;
+}
+
+.iez-intro-overlay.is-ending {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .9s ease, visibility .9s ease;
+}
+
+.iez-intro-overlay.is-done {
+  display: none !important;
+}
+
+.iez-intro-overlay__visual {
+  position: absolute !important;
+  inset: 0 !important;
+  display: grid !important;
+  grid-template-columns: var(--iez-intro-nasu-ratio, 60%) calc(100% - var(--iez-intro-nasu-ratio, 60%)) !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.iez-intro-overlay__side {
+  position: relative !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+
+.iez-intro-overlay__slide {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 1 !important;
+  display: block !important;
+  opacity: 0;
+  background-size: cover !important;
+  background-position: center center !important;
+  background-repeat: no-repeat !important;
+  will-change: transform, opacity;
+}
+
+.iez-intro-overlay__slide.is-active {
+  opacity: 1 !important;
+}
+
+/* 画像は Burns Effect */
+.iez-intro-overlay__side--nasu .iez-intro-overlay__slide {
+  animation: iezIntroBurnsNasuStable var(--iez-motion-duration, 11000ms) var(--iez-motion-easing, ease-in-out) infinite alternate both !important;
+}
+
+.iez-intro-overlay__side--tokyo .iez-intro-overlay__slide {
+  animation: iezIntroBurnsTokyoStable var(--iez-motion-duration, 11000ms) var(--iez-motion-easing, ease-in-out) infinite alternate both !important;
+}
+
+@keyframes iezIntroBurnsNasuStable {
+  from {
+    transform: scale(var(--iez-nasu-scale-start, 1.00)) translate3d(0, 0, 0);
+  }
+
+  to {
+    transform:
+      scale(var(--iez-nasu-scale-end, 1.10))
+      translate3d(var(--iez-nasu-x, 0%), var(--iez-nasu-y, -1%), 0);
+  }
+}
+
+@keyframes iezIntroBurnsTokyoStable {
+  from {
+    transform: scale(var(--iez-tokyo-scale-start, 1.10)) translate3d(0, 0, 0);
+  }
+
+  to {
+    transform:
+      scale(var(--iez-tokyo-scale-end, 1.00))
+      translate3d(var(--iez-tokyo-x, 0%), var(--iez-tokyo-y, 0%), 0);
+  }
+}
+
+/* 左右の小さい文書 */
+.iez-intro-overlay__caption {
+  position: absolute !important;
+  z-index: 6 !important;
+  width: min(34vw, 520px) !important;
+  max-width: calc(100% - 56px) !important;
+  color: #fff !important;
+  text-shadow: 0 12px 34px rgba(0,0,0,.72);
+}
+
+.iez-intro-overlay__caption.is-nasu {
+  left: clamp(24px, 4vw, 72px) !important;
+  bottom: clamp(135px, 24vh, 260px) !important;
+}
+
+.iez-intro-overlay__caption.is-tokyo {
+  left: clamp(24px, 4vw, 64px) !important;
+  bottom: clamp(135px, 24vh, 260px) !important;
+  width: min(30vw, 430px) !important;
+}
+
+/* 中央見出しは必ず中央に収める */
+.iez-intro-overlay__center {
+  position: absolute !important;
+  z-index: 8 !important;
+  left: 50% !important;
+  right: auto !important;
+  bottom: clamp(54px, 8vh, 96px) !important;
+  transform: translateX(-50%) !important;
+  width: min(920px, calc(100vw - 80px)) !important;
+  max-width: calc(100vw - 80px) !important;
+  box-sizing: border-box !important;
+  padding: 0 16px !important;
+  text-align: center !important;
+  color: #fff !important;
+  overflow: visible !important;
+  text-shadow:
+    0 2px 8px rgba(0,0,0,.66),
+    0 18px 44px rgba(0,0,0,.72);
+}
+
+.iez-intro-overlay__center h1 {
+  max-width: 100% !important;
+  margin: 0 auto !important;
+  color: #fff !important;
+  font-size: clamp(30px, 3.3vw, 58px) !important;
+  line-height: 1.25 !important;
+  letter-spacing: .06em !important;
+  white-space: normal !important;
+  overflow-wrap: anywhere !important;
+}
+
+.iez-intro-overlay__center p:not(.iez-intro-overlay__kicker) {
+  max-width: 760px !important;
+  margin: 16px auto 0 !important;
+}
+
+/* 文章は Burns ではなく fade-up */
+.iez-intro-overlay__caption,
+.iez-intro-overlay__center {
+  opacity: 0;
+  will-change: opacity, transform;
+}
+
+.iez-intro-overlay.is-started .iez-intro-overlay__caption {
+  animation: iezIntroTextFadeUpStable var(--iez-text-motion-duration, 900ms) ease-out var(--iez-text-delay-side, 600ms) both !important;
+}
+
+.iez-intro-overlay.is-started .iez-intro-overlay__center {
+  animation: iezIntroCenterFadeUpStable var(--iez-text-motion-duration, 900ms) ease-out var(--iez-text-delay-center, 900ms) both !important;
+}
+
+@keyframes iezIntroTextFadeUpStable {
+  from {
+    opacity: 0;
+    transform: translate3d(0, var(--iez-text-y, 18px), 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes iezIntroCenterFadeUpStable {
+  from {
+    opacity: 0;
+    transform: translate3d(-50%, var(--iez-text-y, 18px), 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+/* progress */
+.iez-intro-overlay__progress {
+  z-index: 12 !important;
+}
+
+/* buttons */
+.iez-intro-overlay__sound,
+.iez-intro-overlay__skip {
+  z-index: 20 !important;
+}
+
+.iez-intro-overlay__skip {
+  right: 28px !important;
+  bottom: 28px !important;
+}
+
+.iez-intro-overlay__sound.is-blocked {
+  border-color: rgba(214, 173, 96, .85);
+  background: rgba(176, 138, 76, .34);
+  animation: iezIntroSoundPulseStable 1.7s ease-in-out infinite;
+}
+
+@keyframes iezIntroSoundPulseStable {
+  0% { box-shadow: 0 0 0 0 rgba(214, 173, 96, .45); }
+  70% { box-shadow: 0 0 0 12px rgba(214, 173, 96, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(214, 173, 96, 0); }
+}
+
+@media (max-width: 767px) {
+  .iez-intro-overlay__visual {
+    grid-template-columns: 1fr !important;
+  }
+
+  .iez-intro-overlay__side--tokyo {
+    display: none !important;
+  }
+
+  .iez-intro-overlay__caption.is-nasu {
+    left: 24px !important;
+    right: 24px !important;
+    bottom: 210px !important;
+    width: auto !important;
+  }
+
+  .iez-intro-overlay__center {
+    width: calc(100vw - 32px) !important;
+    max-width: calc(100vw - 32px) !important;
+    bottom: 72px !important;
+  }
+
+  .iez-intro-overlay__center h1 {
+    font-size: clamp(25px, 7vw, 38px) !important;
+  }
+}

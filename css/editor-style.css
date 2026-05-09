@@ -1,0 +1,185 @@
+/* =========================================================
+   blog: 管理画面 + フロント 共通テスト
+   対象:
+   - 管理画面: ブロックエディタ
+   - フロント: single-blog 本文
+   ========================================================= */
+
+/* 共通の本文フォント */
+body {
+  font-family: 'Inter', sans-serif;
+}
+
+/* =========================================================
+   h1 タイトル
+   ========================================================= */
+
+/* 管理画面 */
+.editor-styles-wrapper .editor-post-title__input,
+.editor-styles-wrapper .wp-block-post-title {
+  font-size: 2rem;
+  line-height: 1.45;
+  font-weight: 700;
+  color: #222;
+  margin: 0 0 1.2em;
+  padding-bottom: 0.35em;
+  border-bottom: 3px solid #222;
+}
+
+/* フロント */
+.single-blog h1.post-title {
+  font-size: 2rem;
+  line-height: 1.45;
+  font-weight: 700;
+  color: #222;
+  margin: 0 0 1.2em;
+  padding-bottom: 0.35em;
+  border-bottom: 3px solid #222;
+}
+
+/* =========================================================
+   h2 大見出し
+   ========================================================= */
+
+/* 管理画面 */
+.editor-styles-wrapper h2 {
+  font-size: 1.5rem;
+  line-height: 1.5;
+  font-weight: 700;
+  color: #222;
+  background: #fff3cd;
+  border-left: 8px solid #ffb107;
+  border-bottom: 2px solid #ffb107;
+  padding: 0.75em 0.9em;
+  margin: 2em 0 1em;
+  border-radius: 4px;
+}
+
+/* フロント */
+.single-blog .blog-main-content h2 {
+  font-size: 1.5rem;
+  line-height: 1.5;
+  font-weight: 700;
+  color: #222;
+  background: #fff3cd;
+  border-left: 8px solid #ffb107;
+  border-bottom: 2px solid #ffb107;
+  padding: 0.75em 0.9em;
+  margin: 2em 0 1em;
+  border-radius: 4px;
+}
+
+/* =========================================================
+   h3 小見出し
+   ========================================================= */
+
+/* 管理画面 */
+.editor-styles-wrapper h3 {
+  font-size: 1.12rem;
+  line-height: 1.5;
+  font-weight: 700;
+  color: #444;
+  border-left: 4px solid #ffb107;
+  padding-left: 10px;
+  margin: 1.4em 0 0.7em;
+}
+
+/* フロント */
+.single-blog .blog-main-content h3 {
+  font-size: 1.12rem;
+  line-height: 1.5;
+  font-weight: 700;
+  /*color: #444;*/
+  border-left: 4px solid #ffb107;
+  padding-left: 10px;
+  margin: 1.4em 0 0.7em;
+}
+
+/* =========================================================
+   段落
+   ========================================================= */
+
+/* 管理画面 */
+.editor-styles-wrapper p {
+  font-size: 16px;
+  line-height: 1.9;
+  color: #222;
+}
+
+/* フロント */
+.single-blog .blog-main-content p {
+  font-size: 16px;
+  line-height: 1.9;
+}
+
+/* =========================================================
+   番号リスト
+   ========================================================= */
+
+/* 管理画面 */
+.editor-styles-wrapper ol {
+  counter-reset: number;
+  list-style: none !important;
+  padding: 0.3em 0.8em;
+  border: solid 2px #ffb107;
+}
+
+.editor-styles-wrapper ol li {
+  position: relative;
+  padding: 0.5em 0.5em 0.5em 30px;
+  line-height: 1.6;
+  border-bottom: dashed 1px #ffb107;
+}
+
+.editor-styles-wrapper ol li::before {
+  position: absolute;
+  counter-increment: number;
+  content: counter(number);
+  display: inline-block;
+  background: #ffb107;
+  color: #fff;
+  font-weight: 700;
+  font-size: 15px;
+  border-radius: 50%;
+  left: 0;
+  top: 50%;
+  width: 25px;
+  height: 25px;
+  line-height: 25px;
+  text-align: center;
+  transform: translateY(-50%);
+}
+
+/* フロント */
+.single-blog .blog-main-content ol {
+  counter-reset: number;
+  list-style: none !important;
+  padding: 0.3em 0.8em;
+  border: solid 2px #ffb107;
+}
+
+.single-blog .blog-main-content ol li {
+  position: relative;
+  padding: 0.5em 0.5em 0.5em 30px;
+  line-height: 1.6;
+  border-bottom: dashed 1px #ffb107;
+}
+
+.single-blog .blog-main-content ol li::before {
+  position: absolute;
+  counter-increment: number;
+  content: counter(number);
+  display: inline-block;
+  background: #ffb107;
+  color: #fff;
+  font-weight: 700;
+  font-size: 15px;
+  border-radius: 50%;
+  left: 0;
+  top: 50%;
+  width: 25px;
+  height: 25px;
+  line-height: 25px;
+  text-align: center;
+  transform: translateY(-50%);
+}

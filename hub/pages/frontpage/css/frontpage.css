@@ -1,0 +1,2327 @@
+/* =========================================================
+   Frontpage Portal
+   管理場所: hub/pages/frontpage/css/frontpage.css
+
+   役割:
+   - フロントページ専用の見た目をこの1本に集約
+   - page-wrapper / header / footer / style.css は触らない
+   - 後半で上書きしていた FINAL / fix 系の重複を統合
+   ========================================================= */
+
+/* =========================================================
+   01. Theme variables / common shell
+   役割:
+   - フロントページ全体で使う色・横幅・共通ボタンを定義
+   ========================================================= */
+
+.fp-portal {
+  --fp-blue: #1769b2;
+  --fp-navy: #12304a;
+  --fp-green: #7aa160;
+  --fp-gold: #bd955b;
+  --fp-line: #d9e7f0;
+  --fp-soft: #f5f9fc;
+  --fp-text: #18364d;
+
+  color: var(--fp-text);
+}
+.fp-shell {
+  width: min(1180px, calc(100% - 48px));
+  margin-inline: auto;
+}
+
+.fp-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: #e9f4fb;
+  color: #42799d;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.fp-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  padding: 0 22px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  color: inherit;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 700;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.fp-btn:hover {
+  transform: translateY(-1px);
+}
+
+.fp-btn--blue {
+  background: var(--fp-blue);
+  color: #fff;
+  box-shadow: 0 10px 22px rgba(23, 105, 178, 0.2);
+}
+
+.fp-btn--green {
+  background: var(--fp-green);
+  color: #fff;
+}
+
+.fp-btn--gold {
+  background: var(--fp-gold);
+  color: #fff;
+}
+
+.fp-btn--outline {
+  background: #fff;
+  color: var(--fp-blue);
+  border-color: #8bbbe1;
+}
+
+/* =========================================================
+   02. Hero
+   役割:
+   - PC: 左テキスト + 右メディアグリッド
+   - メディア数ごとに 1〜5枚の配置を切り替える
+   - モバイル: 見出し → リード → 画像/動画 → CTA
+   ========================================================= */
+
+.fp-hero {
+  padding: clamp(18px, 2.4vw, 34px) 0 clamp(20px, 2.8vw, 38px) !important;
+}
+
+.fp-shell.fp-hero__grid,
+.fp-hero__grid {
+  display: grid !important;
+  grid-template-columns: minmax(320px, 0.72fr) minmax(620px, 1.28fr) !important;
+  gap: clamp(24px, 3.2vw, 46px) !important;
+  align-items: center !important;
+  width: min(1440px, calc(100% - 56px)) !important;
+  margin-inline: auto !important;
+}
+
+.fp-hero__body {
+  display: block !important;
+  max-width: 620px !important;
+  padding: 0 !important;
+}
+
+.fp-hero__title {
+  margin: 10px 0 14px !important;
+  color: var(--fp-navy) !important;
+  font-size: clamp(25px, 2.45vw, 38px) !important;
+  line-height: 1.32 !important;
+  letter-spacing: 0.025em !important;
+}
+
+.fp-hero__lead {
+  max-width: 560px !important;
+  margin: 0 0 20px !important;
+  color: #486377 !important;
+  font-size: 14px !important;
+  line-height: 1.78 !important;
+}
+
+.fp-hero__actions {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 12px !important;
+  max-width: 460px !important;
+  margin-top: 0 !important;
+}
+
+.fp-hero__actions .fp-btn {
+  width: 100% !important;
+  min-height: 46px !important;
+}
+
+/* Hero media base
+   役割:
+   - 画像 / video / iframe / lite-youtube を同じ枠で cover 表示
+   ========================================================= */
+
+.fp-hero-media,
+.fp-hero-media--adaptive {
+  display: grid !important;
+  width: 100% !important;
+  height: clamp(320px, 29vw, 460px) !important;
+  gap: 10px !important;
+  overflow: hidden !important;
+  border-radius: 28px !important;
+  background: #eef5f9 !important;
+  box-shadow: 0 24px 60px rgba(36, 70, 96, 0.18) !important;
+}
+
+.fp-hero-media__item {
+  position: relative !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  height: 100% !important;
+  overflow: hidden !important;
+  background: #dfeaf0 !important;
+}
+
+.fp-hero-media__img,
+.fp-hero-media__video,
+.fp-hero-media__iframe,
+.fp-hero-media__lite-youtube,
+.fp-hero-media--adaptive lite-youtube {
+  position: absolute !important;
+  inset: 0 !important;
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  border: 0 !important;
+  background: #111 !important;
+}
+
+.fp-hero-media__video {
+  pointer-events: none !important;
+}
+
+.fp-hero-media__play,
+.fp-hero-media__copy {
+  display: none !important;
+}
+
+.fp-hero-media__item::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(8, 22, 34, 0.02), rgba(8, 22, 34, 0.18));
+}
+
+.fp-hero-media__badge {
+  position: absolute !important;
+  z-index: 3 !important;
+  left: 12px !important;
+  bottom: 12px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  padding: 6px 9px !important;
+  border-radius: 999px !important;
+  background: rgba(18, 48, 74, 0.74) !important;
+  color: #fff !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  backdrop-filter: blur(8px);
+}
+
+/* Hero media layouts by count */
+
+.fp-hero-media--count-1 {
+  grid-template-columns: 1fr !important;
+}
+
+.fp-hero-media--count-2 {
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr) !important;
+}
+
+.fp-hero-media--count-3 {
+  grid-template-columns: minmax(0, 1.45fr) minmax(0, 1.05fr) !important;
+  grid-template-rows: repeat(2, minmax(0, 1fr)) !important;
+}
+
+.fp-hero-media--count-3 .fp-hero-media__item:nth-child(1) {
+  grid-row: 1 / 3 !important;
+}
+
+.fp-hero-media--count-4 {
+  grid-template-columns: minmax(0, 1.38fr) minmax(0, 0.9fr) minmax(0, 0.9fr) !important;
+  grid-template-rows: repeat(2, minmax(0, 1fr)) !important;
+}
+
+.fp-hero-media--count-4 .fp-hero-media__item:nth-child(1) {
+  grid-row: 1 / 3 !important;
+}
+
+.fp-hero-media--count-4 .fp-hero-media__item:nth-child(4) {
+  grid-column: 2 / 4 !important;
+}
+
+.fp-hero-media--count-5 {
+  grid-template-columns: minmax(0, 1.34fr) minmax(0, 0.95fr) minmax(0, 0.95fr) !important;
+  grid-template-rows: repeat(2, minmax(0, 1fr)) !important;
+}
+
+.fp-hero-media--count-5 .fp-hero-media__item:nth-child(1) {
+  grid-row: 1 / 3 !important;
+}
+
+/* =========================================================
+   03. Service cards
+   役割:
+   - 不動産 / 家づくり / 民泊 / 法人向けの入口カード
+   - アイコンはSVG線画前提でサイズ・色を統一
+   ========================================================= */
+
+.fp-services {
+  padding: 24px 0 12px;
+}
+
+.fp-services__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.fp-service-card {
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1fr);
+  gap: 22px;
+  align-items: center;
+  min-height: 150px;
+  padding: 28px;
+  border: 1px solid rgba(142, 180, 207, 0.42) !important;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.9);
+  color: inherit;
+  text-decoration: none;
+  box-shadow: 0 14px 34px rgba(26, 60, 88, 0.055) !important;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.fp-service-card:hover {
+  transform: translateY(-1px);
+  border-color: rgba(36, 122, 188, 0.42) !important;
+  box-shadow: 0 18px 44px rgba(26, 60, 88, 0.1) !important;
+}
+
+.fp-service-card__icon {
+  display: grid !important;
+  place-items: center !important;
+  flex: 0 0 auto;
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  color: var(--fp-blue);
+  background: #eaf4fb;
+}
+
+.fp-service-card__icon svg {
+  display: block !important;
+  width: 58px !important;
+  height: 58px !important;
+  stroke: currentColor !important;
+  fill: none !important;
+  stroke-width: 2.8 !important;
+  stroke-linecap: round !important;
+  stroke-linejoin: round !important;
+}
+
+.fp-service-card--realestate .fp-service-card__icon {
+  color: #1f73b7 !important;
+  background: #e8f3fb !important;
+}
+
+.fp-service-card--home .fp-service-card__icon {
+  color: #78a25d !important;
+  background: #edf6e8 !important;
+}
+
+.fp-service-card--stay .fp-service-card__icon {
+  color: #bd955b !important;
+  background: #f7efe4 !important;
+}
+
+.fp-service-card--business .fp-service-card__icon {
+  color: #2a86b8 !important;
+  background: #e8f4fb !important;
+}
+
+.fp-service-card strong {
+  display: block;
+  margin-bottom: 10px;
+  color: var(--fp-navy);
+  font-size: 25px;
+  letter-spacing: 0.04em;
+}
+
+.fp-service-card small {
+  display: block;
+  color: #536b7d;
+  line-height: 1.8;
+}
+
+.fp-service-card em {
+  display: inline-flex;
+  margin-top: 14px;
+  color: var(--fp-blue);
+  font-style: normal;
+  font-weight: 700;
+}
+
+/* =========================================================
+   04. Business horizontal block
+   役割:
+   - 法人向け / 事業向けの横長CTAブロック
+   ========================================================= */
+
+.fp-business {
+  padding: 18px 0 38px;
+}
+
+.fp-business__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr) auto;
+  gap: 24px;
+  align-items: center;
+  padding: 22px 26px;
+  border: 1px solid rgba(142, 180, 207, 0.44) !important;
+  border-radius: 20px;
+  background: linear-gradient(90deg, #f3f8fc, #fff);
+  box-shadow: 0 12px 34px rgba(26, 60, 88, 0.05) !important;
+}
+
+.fp-business__title {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.fp-business__icon {
+  display: grid !important;
+  place-items: center !important;
+  flex: 0 0 82px !important;
+  width: 82px !important;
+  height: 82px !important;
+  color: #1f73b7 !important;
+}
+
+.fp-business__icon svg {
+  display: block !important;
+  width: 72px !important;
+  height: 72px !important;
+  stroke: currentColor !important;
+  fill: none !important;
+  stroke-width: 2.8 !important;
+  stroke-linecap: round !important;
+  stroke-linejoin: round !important;
+}
+
+.fp-business h2 {
+  margin: 0 0 7px;
+  color: var(--fp-navy);
+  font-size: 20px;
+}
+
+.fp-business p {
+  margin: 0;
+  color: #5d7484;
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.fp-business__checks {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px 18px;
+  padding: 0;
+  margin: 0;
+  color: #24455e;
+  list-style: none;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.fp-business__checks li {
+  border: 0 !important;
+}
+
+.fp-business__checks li::before {
+  content: '✓';
+  margin-right: 8px;
+  color: var(--fp-blue);
+}
+
+.fp-business__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 18px;
+  border: 1px solid #8bbbe1;
+  border-radius: 12px;
+  color: var(--fp-blue);
+  text-decoration: none;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* =========================================================
+   05. Pickup / News
+   管理場所:
+   hub/pages/frontpage/css/frontpage.css
+
+   役割:
+   - ピックアップ全体を「1つの大きな背景カード」として見せる
+   - 中のおすすめ物件 / 施工事例 / お知らせカードは既存のまま使う
+   - 画像・HTML・PHP・JSは触らない
+   - PC / タブレット / モバイルの列数だけここで管理する
+
+   HTML構造:
+   section.fp-pickup
+     div.fp-shell              ← 全体背景カードはここ
+       h2.fp-section-title
+       div.fp-pickup__grid
+         div.fp-pickup-block
+         div.fp-pickup-block
+         div.fp-pickup-block.fp-notices
+   ========================================================= */
+
+/*
+ * 役割:
+ * セクション外側の上下余白。
+ * 背景色は .fp-shell 側につけるので、ここは透明にする。
+ */
+.fp-pickup {
+  padding: clamp(34px, 4.2vw, 62px) 0 !important;
+  background: transparent !important;
+}
+
+/*
+ * 役割:
+ * ピックアップ全体を包む大きなカード。
+ * ユーザー要望の「全体を包むカート全体で色がほしい」はここで対応。
+ */
+.fp-pickup > .fp-shell {
+  padding: clamp(24px, 3.2vw, 42px) !important;
+  border: 1px solid rgba(150, 188, 212, 0.3) !important;
+  border-radius: 30px !important;
+  background:
+    radial-gradient(circle at 12% 0%, rgba(255, 255, 255, 0.95), transparent 34%),
+    linear-gradient(135deg, #fbf6ed 0%, #f4f9fc 48%, #eef6fb 100%) !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.64),
+    0 20px 48px rgba(26, 60, 88, 0.07) !important;
+}
+
+/*
+ * 役割:
+ * セクション見出し。
+ * 背景カードの中に入るので、上余白を詰める。
+ */
+.fp-section-title {
+  position: relative;
+  margin: 0 0 clamp(24px, 3vw, 36px) !important;
+  color: var(--fp-navy);
+  text-align: center;
+  font-size: clamp(26px, 2.4vw, 34px);
+}
+
+.fp-section-title::after {
+  content: '';
+  display: block;
+  width: 42px;
+  height: 3px;
+  margin: 10px auto 0;
+  border-radius: 999px;
+  background: var(--fp-blue);
+}
+
+/*
+ * 役割:
+ * ピックアップ内の3ブロック配置。
+ * PCは おすすめ物件 / 施工事例 / お知らせ を横並び。
+ */
+.fp-pickup__grid {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(280px, 1.12fr) !important;
+  gap: clamp(22px, 2.8vw, 34px) !important;
+  align-items: start !important;
+}
+
+/*
+ * 役割:
+ * 各ブロックの内側にも薄い白パネルを付ける。
+ * これで大きい背景カードの中に、各カテゴリが整理される。
+ */
+.fp-pickup-block {
+  min-width: 0 !important;
+  padding: clamp(16px, 2vw, 22px) !important;
+  border: 1px solid rgba(170, 200, 220, 0.22) !important;
+  border-radius: 22px !important;
+  background: rgba(255, 255, 255, 0.72) !important;
+  box-shadow: 0 12px 30px rgba(26, 60, 88, 0.055) !important;
+}
+
+/*
+ * 役割:
+ * ブロック見出し行。
+ */
+.fp-block-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 14px !important;
+}
+
+.fp-block-head h3 {
+  margin: 0;
+  color: var(--fp-navy);
+  font-size: 20px;
+}
+
+.fp-block-head a {
+  color: var(--fp-blue);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/*
+ * 役割:
+ * おすすめ物件 / 施工事例 の小カードを2列にする。
+ */
+.fp-mini-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+/*
+ * 役割:
+ * 個別の小カード。
+ * 既存カードは残しつつ、背景カード内で見やすくする。
+ */
+.fp-mini-card {
+  display: block;
+  overflow: hidden;
+  border: 1px solid var(--fp-line);
+  border-radius: 16px;
+  background: #fff;
+  color: var(--fp-text);
+  text-decoration: none;
+  box-shadow: 0 10px 26px rgba(34, 66, 92, 0.06);
+}
+
+.fp-mini-card__thumb {
+  display: block;
+  aspect-ratio: 4 / 3;
+  background: linear-gradient(135deg, #dfeef8, #f4efe6);
+}
+
+.fp-mini-card__thumb img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.fp-mini-card strong,
+.fp-mini-card small {
+  display: block;
+  padding-inline: 12px;
+}
+
+.fp-mini-card strong {
+  padding-top: 12px;
+  color: var(--fp-navy);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.fp-mini-card small {
+  padding-top: 6px;
+  padding-bottom: 12px;
+  color: #607989;
+  font-size: 12px;
+}
+
+/*
+ * 役割:
+ * お知らせ・コラムの1行カード。
+ */
+.fp-notice {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr);
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--fp-line);
+  color: inherit;
+  text-decoration: none;
+}
+
+.fp-notice:first-of-type {
+  padding-top: 0;
+}
+
+.fp-notice:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.fp-notice__thumb {
+  width: 72px;
+  height: 54px;
+  overflow: hidden;
+  border-radius: 9px;
+  background: linear-gradient(135deg, #dfeef8, #f4efe6);
+}
+
+.fp-notice__thumb img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.fp-notice__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  color: #7c94a6;
+  font-size: 12px;
+}
+
+.fp-notice__meta em {
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: #eaf4fb;
+  color: var(--fp-blue);
+  font-style: normal;
+}
+
+.fp-notice strong {
+  display: block;
+  margin: 4px 0;
+  color: var(--fp-navy);
+  font-size: 14px;
+}
+
+.fp-notice small {
+  display: block;
+  color: #6c8292;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+/*
+ * 役割:
+ * タブレットでは2列。
+ * お知らせだけ下段いっぱいにする。
+ */
+@media (max-width: 1024px) {
+  .fp-pickup > .fp-shell {
+    padding: 24px !important;
+    border-radius: 26px !important;
+  }
+
+  .fp-pickup__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 18px !important;
+  }
+
+  .fp-pickup__grid > .fp-notices {
+    grid-column: 1 / -1 !important;
+  }
+}
+
+/*
+ * 役割:
+ * スマホでは1列。
+ */
+@media (max-width: 767px) {
+  .fp-pickup {
+    padding: 28px 0 !important;
+  }
+
+  .fp-pickup > .fp-shell {
+    padding: 18px !important;
+    border-radius: 22px !important;
+  }
+
+  .fp-pickup__grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  .fp-pickup__grid > .fp-notices {
+    grid-column: auto !important;
+  }
+
+  .fp-mini-cards {
+    grid-template-columns: 1fr !important;
+  }
+
+  .fp-block-head h3 {
+    font-size: 18px;
+  }
+}
+
+/* =========================================================
+   06. Life section
+   役割:
+   - 那須での暮らしセクション
+   - 通常カード / 画像横並び / 背景画像 / Swiperカードを共存
+   ========================================================= */
+
+.fp-life {
+  padding: 26px 0;
+}
+
+.fp-life__inner {
+  display: grid;
+  grid-template-columns: 0.9fr 1.2fr;
+  gap: 32px;
+  align-items: center;
+  overflow: hidden;
+  padding: 34px;
+  border: 0 !important;
+  border-radius: 24px;
+  background: linear-gradient(90deg, #fbf6ed, #f2f8fc);
+  box-shadow: none !important;
+}
+
+.fp-life h2 {
+  margin: 12px 0;
+  color: var(--fp-navy);
+  font-size: 32px;
+}
+
+.fp-life p {
+  color: #526d7f;
+  line-height: 1.9;
+}
+
+/* Life normal cards
+   役割:
+   - Swiperではない通常の3カード表示
+   - swiper-slide には当てない
+   ========================================================= */
+
+.fp-life__points:not(.js-fp-life-swiper) {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.fp-life__points:not(.js-fp-life-swiper) > div:not(.swiper-slide) {
+  padding: 20px;
+  border: 0 !important;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.75);
+  text-align: center;
+  box-shadow: 0 12px 28px rgba(26, 60, 88, 0.055) !important;
+}
+
+.fp-life__points strong {
+  display: block;
+  margin-bottom: 10px;
+  color: var(--fp-navy);
+}
+
+.fp-life__points small {
+  color: #607989;
+  line-height: 1.7;
+}
+
+/* Life with image side */
+
+.fp-life--image-side .fp-life__inner {
+  grid-template-columns: minmax(0, 0.82fr) minmax(260px, 0.64fr) minmax(0, 0.78fr) !important;
+}
+
+.fp-life__media {
+  overflow: hidden;
+  min-height: 260px;
+  border-radius: 22px;
+  background: #eaf3f8;
+  box-shadow: 0 18px 44px rgba(26, 60, 88, 0.14);
+}
+
+.fp-life__media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 260px;
+  object-fit: cover;
+}
+
+/* Life with background image */
+
+.fp-life--image-background .fp-life__inner {
+  position: relative;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.92), rgba(242, 248, 252, 0.78)),
+    var(--fp-life-bg-image) center / cover no-repeat !important;
+}
+
+/* Life cards swiper
+   役割:
+   - 矢印なし
+   - 丸ドットあり
+   - カード群の外側に背景台紙を表示
+   ========================================================= */
+
+.fp-life.fp-life--cards-swiper {
+  overflow: hidden !important;
+}
+
+.fp-life.fp-life--cards-swiper .fp-life__inner {
+  display: grid !important;
+  grid-template-columns: minmax(260px, 0.82fr) minmax(0, 1.18fr) !important;
+  gap: clamp(22px, 3vw, 40px) !important;
+  align-items: center !important;
+  overflow: hidden !important;
+}
+
+.fp-life.fp-life--cards-swiper .fp-life__text {
+  position: relative !important;
+  z-index: 2 !important;
+  min-width: 0 !important;
+}
+
+.fp-life__points-shell {
+  position: relative !important;
+  min-width: 0 !important;
+  width: 100% !important;
+  overflow: hidden !important;
+  padding: clamp(18px, 2vw, 26px) !important;
+  border: 1px solid rgba(150, 188, 212, 0.28) !important;
+  border-radius: 28px !important;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.72),
+    rgba(234, 246, 252, 0.96)
+  ) !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.58),
+    0 18px 44px rgba(26, 60, 88, 0.06) !important;
+}
+
+.fp-life__points.js-fp-life-swiper {
+  position: relative !important;
+  display: block !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+  padding: 0 38px 30px 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.fp-life__points.js-fp-life-swiper .swiper-wrapper {
+  align-items: stretch !important;
+}
+
+.fp-life__points.js-fp-life-swiper .swiper-slide,
+.fp-life__points div.swiper-slide {
+  display: flex !important;
+  height: auto !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  text-align: left !important;
+  box-shadow: none !important;
+}
+
+.fp-life__point,
+.fp-life__points .fp-life__point {
+  display: flex !important;
+  flex-direction: column !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+  padding: 0 !important;
+  border: 1px solid rgba(170, 200, 220, 0.24) !important;
+  border-radius: 22px !important;
+  background: rgba(255, 255, 255, 0.97) !important;
+  text-align: left !important;
+  box-shadow: 0 12px 30px rgba(26, 60, 88, 0.08) !important;
+}
+
+.fp-life__point-image {
+  display: block !important;
+  width: 100% !important;
+  aspect-ratio: 16 / 10 !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+  border-radius: 22px 22px 0 0 !important;
+  background: #eaf3f8 !important;
+}
+
+.fp-life__point-image img {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}
+
+.fp-life__point-body {
+  display: block !important;
+  padding: 15px 17px 17px !important;
+}
+
+.fp-life__point strong {
+  display: block !important;
+  margin: 0 0 7px !important;
+  padding: 0 !important;
+  color: var(--fp-navy) !important;
+  font-size: 15px !important;
+  line-height: 1.5 !important;
+  text-align: left !important;
+}
+
+.fp-life__point small {
+  display: block !important;
+  padding: 0 !important;
+  color: #607989 !important;
+  font-size: 12px !important;
+  line-height: 1.7 !important;
+  text-align: left !important;
+}
+
+.fp-life__nav,
+.fp-life__nav--prev,
+.fp-life__nav--next {
+  display: none !important;
+}
+
+.fp-life__pagination {
+  position: absolute !important;
+  right: 38px !important;
+  bottom: 4px !important;
+  left: 0 !important;
+  z-index: 4 !important;
+  display: flex !important;
+  justify-content: center !important;
+  gap: 7px !important;
+  pointer-events: auto !important;
+}
+
+.fp-life__pagination .swiper-pagination-bullet {
+  width: 7px !important;
+  height: 7px !important;
+  margin: 0 !important;
+  border-radius: 999px !important;
+  background: rgba(23, 105, 178, 0.24) !important;
+  opacity: 1 !important;
+}
+
+.fp-life__pagination .swiper-pagination-bullet-active {
+  background: var(--fp-blue) !important;
+}
+
+/* =========================================================
+   07. Footer CTA
+   管理場所:
+   hub/pages/frontpage/css/frontpage.css
+
+   役割:
+   - フロントページ最後のCTAブロックを管理する
+   - 管理画面で選んだCTA背景画像をCSS背景として表示する
+   - 今回は「横長CTA専用画像」を使う前提
+   - 親要素の高さは固定しない
+   - 背景画像は cover でブロック全体に広げる
+
+   画像側の前提:
+   - 左側に文字用の余白がある横長画像
+   - 右側に人物・住宅イメージがある画像
+   - そのため cover でも顔やポーズが切れにくい
+   ========================================================= */
+
+/*
+ * 役割:
+ * CTAセクション全体の上下余白。
+ */
+.fp-cta {
+  padding: 24px 0 52px;
+}
+
+/*
+ * 役割:
+ * CTAの親ボックス。
+ * ここにheightは指定しない。
+ * 現在のテキスト量とpaddingで自然な高さにする。
+ */
+.fp-cta__inner {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  padding: 30px 34px;
+  border: 1px solid var(--fp-line);
+  border-radius: 24px;
+  background: linear-gradient(90deg, #eef7fc, #fff);
+  overflow: hidden;
+}
+
+/*
+ * 役割:
+ * CTA見出し。
+ */
+.fp-cta h2 {
+  margin: 0;
+  color: var(--fp-navy);
+  font-size: clamp(22px, 2.4vw, 32px);
+  line-height: 1.6;
+}
+
+/*
+ * 役割:
+ * CTA本文側。
+ * 背景画像より前面に出す。
+ */
+.fp-cta__body {
+  position: relative;
+  z-index: 2;
+  min-width: 0;
+  max-width: 620px;
+}
+
+/*
+ * 役割:
+ * CTAボタンの並び。
+ */
+.fp-cta__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+/*
+ * 役割:
+ * 旧仕様の画像ありCTA。
+ * 現在は背景画像方式を使うが、既存HTML対策として残す。
+ */
+.fp-cta--has-image .fp-cta__inner {
+  display: grid !important;
+  grid-template-columns: minmax(260px, 0.42fr) minmax(0, 0.58fr) !important;
+  gap: clamp(22px, 3vw, 42px) !important;
+  align-items: center !important;
+  padding: clamp(26px, 4vw, 46px) !important;
+  background: linear-gradient(
+    90deg,
+    rgba(238, 247, 252, 0.94),
+    rgba(255, 255, 255, 0.96)
+  ) !important;
+}
+
+/*
+ * 役割:
+ * 画像なしCTA。
+ */
+.fp-cta--no-image .fp-cta__inner {
+  display: flex !important;
+}
+
+/*
+ * 役割:
+ * 旧仕様の画像枠。
+ */
+.fp-cta__media {
+  position: relative;
+  overflow: hidden;
+  min-height: 220px;
+  border-radius: 22px;
+  background: #eaf3f8;
+  box-shadow: 0 18px 44px rgba(20, 45, 68, 0.16);
+}
+
+.fp-cta__media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 220px;
+  object-fit: cover;
+}
+
+.fp-cta--has-image .fp-cta__body h2 {
+  font-size: clamp(24px, 2.4vw, 38px) !important;
+  line-height: 1.55 !important;
+}
+
+/* ---------------------------------------------------------
+   CTA background image
+   役割:
+   - CTA背景画像をブロック全体に表示する
+   - 新しい横長CTA画像用
+   - auto 72% などの縮小表示は使わない
+   --------------------------------------------------------- */
+
+/*
+ * 役割:
+ * 背景画像ありCTAの親。
+ * 画像サイズと位置をCSS変数で調整できるようにする。
+ */
+.fp-cta--has-bg-image .fp-cta__inner {
+  --fp-cta-bg-size: cover;
+  --fp-cta-bg-position: center center;
+
+  position: relative !important;
+  overflow: hidden !important;
+  isolation: isolate !important;
+  background: linear-gradient(90deg, #eef7fc, #fff) !important;
+}
+
+/*
+ * 役割:
+ * 背景画像本体。
+ * 横長CTA専用画像なので cover で全面に広げる。
+ */
+.fp-cta--has-bg-image .fp-cta__inner::before {
+  content: '' !important;
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: -2 !important;
+  background-image: var(--fp-cta-bg-image) !important;
+  background-repeat: no-repeat !important;
+  background-size: var(--fp-cta-bg-size) !important;
+  background-position: var(--fp-cta-bg-position) !important;
+}
+
+/*
+ * 役割:
+ * 文字を読みやすくする白グラデーション。
+ * 新しい画像は左側に余白があるので、白かぶりは弱め。
+ */
+.fp-cta--has-bg-image .fp-cta__inner::after {
+  content: '' !important;
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: -1 !important;
+  background: linear-gradient(
+    90deg,
+    rgba(248, 251, 253, 0.84) 0%,
+    rgba(248, 251, 253, 0.7) 42%,
+    rgba(248, 251, 253, 0.28) 70%,
+    rgba(248, 251, 253, 0.02) 100%
+  ) !important;
+}
+
+/*
+ * 役割:
+ * 背景画像ありCTAの本文。
+ * 白い箱やblurは付けない。
+ */
+.fp-cta--has-bg-image .fp-cta__body {
+  position: relative !important;
+  z-index: 2 !important;
+  max-width: 620px !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  backdrop-filter: none !important;
+}
+
+/*
+ * 役割:
+ * タブレット調整。
+ * 画像はcoverのまま。
+ */
+@media (max-width: 900px) {
+  .fp-cta--has-bg-image .fp-cta__inner {
+    --fp-cta-bg-position: center center;
+    padding: 28px 28px;
+  }
+}
+
+/*
+ * 役割:
+ * モバイル調整。
+ * 文字を優先するため、白グラデーションを少し強める。
+ */
+@media (max-width: 640px) {
+  .fp-cta {
+    padding: 26px 0 42px;
+  }
+
+  .fp-cta__inner {
+    border-radius: 20px;
+  }
+
+  .fp-cta--has-bg-image .fp-cta__inner {
+    --fp-cta-bg-position: center center;
+    padding: 24px 20px;
+  }
+
+  .fp-cta--has-bg-image .fp-cta__inner::after {
+    background: linear-gradient(
+      90deg,
+      rgba(248, 251, 253, 0.96) 0%,
+      rgba(248, 251, 253, 0.88) 58%,
+      rgba(248, 251, 253, 0.62) 100%
+    ) !important;
+  }
+
+  .fp-cta h2 {
+    font-size: 21px;
+    line-height: 1.55;
+  }
+
+  .fp-cta__actions .fp-btn {
+    min-height: 42px;
+    padding-inline: 16px;
+    font-size: 13px;
+  }
+}
+
+/* =========================================================
+   08. Responsive
+   役割:
+   - PC低高さ / タブレット / スマホの調整を最後に集約
+   ========================================================= */
+
+@media (min-width: 1001px) and (max-height: 850px) {
+  .fp-hero {
+    padding-top: 12px !important;
+    padding-bottom: 18px !important;
+  }
+
+  .fp-hero__title {
+    margin: 8px 0 12px !important;
+    font-size: clamp(26px, 2.7vw, 42px) !important;
+    line-height: 1.28 !important;
+  }
+
+  .fp-hero__lead {
+    margin-bottom: 14px !important;
+    font-size: 13px !important;
+    line-height: 1.65 !important;
+  }
+
+  .fp-hero-media,
+  .fp-hero-media--adaptive {
+    height: clamp(300px, 28vw, 420px) !important;
+  }
+}
+
+@media (max-width: 1200px) {
+  .fp-hero {
+    padding-top: 16px !important;
+    padding-bottom: 20px !important;
+  }
+
+  .fp-shell.fp-hero__grid,
+  .fp-hero__grid {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    align-items: start !important;
+    width: min(100% - 36px, 920px) !important;
+    gap: 12px !important;
+    margin-inline: auto !important;
+  }
+
+  .fp-hero__body {
+    display: contents !important;
+  }
+
+  .fp-eyebrow {
+    order: 1 !important;
+    margin: 0 !important;
+  }
+
+  .fp-hero__title {
+    order: 2 !important;
+    max-width: 760px !important;
+    margin: 8px 0 0 !important;
+    font-size: clamp(24px, 3.8vw, 34px) !important;
+    line-height: 1.3 !important;
+    letter-spacing: 0.02em !important;
+  }
+
+  .fp-hero__lead {
+    order: 3 !important;
+    max-width: 720px !important;
+    margin: 8px 0 0 !important;
+    font-size: 14px !important;
+    line-height: 1.65 !important;
+  }
+
+  .fp-hero-media,
+  .fp-hero-media--adaptive {
+    order: 4 !important;
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    margin: 8px 0 0 !important;
+    overflow: hidden !important;
+    border-radius: 22px !important;
+  }
+
+  .fp-hero-media--mobile-swiper {
+    padding-bottom: 16px !important;
+  }
+
+  .fp-hero-media--mobile-swiper .swiper-wrapper,
+  .fp-hero-media--mobile-swiper .fp-hero-media__mobile-wrapper {
+    align-items: stretch !important;
+  }
+
+  .fp-hero-media--mobile-swiper .fp-hero-media__item {
+    height: clamp(250px, 38vw, 360px) !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+    border-radius: 20px !important;
+  }
+
+  .fp-hero-media--mobile-swiper .fp-hero-media__img,
+  .fp-hero-media--mobile-swiper .fp-hero-media__video,
+  .fp-hero-media--mobile-swiper .fp-hero-media__iframe,
+  .fp-hero-media--mobile-swiper lite-youtube {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+  }
+
+  .fp-hero-media__mobile-pagination {
+    position: relative !important;
+    margin-top: 6px !important;
+  }
+
+  .fp-hero__actions {
+    order: 5 !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    width: min(100%, 440px) !important;
+    max-width: 440px !important;
+    gap: 10px !important;
+    margin: 4px 0 0 !important;
+  }
+
+  .fp-hero__actions .fp-btn {
+    width: 100% !important;
+    min-height: 44px !important;
+    padding-inline: 12px !important;
+    font-size: 13px !important;
+  }
+
+  .fp-hero__actions .fp-btn:nth-child(n + 3) {
+    display: none !important;
+  }
+}
+
+@media (max-width: 1024px) {
+  .fp-life.fp-life--cards-swiper .fp-life__inner {
+    grid-template-columns: 1fr !important;
+    gap: 22px !important;
+  }
+
+  .fp-life__points.js-fp-life-swiper {
+    padding-right: 34px !important;
+  }
+
+  .fp-life__pagination {
+    right: 34px !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .fp-shell {
+    width: min(100% - 28px, 680px);
+  }
+
+  .fp-services__grid,
+  .fp-business__inner,
+  .fp-pickup__grid,
+  .fp-life__inner,
+  .fp-cta__inner {
+    grid-template-columns: 1fr;
+  }
+
+  .fp-service-card {
+    grid-template-columns: 80px 1fr;
+    padding: 22px;
+  }
+
+  .fp-service-card__icon {
+    width: 72px;
+    height: 72px;
+  }
+
+  .fp-service-card__icon svg {
+    width: 46px !important;
+    height: 46px !important;
+  }
+
+  .fp-business__title {
+    align-items: flex-start;
+  }
+
+  .fp-business__icon {
+    flex-basis: 64px !important;
+    width: 64px !important;
+    height: 64px !important;
+  }
+
+  .fp-business__icon svg {
+    width: 56px !important;
+    height: 56px !important;
+  }
+
+  .fp-business__checks,
+  .fp-life__points:not(.js-fp-life-swiper) {
+    grid-template-columns: 1fr;
+  }
+
+  .fp-life--image-side .fp-life__inner,
+  .fp-cta--has-image .fp-cta__inner {
+    grid-template-columns: 1fr !important;
+  }
+
+  .fp-life__media,
+  .fp-life__media img,
+  .fp-cta__media,
+  .fp-cta__media img {
+    min-height: 210px;
+  }
+
+  .fp-cta__inner,
+  .fp-cta--no-image .fp-cta__inner {
+    display: grid !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .fp-life__points-shell {
+    padding: 14px !important;
+    border-radius: 22px !important;
+  }
+
+  .fp-life__points.js-fp-life-swiper {
+    padding: 0 28px 28px 0 !important;
+  }
+
+  .fp-life__pagination {
+    right: 28px !important;
+    bottom: 3px !important;
+  }
+
+  .fp-life__point {
+    border-radius: 18px !important;
+  }
+
+  .fp-life__point-image {
+    border-radius: 18px 18px 0 0 !important;
+  }
+
+  .fp-life__point-body {
+    padding: 14px 16px 16px !important;
+  }
+
+  .fp-life__point strong {
+    font-size: 14px !important;
+  }
+
+  .fp-life__point small {
+    font-size: 12px !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .fp-hero {
+    padding-top: 14px !important;
+    padding-bottom: 18px !important;
+  }
+
+  .fp-shell.fp-hero__grid,
+  .fp-hero__grid {
+    width: min(100% - 28px, 720px) !important;
+    gap: 10px !important;
+  }
+
+  .fp-eyebrow {
+    padding: 6px 10px !important;
+    font-size: 11px !important;
+  }
+
+  .fp-hero__title {
+    margin-top: 6px !important;
+    font-size: clamp(22px, 6vw, 28px) !important;
+    line-height: 1.34 !important;
+  }
+
+  .fp-hero__lead {
+    margin-top: 6px !important;
+    font-size: 13px !important;
+    line-height: 1.62 !important;
+  }
+
+  .fp-hero-media,
+  .fp-hero-media--adaptive {
+    margin-top: 6px !important;
+    border-radius: 18px !important;
+  }
+
+  .fp-hero-media--mobile-swiper {
+    padding-bottom: 14px !important;
+  }
+
+  .fp-hero-media--mobile-swiper .fp-hero-media__item {
+    height: clamp(220px, 58vw, 300px) !important;
+    border-radius: 18px !important;
+  }
+
+  .fp-hero__actions {
+    gap: 8px !important;
+    margin-top: 4px !important;
+  }
+
+  .fp-hero__actions .fp-btn {
+    min-height: 42px !important;
+    padding-inline: 10px !important;
+    font-size: 12px !important;
+  }
+}
+
+/* =========================================================
+ * 09. Frontpage dark mode
+ * 管理場所:
+ * hub/pages/frontpage/css/frontpage.css
+ *
+ * 役割:
+ * - フロントページ本文全体の応急ダークモード
+ * - style.css は触らない
+ * - header は下の header dark final override に任せる
+ * - ここでは .fp-portal 内のセクション / カード / CTA / Swiper を暗色化する
+ * ========================================================= */
+
+:is(
+    body.dark-mode,
+    body.is-dark,
+    body.theme-dark,
+    body.dark-theme,
+    body.dark,
+    body[data-theme='dark'],
+    html.dark body,
+    html.is-dark body,
+    html.theme-dark body,
+    html.dark-theme body,
+    html[data-theme='dark'] body
+  )
+  .fp-portal {
+  --fp-blue: #7dbcf0;
+  --fp-navy: #f2f7fb;
+  --fp-green: #98c47c;
+  --fp-gold: #d7ad6d;
+  --fp-line: rgba(226, 238, 248, 0.16);
+  --fp-soft: #142130;
+  --fp-text: #e8f1f7;
+
+  color: var(--fp-text);
+  background: transparent !important;
+}
+
+/* 共通テキスト */
+:is(
+    body.dark-mode,
+    body.is-dark,
+    body.theme-dark,
+    body.dark-theme,
+    body.dark,
+    body[data-theme='dark'],
+    html.dark body,
+    html.is-dark body,
+    html.theme-dark body,
+    html.dark-theme body,
+    html[data-theme='dark'] body
+  )
+  .fp-portal
+  :is(
+    .fp-hero__title,
+    .fp-section-title,
+    .fp-block-head h3,
+    .fp-service-card strong,
+    .fp-business h2,
+    .fp-life h2,
+    .fp-life__points strong,
+    .fp-life__point strong,
+    .fp-cta h2,
+    .fp-mini-card strong,
+    .fp-notice strong
+  ) {
+  color: var(--fp-navy) !important;
+}
+
+:is(
+    body.dark-mode,
+    body.is-dark,
+    body.theme-dark,
+    body.dark-theme,
+    body.dark,
+    body[data-theme='dark'],
+    html.dark body,
+    html.is-dark body,
+    html.theme-dark body,
+    html.dark-theme body,
+    html[data-theme='dark'] body
+  )
+  .fp-portal
+  :is(
+    .fp-hero__lead,
+    .fp-service-card small,
+    .fp-business p,
+    .fp-life p,
+    .fp-life__points small,
+    .fp-life__point small,
+    .fp-mini-card small,
+    .fp-notice small,
+    .fp-notice__meta
+  ) {
+  color: #a9bdcc !important;
+}
+
+/* ボタン */
+:is(
+    body.dark-mode,
+    body.is-dark,
+    body.theme-dark,
+    body.dark-theme,
+    body.dark,
+    body[data-theme='dark'],
+    html.dark body,
+    html.is-dark body,
+    html.theme-dark body,
+    html.dark-theme body,
+    html[data-theme='dark'] body
+  )
+  .fp-portal
+  .fp-btn--outline {
+  background: #142130;
+  color: var(--fp-blue);
+  border-color: rgba(125, 188, 240, 0.42);
+}
+
+/* Hero media */
+:is(
+    body.dark-mode,
+    body.is-dark,
+    body.theme-dark,
+    body.dark-theme,
+    body.dark,
+    body[data-theme='dark'],
+    html.dark body,
+    html.is-dark body,
+    html.theme-dark body,
+    html.dark-theme body,
+    html[data-theme='dark'] body
+  )
+  .fp-portal
+  :is(.fp-hero-media, .fp-hero-media--adaptive) {
+  background: #142130 !important;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.38) !important;
+}
+
+:is(
+    body.dark-mode,
+    body.is-dark,
+    body.theme-dark,
+    body.dark-theme,
+    body.dark,
+    body[data-theme='dark'],
+    html.dark body,
+    html.is-dark body,
+    html.theme-dark body,
+    html.dark-theme body,
+    html[data-theme='dark'] body
+  )
+  .fp-portal
+  .fp-hero-media__item {
+  background: #101820 !important;
+}
+
+/* Service cards / Business */
+:is(
+    body.dark-mode,
+    body.is-dark,
+    body.theme-dark,
+    body.dark-theme,
+    body.dark,
+    body[data-theme='dark'],
+    html.dark body,
+    html.is-dark body,
+    html.theme-dark body,
+    html.dark-theme body,
+    html[data-theme='dark'] body
+  )
+  .fp-portal
+  .fp-service-card,
+:is(
+    body.dark-mode,
+    body.is-dark,
+    body.theme-dark,
+    body.dark-theme,
+    body.dark,
+    body[data-theme='dark'],
+    html.dark body,
+    html.is-dark body,
+    html.theme-dark body,
+    html.dark-theme body,
+    html[data-theme='dark'] body
+  )
+  .fp-portal
+  .fp-business__inner {
+  background: rgba(20, 33, 48, 0.92) !important;
+  border-color: rgba(226, 238, 248, 0.14) !important;
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.28) !important;
+}
+
+:is(
+    body.dark-mode,
+    body.is-dark,
+    body.theme-dark,
+    body.dark-theme,
+    body.dark,
+    body[data-theme='dark'],
+    html.dark body,
+    html.is-dark body,
+    html.theme-dark body,
+    html.dark-theme body,
+    html[data-theme='dark'] body
+  )
+  .fp-portal
+  .fp-service-card__icon {
+  background: rgba(125, 188, 240, 0.13) !important;
+}
+
+:is(
+    body.dark-mode,
+    body.is-dark,
+    body.theme-dark,
+    body.dark-theme,
+    body.dark,
+    body[data-theme='dark'],
+    html.dark body,
+    html.is-dark body,
+    html.theme-dark body,
+    html[data-theme='dark'] body
+  )
+  .fp-portal
+  .fp-business__checks {
+  color: #c4d5e2;
+}
+
+/* Pickup 大枠 / 内側カード */
+:is(
+    body.dark-mode,
+    body.is-dark,
+    body.theme-dark,
+    body.dark-theme,
+    body.dark,
+    body[data-theme='dark'],
+    html.dark body,
+    html.is-dark body,
+    html.theme-dark body,
+    html[data-theme='dark'] body
+  )
+  .fp-portal
+  .fp-pickup
+  > .fp-shell {
+  border-color: rgba(226, 238, 248, 0.14) !important;
+  background:
+    radial-gradient(circle at 12% 0%, rgba(125, 188, 240, 0.1), transparent 36%),
+    linear-gradient(135deg, #121c26 0%, #142130 52%, #101820 100%) !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.035),
+    0 22px 54px rgba(0, 0, 0, 0.3) !important;
+}
+
+:is(
+    body.dark-mode,
+    body.is-dark,
+    body.theme-dark,
+    body.dark-theme,
+    body.dark,
+    body[data-theme='dark'],
+    html.dark body,
+    html.is-dark body,
+    html.theme-dark body,
+    html[data-theme='dark'] body
+  )
+  .fp-portal
+  .fp-pickup-block,
+:is(
+    body.dark-mode,
+    body.is-dark,
+    body.theme-dark,
+    body.dark-theme,
+    body.dark,
+    body[data-theme='dark'],
+    html.dark body,
+    html.is-dark body,
+    html.theme-dark body,
+    html[data-theme='dark'] body
+  )
+  .fp-portal
+  .fp-mini-card {
+  background: rgba(20, 33, 48, 0.84) !important;
+  border-color: rgba(226, 238, 248, 0.12) !important;
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.22) !important;
+}
+
+:is(
+    body.dark-mode,
+    body.is-dark,
+    body.theme-dark,
+    body.dark-theme,
+    body.dark,
+    body[data-theme='dark'],
+    html.dark body,
+    html.is-dark body,
+    html.theme-dark body,
+    html[data-theme='dark'] body
+  )
+  .fp-portal
+  :is(.fp-mini-card__thumb, .fp-notice__thumb) {
+  background: linear-gradient(135deg, #152331, #1d2f40) !important;
+}
+
+:is(
+    body.dark-mode,
+    body.is-dark,
+    body.theme-dark,
+    body.dark-theme,
+    body.dark,
+    body[data-theme='dark'],
+    html.dark body,
+    html.is-dark body,
+    html.theme-dark body,
+    html[data-theme='dark'] body
+  )
+  .fp-portal
+  .fp-notice {
+  border-color: rgba(226, 238, 248, 0.13) !important;
+}
+
+/* Life section */
+:is(
+    body.dark-mode,
+    body.is-dark,
+    body.theme-dark,
+    body.dark-theme,
+    body.dark,
+    body[data-theme='dark'],
+    html.dark body,
+    html.is-dark body,
+    html.theme-dark body,
+    html[data-theme='dark'] body
+  )
+  .fp-portal
+  .fp-life__inner {
+  background: linear-gradient(90deg, #121c26, #101820) !important;
+}
+
+:is(
+    body.dark-mode,
+    body.is-dark,
+    body.theme-dark,
+    body.dark-theme,
+    body.dark,
+    body[data-theme='dark'],
+    html.dark body,
+    html.is-dark body,
+    html.theme-dark body,
+    html[data-theme='dark'] body
+  )
+  .fp-portal
+  .fp-life__points-shell {
+  border-color: rgba(226, 238, 248, 0.14) !important;
+  background: linear-gradient(135deg, rgba(20, 33, 48, 0.92), rgba(16, 24, 32, 0.96)) !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.035),
+    0 18px 44px rgba(0, 0, 0, 0.26) !important;
+}
+
+:is(
+    body.dark-mode,
+    body.is-dark,
+    body.theme-dark,
+    body.dark-theme,
+    body.dark,
+    body[data-theme='dark'],
+    html.dark body,
+    html.is-dark body,
+    html.theme-dark body,
+    html[data-theme='dark'] body
+  )
+  .fp-portal
+  .fp-life__point,
+:is(
+    body.dark-mode,
+    body.is-dark,
+    body.theme-dark,
+    body.dark-theme,
+    body.dark,
+    body[data-theme='dark'],
+    html.dark body,
+    html.is-dark body,
+    html.theme-dark body,
+    html[data-theme='dark'] body
+  )
+  .fp-portal
+  .fp-life__points:not(.js-fp-life-swiper)
+  > div:not(.swiper-slide) {
+  background: rgba(20, 33, 48, 0.96) !important;
+  border-color: rgba(226, 238, 248, 0.12) !important;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.24) !important;
+}
+
+:is(
+    body.dark-mode,
+    body.is-dark,
+    body.theme-dark,
+    body.dark-theme,
+    body.dark,
+    body[data-theme='dark'],
+    html.dark body,
+    html.is-dark body,
+    html.theme-dark body,
+    html[data-theme='dark'] body
+  )
+  .fp-portal
+  .fp-life__point-image,
+:is(
+    body.dark-mode,
+    body.is-dark,
+    body.theme-dark,
+    body.dark-theme,
+    body.dark,
+    body[data-theme='dark'],
+    html.dark body,
+    html.is-dark body,
+    html.theme-dark body,
+    html[data-theme='dark'] body
+  )
+  .fp-portal
+  .fp-life__media {
+  background: #152331 !important;
+}
+
+:is(
+    body.dark-mode,
+    body.is-dark,
+    body.theme-dark,
+    body.dark-theme,
+    body.dark,
+    body[data-theme='dark'],
+    html.dark body,
+    html.is-dark body,
+    html.theme-dark body,
+    html[data-theme='dark'] body
+  )
+  .fp-portal
+  .fp-life__pagination
+  .swiper-pagination-bullet {
+  background: rgba(125, 188, 240, 0.32) !important;
+}
+
+:is(
+    body.dark-mode,
+    body.is-dark,
+    body.theme-dark,
+    body.dark-theme,
+    body.dark,
+    body[data-theme='dark'],
+    html.dark body,
+    html.is-dark body,
+    html.theme-dark body,
+    html[data-theme='dark'] body
+  )
+  .fp-portal
+  .fp-life__pagination
+  .swiper-pagination-bullet-active {
+  background: var(--fp-blue) !important;
+}
+
+/* CTA */
+:is(
+    body.dark-mode,
+    body.is-dark,
+    body.theme-dark,
+    body.dark-theme,
+    body.dark,
+    body[data-theme='dark'],
+    html.dark body,
+    html.is-dark body,
+    html.theme-dark body,
+    html[data-theme='dark'] body
+  )
+  .fp-portal
+  .fp-cta__inner {
+  border-color: rgba(226, 238, 248, 0.14) !important;
+  background: linear-gradient(90deg, #121c26, #101820) !important;
+}
+
+:is(
+    body.dark-mode,
+    body.is-dark,
+    body.theme-dark,
+    body.dark-theme,
+    body.dark,
+    body[data-theme='dark'],
+    html.dark body,
+    html.is-dark body,
+    html.theme-dark body,
+    html[data-theme='dark'] body
+  )
+  .fp-portal
+  .fp-cta--has-bg-image
+  .fp-cta__inner::after {
+  background: linear-gradient(
+    90deg,
+    rgba(15, 20, 25, 0.92) 0%,
+    rgba(15, 20, 25, 0.76) 44%,
+    rgba(15, 20, 25, 0.38) 72%,
+    rgba(15, 20, 25, 0.12) 100%
+  ) !important;
+}
+
+/* =========================================================
+ * 09. Frontpage dark mode end
+ * ========================================================= */
+
+
+/* =========================================================
+ * frontpage pickup width final fix
+ * 役割:
+ * - Pick up 全体カードが他の .fp-shell より広がる問題を止める
+ * - 原因は .fp-pickup > .fp-shell の padding が width に加算されること
+ * - box-sizing: border-box で、padding込みで同じ横幅に収める
+ * ========================================================= */
+
+.fp-pickup > .fp-shell {
+  box-sizing: border-box !important;
+  width: min(1180px, calc(100% - 48px)) !important;
+  max-width: 1180px !important;
+  margin-inline: auto !important;
+}
+
+@media (max-width: 900px) {
+  .fp-pickup > .fp-shell {
+    width: min(100% - 28px, 680px) !important;
+  }
+}
+
+/* =========================================================
+ * frontpage pickup spacing final
+ * 役割:
+ * - Pick up 上の余白が広すぎる問題を修正
+ * - 他セクションの .fp-shell と同じ幅に揃える
+ * - 外側余白と内側paddingを分けて管理する
+ * - style.css は触らない
+ * ========================================================= */
+
+/*
+ * 直前の business ブロックから Pick up へ続く場合、
+ * 余白が二重に見えるので Pick up 側の上余白を詰める。
+ */
+.fp-business + .fp-pickup {
+  padding-top: clamp(12px, 1.8vw, 24px) !important;
+}
+
+/*
+ * Pick up セクション単体の上下余白。
+ * 以前より上を詰め、下は次セクションとの呼吸を残す。
+ */
+.fp-pickup {
+  padding-top: clamp(12px, 1.8vw, 24px) !important;
+  padding-bottom: clamp(30px, 4vw, 52px) !important;
+}
+
+/*
+ * Pick up 全体カード。
+ * padding込みで他の .fp-shell と同じ幅に収める。
+ */
+.fp-pickup > .fp-shell {
+  box-sizing: border-box !important;
+  width: min(1180px, calc(100% - 48px)) !important;
+  max-width: 1180px !important;
+  margin-inline: auto !important;
+  padding: clamp(20px, 2.4vw, 32px) !important;
+}
+
+/*
+ * 見出し下の余白も少し詰める。
+ */
+.fp-pickup .fp-section-title {
+  margin-bottom: clamp(18px, 2.2vw, 28px) !important;
+}
+
+/*
+ * モバイルではさらに詰める。
+ */
+@media (max-width: 900px) {
+  .fp-pickup {
+    padding-top: 18px !important;
+    padding-bottom: 34px !important;
+  }
+
+  .fp-pickup > .fp-shell {
+    width: min(100% - 28px, 680px) !important;
+    padding: 18px !important;
+    border-radius: 22px !important;
+  }
+
+  .fp-pickup .fp-section-title {
+    margin-bottom: 18px !important;
+  }
+}
+
+/* =========================================================
+ * frontpage pickup spacing final end
+ * ========================================================= */
+
+/* =========================================================
+   spacing normalize final
+   目的:
+   - ブロックごとの上下余白を統一
+   - section同士の「下padding + 上padding」の二重余白を止める
+   - HTML / PHP / JS は触らない
+   ========================================================= */
+
+.fp-portal {
+  --fp-section-gap: clamp(20px, 2.6vw, 34px);
+  --fp-section-gap-large: clamp(26px, 3.2vw, 44px);
+  --fp-panel-pad: clamp(20px, 2.8vw, 34px);
+  --fp-card-pad: clamp(16px, 2vw, 24px);
+  --fp-card-gap: clamp(14px, 1.8vw, 22px);
+}
+
+/* sectionの基本余白を統一 */
+.fp-portal > .fp-hero,
+.fp-portal > .fp-services,
+.fp-portal > .fp-business,
+.fp-portal > .fp-pickup,
+.fp-portal > .fp-life,
+.fp-portal > .fp-cta {
+  margin: 0 !important;
+  padding-top: var(--fp-section-gap) !important;
+  padding-bottom: var(--fp-section-gap) !important;
+}
+
+/* 最初のheroだけ少し詰める */
+.fp-portal > .fp-hero {
+  padding-top: clamp(12px, 1.8vw, 24px) !important;
+}
+
+/* 連続sectionの上余白を潰す。
+   これで「前の下padding + 次の上padding」の二重余白を防ぐ */
+.fp-portal > .fp-services,
+.fp-portal > .fp-business,
+.fp-portal > .fp-pickup,
+.fp-portal > .fp-life,
+.fp-portal > .fp-cta {
+  padding-top: 0 !important;
+}
+
+/* カード・パネル内側の余白も統一 */
+.fp-service-card,
+.fp-pickup-block,
+.fp-life__points:not(.js-fp-life-swiper) > div:not(.swiper-slide) {
+  padding: var(--fp-card-pad) !important;
+}
+
+/* 大きい背景パネルの余白を統一 */
+.fp-pickup > .fp-shell,
+.fp-life__inner,
+.fp-cta__inner {
+  padding: var(--fp-panel-pad) !important;
+}
+
+/* grid gapの統一 */
+.fp-services__grid,
+.fp-pickup__grid,
+.fp-mini-cards,
+.fp-life__points:not(.js-fp-life-swiper),
+.fp-hero__actions,
+.fp-cta__actions {
+  gap: var(--fp-card-gap) !important;
+}
+
+/* businessだけ横長なので詰めすぎない */
+.fp-business__inner {
+  padding: clamp(18px, 2.4vw, 28px) !important;
+  gap: var(--fp-card-gap) !important;
+}
+
+/* 見出し下の余白を統一 */
+.fp-section-title {
+  margin-bottom: clamp(18px, 2.2vw, 28px) !important;
+}
+
+.fp-block-head {
+  margin-bottom: clamp(12px, 1.4vw, 18px) !important;
+}
+
+/* モバイルではさらに詰める */
+@media (max-width: 767px) {
+  .fp-portal {
+    --fp-section-gap: 22px;
+    --fp-section-gap-large: 28px;
+    --fp-panel-pad: 18px;
+    --fp-card-pad: 16px;
+    --fp-card-gap: 14px;
+  }
+
+  .fp-portal > .fp-hero,
+  .fp-portal > .fp-services,
+  .fp-portal > .fp-business,
+  .fp-portal > .fp-pickup,
+  .fp-portal > .fp-life,
+  .fp-portal > .fp-cta {
+    padding-bottom: var(--fp-section-gap) !important;
+  }
+
+  .fp-portal > .fp-services,
+  .fp-portal > .fp-business,
+  .fp-portal > .fp-pickup,
+  .fp-portal > .fp-life,
+  .fp-portal > .fp-cta {
+    padding-top: 0 !important;
+  }
+}
+
+
+/* === FRONTPAGE PORTAL BACKGROUND OFF START === */
+/*
+ * frontpage.css では外側背景を塗らない。
+ * body / page-wrapper / header top は style.css に任せる。
+ * ここでは .fp-portal 内のカード・パネルだけ dark/light を切り替える。
+ */
+
+.fp-portal {
+  background: transparent !important;
+}
+
+:is(
+  body.dark-mode,
+  body.is-dark,
+  body.theme-dark,
+  body.dark-theme,
+  body.dark,
+  body[data-theme='dark'],
+  html.dark body,
+  html.is-dark body,
+  html.theme-dark body,
+  html.dark-theme body,
+  html[data-theme='dark'] body
+) .fp-portal {
+  background: transparent !important;
+}
+
+/* === FRONTPAGE PORTAL BACKGROUND OFF END === */
+

@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#0c2618"/>
+      <stop offset="0.55" stop-color="#355836"/>
+      <stop offset="1" stop-color="#10110c"/>
+    </linearGradient>
+    <radialGradient id="sun" cx=".72" cy=".24" r=".42">
+      <stop offset="0" stop-color="#f1c47a" stop-opacity=".55"/>
+      <stop offset=".45" stop-color="#f1c47a" stop-opacity=".14"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1600" height="1000" fill="url(#g)"/>
+  <rect width="1600" height="1000" fill="url(#sun)"/>
+  <path d="M0 590 C250 450 430 520 620 390 C850 230 1010 410 1210 285 C1390 175 1510 260 1600 190 V1000 H0 Z" fill="#07140d" opacity=".72"/>
+  <path d="M0 720 C220 590 470 635 650 540 C910 405 1080 510 1280 435 C1440 375 1530 430 1600 385 V1000 H0 Z" fill="#132a19" opacity=".85"/>
+  <path d="M180 830 C380 790 640 800 850 750 C1030 706 1260 710 1460 650" fill="none" stroke="#d7c194" stroke-width="6" opacity=".22"/>
+  <text x="110" y="700" fill="#fff" font-size="96" font-family="serif" letter-spacing="12" opacity=".86">NASU</text>
+  <text x="116" y="760" fill="#fff" font-size="30" font-family="sans-serif" letter-spacing="8" opacity=".74">CUSTOM HOME</text>
+</svg>

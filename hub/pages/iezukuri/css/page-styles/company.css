@@ -1,0 +1,537 @@
+/* /iezukuri/company : 会社概要テーブル + Google Map のみ */
+
+.iez-company-simple {
+  padding: clamp(24px, 4vw, 56px) 0;
+}
+
+.iez-company-simple__inner {
+  width: min(1080px, calc(100% - 40px));
+  margin-inline: auto;
+}
+
+.iez-company-simple__card {
+  margin-top: 24px;
+  padding: clamp(22px, 3vw, 34px);
+  border: 1px solid rgba(48, 38, 26, 0.12);
+  border-radius: 24px;
+  background: #fff;
+  box-shadow: 0 16px 42px rgba(32, 24, 16, 0.07);
+}
+
+.iez-company-simple__card:first-child {
+  margin-top: 0;
+}
+
+.iez-company-simple__card h2 {
+  margin: 0 0 20px;
+  font-size: clamp(22px, 2.6vw, 30px);
+  line-height: 1.4;
+  letter-spacing: 0.04em;
+}
+
+.iez-company-simple__table {
+  overflow-x: auto;
+}
+
+.iez-company-simple__table table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+}
+
+.iez-company-simple__table th,
+.iez-company-simple__table td {
+  padding: 15px 18px;
+  border: 1px solid rgba(48, 38, 26, 0.16);
+  vertical-align: top;
+  line-height: 1.8;
+}
+
+.iez-company-simple__table th {
+  width: 28%;
+  min-width: 160px;
+  background: #f5efe3;
+  font-weight: 700;
+  text-align: left;
+}
+
+.iez-company-simple__map iframe {
+  display: block;
+  width: 100% !important;
+  max-width: 100%;
+  height: 430px !important;
+  border: 0;
+  border-radius: 18px;
+}
+
+@media (max-width: 640px) {
+  .iez-company-simple__inner {
+    width: min(100% - 24px, 1080px);
+  }
+
+  .iez-company-simple__table th,
+  .iez-company-simple__table td {
+    display: block;
+    width: 100%;
+  }
+
+  .iez-company-simple__map iframe {
+    height: 340px !important;
+  }
+}
+
+/* === MOVED FROM top.css: company START === */
+/* =========================================================
+ * /iezukuri/company
+ * 会社概要ページ専用レイアウト
+ * ========================================================= */
+
+.ch-company-page {
+  background: transparent;
+}
+
+.ch-company-page .ch-section-inner {
+  width: min(1180px, calc(100% - 40px));
+  margin-inline: auto;
+}
+
+.ch-company-hero-card {
+  margin-bottom: 28px;
+  padding: clamp(24px, 4vw, 44px);
+  border: 1px solid rgba(40, 32, 24, 0.12);
+  border-radius: 28px;
+  background:
+    linear-gradient(135deg, rgba(255,255,255,0.92), rgba(250,246,238,0.84));
+  box-shadow: 0 22px 60px rgba(20, 16, 10, 0.08);
+}
+
+.ch-company-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 24px;
+  align-items: start;
+}
+
+.ch-company-panel {
+  padding: clamp(22px, 3vw, 34px);
+  border: 1px solid rgba(40, 32, 24, 0.12);
+  border-radius: 26px;
+  background: rgba(255,255,255,0.92);
+  box-shadow: 0 18px 45px rgba(20, 16, 10, 0.07);
+}
+
+.ch-company-panel--sticky {
+  position: sticky;
+  top: 96px;
+}
+
+.ch-company-panel__head {
+  margin-bottom: 18px;
+}
+
+.ch-company-panel__head h3,
+.ch-company-map-head h3,
+.ch-company-suggestion h3 {
+  margin: 0;
+  font-size: clamp(22px, 2.6vw, 32px);
+  line-height: 1.35;
+  letter-spacing: 0.04em;
+}
+
+.ch-company-source-content {
+  display: grid;
+  gap: 18px;
+  line-height: 1.9;
+}
+
+.ch-company-source-content > *:first-child {
+  margin-top: 0;
+}
+
+.ch-company-source-content > *:last-child {
+  margin-bottom: 0;
+}
+
+.ch-company-source-content table {
+  width: 100%;
+  border-collapse: collapse;
+  overflow: hidden;
+  border-radius: 16px;
+}
+
+.ch-company-source-content th,
+.ch-company-source-content td {
+  padding: 14px 16px;
+  border: 1px solid rgba(40, 32, 24, 0.12);
+  vertical-align: top;
+}
+
+.ch-company-source-content th {
+  width: 28%;
+  background: rgba(246, 240, 228, 0.9);
+  font-weight: 700;
+}
+
+.ch-company-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 26px;
+}
+
+.ch-company-guide-list {
+  display: grid;
+  gap: 14px;
+  padding: 0;
+  margin: 20px 0 0;
+  list-style: none;
+}
+
+.ch-company-guide-list li {
+  display: grid;
+  grid-template-columns: 44px 1fr;
+  gap: 4px 12px;
+  padding: 14px;
+  border-radius: 18px;
+  background: rgba(246, 240, 228, 0.7);
+}
+
+.ch-company-guide-list li span {
+  grid-row: span 2;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  background: rgba(30, 24, 18, 0.9);
+  color: var(--iezukuri-surface);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.ch-company-guide-list li strong {
+  display: block;
+  font-size: 15px;
+  letter-spacing: 0.04em;
+}
+
+.ch-company-guide-list li em {
+  display: block;
+  color: rgba(30, 24, 18, 0.64);
+  font-size: 13px;
+  font-style: normal;
+  line-height: 1.6;
+}
+
+.ch-company-map-section,
+.ch-company-suggestion {
+  margin-top: 24px;
+  padding: clamp(22px, 3vw, 34px);
+  border: 1px solid rgba(40, 32, 24, 0.12);
+  border-radius: 26px;
+  background: rgba(255,255,255,0.92);
+  box-shadow: 0 18px 45px rgba(20, 16, 10, 0.07);
+}
+
+.ch-company-map-head {
+  margin-bottom: 18px;
+}
+
+.ch-company-map-head p {
+  max-width: 760px;
+  line-height: 1.85;
+}
+
+.ch-company-map-frame {
+  overflow: hidden;
+  min-height: 360px;
+  border-radius: 22px;
+  background: rgba(246, 240, 228, 0.9);
+}
+
+.ch-company-map-frame iframe {
+  display: block;
+  width: 100% !important;
+  height: 420px !important;
+  border: 0;
+}
+
+.ch-company-map-empty {
+  display: grid;
+  place-items: center;
+  min-height: 360px;
+  padding: 24px;
+  text-align: center;
+}
+
+.ch-company-suggestion {
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+  gap: 22px;
+  align-items: center;
+}
+
+.ch-company-suggestion__text p {
+  line-height: 1.85;
+}
+
+.ch-company-suggestion__cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.ch-company-suggestion__cards article {
+  min-height: 130px;
+  padding: 18px;
+  border-radius: 20px;
+  background: rgba(246, 240, 228, 0.78);
+  border: 1px solid rgba(40, 32, 24, 0.10);
+}
+
+.ch-company-suggestion__cards strong {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 16px;
+}
+
+.ch-company-suggestion__cards span {
+  display: block;
+  color: rgba(30, 24, 18, 0.68);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.ch-company-empty {
+  padding: 18px;
+  border-radius: 18px;
+  background: rgba(255, 247, 225, 0.7);
+  line-height: 1.8;
+}
+
+:is(body.dark-mode, body.is-dark, body.theme-dark) .ch-company-hero-card,
+:is(body.dark-mode, body.is-dark, body.theme-dark) .ch-company-panel,
+:is(body.dark-mode, body.is-dark, body.theme-dark) .ch-company-map-section,
+:is(body.dark-mode, body.is-dark, body.theme-dark) .ch-company-suggestion {
+  background: rgba(26, 24, 22, 0.92);
+  border-color: rgba(255,255,255,0.12);
+  box-shadow: 0 18px 45px rgba(0,0,0,0.24);
+}
+
+:is(body.dark-mode, body.is-dark, body.theme-dark) .ch-company-guide-list li,
+:is(body.dark-mode, body.is-dark, body.theme-dark) .ch-company-suggestion__cards article,
+:is(body.dark-mode, body.is-dark, body.theme-dark) .ch-company-source-content th,
+:is(body.dark-mode, body.is-dark, body.theme-dark) .ch-company-map-frame {
+  background: rgba(255,255,255,0.07);
+  border-color: rgba(255,255,255,0.10);
+}
+
+:is(body.dark-mode, body.is-dark, body.theme-dark) .ch-company-guide-list li em,
+:is(body.dark-mode, body.is-dark, body.theme-dark) .ch-company-suggestion__cards span {
+  color: rgba(255,255,255,0.68);
+}
+
+@media (max-width: 960px) {
+  .ch-company-layout,
+  .ch-company-suggestion {
+    grid-template-columns: 1fr;
+  }
+
+  .ch-company-panel--sticky {
+    position: static;
+  }
+
+  .ch-company-suggestion__cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .ch-company-page .ch-section-inner {
+    width: min(100% - 24px, 1180px);
+  }
+
+  .ch-company-actions {
+    flex-direction: column;
+  }
+
+  .ch-company-actions .ch-btn {
+    width: 100%;
+  }
+
+  .ch-company-source-content th,
+  .ch-company-source-content td {
+    display: block;
+    width: 100%;
+  }
+
+  .ch-company-map-frame iframe {
+    height: 340px !important;
+  }
+}
+
+
+
+/* =========================================================
+ * /iezukuri/company
+ * 会社概要ページ
+ * ダークモード指定なし
+ * ========================================================= */
+
+.ch-company-page .ch-section-inner {
+  width: min(1180px, calc(100% - 40px));
+  margin-inline: auto;
+}
+
+.ch-company-lead-card {
+  margin-bottom: 24px;
+  padding: clamp(24px, 4vw, 44px);
+  border: 1px solid rgba(48, 38, 26, 0.12);
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 20px 54px rgba(32, 24, 16, 0.08);
+}
+
+.ch-company-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 24px;
+  align-items: start;
+}
+
+.ch-company-card {
+  padding: clamp(22px, 3vw, 34px);
+  border: 1px solid rgba(48, 38, 26, 0.12);
+  border-radius: 26px;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 16px 42px rgba(32, 24, 16, 0.07);
+}
+
+.ch-company-card--side {
+  position: sticky;
+  top: 96px;
+}
+
+.ch-company-card__head {
+  margin-bottom: 18px;
+}
+
+.ch-company-card h3 {
+  margin: 0;
+  font-size: clamp(22px, 2.4vw, 30px);
+  line-height: 1.35;
+  letter-spacing: 0.04em;
+}
+
+.ch-company-source {
+  line-height: 1.9;
+}
+
+.ch-company-source > *:first-child {
+  margin-top: 0;
+}
+
+.ch-company-source > *:last-child {
+  margin-bottom: 0;
+}
+
+.ch-company-source table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.ch-company-source th,
+.ch-company-source td {
+  padding: 14px 16px;
+  border: 1px solid rgba(48, 38, 26, 0.14);
+  vertical-align: top;
+}
+
+.ch-company-source th {
+  width: 28%;
+  background: #f5efe3;
+  font-weight: 700;
+}
+
+.ch-company-source iframe {
+  display: block;
+  width: 100% !important;
+  max-width: 100%;
+  min-height: 360px;
+  border: 0;
+  border-radius: 20px;
+}
+
+.ch-company-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 26px;
+}
+
+.ch-company-point-list {
+  display: grid;
+  gap: 14px;
+  padding: 0;
+  margin: 20px 0 0;
+  list-style: none;
+}
+
+.ch-company-point-list li {
+  padding: 16px;
+  border-radius: 18px;
+  background: #f7f1e6;
+  border: 1px solid rgba(48, 38, 26, 0.10);
+}
+
+.ch-company-point-list strong {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 15px;
+  letter-spacing: 0.04em;
+}
+
+.ch-company-point-list span {
+  display: block;
+  color: rgba(35, 28, 20, 0.68);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+@media (max-width: 960px) {
+  .ch-company-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ch-company-card--side {
+    position: static;
+  }
+}
+
+@media (max-width: 640px) {
+  .ch-company-page .ch-section-inner {
+    width: min(100% - 24px, 1180px);
+  }
+
+  .ch-company-actions {
+    flex-direction: column;
+  }
+
+  .ch-company-actions .ch-btn {
+    width: 100%;
+  }
+
+  .ch-company-source th,
+  .ch-company-source td {
+    display: block;
+    width: 100%;
+  }
+
+  .ch-company-source iframe {
+    min-height: 320px;
+  }
+}
+
+
+
+/* === MOVED FROM top.css: company END === */

@@ -1,0 +1,803 @@
+/* =========================================================
+ * minpaku-base.css
+ * 民泊共通ベース
+ *
+ * 役割:
+ * - 色トークン
+ * - body / shell
+ * - 共通カード
+ * - 共通ボタン
+ * - 共通フォーム
+ * - 共通モーダルの開閉だけ
+ *
+ * 予約カレンダー / 人数 / 料金 / checkout導線は
+ * minpaku-booking.css で管理する
+ * ========================================================= */
+
+/* ---------------------------------------------------------
+ * 01. color tokens
+ * --------------------------------------------------------- */
+
+:root {
+  --mnpk-bg: #f6fbfd;
+  --mnpk-page-bg: #f6fbfd;
+
+  --mnpk-surface: #ffffff;
+  --mnpk-surface-2: #f2f8fb;
+  --mnpk-surface-soft: #e8f4f8;
+
+  --mnpk-card-bg: #ffffff;
+  --mnpk-card-bg-soft: #ffffff;
+
+  --mnpk-heading: #102235;
+  --mnpk-text: #24384a;
+  --mnpk-muted: #637887;
+  --mnpk-text-soft: #637887;
+
+  /* archive / page text colors */
+  --mnpk-page-text: var(--mnpk-text);
+  --mnpk-page-muted: var(--mnpk-muted);
+
+  --mnpk-border: #d5e8ef;
+  --mnpk-border-strong: #aaceda;
+
+  --mnpk-accent: #2f7fa2;
+  --mnpk-accent-hover: #256b8b;
+  --mnpk-accent-soft: #e4f2f7;
+  --mnpk-accent-2: #3a93b5;
+
+  /* button colors */
+  --mnpk-button-primary-bg: var(--mnpk-accent);
+  --mnpk-button-primary-bg-2: var(--mnpk-accent-2);
+  --mnpk-button-primary-text: #ffffff;
+  --mnpk-button-primary-border: var(--mnpk-accent);
+
+  --mnpk-button-secondary-bg: var(--mnpk-surface);
+  --mnpk-button-secondary-text: var(--mnpk-accent);
+  --mnpk-button-secondary-border: var(--mnpk-border-strong);
+
+  --mnpk-hero-button-secondary-bg: rgba(255, 255, 255, 0.14);
+  --mnpk-hero-button-secondary-text: #ffffff;
+  --mnpk-hero-button-secondary-border: rgba(255, 255, 255, 0.42);
+
+  --mnpk-hero-noimage-button-secondary-bg: var(--mnpk-surface);
+  --mnpk-hero-noimage-button-secondary-text: var(--mnpk-accent);
+  --mnpk-hero-noimage-button-secondary-border: var(--mnpk-border-strong);
+
+  --mnpk-danger: #b91c1c;
+
+  --mnpk-shadow: 0 14px 34px rgba(16, 34, 53, 0.08);
+  --mnpk-shadow-soft: 0 10px 24px rgba(16, 34, 53, 0.06);
+
+  --mnpk-radius-xl: 28px;
+  --mnpk-radius-lg: 22px;
+  --mnpk-radius-md: 16px;
+  --mnpk-radius-sm: 12px;
+
+  --mnpk-shell: 1240px;
+  --mnpk-shell-narrow: 1120px;
+
+  /* booking colors */
+  --mnpk-booking-overlay-bg: rgba(15, 23, 42, 0.42);
+  --mnpk-booking-frame-bg: var(--mnpk-modal-bg);
+  --mnpk-booking-item-bg: var(--mnpk-modal-surface);
+  --mnpk-booking-control-bg: var(--mnpk-modal-surface);
+  --mnpk-booking-selected-bg: var(--mnpk-accent);
+  --mnpk-booking-selected-text: #ffffff;
+  --mnpk-booking-disabled-bg: var(--mnpk-modal-disabled-bg);
+  --mnpk-booking-shadow: 0 20px 54px rgba(16, 34, 53, 0.14);
+  --mnpk-modal-bg: #eef7fb;
+  --mnpk-modal-surface: #ffffff;
+  --mnpk-modal-soft-bg: #f7fcfe;
+  --mnpk-modal-disabled-bg: #f3f8fb;
+  --mnpk-modal-today-bg: #e8f6fb;
+  --mnpk-modal-heading: var(--mnpk-heading);
+  --mnpk-modal-text: var(--mnpk-text);
+  --mnpk-modal-muted: #526b7d;
+  --mnpk-modal-border: #bddce8;
+  --mnpk-modal-border-strong: #94c4d8;
+  --mnpk-modal-disabled-text: #849aaa;
+}
+
+/* dark-mode は黒くしない。薄いグレー系に寄せる */
+:is(body.dark-mode, body.is-dark, body.dark-theme, body.dark):is(
+  .single-minpaku,
+  .minpaku-single,
+  .post-type-archive-minpaku,
+  .post-type-archive-minpaku_page,
+  .page-template-page-minpaku-b2c,
+  .page-template-page-minpaku-b2c-php,
+  .page-template-page-minpaku-support,
+  .page-template-page-minpaku-support-php
+) {
+  --mnpk-bg: #e9eef2;
+  --mnpk-page-bg: #e9eef2;
+
+  --mnpk-surface: #f7fafc;
+  --mnpk-surface-2: #edf3f6;
+  --mnpk-surface-soft: #e4edf2;
+
+  --mnpk-card-bg: #f7fafc;
+  --mnpk-card-bg-soft: #edf3f6;
+
+  --mnpk-heading: #102235;
+  --mnpk-text: #172536;
+  --mnpk-muted: #5f7180;
+  --mnpk-text-soft: #5f7180;
+
+  /* archive / page text colors */
+  --mnpk-page-text: var(--mnpk-text);
+  --mnpk-page-muted: var(--mnpk-muted);
+
+  --mnpk-border: #cbdde6;
+  --mnpk-border-strong: #a9c5d2;
+
+  --mnpk-accent: #2f7fa2;
+  --mnpk-accent-hover: #256b8b;
+  --mnpk-accent-soft: #dcecf2;
+  --mnpk-accent-2: #3a93b5;
+
+  --mnpk-shadow: 0 12px 28px rgba(16, 34, 53, 0.10);
+  --mnpk-shadow-soft: 0 8px 20px rgba(16, 34, 53, 0.08);
+
+  --mnpk-booking-overlay-bg: rgba(15, 23, 42, 0.34);
+  --mnpk-booking-frame-bg: #ffffff;
+  --mnpk-booking-item-bg: #ffffff;
+  --mnpk-booking-control-bg: #ffffff;
+  --mnpk-booking-selected-bg: var(--mnpk-accent);
+  --mnpk-booking-selected-text: #fff;
+  --mnpk-booking-disabled-bg: #ffffff;
+  --mnpk-booking-shadow: none;
+}
+
+/* ---------------------------------------------------------
+ * 02. page base
+ * --------------------------------------------------------- */
+
+body.single-minpaku,
+body.minpaku-single,
+body.post-type-archive-minpaku,
+body.post-type-archive-minpaku_page,
+body.page-template-page-minpaku-b2c,
+body.page-template-page-minpaku-b2c-php,
+body.page-template-page-minpaku-support,
+body.page-template-page-minpaku-support-php {
+  --color-heading: var(--mnpk-heading);
+  --color-text: var(--mnpk-text);
+  --color-muted: var(--mnpk-muted);
+  background: var(--mnpk-bg);
+  color: var(--mnpk-text);
+}
+
+.mnpk-archive-page,
+.mnpk-single-page,
+.mnpk-checkout-page,
+.mnpk-page {
+  background: transparent;
+  color: var(--mnpk-text);
+}
+
+body.single-minpaku #page,
+body.minpaku-single #page,
+body.post-type-archive-minpaku #page,
+body.page-template-page-minpaku-b2c #page,
+body.page-template-page-minpaku-b2c-php #page,
+body.page-template-page-minpaku-support #page,
+body.page-template-page-minpaku-support-php #page,
+body.single-minpaku #wrapper,
+body.minpaku-single #wrapper,
+body.post-type-archive-minpaku #wrapper,
+body.page-template-page-minpaku-b2c #wrapper,
+body.page-template-page-minpaku-b2c-php #wrapper,
+body.page-template-page-minpaku-support #wrapper,
+body.page-template-page-minpaku-support-php #wrapper,
+body.single-minpaku .site,
+body.minpaku-single .site,
+body.post-type-archive-minpaku .site,
+body.page-template-page-minpaku-b2c .site,
+body.page-template-page-minpaku-b2c-php .site,
+body.page-template-page-minpaku-support .site,
+body.page-template-page-minpaku-support-php .site {
+  background: transparent;
+}
+
+.mnpk-shell,
+.mnpk-archive-shell {
+  width: min(var(--mnpk-shell), calc(100% - 32px));
+  margin: 0 auto;
+}
+
+.mnpk-shell--narrow {
+  width: min(var(--mnpk-shell-narrow), calc(100% - 32px));
+  margin: 0 auto;
+}
+
+.mnpk-hidden,
+#main #mnpk-booking-card-data,
+.mnpk-booking-card--hidden-data {
+  display: none !important;
+}
+
+/* ---------------------------------------------------------
+ * 03. text reset
+ * --------------------------------------------------------- */
+
+#main .mnpk-archive-page h1,
+#main .mnpk-archive-page h2,
+#main .mnpk-single-page h1,
+#main .mnpk-single-page h2,
+#main .mnpk-checkout-page h1,
+#main .mnpk-checkout-page h2 {
+  display: block !important;
+  justify-content: initial !important;
+  align-items: initial !important;
+  color: var(--mnpk-heading);
+}
+
+.mnpk-section-head {
+  display: grid;
+  gap: 8px;
+  margin: 0 0 18px;
+}
+
+.mnpk-section-kicker {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  min-height: 28px;
+  padding: 5px 10px;
+  border: 1px solid var(--mnpk-border);
+  border-radius: 999px;
+  background: var(--mnpk-accent-soft);
+  color: var(--mnpk-heading);
+  font-size: 11px;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: 0.12em;
+}
+
+.mnpk-section-title {
+  margin: 0;
+  color: var(--mnpk-heading);
+  font-size: clamp(22px, 2.8vw, 30px);
+  line-height: 1.25;
+}
+
+.mnpk-content-body {
+  color: var(--mnpk-text);
+  font-size: 15px;
+  line-height: 1.9;
+}
+
+.mnpk-content-body > *:first-child {
+  margin-top: 0;
+}
+
+.mnpk-content-body > *:last-child {
+  margin-bottom: 0;
+}
+
+/* ---------------------------------------------------------
+ * 04. common cards
+ * --------------------------------------------------------- */
+
+.mnpk-card,
+.mnpk-summary-box,
+.mnpk-accepted-methods {
+  border: 1px solid var(--mnpk-border);
+  border-radius: var(--mnpk-radius-lg);
+  background: transparent;
+  color: var(--mnpk-text);
+  box-shadow: none;
+}
+
+.mnpk-card {
+  padding: 24px;
+}
+
+.mnpk-summary-box,
+.mnpk-accepted-methods {
+  padding: 16px;
+}
+
+.mnpk-summary-list {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mnpk-summary-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--mnpk-text);
+  font-size: 15px;
+}
+
+.mnpk-summary-list span {
+  color: var(--mnpk-muted);
+}
+
+.mnpk-summary-list strong {
+  color: var(--mnpk-heading);
+}
+
+/* ---------------------------------------------------------
+ * 05. common buttons
+ * --------------------------------------------------------- */
+
+.mnpk-button,
+.mnpk-archive-button,
+.mnpk-stay-card__button,
+.mnpk-stay-card__button--reserve,
+.mnpk-booking-submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 12px 18px;
+  border: 0;
+  border-radius: 14px;
+  background: var(--mnpk-accent);
+  color: #fff;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.2;
+  cursor: pointer;
+}
+
+.mnpk-button:hover,
+.mnpk-archive-button:hover,
+.mnpk-stay-card__button:hover,
+.mnpk-stay-card__button--reserve:hover,
+.mnpk-booking-submit:hover {
+  background: var(--mnpk-accent-hover);
+}
+
+.mnpk-button--ghost,
+.mnpk-archive-button--ghost,
+.mnpk-link-button,
+.mnpk-back-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 9px 14px;
+  border: 1px solid var(--mnpk-border);
+  border-radius: 999px;
+  background: var(--mnpk-surface);
+  color: var(--mnpk-text);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.2;
+  cursor: pointer;
+}
+
+.mnpk-button--ghost:hover,
+.mnpk-archive-button--ghost:hover,
+.mnpk-link-button:hover,
+.mnpk-back-link:hover {
+  background: var(--mnpk-surface-2);
+}
+
+/* ---------------------------------------------------------
+ * 06. forms
+ * --------------------------------------------------------- */
+
+.mnpk-form-grid {
+  display: grid;
+  gap: 16px;
+}
+
+.mnpk-form-field {
+  display: grid;
+  gap: 8px;
+}
+
+.mnpk-form-field label,
+.mnpk-form-field__label {
+  display: block;
+  color: var(--mnpk-heading);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.mnpk-form-field input,
+.mnpk-form-field textarea,
+.mnpk-form-field select,
+.mnpk-payment-form input,
+.mnpk-payment-form textarea,
+.mnpk-payment-form select {
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 14px;
+  border: 1px solid var(--mnpk-border);
+  border-radius: 14px;
+  background: var(--mnpk-surface);
+  color: var(--mnpk-text);
+  font: inherit;
+  box-sizing: border-box;
+}
+
+.mnpk-form-field input:focus,
+.mnpk-form-field textarea:focus,
+.mnpk-form-field select:focus,
+.mnpk-payment-form input:focus,
+.mnpk-payment-form textarea:focus,
+.mnpk-payment-form select:focus {
+  outline: none;
+  border-color: var(--mnpk-accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--mnpk-accent) 18%, transparent);
+}
+
+.mnpk-form-help {
+  color: var(--mnpk-muted);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+/* ---------------------------------------------------------
+ * 07. pills / chips
+ * --------------------------------------------------------- */
+
+.mnpk-chip,
+.mnpk-payment-pill,
+.mnpk-accepted-methods__label,
+.mnpk-field-button__label,
+.mnpk-checkout-stay-card__kicker {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  min-height: 30px;
+  padding: 6px 11px;
+  border: 1px solid var(--mnpk-border);
+  border-radius: 999px;
+  background: var(--mnpk-accent-soft);
+  color: var(--mnpk-heading);
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.mnpk-payment-methods {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* ---------------------------------------------------------
+ * 08. modal shell only
+ * 詳細な見た目は booking.css / 各ページCSS
+ * --------------------------------------------------------- */
+
+.mnpk-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: none;
+  overflow: auto;
+  padding: 20px;
+  background: rgba(15, 23, 42, 0.45);
+}
+
+.mnpk-modal.is-open {
+  display: block;
+}
+
+body.mnpk-modal-open {
+  overflow: hidden;
+}
+
+.mnpk-modal__backdrop {
+  position: fixed;
+  inset: 0;
+}
+
+.mnpk-modal__dialog {
+  position: relative;
+  width: min(920px, 100%);
+  margin: 20px auto;
+  border-radius: var(--mnpk-radius-lg);
+  background: var(--mnpk-surface);
+  color: var(--mnpk-text);
+  box-shadow: var(--mnpk-shadow);
+  overflow: hidden;
+}
+
+.mnpk-modal__dialog--photo {
+  width: min(1200px, 100%);
+}
+
+.mnpk-modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--mnpk-border);
+}
+
+.mnpk-modal__header h2,
+.mnpk-modal__header h3 {
+  margin: 0;
+  color: var(--mnpk-heading);
+  font-size: 22px;
+  line-height: 1.3;
+}
+
+
+.mnpk-modal__body {
+  padding: 20px;
+}
+
+.mnpk-modal__actions {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 0 20px 20px;
+}
+
+/* ---------------------------------------------------------
+ * 09. errors / status
+ * --------------------------------------------------------- */
+
+.mnpk-booking-error,
+[data-booking-error],
+[data-calendar-error],
+[data-payment-error] {
+  margin-top: 14px;
+  padding: 12px 14px;
+  border: 1px solid rgba(185, 28, 28, 0.2);
+  border-radius: 14px;
+  background: rgba(185, 28, 28, 0.06);
+  color: var(--mnpk-danger);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.mnpk-booking-error[hidden],
+[data-booking-error][hidden],
+[data-calendar-error][hidden],
+[data-payment-error][hidden],
+.mnpk-payment-status[hidden] {
+  display: none !important;
+}
+
+.mnpk-payment-status {
+  margin-bottom: 18px;
+  padding: 14px 16px;
+  border: 1px solid var(--mnpk-border);
+  border-radius: 16px;
+  background: var(--mnpk-accent-soft);
+  color: var(--mnpk-heading);
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.7;
+}
+
+/* ---------------------------------------------------------
+ * 10. mobile
+ * --------------------------------------------------------- */
+
+@media (max-width: 767px) {
+  .mnpk-shell,
+  .mnpk-archive-shell,
+  .mnpk-shell--narrow {
+    width: calc(100% - 20px);
+  }
+
+  .mnpk-modal {
+    padding: 10px;
+  }
+
+  .mnpk-modal__dialog,
+  .mnpk-modal__dialog--photo {
+    width: 100%;
+    margin: 8px auto;
+    border-radius: 20px;
+  }
+
+  .mnpk-modal__header h2,
+  .mnpk-modal__header h3 {
+    font-size: 20px;
+  }
+
+  .mnpk-modal__actions {
+    flex-direction: column;
+  }
+
+  .mnpk-button,
+  .mnpk-button--ghost,
+  .mnpk-link-button,
+  .mnpk-archive-button,
+  .mnpk-archive-button--ghost,
+  .mnpk-booking-submit {
+    width: 100%;
+  }
+
+  .mnpk-card,
+  .mnpk-summary-box,
+  .mnpk-accepted-methods {
+    padding: 16px;
+  }
+}
+
+/* =========================================================
+ * MINPAKU MODAL CONTRAST BASE FIX START
+ * 役割:
+ * - モーダル色はここで一元管理
+ * - 白ベース + 薄い青 + 濃い青アクセント
+ * - 黒いダークモードにしない
+ * MINPAKU MODAL CONTRAST BASE FIX END
+ * ========================================================= */
+
+:root {
+  --mnpk-modal-bg: #ffffff;
+  --mnpk-modal-surface: #ffffff;
+  --mnpk-modal-soft-bg: #f2f8fb;
+  --mnpk-modal-head: #eef7fb;
+  --mnpk-modal-cell: #ffffff;
+
+  --mnpk-modal-heading: #102235;
+  --mnpk-modal-text: #20364a;
+  --mnpk-modal-muted: #3f586b;
+
+  --mnpk-modal-border: #b8d8e5;
+  --mnpk-modal-border-strong: #7fb6cd;
+
+  --mnpk-modal-accent: #2f7fa2;
+  --mnpk-modal-accent-hover: #256b8b;
+  --mnpk-modal-accent-soft: #dff1f7;
+
+  --mnpk-modal-disabled-bg: #edf4f7;
+  --mnpk-modal-disabled-text: #6f8798;
+  --mnpk-modal-today-bg: #e5f5fb;
+
+  --mnpk-modal-close-bg: var(--mnpk-modal-accent);
+  --mnpk-modal-close-bg-hover: var(--mnpk-modal-accent-hover);
+  --mnpk-modal-close-text: #ffffff;
+  --mnpk-modal-close-border: transparent;
+
+  --mnpk-booking-overlay-bg: rgba(15, 35, 52, 0.42);
+  --mnpk-booking-frame-bg: var(--mnpk-modal-bg);
+  --mnpk-booking-item-bg: var(--mnpk-modal-surface);
+  --mnpk-booking-control-bg: var(--mnpk-modal-surface);
+  --mnpk-booking-selected-bg: var(--mnpk-modal-accent);
+  --mnpk-booking-selected-text: #ffffff;
+  --mnpk-booking-disabled-bg: var(--mnpk-modal-disabled-bg);
+}
+
+:is(body.dark-mode, body.is-dark, body.dark-theme, body.dark):is(
+  .single-minpaku,
+  .minpaku-single,
+  .post-type-archive-minpaku,
+  .page-template-page-minpaku-b2c,
+  .page-template-page-minpaku-b2c-php,
+  .page-template-page-minpaku-support,
+  .page-template-page-minpaku-support-php
+) {
+  --mnpk-modal-bg: #ffffff;
+  --mnpk-modal-surface: #ffffff;
+  --mnpk-modal-soft-bg: #f2f8fb;
+  --mnpk-modal-head: #eef7fb;
+  --mnpk-modal-cell: #ffffff;
+
+  --mnpk-modal-heading: #102235;
+  --mnpk-modal-text: #20364a;
+  --mnpk-modal-muted: #3f586b;
+
+  --mnpk-modal-border: #b8d8e5;
+  --mnpk-modal-border-strong: #7fb6cd;
+
+  --mnpk-modal-accent: #2f7fa2;
+  --mnpk-modal-accent-hover: #256b8b;
+  --mnpk-modal-accent-soft: #dff1f7;
+
+  --mnpk-modal-disabled-bg: #edf4f7;
+  --mnpk-modal-disabled-text: #6f8798;
+  --mnpk-modal-today-bg: #e5f5fb;
+
+  --mnpk-modal-close-bg: var(--mnpk-modal-accent);
+  --mnpk-modal-close-bg-hover: var(--mnpk-modal-accent-hover);
+  --mnpk-modal-close-text: #ffffff;
+  --mnpk-modal-close-border: transparent;
+
+  --mnpk-booking-overlay-bg: rgba(15, 35, 52, 0.36);
+}
+
+.mnpk-modal {
+  background: var(--mnpk-booking-overlay-bg);
+}
+
+.mnpk-modal__dialog {
+  border: 1px solid var(--mnpk-modal-border);
+  background: var(--mnpk-modal-bg);
+  color: var(--mnpk-modal-text);
+}
+
+.mnpk-modal__header {
+  background: var(--mnpk-modal-head);
+  border-bottom: 1px solid var(--mnpk-modal-border);
+  color: var(--mnpk-modal-text);
+}
+
+.mnpk-modal__header h2,
+.mnpk-modal__header h3 {
+  color: var(--mnpk-modal-heading);
+}
+
+.mnpk-modal__body {
+  background: var(--mnpk-modal-bg);
+  color: var(--mnpk-modal-text);
+}
+
+.mnpk-modal__actions {
+  background: var(--mnpk-modal-head);
+  border-top: 1px solid var(--mnpk-modal-border);
+}
+
+
+
+
+
+/* =========================================================
+ * MNPK FLOW MOBILE ARROW FIX START
+ * ---------------------------------------------------------
+ * 対象:
+ * - B2C固定ページのFlow / STEP表示
+ *
+ * 役割:
+ * - PCでは横方向の流れを維持
+ * - モバイルでは縦並びに合わせて矢印を「↓」にする
+ *
+ * 注意:
+ * - フロント用CSS
+ * - 管理画面CSSではない
+ * ========================================================= */
+
+@media (max-width: 760px) {
+  .mnpk-page-flow .mnpk-flow-track {
+    grid-template-columns: 1fr !important;
+    gap: 28px !important;
+  }
+
+  .mnpk-page-flow .mnpk-flow-step {
+    position: relative;
+  }
+
+  .mnpk-page-flow .mnpk-flow-step:not(:last-child)::after {
+    content: "↓" !important;
+    position: absolute !important;
+    left: 50% !important;
+    right: auto !important;
+    top: 100% !important;
+    bottom: auto !important;
+    transform: translate(-50%, 5px) !important;
+
+    display: grid !important;
+    place-items: center !important;
+
+    width: 24px !important;
+    height: 24px !important;
+    border-radius: 999px !important;
+
+    background: var(--mnpk-accent-soft, #e5f3f6) !important;
+    color: var(--mnpk-accent-hover, #216b7b) !important;
+    border: 1px solid var(--mnpk-border, rgba(40, 127, 146, .18)) !important;
+
+    font-size: 16px !important;
+    font-weight: 900 !important;
+    line-height: 1 !important;
+  }
+}
+
+/* MNPK FLOW MOBILE ARROW FIX END */

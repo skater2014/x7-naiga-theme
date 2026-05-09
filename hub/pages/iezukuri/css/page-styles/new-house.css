@@ -1,0 +1,99 @@
+/* /iezukuri/new-house/ 専用。色は base.css。ここは骨組みだけ。 */
+
+.ch-new-house-content {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.ch-new-house-section .ch-shell > p:not(.ch-eyebrow) {
+  max-width: 860px;
+  margin: 18px 0 0;
+  line-height: 1.95;
+}
+
+.ch-new-house-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(16px, 2vw, 24px);
+  margin-top: clamp(28px, 4vw, 44px);
+}
+
+.ch-new-house-card {
+  min-width: 0;
+  padding: clamp(20px, 2.6vw, 30px);
+  border: 1px solid var(--iezukuri-border);
+  border-radius: 22px;
+  background: var(--iezukuri-surface);
+}
+
+.ch-new-house-card span {
+  display: inline-block;
+  margin-bottom: 12px;
+  color: var(--iezukuri-accent);
+  font-weight: 900;
+  letter-spacing: .12em;
+}
+
+.ch-new-house-card h3 {
+  margin: 0;
+  font-size: clamp(18px, 2vw, 22px);
+  line-height: 1.45;
+}
+
+.ch-new-house-card p {
+  margin: 12px 0 0;
+  line-height: 1.85;
+}
+
+.ch-new-house-table {
+  display: grid;
+  gap: 12px;
+  margin-top: clamp(28px, 4vw, 44px);
+}
+
+.ch-new-house-row {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  border: 1px solid var(--iezukuri-border);
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--iezukuri-surface);
+}
+
+.ch-new-house-row__label {
+  display: grid;
+  place-items: center;
+  min-height: 82px;
+  padding: 16px;
+  border-right: 1px solid var(--iezukuri-border);
+  font-weight: 900;
+}
+
+.ch-new-house-row__body {
+  min-width: 0;
+  padding: 18px 22px;
+  line-height: 1.9;
+}
+
+.ch-new-house-section .ch-btn {
+  margin-top: 24px;
+}
+
+@media (max-width: 1080px) {
+  .ch-new-house-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .ch-new-house-grid,
+  .ch-new-house-row {
+    grid-template-columns: 1fr;
+  }
+
+  .ch-new-house-row__label {
+    border-right: 0;
+    border-bottom: 1px solid var(--iezukuri-border);
+  }
+}

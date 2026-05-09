@@ -1,0 +1,907 @@
+/* =========================================================
+ * hub/pages/iezukuri/css/common/hero.css
+ *
+ * 役割:
+ * - iezukuri共通Hero専用CSS
+ * - image / swiper / video / burns の見た目
+ * - Hero内CTAボタン
+ *
+ * 方針:
+ * - PC: Heroは画面幅いっぱい。画像上に本文とCTAを重ねる。
+ * - SP: 画像と本文/CTAを分離する。
+ * - swiper / burns どちらも画像はHero全面にcover。
+ * - 矢印は固定サイズ・固定位置にしてガタつきを止める。
+ * - CTA色はbase側の変数を優先参照する。
+ * - fadeは使わない。burns内のクロスフェード演出として扱う。
+ * ========================================================= */
+
+
+/* ---------------------------------------------------------
+ * 01. full bleed
+ * --------------------------------------------------------- */
+
+body.iezukuri-page {
+  overflow-x: clip;
+}
+
+/* Heroに余計なmarginを作らず、親幅に関係なく画面いっぱいへ出す */
+.hub-customhome-page .iez-hero {
+  position: relative;
+  left: 50%;
+  width: 100vw;
+  max-width: 100vw;
+  margin: 0;
+  transform: translateX(-50%);
+}
+
+
+/* ---------------------------------------------------------
+ * 02. common hero
+ * --------------------------------------------------------- */
+
+.iez-hero {
+  --iez-hero-bg: var(--iezukuri-dark, #101827);
+  --iez-hero-text: var(--iezukuri-surface, #fff);
+
+  /* PCの暗さを弱める */
+  --iez-hero-overlay-left: rgba(7, 15, 26, .34);
+  --iez-hero-overlay-center: rgba(7, 15, 26, .12);
+  --iez-hero-overlay-right: rgba(7, 15, 26, .02);
+  --iez-hero-overlay-bottom: rgba(7, 15, 26, .16);
+
+  /* CTAはbase色を優先 */
+  --iez-hero-primary-bg: var(--iezukuri-accent, var(--ch-accent, #8b5a2b));
+  --iez-hero-primary-text: var(--iezukuri-surface, #fff);
+  --iez-hero-secondary-bg: rgba(255, 255, 255, .14);
+  --iez-hero-secondary-border: rgba(255, 255, 255, .72);
+  --iez-hero-secondary-text: var(--iezukuri-surface, #fff);
+
+  isolation: isolate;
+  overflow: hidden;
+  min-height: clamp(500px, 62svh, 720px);
+  color: var(--iez-hero-text);
+  background: var(--iez-hero-bg);
+}
+
+.iez-hero__media,
+.iez-hero__overlay {
+  position: absolute;
+  inset: 0;
+}
+
+.iez-hero__media {
+  z-index: 0;
+  overflow: hidden;
+  background: var(--iez-hero-bg);
+}
+
+.iez-hero__overlay {
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      90deg,
+      var(--iez-hero-overlay-left),
+      var(--iez-hero-overlay-center) 46%,
+      var(--iez-hero-overlay-right)
+    ),
+    linear-gradient(
+      180deg,
+      rgba(7, 15, 26, .015),
+      var(--iez-hero-overlay-bottom)
+    );
+}
+
+.iez-hero__slide {
+  margin: 0;
+}
+
+.iez-hero__image,
+.iez-hero__video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  object-position: center center;
+}
+
+
+/* ---------------------------------------------------------
+ * 03. engines: image / video / burns
+ * --------------------------------------------------------- */
+
+.iez-hero__media--video .iez-hero__slide,
+.iez-hero__media--image .iez-hero__slide,
+.iez-hero__media--burns .iez-hero__slide {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+
+/* ---------------------------------------------------------
+ * 04. engine: swiper
+ * --------------------------------------------------------- */
+
+/* swiperでも画像をHero全面へ広げる */
+.iez-hero__media--swiper .iez-hero__swiper,
+.iez-hero__media--swiper .swiper,
+.iez-hero__media--swiper .swiper-wrapper,
+.iez-hero__media--swiper .iez-hero__track,
+.iez-hero__media--swiper .swiper-slide,
+.iez-hero__media--swiper .iez-hero__slide {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+}
+
+.iez-hero__media--swiper .iez-hero__swiper,
+.iez-hero__media--swiper .swiper {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.iez-hero__media--swiper .swiper-wrapper,
+.iez-hero__media--swiper .iez-hero__track {
+  align-items: stretch;
+}
+
+.iez-hero__media--swiper .swiper-slide,
+.iez-hero__media--swiper .iez-hero__slide {
+  position: relative;
+  overflow: hidden;
+}
+
+.iez-hero__media--swiper .iez-hero__image {
+  position: absolute;
+  inset: 0;
+}
+
+
+/* ---------------------------------------------------------
+ * 05. engine: burns
+ * --------------------------------------------------------- */
+
+.iez-hero__media--burns {
+  perspective: 400px;
+}
+
+.iez-hero__media--burns .iez-hero__slide {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 1100ms ease;
+}
+
+.iez-hero__media--burns .iez-hero__slide.is-active {
+  opacity: 1;
+  pointer-events: auto;
+  z-index: 2;
+}
+
+.iez-hero__media--burns .iez-hero__image {
+  transform: scale(1);
+  will-change: transform;
+}
+
+.iez-hero__media--burns .iez-hero__slide.is-active[data-motion="kenburns-top"] .iez-hero__image {
+  animation: iezKenburnsTop 9s linear both;
+}
+
+.iez-hero__media--burns .iez-hero__slide.is-active[data-motion="kenburns-bottom"] .iez-hero__image {
+  animation: iezKenburnsBottom 9s linear both;
+}
+
+.iez-hero__media--burns .iez-hero__slide.is-active[data-motion="kenburns-left"] .iez-hero__image {
+  animation: iezKenburnsLeft 9s linear both;
+}
+
+.iez-hero__media--burns .iez-hero__slide.is-active[data-motion="kenburns-right"] .iez-hero__image {
+  animation: iezKenburnsRight 9s linear both;
+}
+
+.iez-hero__media--burns .iez-hero__slide.is-active[data-motion="none"] .iez-hero__image {
+  animation: none;
+}
+
+@keyframes iezKenburnsTop {
+  0% {
+    transform: scale(1) translateY(0);
+    transform-origin: 50% 16%;
+  }
+
+  100% {
+    transform: scale(1.18) translateY(-12px);
+    transform-origin: top;
+  }
+}
+
+@keyframes iezKenburnsBottom {
+  0% {
+    transform: scale(1) translateY(0);
+    transform-origin: 50% 84%;
+  }
+
+  100% {
+    transform: scale(1.18) translateY(12px);
+    transform-origin: bottom;
+  }
+}
+
+@keyframes iezKenburnsLeft {
+  0% {
+    transform: scale(1) translateX(0);
+    transform-origin: 16% 50%;
+  }
+
+  100% {
+    transform: scale(1.18) translateX(-16px);
+    transform-origin: left;
+  }
+}
+
+@keyframes iezKenburnsRight {
+  0% {
+    transform: scale(1) translateX(0);
+    transform-origin: 84% 50%;
+  }
+
+  100% {
+    transform: scale(1.18) translateX(16px);
+    transform-origin: right;
+  }
+}
+
+
+/* ---------------------------------------------------------
+ * 06. content
+ * --------------------------------------------------------- */
+
+.iez-hero__inner {
+  position: relative;
+  z-index: 3;
+  width: min(1200px, calc(100% - 96px));
+  min-height: inherit;
+  margin-inline: auto;
+  display: flex;
+  align-items: center;
+}
+
+.iez-hero__content {
+  width: min(820px, 100%);
+  padding: clamp(76px, 9svh, 124px) 0 clamp(52px, 7svh, 86px);
+}
+
+.iez-hero__eyebrow,
+.iez-hero__caption {
+  margin: 0 0 14px;
+  color: rgba(255, 255, 255, .92);
+  font-size: clamp(12px, 1.2vw, 14px);
+  line-height: 1.5;
+  letter-spacing: .16em;
+  font-weight: 800;
+}
+
+.iez-hero__caption[hidden],
+.iez-hero__lead[hidden] {
+  display: none;
+}
+
+.iez-hero__title {
+  margin: 0;
+  max-width: 860px;
+  color: #fff;
+  font-size: clamp(38px, 5.4vw, 68px);
+  line-height: 1.08;
+  letter-spacing: .02em;
+  font-weight: 850;
+  text-wrap: balance;
+  text-shadow: 0 8px 22px rgba(0, 0, 0, .22);
+}
+
+.iez-hero__lead {
+  max-width: 760px;
+  margin: clamp(16px, 2.2vw, 26px) 0 0;
+  color: rgba(255, 255, 255, .95);
+  font-size: clamp(16px, 1.65vw, 20px);
+  line-height: 1.85;
+  font-weight: 700;
+  text-wrap: balance;
+  text-shadow: 0 6px 18px rgba(0, 0, 0, .18);
+}
+
+
+/* ---------------------------------------------------------
+ * 07. heading motion
+ * 対象: caption / h1 / lead のみ
+ * CTAは固定
+ * --------------------------------------------------------- */
+
+.iez-hero[data-iez-caption-motion="focus"] .iez-hero__caption,
+.iez-hero[data-iez-caption-motion="focus"] .iez-hero__title,
+.iez-hero[data-iez-caption-motion="focus"] .iez-hero__lead,
+.iez-hero[data-iez-caption-motion="slide-up"] .iez-hero__caption,
+.iez-hero[data-iez-caption-motion="slide-up"] .iez-hero__title,
+.iez-hero[data-iez-caption-motion="slide-up"] .iez-hero__lead {
+  opacity: 0;
+}
+
+.iez-hero.is-text-motion-run[data-iez-caption-motion="focus"] .iez-hero__caption,
+.iez-hero.is-text-motion-run[data-iez-caption-motion="focus"] .iez-hero__title,
+.iez-hero.is-text-motion-run[data-iez-caption-motion="focus"] .iez-hero__lead {
+  animation: iezHeroTextFocus .72s cubic-bezier(.25,.46,.45,.94) both;
+}
+
+.iez-hero.is-text-motion-run[data-iez-caption-motion="slide-up"] .iez-hero__caption,
+.iez-hero.is-text-motion-run[data-iez-caption-motion="slide-up"] .iez-hero__title,
+.iez-hero.is-text-motion-run[data-iez-caption-motion="slide-up"] .iez-hero__lead {
+  animation: iezHeroTextSlideUp .62s cubic-bezier(.25,.46,.45,.94) both;
+}
+
+.iez-hero.is-text-motion-run .iez-hero__caption {
+  animation-delay: 0s;
+}
+
+.iez-hero.is-text-motion-run .iez-hero__title {
+  animation-delay: .08s;
+}
+
+.iez-hero.is-text-motion-run .iez-hero__lead {
+  animation-delay: .16s;
+}
+
+.iez-hero.is-text-motion-run .iez-hero__actions,
+.iez-hero.is-text-motion-run .iez-hero__btn {
+  animation: none !important;
+  opacity: 1;
+  transform: none;
+}
+
+@keyframes iezHeroTextFocus {
+  0% {
+    letter-spacing: .22em;
+    filter: blur(10px);
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  100% {
+    letter-spacing: inherit;
+    filter: blur(0);
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes iezHeroTextSlideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+/* ---------------------------------------------------------
+ * 08. CTA
+ * --------------------------------------------------------- */
+
+.iez-hero__actions {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-top: clamp(24px, 3vw, 36px);
+}
+
+.iez-hero__btn {
+  display: inline-flex;
+  visibility: visible;
+  opacity: 1;
+  align-items: center;
+  justify-content: center;
+  min-width: 180px;
+  min-height: 48px;
+  padding: 13px 22px;
+  border-radius: 999px;
+  font-weight: 850;
+  line-height: 1.2;
+  text-decoration: none;
+  pointer-events: auto;
+  box-shadow: 0 12px 26px rgba(0, 0, 0, .12);
+  transition: background-color .18s ease, border-color .18s ease, opacity .18s ease;
+}
+
+.iez-hero__btn:hover,
+.iez-hero__btn:focus-visible {
+  opacity: .94;
+  text-decoration: none;
+}
+
+.iez-hero__btn--primary {
+  color: var(--iez-hero-primary-text);
+  background: var(--iez-hero-primary-bg);
+  border: 1px solid var(--iez-hero-primary-bg);
+}
+
+.iez-hero__btn--secondary {
+  color: var(--iez-hero-secondary-text);
+  background: var(--iez-hero-secondary-bg);
+  border: 1px solid var(--iez-hero-secondary-border);
+  backdrop-filter: blur(8px);
+}
+
+
+/* ---------------------------------------------------------
+ * 09. arrows
+ * Swiper標準矢印とBurns独自矢印を同じ固定ルールへ寄せる。
+ * transform競合を避けるため translate を使う。
+ * --------------------------------------------------------- */
+
+.iez-hero .iez-hero__nav,
+.iez-hero .iez-hero__swiper-prev,
+.iez-hero .iez-hero__swiper-next {
+  position: absolute !important;
+  z-index: 12;
+  top: 50% !important;
+  width: 52px !important;
+  height: 52px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: grid !important;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, .38);
+  border-radius: 999px;
+  background: rgba(7, 15, 26, .22);
+  color: #fff;
+  line-height: 1;
+  cursor: pointer;
+  translate: 0 -50%;
+  transform: none !important;
+  transition: background-color .18s ease, border-color .18s ease, opacity .18s ease;
+  backdrop-filter: blur(6px);
+  animation: none !important;
+}
+
+.iez-hero .iez-hero__nav:hover,
+.iez-hero .iez-hero__swiper-prev:hover,
+.iez-hero .iez-hero__swiper-next:hover {
+  background: rgba(7, 15, 26, .32);
+  border-color: rgba(255, 255, 255, .54);
+}
+
+.iez-hero .iez-hero__nav--prev,
+.iez-hero .iez-hero__swiper-prev {
+  left: clamp(16px, 4vw, 56px) !important;
+  right: auto !important;
+}
+
+.iez-hero .iez-hero__nav--next,
+.iez-hero .iez-hero__swiper-next {
+  right: clamp(16px, 4vw, 56px) !important;
+  left: auto !important;
+}
+
+/* Swiper標準の文字矢印を消す */
+.iez-hero .iez-hero__swiper-prev::after,
+.iez-hero .iez-hero__swiper-next::after {
+  display: none !important;
+  content: "" !important;
+}
+
+/* 自前矢印 */
+.iez-hero .iez-hero__nav::before,
+.iez-hero .iez-hero__swiper-prev::before,
+.iez-hero .iez-hero__swiper-next::before {
+  content: "";
+  display: block;
+  width: 13px;
+  height: 13px;
+  border-top: 3px solid currentColor;
+  border-right: 3px solid currentColor;
+}
+
+.iez-hero .iez-hero__nav--prev::before,
+.iez-hero .iez-hero__swiper-prev::before {
+  transform: translateX(2px) rotate(-135deg);
+}
+
+.iez-hero .iez-hero__nav--next::before,
+.iez-hero .iez-hero__swiper-next::before {
+  transform: translateX(-2px) rotate(45deg);
+}
+
+.iez-hero .swiper-button-disabled {
+  opacity: .35;
+  pointer-events: none;
+}
+
+
+/* ---------------------------------------------------------
+ * 10. mobile
+ * 画像と本文を分離。
+ * --------------------------------------------------------- */
+
+@media (max-width: 900px) {
+  .hub-customhome-page .iez-hero {
+    left: auto;
+    width: 100%;
+    max-width: 100%;
+    transform: none;
+  }
+
+  .iez-hero {
+    min-height: 0;
+    display: block;
+    color: var(--iezukuri-text, #24160f);
+    background: var(--iezukuri-page-bg, #f4eee4);
+  }
+
+  .iez-hero__media {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    height: clamp(260px, 56vw, 430px);
+    min-height: 0;
+  }
+
+  .iez-hero__overlay {
+    top: 0;
+    right: 0;
+    bottom: auto;
+    left: 0;
+    height: clamp(260px, 56vw, 430px);
+    background: linear-gradient(180deg, rgba(7, 15, 26, .015), rgba(7, 15, 26, .06));
+  }
+
+  .iez-hero__inner {
+    position: relative;
+    z-index: 4;
+    width: 100%;
+    min-height: 0;
+    margin: 0;
+    display: block;
+    background: linear-gradient(180deg, rgba(255,255,255,.98), rgba(247,242,235,.98));
+    border-top: 1px solid rgba(36, 22, 15, .08);
+  }
+
+  .iez-hero__content {
+    width: min(100% - 32px, 720px);
+    margin-inline: auto;
+    padding: 24px 0 30px;
+    color: var(--iezukuri-text, #24160f);
+  }
+
+  .iez-hero__eyebrow,
+  .iez-hero__caption {
+    margin: 0 0 8px;
+    color: rgba(36, 22, 15, .68);
+    font-size: 12px;
+    line-height: 1.5;
+    letter-spacing: .12em;
+    text-shadow: none;
+  }
+
+  .iez-hero__title {
+    color: var(--iezukuri-text, #24160f);
+    font-size: clamp(28px, 7.6vw, 40px);
+    line-height: 1.18;
+    text-shadow: none;
+  }
+
+  .iez-hero__lead {
+    margin-top: 12px;
+    color: rgba(36, 22, 15, .82);
+    font-size: 15px;
+    line-height: 1.8;
+    font-weight: 700;
+    text-shadow: none;
+  }
+
+  .iez-hero .iez-hero__actions {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-top: 18px;
+  }
+
+  .iez-hero .iez-hero__btn {
+    width: 100%;
+    min-width: 0;
+    min-height: 46px;
+    box-shadow: none;
+  }
+
+  .iez-hero .iez-hero__btn--primary {
+    color: var(--iezukuri-surface, #fff);
+    background: var(--iezukuri-accent, var(--ch-accent, #8b5a2b));
+    border-color: var(--iezukuri-accent, var(--ch-accent, #8b5a2b));
+  }
+
+  .iez-hero .iez-hero__btn--secondary {
+    color: var(--iezukuri-text, #24160f);
+    background: var(--iezukuri-surface, #fff);
+    border-color: rgba(36, 22, 15, .24);
+    backdrop-filter: none;
+  }
+
+  .iez-hero .iez-hero__nav,
+  .iez-hero .iez-hero__swiper-prev,
+  .iez-hero .iez-hero__swiper-next {
+    top: calc(clamp(260px, 56vw, 430px) / 2) !important;
+    width: 42px !important;
+    height: 42px !important;
+  }
+
+  .iez-hero .iez-hero__nav--prev,
+  .iez-hero .iez-hero__swiper-prev {
+    left: 12px !important;
+  }
+
+  .iez-hero .iez-hero__nav--next,
+  .iez-hero .iez-hero__swiper-next {
+    right: 12px !important;
+  }
+}
+
+@media (max-width: 520px) {
+  .iez-hero__media,
+  .iez-hero__overlay {
+    height: clamp(230px, 62vw, 330px);
+  }
+
+  .iez-hero__content {
+    width: min(100% - 28px, 520px);
+    padding: 20px 0 26px;
+  }
+
+  .iez-hero__lead {
+    font-size: 14px;
+  }
+
+  .iez-hero .iez-hero__nav,
+  .iez-hero .iez-hero__swiper-prev,
+  .iez-hero .iez-hero__swiper-next {
+    top: calc(clamp(230px, 62vw, 330px) / 2) !important;
+  }
+}
+
+
+/* ---------------------------------------------------------
+ * 11. legacy .ch-hero bridge
+ * 旧テンプレート用。新Hero本体は .iez-hero。
+ * --------------------------------------------------------- */
+
+.hub-customhome-page .ch-hero {
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  align-items: center;
+  min-height: clamp(360px, 48vw, 640px);
+  color: #fff;
+  background: var(--iezukuri-dark, #101827);
+}
+
+.hub-customhome-page .ch-hero__media,
+.hub-customhome-page .ch-hero__overlay {
+  position: absolute;
+  inset: 0;
+}
+
+.hub-customhome-page .ch-hero__media {
+  z-index: 0;
+  overflow: hidden;
+}
+
+.hub-customhome-page .ch-hero__media img,
+.hub-customhome-page .ch-hero__image,
+.hub-customhome-page .ch-hero__video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  object-position: center;
+}
+
+.hub-customhome-page .ch-hero__overlay {
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(90deg, rgba(7, 15, 26, .34), rgba(7, 15, 26, .06));
+}
+
+.hub-customhome-page .ch-hero__inner {
+  position: relative;
+  z-index: 2;
+}
+
+
+/* ---------------------------------------------------------
+ * 12. reduce motion
+ * --------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .iez-hero__slide,
+  .iez-hero__image,
+  .iez-hero__video,
+  .iez-hero__caption,
+  .iez-hero__title,
+  .iez-hero__lead {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+
+/* IEZ_HERO_CODEPEN_TEXT_MOTION_START */
+/* CodePen風: 見出しだけ focus / slide-up。CTAは動かさない */
+.iez-hero[data-iez-caption-motion="focus"] .iez-hero__caption,
+.iez-hero[data-iez-caption-motion="focus"] .iez-hero__title,
+.iez-hero[data-iez-caption-motion="focus"] .iez-hero__lead,
+.iez-hero[data-iez-caption-motion="slide-up"] .iez-hero__caption,
+.iez-hero[data-iez-caption-motion="slide-up"] .iez-hero__title,
+.iez-hero[data-iez-caption-motion="slide-up"] .iez-hero__lead {
+  opacity: 0;
+}
+
+.iez-hero.is-text-motion-run[data-iez-caption-motion="focus"] .iez-hero__caption,
+.iez-hero.is-text-motion-run[data-iez-caption-motion="focus"] .iez-hero__title,
+.iez-hero.is-text-motion-run[data-iez-caption-motion="focus"] .iez-hero__lead {
+  animation-name: iezHeroFocusIn, iezHeroTextBlurOut;
+  animation-duration: .9s, .9s;
+  animation-delay: 0s, 6.4s;
+  animation-timing-function: cubic-bezier(.25,.46,.45,.94), ease;
+  animation-fill-mode: both, forwards;
+}
+
+.iez-hero.is-text-motion-run[data-iez-caption-motion="slide-up"] .iez-hero__caption,
+.iez-hero.is-text-motion-run[data-iez-caption-motion="slide-up"] .iez-hero__title,
+.iez-hero.is-text-motion-run[data-iez-caption-motion="slide-up"] .iez-hero__lead {
+  animation-name: iezHeroSlideInBottom, iezHeroFadeOut;
+  animation-duration: .72s, .8s;
+  animation-delay: 0s, 6.5s;
+  animation-timing-function: cubic-bezier(.25,.46,.45,.94), ease;
+  animation-fill-mode: both, forwards;
+}
+
+.iez-hero.is-text-motion-run .iez-hero__caption {
+  animation-delay: 0s, 6.4s;
+}
+
+.iez-hero.is-text-motion-run .iez-hero__title {
+  animation-delay: .08s, 6.45s;
+}
+
+.iez-hero.is-text-motion-run .iez-hero__lead {
+  animation-delay: .16s, 6.5s;
+}
+
+/* CTAは固定 */
+.iez-hero .iez-hero__actions,
+.iez-hero .iez-hero__btn {
+  animation: none !important;
+}
+
+@keyframes iezHeroFocusIn {
+  0% {
+    letter-spacing: .22em;
+    filter: blur(12px);
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  100% {
+    letter-spacing: inherit;
+    filter: blur(0);
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes iezHeroSlideInBottom {
+  0% {
+    opacity: 0;
+    transform: translateY(26px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes iezHeroFadeOut {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes iezHeroTextBlurOut {
+  0% {
+    filter: blur(0);
+    opacity: 1;
+  }
+
+  100% {
+    filter: blur(10px);
+    opacity: 0;
+  }
+}
+/* IEZ_HERO_CODEPEN_TEXT_MOTION_END */
+
+/* IEZ_HERO_TEXT_TIMING_SYNC_START
+ * Hero H1 / p 文字モーション時間
+ *
+ * 方針:
+ * - 画像切替間隔 9000ms を標準にする。
+ * - H1 / p は短時間で走らせず、スライド1枚の時間内で読めるようにする。
+ * - CTAは動かさない。
+ */
+.iez-hero {
+  --iez-hero-slide-ms: 9000ms;
+  --iez-hero-text-in-ms: 1500ms;
+  --iez-hero-text-out-ms: 1200ms;
+  --iez-hero-text-out-delay-ms: calc(var(--iez-hero-slide-ms) - var(--iez-hero-text-out-ms));
+}
+
+.iez-hero.is-text-motion-run[data-iez-caption-motion="focus"] .iez-hero__caption,
+.iez-hero.is-text-motion-run[data-iez-caption-motion="focus"] .iez-hero__title,
+.iez-hero.is-text-motion-run[data-iez-caption-motion="focus"] .iez-hero__lead {
+  animation-duration: var(--iez-hero-text-in-ms), var(--iez-hero-text-out-ms) !important;
+  animation-delay: 0ms, var(--iez-hero-text-out-delay-ms) !important;
+  animation-fill-mode: both, both !important;
+}
+
+.iez-hero.is-text-motion-run[data-iez-caption-motion="slide-up"] .iez-hero__caption,
+.iez-hero.is-text-motion-run[data-iez-caption-motion="slide-up"] .iez-hero__title,
+.iez-hero.is-text-motion-run[data-iez-caption-motion="slide-up"] .iez-hero__lead {
+  animation-duration: var(--iez-hero-text-in-ms), var(--iez-hero-text-out-ms) !important;
+  animation-delay: 0ms, var(--iez-hero-text-out-delay-ms) !important;
+  animation-fill-mode: both, both !important;
+}
+/* IEZ_HERO_TEXT_TIMING_SYNC_END */
+
+/* =========================================================
+ * iezukuri hero header overlap guard
+ *
+ * 対象:
+ * - .iez-hero
+ *
+ * 理由:
+ * - 新しい hero renderer は .ch-hero ではなく .iez-hero を出力する。
+ * - ヘッダーや管理バーと hero が重なって見えるページがあるため、
+ *   家づくり配下の hero をヘッダー下の通常フローに収める。
+ *
+ * 注意:
+ * - hero の高さは変えない。
+ * - 画像を上へ潜らせる negative margin を無効化する。
+ * ========================================================= */
+
+body.iezukuri-page main.hub-customhome-subpage > .iez-hero,
+body.iezukuri-subpage main.hub-customhome-subpage > .iez-hero,
+body.single-iez_plan main.hub-customhome-subpage > .iez-hero {
+  position: relative;
+  z-index: 1;
+  margin-top: 0 !important;
+  transform: none !important;
+}
+
+body.iezukuri-page main.hub-customhome-subpage,
+body.iezukuri-subpage main.hub-customhome-subpage,
+body.single-iez_plan main.hub-customhome-subpage {
+  position: relative;
+  overflow: clip;
+}

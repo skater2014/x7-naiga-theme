@@ -1,0 +1,1775 @@
+/* =========================================================
+ * minpaku-booking.css
+ * 予約モーダル共通CSS
+ *
+ * 対象:
+ * - single:  #mnpk-date-modal / #mnpk-guest-modal
+ * - archive: #mnpk-archive-booking-modal / .mnpk-archive-booking-modal
+ *
+ * 方針:
+ * - モーダル構造は header / body / actions に統一
+ * - archive と single を共通セレクタで管理
+ * - CSS追記ブロックを増やさない
+ * ========================================================= */
+
+/* ---------------------------------------------------------
+ * 01. overlay
+ * --------------------------------------------------------- */
+
+:is(
+  #mnpk-date-modal,
+  #mnpk-guest-modal,
+  #mnpk-archive-booking-modal,
+  .mnpk-archive-booking-modal
+) {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: 18px;
+  overflow: auto;
+  background: var(--mnpk-booking-overlay-bg, rgba(15, 23, 42, .42));
+  color: var(--mnpk-text);
+}
+
+:is(
+  #mnpk-date-modal,
+  #mnpk-guest-modal,
+  #mnpk-archive-booking-modal,
+  .mnpk-archive-booking-modal
+).is-open,
+:is(
+  #mnpk-date-modal,
+  #mnpk-guest-modal,
+  #mnpk-archive-booking-modal,
+  .mnpk-archive-booking-modal
+)[aria-hidden='false'],
+:is(
+  #mnpk-date-modal,
+  #mnpk-guest-modal,
+  #mnpk-archive-booking-modal,
+  .mnpk-archive-booking-modal
+)[style*='display: block'],
+:is(
+  #mnpk-date-modal,
+  #mnpk-guest-modal,
+  #mnpk-archive-booking-modal,
+  .mnpk-archive-booking-modal
+)[style*='display:block'] {
+  display: flex;
+}
+
+/* ---------------------------------------------------------
+ * 02. frame
+ * --------------------------------------------------------- */
+
+.mnpk-modal__dialog {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: min(720px, calc(100vw - 32px));
+  max-height: calc(100vh - 64px);
+  overflow: hidden;
+  border: 1px solid var(--mnpk-modal-border);
+  border-radius: 24px;
+  background: var(--mnpk-modal-bg);
+  color: var(--mnpk-text);
+  box-shadow: var(--mnpk-booking-shadow, none);
+}
+
+:is(#mnpk-date-modal, #mnpk-archive-booking-modal, .mnpk-archive-booking-modal) .mnpk-modal__dialog {
+  width: min(1040px, calc(100vw - 32px));
+}
+
+#mnpk-guest-modal .mnpk-modal__dialog,
+.mnpk-modal__dialog--compact {
+  width: min(460px, calc(100vw - 32px));
+}
+
+/* ---------------------------------------------------------
+ * 03. header / close
+ * --------------------------------------------------------- */
+
+.mnpk-modal__header {
+  flex: 0 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 14px;
+  padding: 24px 96px 24px 28px;
+  border-bottom: 1px solid var(--mnpk-border);
+  background: var(--mnpk-modal-bg);
+}
+
+.mnpk-modal__header h2,
+.mnpk-modal__title {
+  margin: 0;
+  color: var(--mnpk-modal-heading);
+  font-size: clamp(30px, 4vw, 52px);
+  line-height: 1.05;
+  font-weight: 900;
+  letter-spacing: -.04em;
+}
+
+.mnpk-modal__header > span,
+.mnpk-modal__lead {
+  color: var(--mnpk-modal-muted);
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+
+/* ---------------------------------------------------------
+ * 04. body / actions
+ * --------------------------------------------------------- */
+
+.mnpk-modal__body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  padding: 24px 28px;
+  background: var(--mnpk-modal-surface);
+}
+
+.mnpk-modal__actions {
+  flex: 0 0 auto;
+  display: grid;
+  grid-template-columns: auto auto auto;
+  justify-content: end;
+  gap: 12px;
+  padding: 16px 28px 20px;
+  border-top: 1px solid var(--mnpk-border);
+  background: var(--mnpk-modal-bg);
+}
+
+/* ---------------------------------------------------------
+ * 05. selected summary
+ * --------------------------------------------------------- */
+
+:is(.mnpk-date-summary, .mnpk-calendar-selected, .mnpk-booking-times) {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin: 0 0 18px;
+}
+
+:is(.mnpk-date-summary__box, .mnpk-calendar-selected > div, .mnpk-booking-times__item) {
+  min-width: 0;
+  padding: 16px 18px;
+  border: 1px solid var(--mnpk-border);
+  border-radius: 18px;
+  background: var(--mnpk-modal-surface);
+}
+
+:is(.mnpk-date-summary__box span, .mnpk-calendar-selected span, .mnpk-booking-times__item span) {
+  display: block;
+  margin: 0 0 6px;
+  color: var(--mnpk-modal-muted);
+  font-size: 13px;
+  font-weight: 900;
+}
+
+:is(.mnpk-date-summary__box strong, .mnpk-calendar-selected strong, .mnpk-booking-times__item strong) {
+  display: block;
+  color: var(--mnpk-modal-heading);
+  font-size: 20px;
+  font-weight: 900;
+  line-height: 1.35;
+}
+
+/* ---------------------------------------------------------
+ * 06. toolbar / legend
+ * --------------------------------------------------------- */
+
+.mnpk-calendar-toolbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0 0 14px;
+}
+
+:is(
+  .mnpk-calendar-toolbar__button,
+  .mnpk-calendar-prev,
+  .mnpk-calendar-next,
+  [data-calendar-prev],
+  [data-calendar-next],
+  [data-archive-calendar-prev],
+  [data-archive-calendar-next]
+) {
+  display: grid;
+  place-items: center;
+  width: 50px;
+  height: 50px;
+  padding: 0;
+  border: 0;
+  border-radius: 16px;
+  background: var(--mnpk-accent);
+  color: #fff;
+  font-size: 24px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.mnpk-calendar-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  align-items: center;
+  margin: 0 0 18px;
+  padding: 12px 14px;
+  border: 1px solid var(--mnpk-border);
+  border-radius: 16px;
+  background: var(--mnpk-modal-soft-bg);
+  color: var(--mnpk-modal-muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.mnpk-calendar-legend > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.mnpk-calendar-mark {
+  display: inline-grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border: 1px solid var(--mnpk-border);
+  border-radius: 999px;
+  background: var(--mnpk-modal-surface);
+  color: var(--mnpk-modal-heading);
+  font-style: normal;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+/* ---------------------------------------------------------
+ * 07. calendar grid
+ * --------------------------------------------------------- */
+
+:is(.mnpk-calendar-grid, .mnpk-calendar-months) {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+  margin: 0;
+}
+
+.mnpk-calendar-month {
+  min-width: 0;
+  padding: 16px;
+  border: 1px solid var(--mnpk-border);
+  border-radius: 22px;
+  background: var(--mnpk-modal-surface);
+}
+
+.mnpk-calendar-month__title {
+  margin: 0 0 14px;
+  color: var(--mnpk-modal-heading);
+  font-size: 24px;
+  font-weight: 900;
+  line-height: 1.15;
+}
+
+:is(.mnpk-calendar-weekdays, .mnpk-calendar-days, .mnpk-calendar-month .mnpk-calendar-grid) {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 7px;
+}
+
+.mnpk-calendar-weekdays {
+  margin-bottom: 8px;
+}
+
+:is(.mnpk-calendar-weekday, .mnpk-calendar-weekdays span) {
+  display: grid;
+  place-items: center;
+  min-height: 26px;
+  color: var(--mnpk-modal-muted);
+  font-size: 13px;
+  font-weight: 900;
+}
+
+:is(.mnpk-calendar-empty, .mnpk-calendar-day--empty) {
+  min-height: 48px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.mnpk-calendar-day {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 50px;
+  width: 100%;
+  padding: 0;
+  border: 1px solid var(--mnpk-modal-border-strong);
+  border-radius: 14px;
+  background: var(--mnpk-modal-surface);
+  color: var(--mnpk-modal-heading);
+  font-size: 18px;
+  font-weight: 900;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.mnpk-calendar-day > * {
+  color: inherit;
+}
+
+.mnpk-calendar-day:hover:not(:disabled):not(.is-disabled):not(.is-booked):not(.is-blocked) {
+  border-color: var(--mnpk-accent);
+  color: var(--mnpk-accent);
+}
+
+.mnpk-calendar-day.is-today,
+.mnpk-calendar-day[data-today='true'] {
+  border-color: #5ea4c6;
+  background: var(--mnpk-modal-today-bg);
+  color: var(--mnpk-modal-heading);
+}
+
+.mnpk-calendar-day.is-selected,
+.mnpk-calendar-day.is-checkin,
+.mnpk-calendar-day.is-checkout,
+.mnpk-calendar-day.is-start,
+.mnpk-calendar-day.is-end,
+.mnpk-calendar-day[aria-pressed='true'] {
+  border-color: var(--mnpk-accent);
+  background: var(--mnpk-accent);
+  color: #fff;
+}
+
+.mnpk-calendar-day.is-in-range,
+.mnpk-calendar-day.is-range {
+  border-color: var(--mnpk-modal-border);
+  background: #edf7fb;
+  color: var(--mnpk-modal-heading);
+}
+
+.mnpk-calendar-day:disabled,
+.mnpk-calendar-day.is-disabled,
+.mnpk-calendar-day.is-booked,
+.mnpk-calendar-day.is-blocked {
+  border-color: var(--mnpk-modal-border);
+  background: var(--mnpk-modal-disabled-bg);
+  color: var(--mnpk-modal-disabled-text);
+  opacity: 1;
+  cursor: not-allowed;
+}
+
+.mnpk-calendar-day__mark {
+  display: none;
+}
+
+/* ---------------------------------------------------------
+ * 08. help / guest / price
+ * --------------------------------------------------------- */
+
+.mnpk-form-help,
+.mnpk-booking-error {
+  margin: 14px 0 0;
+  color: var(--mnpk-modal-muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.mnpk-booking-error {
+  padding: 12px 14px;
+  border: 1px solid rgba(185, 28, 28, .2);
+  border-radius: 14px;
+  background: rgba(185, 28, 28, .06);
+  color: var(--mnpk-danger, #b91c1c);
+}
+
+.mnpk-booking-error[hidden],
+[data-booking-error][hidden],
+[data-calendar-error][hidden],
+[data-payment-error][hidden] {
+  display: none !important;
+}
+
+.mnpk-guest-rows {
+  display: grid;
+  gap: 12px;
+}
+
+.mnpk-guest-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 14px;
+  border: 1px solid var(--mnpk-border);
+  border-radius: 16px;
+  background: var(--mnpk-modal-surface);
+}
+
+.mnpk-guest-row__label {
+  display: grid;
+  gap: 4px;
+}
+
+.mnpk-guest-row__label strong {
+  color: var(--mnpk-modal-heading);
+  font-weight: 900;
+}
+
+.mnpk-guest-row__label span {
+  color: var(--mnpk-modal-muted);
+  font-size: 13px;
+}
+
+.mnpk-counter {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.mnpk-counter__button,
+.mnpk-guest-minus,
+.mnpk-guest-plus {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--mnpk-border);
+  border-radius: 12px;
+  background: var(--mnpk-modal-surface);
+  color: var(--mnpk-modal-heading);
+  font-size: 22px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.mnpk-counter__value,
+.mnpk-guest-count {
+  min-width: 24px;
+  text-align: center;
+  color: var(--mnpk-modal-heading);
+  font-size: 18px;
+  font-weight: 900;
+}
+
+/* price summary */
+.mnpk-summary-box,
+.mnpk-price-breakdown {
+  margin-top: 14px;
+  padding: 14px 16px;
+  border: 1px solid var(--mnpk-border);
+  border-radius: 16px;
+  background: var(--mnpk-modal-surface);
+}
+
+.mnpk-summary-list {
+  display: grid;
+  gap: 0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.mnpk-summary-list li,
+.mnpk-price-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--mnpk-border);
+  color: var(--mnpk-modal-muted);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.mnpk-summary-list li:last-child,
+.mnpk-price-row:last-child {
+  border-bottom: 0;
+}
+
+.mnpk-summary-list strong,
+.mnpk-price-row strong,
+.mnpk-price-row--total {
+  color: var(--mnpk-modal-heading);
+  font-weight: 900;
+}
+
+/* ---------------------------------------------------------
+ * 09. buttons
+ * --------------------------------------------------------- */
+
+.mnpk-booking-submit,
+[data-booking-submit],
+[data-apply-dates],
+[data-apply-guests],
+[data-archive-booking-submit],
+.mnpk-button--primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 0 22px;
+  border: 0;
+  border-radius: 14px;
+  background: var(--mnpk-accent);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 900;
+  line-height: 1.2;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.mnpk-button--ghost,
+[data-close-modal],
+[data-archive-booking-close],
+[data-archive-calendar-clear],
+[data-calendar-clear] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 0 20px;
+  border: 1px solid var(--mnpk-border);
+  border-radius: 14px;
+  background: var(--mnpk-modal-surface);
+  color: var(--mnpk-modal-heading);
+  font-size: 15px;
+  font-weight: 900;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+:is(#mnpk-date-modal, #mnpk-archive-booking-modal, .mnpk-archive-booking-modal) [data-apply-dates],
+:is(#mnpk-date-modal, #mnpk-archive-booking-modal, .mnpk-archive-booking-modal) [data-archive-booking-submit] {
+  min-width: 220px;
+}
+
+:is(#mnpk-date-modal, #mnpk-archive-booking-modal, .mnpk-archive-booking-modal) [data-calendar-clear],
+:is(#mnpk-date-modal, #mnpk-archive-booking-modal, .mnpk-archive-booking-modal) [data-close-modal],
+:is(#mnpk-date-modal, #mnpk-archive-booking-modal, .mnpk-archive-booking-modal) [data-archive-calendar-clear],
+:is(#mnpk-date-modal, #mnpk-archive-booking-modal, .mnpk-archive-booking-modal) [data-archive-booking-close] {
+  min-width: 120px;
+}
+
+/* ---------------------------------------------------------
+ * 10. responsive
+ * --------------------------------------------------------- */
+
+@media (max-width: 900px) {
+  :is(.mnpk-calendar-grid, .mnpk-calendar-months) {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  :is(
+    #mnpk-date-modal,
+    #mnpk-guest-modal,
+    #mnpk-archive-booking-modal,
+    .mnpk-archive-booking-modal
+  ) {
+    align-items: flex-start;
+    padding: 8px;
+  }
+
+  .mnpk-modal__dialog,
+  :is(#mnpk-date-modal, #mnpk-archive-booking-modal, .mnpk-archive-booking-modal) .mnpk-modal__dialog,
+  #mnpk-guest-modal .mnpk-modal__dialog {
+    width: 100%;
+    max-height: calc(100vh - 16px);
+    border-radius: 20px;
+  }
+
+  .mnpk-modal__header {
+    grid-template-columns: minmax(0, 1fr) auto;
+    padding: 20px 18px 18px;
+  }
+
+  .mnpk-modal__header > span {
+    grid-column: 1 / -1;
+  }
+
+  .mnpk-modal__header h2,
+  .mnpk-modal__title {
+    font-size: 32px;
+  }
+
+  .mnpk-modal__body {
+    padding: 18px;
+  }
+
+  :is(.mnpk-date-summary, .mnpk-calendar-selected, .mnpk-booking-times) {
+    grid-template-columns: 1fr;
+  }
+
+  .mnpk-calendar-month {
+    padding: 12px;
+  }
+
+  .mnpk-calendar-day {
+    min-height: 42px;
+    font-size: 15px;
+    border-radius: 12px;
+  }
+
+  .mnpk-guest-row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .mnpk-counter {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .mnpk-modal__actions {
+    grid-template-columns: 1fr;
+    padding: 14px 18px 18px;
+  }
+
+  .mnpk-modal__actions > *,
+  :is(#mnpk-date-modal, #mnpk-archive-booking-modal, .mnpk-archive-booking-modal) [data-apply-dates],
+  :is(#mnpk-date-modal, #mnpk-archive-booking-modal, .mnpk-archive-booking-modal) [data-archive-booking-submit],
+  :is(#mnpk-date-modal, #mnpk-archive-booking-modal, .mnpk-archive-booking-modal) [data-calendar-clear],
+  :is(#mnpk-date-modal, #mnpk-archive-booking-modal, .mnpk-archive-booking-modal) [data-close-modal],
+  :is(#mnpk-date-modal, #mnpk-archive-booking-modal, .mnpk-archive-booking-modal) [data-archive-calendar-clear],
+  :is(#mnpk-date-modal, #mnpk-archive-booking-modal, .mnpk-archive-booking-modal) [data-archive-booking-close] {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+
+
+
+/* =========================================================
+ * MINPAKU BOOKING MODAL CONTRAST SKELETON START
+ * 役割:
+ * - 色は minpaku-base.css の --mnpk-modal-* を参照
+ * - ここは日付/人数/予約モーダルの骨組みだけ
+ * MINPAKU BOOKING MODAL CONTRAST SKELETON END
+ * ========================================================= */
+
+#mnpk-date-modal .mnpk-modal__dialog,
+#mnpk-guest-modal .mnpk-modal__dialog,
+#mnpk-payment-modal .mnpk-modal__dialog,
+#mnpk-archive-booking-modal .mnpk-modal__dialog,
+.mnpk-archive-booking-modal .mnpk-modal__dialog {
+  background: var(--mnpk-modal-bg) !important;
+  color: var(--mnpk-modal-text) !important;
+  border: 1px solid var(--mnpk-modal-border) !important;
+}
+
+#mnpk-date-modal .mnpk-modal__body,
+#mnpk-guest-modal .mnpk-modal__body,
+#mnpk-payment-modal .mnpk-modal__body,
+#mnpk-archive-booking-modal .mnpk-modal__body,
+.mnpk-archive-booking-modal .mnpk-modal__body {
+  background: var(--mnpk-modal-bg) !important;
+  color: var(--mnpk-modal-text) !important;
+  max-height: calc(100vh - 190px);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+#mnpk-date-modal .mnpk-date-summary__box,
+#mnpk-date-modal .mnpk-booking-times__item,
+#mnpk-guest-modal .mnpk-guest-row,
+#mnpk-archive-booking-modal .mnpk-calendar-selected > div,
+#mnpk-archive-booking-modal .mnpk-guest-row,
+#mnpk-archive-booking-modal .mnpk-summary-box,
+.mnpk-archive-booking-modal .mnpk-calendar-selected > div,
+.mnpk-archive-booking-modal .mnpk-guest-row,
+.mnpk-archive-booking-modal .mnpk-summary-box {
+  background: var(--mnpk-modal-surface) !important;
+  border: 1px solid var(--mnpk-modal-border) !important;
+  color: var(--mnpk-modal-text) !important;
+}
+
+#mnpk-date-modal .mnpk-calendar-day,
+#mnpk-archive-booking-modal .mnpk-calendar-day,
+.mnpk-archive-booking-modal .mnpk-calendar-day {
+  background: var(--mnpk-modal-cell) !important;
+  border: 1px solid var(--mnpk-modal-border) !important;
+  color: var(--mnpk-modal-text) !important;
+  font-weight: 900;
+}
+
+#mnpk-date-modal .mnpk-calendar-day__num,
+#mnpk-date-modal .mnpk-calendar-day__mark,
+#mnpk-archive-booking-modal .mnpk-calendar-day__num,
+#mnpk-archive-booking-modal .mnpk-calendar-day__mark,
+.mnpk-archive-booking-modal .mnpk-calendar-day__num,
+.mnpk-archive-booking-modal .mnpk-calendar-day__mark {
+  color: inherit !important;
+}
+
+#mnpk-date-modal .mnpk-calendar-day.is-today,
+#mnpk-archive-booking-modal .mnpk-calendar-day.is-today,
+.mnpk-archive-booking-modal .mnpk-calendar-day.is-today {
+  background: var(--mnpk-modal-today-bg) !important;
+  border-color: var(--mnpk-modal-border-strong) !important;
+}
+
+#mnpk-date-modal .mnpk-calendar-day.is-selected,
+#mnpk-date-modal .mnpk-calendar-day.is-checkin,
+#mnpk-date-modal .mnpk-calendar-day.is-checkout,
+#mnpk-date-modal .mnpk-calendar-day[aria-pressed="true"],
+#mnpk-archive-booking-modal .mnpk-calendar-day.is-selected,
+#mnpk-archive-booking-modal .mnpk-calendar-day.is-checkin,
+#mnpk-archive-booking-modal .mnpk-calendar-day.is-checkout,
+#mnpk-archive-booking-modal .mnpk-calendar-day[aria-pressed="true"],
+.mnpk-archive-booking-modal .mnpk-calendar-day.is-selected,
+.mnpk-archive-booking-modal .mnpk-calendar-day.is-checkin,
+.mnpk-archive-booking-modal .mnpk-calendar-day.is-checkout,
+.mnpk-archive-booking-modal .mnpk-calendar-day[aria-pressed="true"] {
+  background: var(--mnpk-modal-accent) !important;
+  border-color: var(--mnpk-modal-accent) !important;
+  color: var(--mnpk-modal-close-text, #ffffff) !important;
+}
+
+#mnpk-date-modal .mnpk-calendar-day.is-in-range,
+#mnpk-date-modal .mnpk-calendar-day.is-range,
+#mnpk-archive-booking-modal .mnpk-calendar-day.is-in-range,
+#mnpk-archive-booking-modal .mnpk-calendar-day.is-range,
+.mnpk-archive-booking-modal .mnpk-calendar-day.is-in-range,
+.mnpk-archive-booking-modal .mnpk-calendar-day.is-range {
+  background: var(--mnpk-modal-accent-soft) !important;
+  border-color: var(--mnpk-modal-border-strong) !important;
+  color: var(--mnpk-modal-heading) !important;
+}
+
+#mnpk-date-modal .mnpk-calendar-day.is-disabled,
+#mnpk-date-modal .mnpk-calendar-day[disabled],
+#mnpk-archive-booking-modal .mnpk-calendar-day.is-disabled,
+#mnpk-archive-booking-modal .mnpk-calendar-day[disabled],
+.mnpk-archive-booking-modal .mnpk-calendar-day.is-disabled,
+.mnpk-archive-booking-modal .mnpk-calendar-day[disabled] {
+  background: var(--mnpk-modal-disabled-bg) !important;
+  color: var(--mnpk-modal-disabled-text) !important;
+  opacity: 1 !important;
+}
+
+#mnpk-date-modal [data-apply-dates],
+#mnpk-date-modal .mnpk-booking-submit,
+#mnpk-archive-booking-modal [data-archive-booking-submit],
+#mnpk-archive-booking-modal .mnpk-booking-submit,
+.mnpk-archive-booking-modal [data-archive-booking-submit] {
+  background: var(--mnpk-modal-accent) !important;
+  border-color: var(--mnpk-modal-accent) !important;
+  color: var(--mnpk-modal-close-text, #ffffff) !important;
+}
+
+#mnpk-date-modal [data-apply-dates]:hover,
+#mnpk-archive-booking-modal [data-archive-booking-submit]:hover,
+.mnpk-archive-booking-modal [data-archive-booking-submit]:hover {
+  background: var(--mnpk-modal-accent-hover) !important;
+}
+
+
+/* =========================================================
+ * MINPAKU MODAL ONE SYSTEM START
+ *
+ * 役割:
+ * - 民泊モーダルの見た目をこの1ブロックに集約
+ * - single / archive / date / guest / payment / photo を同じ骨組みにする
+ * - 個別差分は ID で最小限だけ指定
+ *
+ * 管理場所:
+ * - minpaku/common/css/minpaku-booking.css
+ *
+ * 触らない場所:
+ * - minpaku-base.css にモーダルを追記しない
+ * - minpaku-b2c.css にモーダルを追記しない
+ * ========================================================= */
+
+/* ---------------------------------------------------------
+ * 01. modal root
+ * --------------------------------------------------------- */
+
+:is(
+  #mnpk-date-modal,
+  #mnpk-guest-modal,
+  #mnpk-payment-modal,
+  #mnpk-photo-modal,
+  #mnpk-archive-booking-modal,
+  .mnpk-archive-booking-modal
+) {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 9999 !important;
+  display: none !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-sizing: border-box !important;
+  padding: 16px !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain !important;
+  background: var(--mnpk-booking-overlay-bg, rgba(15, 23, 42, .42)) !important;
+  color: var(--mnpk-text, #13283a) !important;
+}
+
+:is(
+  #mnpk-date-modal,
+  #mnpk-guest-modal,
+  #mnpk-payment-modal,
+  #mnpk-photo-modal,
+  #mnpk-archive-booking-modal,
+  .mnpk-archive-booking-modal
+).is-open,
+:is(
+  #mnpk-date-modal,
+  #mnpk-guest-modal,
+  #mnpk-payment-modal,
+  #mnpk-photo-modal,
+  #mnpk-archive-booking-modal,
+  .mnpk-archive-booking-modal
+)[aria-hidden="false"] {
+  display: flex !important;
+}
+
+/* ---------------------------------------------------------
+ * 02. common frame
+ * --------------------------------------------------------- */
+
+:is(
+  #mnpk-date-modal,
+  #mnpk-guest-modal,
+  #mnpk-payment-modal,
+  #mnpk-photo-modal,
+  #mnpk-archive-booking-modal,
+  .mnpk-archive-booking-modal
+) .mnpk-modal__dialog {
+  position: relative !important;
+  display: flex !important;
+  flex-direction: column !important;
+  width: min(720px, calc(100vw - 32px)) !important;
+  max-height: calc(100dvh - 32px) !important;
+  overflow: hidden !important;
+  border: 1px solid var(--mnpk-modal-border, #cfe4ee) !important;
+  border-radius: 20px !important;
+  background: var(--mnpk-modal-bg, #ffffff) !important;
+  color: var(--mnpk-modal-heading, #13283a) !important;
+  box-shadow: 0 22px 70px rgba(15, 23, 42, .14) !important;
+}
+
+/* 日付・アーカイブ予約は広め。ただしデカすぎない */
+:is(
+  #mnpk-date-modal,
+  #mnpk-archive-booking-modal,
+  .mnpk-archive-booking-modal
+) .mnpk-modal__dialog {
+  width: min(920px, calc(100vw - 40px)) !important;
+}
+
+/* 人数・支払いは小さめ */
+:is(#mnpk-guest-modal, #mnpk-payment-modal) .mnpk-modal__dialog,
+.mnpk-modal__dialog--compact {
+  width: min(460px, calc(100vw - 32px)) !important;
+}
+
+/* ---------------------------------------------------------
+ * 03. header / body / actions
+ * --------------------------------------------------------- */
+
+:is(
+  #mnpk-date-modal,
+  #mnpk-guest-modal,
+  #mnpk-payment-modal,
+  #mnpk-photo-modal,
+  #mnpk-archive-booking-modal,
+  .mnpk-archive-booking-modal
+) .mnpk-modal__header {
+  flex: 0 0 auto !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding: 18px 72px 16px 22px !important;
+  border-bottom: 1px solid var(--mnpk-modal-border, #d6e6ee) !important;
+  background: var(--mnpk-modal-bg, #ffffff) !important;
+}
+
+:is(
+  #mnpk-date-modal,
+  #mnpk-guest-modal,
+  #mnpk-payment-modal,
+  #mnpk-photo-modal,
+  #mnpk-archive-booking-modal,
+  .mnpk-archive-booking-modal
+) .mnpk-modal__header h2,
+:is(
+  #mnpk-date-modal,
+  #mnpk-guest-modal,
+  #mnpk-payment-modal,
+  #mnpk-photo-modal,
+  #mnpk-archive-booking-modal,
+  .mnpk-archive-booking-modal
+) .mnpk-modal__title {
+  margin: 0 !important;
+  color: var(--mnpk-modal-heading, #13283a) !important;
+  font-size: clamp(22px, 3vw, 32px) !important;
+  line-height: 1.12 !important;
+  font-weight: 900 !important;
+  letter-spacing: -.03em !important;
+}
+
+:is(
+  #mnpk-date-modal,
+  #mnpk-guest-modal,
+  #mnpk-payment-modal,
+  #mnpk-photo-modal,
+  #mnpk-archive-booking-modal,
+  .mnpk-archive-booking-modal
+) .mnpk-modal__header > span,
+:is(
+  #mnpk-date-modal,
+  #mnpk-guest-modal,
+  #mnpk-payment-modal,
+  #mnpk-photo-modal,
+  #mnpk-archive-booking-modal,
+  .mnpk-archive-booking-modal
+) .mnpk-modal__lead {
+  color: var(--mnpk-modal-muted, #486272) !important;
+  font-size: 13px !important;
+  font-weight: 800 !important;
+  line-height: 1.5 !important;
+}
+
+:is(
+  #mnpk-date-modal,
+  #mnpk-guest-modal,
+  #mnpk-payment-modal,
+  #mnpk-photo-modal,
+  #mnpk-archive-booking-modal,
+  .mnpk-archive-booking-modal
+) .mnpk-modal__body {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  padding: 18px 22px !important;
+  background: var(--mnpk-modal-soft-bg, #f4fbff) !important;
+}
+
+:is(
+  #mnpk-date-modal,
+  #mnpk-guest-modal,
+  #mnpk-payment-modal,
+  #mnpk-photo-modal,
+  #mnpk-archive-booking-modal,
+  .mnpk-archive-booking-modal
+) .mnpk-modal__actions {
+  flex: 0 0 auto !important;
+  display: grid !important;
+  grid-template-columns: auto auto auto !important;
+  justify-content: end !important;
+  gap: 10px !important;
+  padding: 14px 20px 16px !important;
+  border-top: 1px solid var(--mnpk-modal-border, #d6e6ee) !important;
+  background: var(--mnpk-modal-bg, #ffffff) !important;
+}
+
+/* ---------------------------------------------------------
+ * 04. close button
+ *
+ * 詳細ページ / アーカイブ / 写真 / 支払いモーダル共通
+ *
+ * 方針:
+ * - 「×」文字は使わない
+ * - ::before / ::after の2本線で中央に固定する
+ * - 詳細とアーカイブで同じ class を使ってOK
+ * --------------------------------------------------------- */
+
+:is(
+  #mnpk-date-modal,
+  #mnpk-guest-modal,
+  #mnpk-payment-modal,
+  #mnpk-photo-modal,
+  #mnpk-archive-booking-modal,
+  .mnpk-archive-booking-modal
+) .mnpk-modal__close {
+  position: absolute !important;
+  top: 14px !important;
+  right: 16px !important;
+  z-index: 40 !important;
+
+  display: block !important;
+
+  width: 44px !important;
+  height: 44px !important;
+  min-width: 44px !important;
+  min-height: 44px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+
+  border: 1px solid var(--mnpk-modal-close-border, transparent) !important;
+  border-radius: 999px !important;
+  background: var(--mnpk-modal-close-bg, var(--mnpk-modal-accent, #2f7fa2)) !important;
+  color: var(--mnpk-modal-close-text, #ffffff) !important;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, .14) !important;
+
+  font-size: 0 !important;
+  line-height: 0 !important;
+  text-indent: -9999px !important;
+
+  cursor: pointer !important;
+  appearance: none !important;
+  overflow: hidden !important;
+  transform: none !important;
+}
+
+:is(
+  #mnpk-date-modal,
+  #mnpk-guest-modal,
+  #mnpk-payment-modal,
+  #mnpk-photo-modal,
+  #mnpk-archive-booking-modal,
+  .mnpk-archive-booking-modal
+) .mnpk-modal__close::before,
+:is(
+  #mnpk-date-modal,
+  #mnpk-guest-modal,
+  #mnpk-payment-modal,
+  #mnpk-photo-modal,
+  #mnpk-archive-booking-modal,
+  .mnpk-archive-booking-modal
+) .mnpk-modal__close::after {
+  content: "" !important;
+
+  position: absolute !important;
+  left: 50% !important;
+  top: 50% !important;
+
+  display: block !important;
+  width: 18px !important;
+  height: 2px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+
+  background: currentColor !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  box-shadow: none !important;
+
+  transform-origin: center !important;
+}
+
+:is(
+  #mnpk-date-modal,
+  #mnpk-guest-modal,
+  #mnpk-payment-modal,
+  #mnpk-photo-modal,
+  #mnpk-archive-booking-modal,
+  .mnpk-archive-booking-modal
+) .mnpk-modal__close::before {
+  transform: translate(-50%, -50%) rotate(45deg) !important;
+}
+
+:is(
+  #mnpk-date-modal,
+  #mnpk-guest-modal,
+  #mnpk-payment-modal,
+  #mnpk-photo-modal,
+  #mnpk-archive-booking-modal,
+  .mnpk-archive-booking-modal
+) .mnpk-modal__close::after {
+  transform: translate(-50%, -50%) rotate(-45deg) !important;
+}
+
+:is(
+  #mnpk-date-modal,
+  #mnpk-guest-modal,
+  #mnpk-payment-modal,
+  #mnpk-photo-modal,
+  #mnpk-archive-booking-modal,
+  .mnpk-archive-booking-modal
+) .mnpk-modal__close:hover,
+:is(
+  #mnpk-date-modal,
+  #mnpk-guest-modal,
+  #mnpk-payment-modal,
+  #mnpk-photo-modal,
+  #mnpk-archive-booking-modal,
+  .mnpk-archive-booking-modal
+) .mnpk-modal__close:focus-visible {
+  background: var(--mnpk-modal-close-bg-hover, var(--mnpk-modal-accent-hover, #256b8b)) !important;
+  outline: none !important;
+  transform: none !important;
+}
+
+/* ---------------------------------------------------------
+ * 05. date calendar common
+ * --------------------------------------------------------- */
+
+.mnpk-date-direct {
+  display: none !important;
+}
+
+:is(.mnpk-date-summary, .mnpk-calendar-selected, .mnpk-booking-times) {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 12px !important;
+  margin: 0 0 14px !important;
+}
+
+:is(.mnpk-date-summary__box, .mnpk-calendar-selected > div, .mnpk-booking-times__item) {
+  min-width: 0 !important;
+  padding: 14px 16px !important;
+  border: 1px solid var(--mnpk-modal-border, #cfe4ee) !important;
+  border-radius: 16px !important;
+  background: #ffffff !important;
+}
+
+:is(.mnpk-date-summary__box strong, .mnpk-calendar-selected strong, .mnpk-booking-times__item strong) {
+  color: var(--mnpk-modal-heading, #13283a) !important;
+  font-size: 18px !important;
+  font-weight: 900 !important;
+  line-height: 1.3 !important;
+}
+
+/* カレンダー矢印は通常フロー。無理な3カラム化はしない */
+.mnpk-calendar-toolbar {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
+  margin: 0 0 12px !important;
+}
+
+:is(
+  .mnpk-calendar-toolbar__button,
+  .mnpk-calendar-prev,
+  .mnpk-calendar-next,
+  [data-calendar-prev],
+  [data-calendar-next],
+  [data-archive-calendar-prev],
+  [data-archive-calendar-next]
+) {
+  display: grid !important;
+  place-items: center !important;
+  width: 44px !important;
+  height: 44px !important;
+  min-width: 44px !important;
+  min-height: 44px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 14px !important;
+  background: var(--mnpk-modal-close-bg, var(--mnpk-modal-accent, #2f7fa2)) !important;
+  color: var(--mnpk-booking-selected-text, var(--mnpk-button-primary-text, #ffffff)) !important;
+  font-size: 22px !important;
+  font-weight: 900 !important;
+  cursor: pointer !important;
+}
+
+.mnpk-calendar-legend {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 8px 12px !important;
+  align-items: center !important;
+  margin: 0 0 14px !important;
+  padding: 10px 12px !important;
+  border: 1px solid var(--mnpk-modal-border, #cfe4ee) !important;
+  border-radius: 14px !important;
+  background: #ffffff !important;
+  color: var(--mnpk-modal-muted, #486272) !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+}
+
+:is(.mnpk-calendar-grid, .mnpk-calendar-months) {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 16px !important;
+  margin: 0 !important;
+}
+
+.mnpk-calendar-month {
+  min-width: 0 !important;
+  padding: 14px !important;
+  border: 1px solid var(--mnpk-modal-border, #cfe4ee) !important;
+  border-radius: 18px !important;
+  background: #ffffff !important;
+}
+
+.mnpk-calendar-month__title {
+  margin: 0 0 10px !important;
+  color: var(--mnpk-modal-heading, #13283a) !important;
+  font-size: 20px !important;
+  font-weight: 900 !important;
+  line-height: 1.2 !important;
+}
+
+:is(.mnpk-calendar-weekdays, .mnpk-calendar-days, .mnpk-calendar-month .mnpk-calendar-grid) {
+  display: grid !important;
+  grid-template-columns: repeat(7, minmax(0, 1fr)) !important;
+  gap: 6px !important;
+}
+
+:is(.mnpk-calendar-weekday, .mnpk-calendar-weekdays span) {
+  display: grid !important;
+  place-items: center !important;
+  min-height: 22px !important;
+  color: var(--mnpk-modal-muted, #486272) !important;
+  font-size: 12px !important;
+  font-weight: 900 !important;
+}
+
+:is(.mnpk-calendar-empty, .mnpk-calendar-day--empty) {
+  min-height: 40px !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+.mnpk-calendar-day {
+  position: relative !important;
+  display: grid !important;
+  place-items: center !important;
+  min-height: 40px !important;
+  width: 100% !important;
+  padding: 0 !important;
+  border: 1px solid var(--mnpk-modal-border-strong, #b9d8e8) !important;
+  border-radius: 12px !important;
+  background: #ffffff !important;
+  color: var(--mnpk-modal-heading, #13283a) !important;
+  font-size: 15px !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+  cursor: pointer !important;
+}
+
+.mnpk-calendar-day__num,
+.mnpk-calendar-day__mark {
+  color: inherit !important;
+}
+
+.mnpk-calendar-day__mark {
+  display: none !important;
+}
+
+.mnpk-calendar-day.is-today,
+.mnpk-calendar-day[data-today="true"] {
+  border-color: var(--mnpk-accent, #2f8fb3) !important;
+  background: var(--mnpk-modal-today-bg, #e8f6fb) !important;
+}
+
+.mnpk-calendar-day.is-selected,
+.mnpk-calendar-day.is-checkin,
+.mnpk-calendar-day.is-checkout,
+.mnpk-calendar-day.is-start,
+.mnpk-calendar-day.is-end,
+.mnpk-calendar-day[aria-pressed="true"] {
+  border-color: var(--mnpk-accent, #2f8fb3) !important;
+  background: var(--mnpk-modal-close-bg, var(--mnpk-modal-accent, #2f7fa2)) !important;
+  color: var(--mnpk-booking-selected-text, var(--mnpk-button-primary-text, #ffffff)) !important;
+}
+
+.mnpk-calendar-day.is-in-range,
+.mnpk-calendar-day.is-range {
+  border-color: var(--mnpk-modal-border, #cfe4ee) !important;
+  background: var(--mnpk-modal-accent-soft, #e8f6fb) !important;
+  color: var(--mnpk-modal-heading, #13283a) !important;
+}
+
+.mnpk-calendar-day:disabled,
+.mnpk-calendar-day.is-disabled,
+.mnpk-calendar-day.is-booked,
+.mnpk-calendar-day.is-blocked {
+  border-color: var(--mnpk-modal-border, #cfe4ee) !important;
+  background: var(--mnpk-modal-disabled-bg, #e9f2f7) !important;
+  color: var(--mnpk-modal-disabled-text, #7b95a3) !important;
+  opacity: 1 !important;
+  cursor: not-allowed !important;
+}
+
+/* ---------------------------------------------------------
+ * 06. buttons
+ * --------------------------------------------------------- */
+
+:is(
+  .mnpk-booking-submit,
+  [data-booking-submit],
+  [data-apply-dates],
+  [data-apply-guests],
+  [data-archive-booking-submit],
+  .mnpk-button--primary
+) {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-height: 44px !important;
+  padding: 0 18px !important;
+  border: 0 !important;
+  border-radius: 12px !important;
+  background: var(--mnpk-modal-close-bg, var(--mnpk-modal-accent, #2f7fa2)) !important;
+  color: var(--mnpk-booking-selected-text, var(--mnpk-button-primary-text, #ffffff)) !important;
+  font-size: 14px !important;
+  font-weight: 900 !important;
+  line-height: 1.2 !important;
+  text-decoration: none !important;
+  cursor: pointer !important;
+}
+
+:is(
+  .mnpk-button--ghost,
+  [data-close-modal],
+  [data-archive-booking-close],
+  [data-archive-calendar-clear],
+  [data-calendar-clear]
+) {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-height: 44px !important;
+  padding: 0 18px !important;
+  border: 1px solid var(--mnpk-modal-border, #cfe4ee) !important;
+  border-radius: 12px !important;
+  background: #ffffff !important;
+  color: var(--mnpk-modal-heading, #13283a) !important;
+  font-size: 14px !important;
+  font-weight: 900 !important;
+  line-height: 1.2 !important;
+  text-decoration: none !important;
+  cursor: pointer !important;
+}
+
+/* ---------------------------------------------------------
+ * 06.5 unified date / archive calendar modal
+ * 役割:
+ * - 詳細ページ #mnpk-date-modal
+ * - アーカイブ #mnpk-archive-booking-modal / .mnpk-archive-booking-modal
+ * を同じ見た目にする
+ *
+ * 注意:
+ * - 外側の月コンテナだけ2列
+ * - 月の中の日付グリッドは必ず7列
+ * --------------------------------------------------------- */
+
+/* 共通サイズ */
+:is(
+  #mnpk-date-modal,
+  #mnpk-archive-booking-modal,
+  .mnpk-archive-booking-modal
+) .mnpk-modal__dialog--calendar {
+  width: min(920px, calc(100vw - 40px)) !important;
+  max-height: calc(100dvh - 32px) !important;
+  border-radius: 20px !important;
+  overflow: hidden !important;
+}
+
+/* アーカイブだけの余計な見出しは消して詳細に寄せる */
+:is(
+  #mnpk-archive-booking-modal,
+  .mnpk-archive-booking-modal
+) .mnpk-modal__eyebrow,
+:is(
+  #mnpk-archive-booking-modal,
+  .mnpk-archive-booking-modal
+) [data-archive-stay-title] {
+  display: none !important;
+}
+
+/* ヘッダー */
+:is(
+  #mnpk-date-modal,
+  #mnpk-archive-booking-modal,
+  .mnpk-archive-booking-modal
+) .mnpk-modal__header {
+  padding: 18px 74px 16px 22px !important;
+  border-bottom: 1px solid var(--mnpk-modal-border, #cfe4ee) !important;
+  background: #ffffff !important;
+}
+
+:is(
+  #mnpk-date-modal,
+  #mnpk-archive-booking-modal,
+  .mnpk-archive-booking-modal
+) .mnpk-modal__header h2,
+:is(
+  #mnpk-date-modal,
+  #mnpk-archive-booking-modal,
+  .mnpk-archive-booking-modal
+) .mnpk-modal__title {
+  margin: 0 !important;
+  font-size: clamp(28px, 3.2vw, 40px) !important;
+  line-height: 1.08 !important;
+}
+
+/* body：矢印をカレンダー左右に置くための外側grid */
+:is(
+  #mnpk-date-modal,
+  #mnpk-archive-booking-modal,
+  .mnpk-archive-booking-modal
+) .mnpk-modal__body {
+  display: grid !important;
+  grid-template-columns: 48px minmax(0, 1fr) 48px !important;
+  grid-template-areas:
+    "summary summary summary"
+    "legend  legend  legend"
+    "prev    calendar next"
+    "help    help    help" !important;
+  column-gap: 12px !important;
+  row-gap: 14px !important;
+  align-items: center !important;
+  padding: 18px 22px 0 !important;
+  background: var(--mnpk-modal-soft-bg, #f4fbff) !important;
+}
+
+/* チェックイン/アウト */
+:is(
+  #mnpk-date-modal,
+  #mnpk-archive-booking-modal,
+  .mnpk-archive-booking-modal
+) :is(.mnpk-date-summary, .mnpk-calendar-selected, .mnpk-booking-times) {
+  grid-area: summary !important;
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 12px !important;
+  margin: 0 !important;
+}
+
+:is(
+  #mnpk-date-modal,
+  #mnpk-archive-booking-modal,
+  .mnpk-archive-booking-modal
+) :is(.mnpk-date-summary__box, .mnpk-calendar-selected > div, .mnpk-booking-times__item) {
+  min-height: 72px !important;
+  padding: 14px 16px !important;
+  border-radius: 16px !important;
+}
+
+/* toolbarは箱を消して、中のボタンだけgridに参加させる */
+:is(
+  #mnpk-date-modal,
+  #mnpk-archive-booking-modal,
+  .mnpk-archive-booking-modal
+) .mnpk-calendar-toolbar {
+  display: contents !important;
+}
+
+/* 左矢印 */
+:is(
+  #mnpk-date-modal,
+  #mnpk-archive-booking-modal,
+  .mnpk-archive-booking-modal
+) :is([data-calendar-prev], [data-archive-calendar-prev]) {
+  grid-area: prev !important;
+  justify-self: center !important;
+  align-self: center !important;
+}
+
+/* 右矢印 */
+:is(
+  #mnpk-date-modal,
+  #mnpk-archive-booking-modal,
+  .mnpk-archive-booking-modal
+) :is([data-calendar-next], [data-archive-calendar-next]) {
+  grid-area: next !important;
+  justify-self: center !important;
+  align-self: center !important;
+}
+
+/* 矢印ボタン */
+:is(
+  #mnpk-date-modal,
+  #mnpk-archive-booking-modal,
+  .mnpk-archive-booking-modal
+) :is(
+  [data-calendar-prev],
+  [data-calendar-next],
+  [data-archive-calendar-prev],
+  [data-archive-calendar-next],
+  .mnpk-calendar-toolbar__button
+) {
+  display: grid !important;
+  place-items: center !important;
+  width: 44px !important;
+  height: 44px !important;
+  min-width: 44px !important;
+  min-height: 44px !important;
+  border: 0 !important;
+  border-radius: 14px !important;
+  background: var(--mnpk-modal-close-bg, var(--mnpk-modal-accent, #2f7fa2)) !important;
+  color: var(--mnpk-booking-selected-text, var(--mnpk-button-primary-text, #ffffff)) !important;
+  font-size: 24px !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, .12) !important;
+  cursor: pointer !important;
+}
+
+/* 凡例 */
+:is(
+  #mnpk-date-modal,
+  #mnpk-archive-booking-modal,
+  .mnpk-archive-booking-modal
+) .mnpk-calendar-legend {
+  grid-area: legend !important;
+  margin: 0 !important;
+}
+
+/* 外側の月コンテナだけ2列 */
+:is(
+  #mnpk-date-modal,
+  #mnpk-archive-booking-modal,
+  .mnpk-archive-booking-modal
+) .mnpk-modal__body > .mnpk-calendar-grid,
+:is(
+  #mnpk-date-modal,
+  #mnpk-archive-booking-modal,
+  .mnpk-archive-booking-modal
+) .mnpk-modal__body > .mnpk-calendar-months {
+  grid-area: calendar !important;
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 16px !important;
+  margin: 0 !important;
+  min-width: 0 !important;
+}
+
+/* 月カード */
+:is(
+  #mnpk-date-modal,
+  #mnpk-archive-booking-modal,
+  .mnpk-archive-booking-modal
+) .mnpk-calendar-month {
+  padding: 14px !important;
+  border-radius: 18px !important;
+}
+
+:is(
+  #mnpk-date-modal,
+  #mnpk-archive-booking-modal,
+  .mnpk-archive-booking-modal
+) .mnpk-calendar-month__title {
+  margin: 0 0 10px !important;
+  font-size: 20px !important;
+  line-height: 1.2 !important;
+}
+
+/* ここが重要：月の中の日付グリッドは必ず7列 */
+:is(
+  #mnpk-date-modal,
+  #mnpk-archive-booking-modal,
+  .mnpk-archive-booking-modal
+) .mnpk-calendar-month :is(.mnpk-calendar-weekdays, .mnpk-calendar-days, .mnpk-calendar-grid) {
+  display: grid !important;
+  grid-template-columns: repeat(7, minmax(0, 1fr)) !important;
+  gap: 6px !important;
+  margin: 0 !important;
+}
+
+/* 日付ボタン */
+:is(
+  #mnpk-date-modal,
+  #mnpk-archive-booking-modal,
+  .mnpk-archive-booking-modal
+) .mnpk-calendar-day {
+  min-height: 40px !important;
+  border-radius: 12px !important;
+  font-size: 15px !important;
+}
+
+/* help / error */
+:is(
+  #mnpk-date-modal,
+  #mnpk-archive-booking-modal,
+  .mnpk-archive-booking-modal
+) :is([data-calendar-help], [data-archive-calendar-help], [data-calendar-error], [data-archive-calendar-error], .mnpk-form-help, .mnpk-booking-error) {
+  grid-area: help !important;
+}
+
+/* 下部ボタン */
+:is(
+  #mnpk-date-modal,
+  #mnpk-archive-booking-modal,
+  .mnpk-archive-booking-modal
+) .mnpk-modal__actions {
+  padding: 14px 20px 16px !important;
+  gap: 10px !important;
+  justify-content: end !important;
+}
+
+@media (max-width: 900px) {
+  :is(
+    #mnpk-date-modal,
+    #mnpk-archive-booking-modal,
+    .mnpk-archive-booking-modal
+  ) .mnpk-modal__body {
+    grid-template-columns: 44px minmax(0, 1fr) 44px !important;
+  }
+
+  :is(
+    #mnpk-date-modal,
+    #mnpk-archive-booking-modal,
+    .mnpk-archive-booking-modal
+  ) .mnpk-modal__body > .mnpk-calendar-grid,
+  :is(
+    #mnpk-date-modal,
+    #mnpk-archive-booking-modal,
+    .mnpk-archive-booking-modal
+  ) .mnpk-modal__body > .mnpk-calendar-months {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 640px) {
+  :is(
+    #mnpk-date-modal,
+    #mnpk-archive-booking-modal,
+    .mnpk-archive-booking-modal
+  ) .mnpk-modal__body {
+    display: block !important;
+    padding: 14px 16px !important;
+  }
+
+  :is(
+    #mnpk-date-modal,
+    #mnpk-archive-booking-modal,
+    .mnpk-archive-booking-modal
+  ) .mnpk-calendar-toolbar {
+    display: flex !important;
+    justify-content: space-between !important;
+    margin: 0 0 12px !important;
+  }
+
+  :is(
+    #mnpk-date-modal,
+    #mnpk-archive-booking-modal,
+    .mnpk-archive-booking-modal
+  ) :is(.mnpk-date-summary, .mnpk-calendar-selected, .mnpk-booking-times) {
+    grid-template-columns: 1fr !important;
+  }
+
+  :is(
+    #mnpk-date-modal,
+    #mnpk-archive-booking-modal,
+    .mnpk-archive-booking-modal
+  ) .mnpk-modal__body > .mnpk-calendar-grid,
+  :is(
+    #mnpk-date-modal,
+    #mnpk-archive-booking-modal,
+    .mnpk-archive-booking-modal
+  ) .mnpk-modal__body > .mnpk-calendar-months {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ---------------------------------------------------------
+ * 07. responsive
+ * --------------------------------------------------------- */
+
+@media (max-width: 900px) {
+  :is(.mnpk-calendar-grid, .mnpk-calendar-months) {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 640px) {
+  :is(
+    #mnpk-date-modal,
+    #mnpk-guest-modal,
+    #mnpk-payment-modal,
+    #mnpk-photo-modal,
+    #mnpk-archive-booking-modal,
+    .mnpk-archive-booking-modal
+  ) {
+    padding: 8px !important;
+  }
+
+  :is(
+    #mnpk-date-modal,
+    #mnpk-guest-modal,
+    #mnpk-payment-modal,
+    #mnpk-photo-modal,
+    #mnpk-archive-booking-modal,
+    .mnpk-archive-booking-modal
+  ) .mnpk-modal__dialog {
+    width: calc(100vw - 16px) !important;
+    max-height: calc(100dvh - 16px) !important;
+    border-radius: 16px !important;
+  }
+
+  :is(
+    #mnpk-date-modal,
+    #mnpk-guest-modal,
+    #mnpk-payment-modal,
+    #mnpk-photo-modal,
+    #mnpk-archive-booking-modal,
+    .mnpk-archive-booking-modal
+  ) .mnpk-modal__header {
+    padding: 14px 60px 14px 16px !important;
+  }
+
+  :is(
+    #mnpk-date-modal,
+    #mnpk-guest-modal,
+    #mnpk-payment-modal,
+    #mnpk-photo-modal,
+    #mnpk-archive-booking-modal,
+    .mnpk-archive-booking-modal
+  ) .mnpk-modal__header h2,
+  :is(
+    #mnpk-date-modal,
+    #mnpk-guest-modal,
+    #mnpk-payment-modal,
+    #mnpk-photo-modal,
+    #mnpk-archive-booking-modal,
+    .mnpk-archive-booking-modal
+  ) .mnpk-modal__title {
+    font-size: 22px !important;
+  }
+
+  :is(
+    #mnpk-date-modal,
+    #mnpk-guest-modal,
+    #mnpk-payment-modal,
+    #mnpk-photo-modal,
+    #mnpk-archive-booking-modal,
+    .mnpk-archive-booking-modal
+  ) .mnpk-modal__body {
+    padding: 14px 16px !important;
+  }
+
+  :is(.mnpk-date-summary, .mnpk-calendar-selected, .mnpk-booking-times) {
+    grid-template-columns: 1fr !important;
+  }
+
+  .mnpk-calendar-day {
+    min-height: 38px !important;
+    font-size: 15px !important;
+  }
+
+  :is(
+    #mnpk-date-modal,
+    #mnpk-guest-modal,
+    #mnpk-payment-modal,
+    #mnpk-photo-modal,
+    #mnpk-archive-booking-modal,
+    .mnpk-archive-booking-modal
+  ) .mnpk-modal__actions {
+    grid-template-columns: 1fr !important;
+  }
+
+  :is(
+    #mnpk-date-modal,
+    #mnpk-guest-modal,
+    #mnpk-payment-modal,
+    #mnpk-photo-modal,
+    #mnpk-archive-booking-modal,
+    .mnpk-archive-booking-modal
+  ) .mnpk-modal__actions > * {
+    width: 100% !important;
+  }
+}
+
+/* MINPAKU MODAL ONE SYSTEM END */
+

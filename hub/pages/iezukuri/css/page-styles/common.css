@@ -1,0 +1,2170 @@
+
+
+/* === MOVED FROM top.css: chuko nisetai service common START === */
+/* =========================================================
+ * IEZUKURI CHUKO NISETai FINAL CSS START
+ *
+ * 対象:
+ * - /iezukuri/ トップ不足分
+ * - /iezukuri/chuko/
+ * - /iezukuri/nisetai/
+ *
+ * 方針:
+ * - 専用CSSファイルは増やさない
+ * - chuko / nisetai は別テンプレート、CSSはbody classで分ける
+ * ========================================================= */
+
+/* ---------- /iezukuri top route cards ---------- */
+
+.hub-customhome-page .ch-top-routes {
+  position: relative;
+  padding: clamp(56px, 7vw, 96px) 0;
+  background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,250,240,.96));
+}
+
+.hub-customhome-page .ch-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: clamp(20px, 4vw, 48px);
+  margin-bottom: clamp(24px, 4vw, 44px);
+}
+
+.hub-customhome-page .ch-head--with-link {
+  padding-bottom: clamp(18px, 3vw, 28px);
+  border-bottom: 1px solid rgba(80, 58, 35, 0.12);
+}
+
+.hub-customhome-page .ch-top-routes__lead {
+  max-width: 720px;
+  margin: 10px 0 0;
+  color: var(--iezukuri-text, #4d4033);
+  font-size: clamp(14px, 1.45vw, 16px);
+  line-height: 1.9;
+}
+
+.hub-customhome-page .ch-route-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(16px, 2.4vw, 28px);
+  align-items: stretch;
+}
+
+.hub-customhome-page .ch-route-card {
+  min-width: 0;
+  height: 100%;
+  overflow: hidden;
+  border: 1px solid rgba(78, 55, 31, 0.12);
+  border-radius: 24px;
+  background: #fff;
+  box-shadow: 0 18px 44px rgba(54, 38, 21, 0.10);
+  transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+}
+
+.hub-customhome-page .ch-route-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(126, 88, 48, 0.28);
+  box-shadow: 0 24px 64px rgba(54, 38, 21, 0.15);
+}
+
+.hub-customhome-page .ch-route-card a {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  height: 100%;
+  color: inherit;
+  text-decoration: none;
+}
+
+.hub-customhome-page .ch-route-card__image {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: linear-gradient(135deg, rgba(105, 74, 42, .22), rgba(222, 202, 170, .28)), #e8dfd0;
+}
+
+.hub-customhome-page .ch-route-card__image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .45s ease, filter .45s ease;
+}
+
+.hub-customhome-page .ch-route-card:hover .ch-route-card__image img {
+  transform: scale(1.045);
+  filter: saturate(1.05) contrast(1.03);
+}
+
+.hub-customhome-page .ch-route-card__image span {
+  position: absolute;
+  inset: 18px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(255,255,255,.55);
+  border-radius: 18px;
+  color: rgba(55, 39, 24, .74);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(22px, 3vw, 34px);
+  font-weight: 700;
+  letter-spacing: .04em;
+  background: rgba(255,255,255,.28);
+  backdrop-filter: blur(4px);
+}
+
+.hub-customhome-page .ch-route-card__body {
+  display: flex;
+  flex-direction: column;
+  min-height: 238px;
+  padding: clamp(18px, 2.2vw, 26px);
+}
+
+.hub-customhome-page .ch-route-card__label {
+  margin: 0 0 10px;
+  color: var(--iezukuri-accent, #8b643d);
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.hub-customhome-page .ch-route-card h3 {
+  margin: 0;
+  color: var(--iezukuri-text-strong, #2b2118);
+  font-size: clamp(18px, 2vw, 23px);
+  line-height: 1.45;
+  letter-spacing: .04em;
+}
+
+.hub-customhome-page .ch-route-card p:not(.ch-route-card__label) {
+  margin: 14px 0 0;
+  color: var(--iezukuri-text, #4d4033);
+  font-size: 14px;
+  line-height: 1.85;
+}
+
+.hub-customhome-page .ch-route-card b {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  margin-top: auto;
+  padding-top: 20px;
+  color: var(--iezukuri-text-strong, #2b2118);
+  font-size: 13px;
+  letter-spacing: .06em;
+}
+
+.hub-customhome-page .ch-route-card b::after {
+  content: "→";
+  margin-left: .6em;
+}
+
+/* ---------- chuko / nisetai service pages ---------- */
+
+body.iezukuri-chuko-page {
+  --service-accent: #8a6848;
+  --service-bg: #f6f0e7;
+  --service-soft: #fff8ee;
+}
+
+body.iezukuri-nisetai-page {
+  --service-accent: #5f725f;
+  --service-bg: #eef3ed;
+  --service-soft: #f7fbf6;
+}
+
+body.iezukuri-chuko-page,
+body.iezukuri-nisetai-page {
+  background: var(--service-bg);
+}
+
+.ch-service-page {
+  color: var(--iezukuri-text-strong, #2b2118);
+  background: var(--service-bg, #f6f1e7);
+}
+
+.ch-service-shell {
+  width: calc(100% - 80px);
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.ch-service-hero {
+  padding: clamp(72px, 10vw, 132px) 0 clamp(52px, 7vw, 88px);
+  background:
+    radial-gradient(circle at 18% 20%, rgba(255,255,255,.86), rgba(255,255,255,0) 34%),
+    linear-gradient(135deg, rgba(255,255,255,.76), rgba(255,255,255,.26));
+}
+
+.ch-service-hero__grid {
+  display: grid;
+  grid-template-columns: minmax(0, .95fr) minmax(320px, .75fr);
+  gap: clamp(28px, 5vw, 68px);
+  align-items: center;
+}
+
+.ch-service-kicker {
+  margin: 0 0 14px;
+  color: var(--service-accent);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+}
+
+.ch-service-title {
+  margin: 0;
+  color: var(--iezukuri-text-strong, #2b2118);
+  font-size: clamp(36px, 5vw, 66px);
+  line-height: 1.16;
+  letter-spacing: .04em;
+}
+
+.ch-service-lead {
+  max-width: 720px;
+  margin: 24px 0 0;
+  color: var(--iezukuri-text, #4d4033);
+  font-size: clamp(15px, 1.6vw, 18px);
+  line-height: 2;
+}
+
+.ch-service-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 26px;
+}
+
+.ch-service-hero__media {
+  min-height: 360px;
+  overflow: hidden;
+  border-radius: 32px;
+  background: #ded2bf;
+  box-shadow: 0 26px 72px rgba(55, 39, 24, .18);
+}
+
+.ch-service-hero__media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 360px;
+  object-fit: cover;
+}
+
+.ch-service-hero__placeholder {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  min-height: 360px;
+  color: rgba(55, 39, 24, .58);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(34px, 5vw, 58px);
+  font-weight: 700;
+}
+
+.ch-service-section {
+  padding: clamp(52px, 8vw, 96px) 0;
+}
+
+.ch-service-section.is-white {
+  background: rgba(255,255,255,.72);
+}
+
+.ch-service-head {
+  max-width: 780px;
+  margin-bottom: clamp(28px, 4vw, 48px);
+}
+
+.ch-service-head h2 {
+  margin: 0;
+  color: var(--iezukuri-text-strong, #2b2118);
+  font-size: clamp(26px, 3.4vw, 42px);
+  line-height: 1.35;
+  letter-spacing: .04em;
+}
+
+.ch-service-head p {
+  margin: 14px 0 0;
+  color: var(--iezukuri-text, #4d4033);
+  line-height: 1.9;
+}
+
+.ch-service-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(16px, 2.4vw, 28px);
+}
+
+.ch-service-card {
+  min-width: 0;
+  border: 1px solid rgba(78,55,31,.12);
+  border-radius: 24px;
+  background: #fff;
+  padding: clamp(22px, 3vw, 32px);
+  box-shadow: 0 16px 44px rgba(54, 38, 21, .08);
+}
+
+.ch-service-card span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  margin-bottom: 18px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--service-accent) 16%, white);
+  color: var(--service-accent);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.ch-service-card h3 {
+  margin: 0;
+  color: var(--iezukuri-text-strong, #2b2118);
+  font-size: 20px;
+  line-height: 1.45;
+}
+
+.ch-service-card p {
+  margin: 12px 0 0;
+  color: var(--iezukuri-text, #4d4033);
+  font-size: 14px;
+  line-height: 1.85;
+}
+
+.ch-service-content {
+  border-radius: 28px;
+  background: #fff;
+  padding: clamp(24px, 4vw, 48px);
+  box-shadow: 0 18px 52px rgba(54, 38, 21, .08);
+}
+
+.ch-service-cta {
+  border-radius: 32px;
+  padding: clamp(28px, 5vw, 52px);
+  background: linear-gradient(135deg, rgba(255,255,255,.94), rgba(255,255,255,.66));
+  box-shadow: 0 22px 64px rgba(54, 38, 21, .12);
+}
+
+.ch-service-cta h2 {
+  margin: 0;
+  color: var(--iezukuri-text-strong, #2b2118);
+  font-size: clamp(26px, 3vw, 40px);
+}
+
+.ch-service-cta p {
+  margin: 14px 0 0;
+  color: var(--iezukuri-text, #4d4033);
+  line-height: 1.9;
+}
+
+@media (max-width: 1100px) {
+  .hub-customhome-page .ch-route-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .ch-service-hero__grid,
+  .ch-service-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .hub-customhome-page .ch-top-routes {
+    padding: 44px 0;
+  }
+
+  .hub-customhome-page .ch-head,
+  .hub-customhome-page .ch-head--with-link {
+    display: block;
+  }
+
+  .hub-customhome-page .ch-route-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .hub-customhome-page .ch-route-card__body {
+    min-height: 0;
+  }
+
+  .ch-service-shell {
+    width: calc(100% - 32px);
+  }
+
+  .ch-service-hero {
+    padding-top: 54px;
+  }
+
+  .ch-service-hero__media,
+  .ch-service-hero__media img,
+  .ch-service-hero__placeholder {
+    min-height: 240px;
+  }
+}
+
+/* IEZUKURI CHUKO NISETai FINAL CSS END */
+
+/* === IEZUKURI SERVICE PAGE CONTENT FIX START ===
+ * 対象:
+ * - /iezukuri/chuko/
+ * - /iezukuri/nisetai/
+ *
+ * 方針:
+ * - base.css / ch-hero.css は触らない
+ * - 新規CSSファイルは増やさない
+ * - templates/content/chuko.php / nisetai.php の本文を整える
+ * ========================================================= */
+
+body.iezukuri-chuko-page,
+body.iezukuri-used-house-page {
+  --service-accent: #8a6848;
+  --service-bg: #f6f0e7;
+  --service-soft: #fff8ee;
+  --service-panel: #fffaf2;
+}
+
+body.iezukuri-nisetai-page,
+body.iezukuri-two-family-page {
+  --service-accent: #5f725f;
+  --service-bg: #eef3ed;
+  --service-soft: #f7fbf6;
+  --service-panel: #fbfff9;
+}
+
+body.iezukuri-chuko-page,
+body.iezukuri-used-house-page,
+body.iezukuri-nisetai-page,
+body.iezukuri-two-family-page {
+  background: var(--service-bg);
+}
+
+.iezukuri-subpage--chuko .ch-service-page,
+.iezukuri-subpage--nisetai .ch-service-page,
+.ch-service-page--chuko,
+.ch-service-page--nisetai {
+  background: var(--service-bg, #f6f1e7);
+  color: var(--iezukuri-text-strong, #2b2118);
+}
+
+.iezukuri-subpage--chuko .ch-service-page__section,
+.iezukuri-subpage--nisetai .ch-service-page__section {
+  padding: clamp(52px, 7vw, 96px) 0;
+}
+
+.iezukuri-subpage--chuko .ch-service-page__section.is-white,
+.iezukuri-subpage--nisetai .ch-service-page__section.is-white {
+  background: rgba(255, 255, 255, .64);
+}
+
+.iezukuri-subpage--chuko .ch-service-page__shell,
+.iezukuri-subpage--nisetai .ch-service-page__shell {
+  width: min(1180px, calc(100% - 80px));
+  margin-inline: auto;
+}
+
+.iezukuri-subpage--chuko .ch-service-page__kicker,
+.iezukuri-subpage--nisetai .ch-service-page__kicker {
+  margin: 0 0 12px;
+  color: var(--service-accent);
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+
+.iezukuri-subpage--chuko .ch-service-page__head h2,
+.iezukuri-subpage--nisetai .ch-service-page__head h2 {
+  margin: 0;
+  color: var(--iezukuri-text-strong, #2b2118);
+  font-size: clamp(28px, 4vw, 48px);
+  line-height: 1.28;
+  letter-spacing: .03em;
+}
+
+.iezukuri-subpage--chuko .ch-service-page__head p,
+.iezukuri-subpage--nisetai .ch-service-page__head p {
+  margin: 16px 0 0;
+  max-width: 780px;
+  color: var(--iezukuri-text, #4d4033);
+  line-height: 1.95;
+}
+
+.ch-service-intro-grid,
+.nisetai-intro-grid,
+.nisetai-balance {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, .52fr);
+  gap: clamp(24px, 5vw, 64px);
+  align-items: start;
+}
+
+.ch-service-note {
+  padding: clamp(22px, 3vw, 34px);
+  border: 1px solid rgba(78, 55, 31, .12);
+  border-radius: 28px;
+  background:
+    radial-gradient(circle at 12% 12%, rgba(255,255,255,.88), rgba(255,255,255,0) 32%),
+    var(--service-panel, #fffaf2);
+  box-shadow: 0 18px 48px rgba(54, 38, 21, .08);
+}
+
+.ch-service-note h3 {
+  margin: 0 0 16px;
+  font-size: 22px;
+  line-height: 1.35;
+}
+
+.ch-service-note ul,
+.nisetai-balance-list {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ch-service-note li,
+.nisetai-balance-list li {
+  padding: 14px 16px;
+  border: 1px solid rgba(78, 55, 31, .10);
+  border-radius: 16px;
+  background: rgba(255,255,255,.72);
+  color: var(--iezukuri-text-strong, #2b2118);
+  font-weight: 800;
+}
+
+.ch-service-page__grid--four {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.iezukuri-subpage--chuko .ch-service-page__card,
+.iezukuri-subpage--nisetai .ch-service-page__card {
+  background: var(--service-panel, #fff);
+}
+
+.ch-service-process {
+  display: grid;
+  grid-template-columns: minmax(240px, .36fr) minmax(0, 1fr);
+  gap: clamp(24px, 5vw, 64px);
+  align-items: start;
+}
+
+.ch-service-process__list {
+  display: grid;
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ch-service-process__list li {
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  gap: 16px;
+  align-items: center;
+  padding: 18px;
+  border: 1px solid rgba(78, 55, 31, .12);
+  border-radius: 20px;
+  background: var(--service-panel, #fff);
+  box-shadow: 0 12px 34px rgba(54, 38, 21, .06);
+}
+
+.ch-service-process__list b {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--service-accent) 18%, white);
+  color: var(--service-accent);
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.ch-service-process__list span {
+  color: var(--iezukuri-text-strong, #2b2118);
+  font-weight: 800;
+  line-height: 1.7;
+}
+
+.nisetai-zone-map {
+  display: grid;
+  gap: 16px;
+}
+
+.nisetai-zone-map div {
+  min-height: 112px;
+  padding: 22px;
+  border: 1px solid rgba(78, 55, 31, .12);
+  border-radius: 26px;
+  background: var(--service-panel, #fff);
+  box-shadow: 0 14px 36px rgba(54, 38, 21, .07);
+}
+
+.nisetai-zone-map div:nth-child(2) {
+  margin-left: 42px;
+  background: #2f3936;
+  color: #fff;
+}
+
+.nisetai-zone-map span {
+  display: block;
+  color: var(--service-accent);
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: .12em;
+}
+
+.nisetai-zone-map div:nth-child(2) span {
+  color: #dfe9dc;
+}
+
+.nisetai-zone-map b {
+  display: block;
+  margin-top: 10px;
+  font-size: clamp(28px, 4vw, 44px);
+  line-height: 1;
+}
+
+.nisetai-style-list {
+  display: grid;
+  gap: 16px;
+}
+
+.nisetai-style-card {
+  display: grid;
+  grid-template-columns: 82px 1fr;
+  gap: 18px;
+  align-items: center;
+  padding: clamp(20px, 3vw, 30px);
+  border: 1px solid rgba(78, 55, 31, .12);
+  border-radius: 26px;
+  background: var(--service-panel, #fff);
+  box-shadow: 0 14px 36px rgba(54, 38, 21, .06);
+}
+
+.nisetai-style-card__num {
+  display: grid;
+  place-items: center;
+  width: 66px;
+  height: 66px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--service-accent) 22%, white);
+  color: var(--service-accent);
+  font-weight: 900;
+}
+
+.nisetai-style-card h3 {
+  margin: 0;
+  font-size: clamp(20px, 2.4vw, 28px);
+  line-height: 1.35;
+}
+
+.nisetai-style-card p {
+  margin: 10px 0 0;
+  color: var(--iezukuri-text, #4d4033);
+  line-height: 1.85;
+}
+
+.iezukuri-subpage--chuko .ch-service-page__cta,
+.iezukuri-subpage--nisetai .ch-service-page__cta {
+  background:
+    radial-gradient(circle at 16% 0%, rgba(255,255,255,.84), rgba(255,255,255,0) 32%),
+    linear-gradient(135deg, var(--service-panel, #fff), rgba(255,255,255,.72));
+}
+
+.iezukuri-subpage--nisetai .nisetai-cta {
+  text-align: center;
+}
+
+.iezukuri-subpage--nisetai .nisetai-cta .ch-service-page__actions {
+  justify-content: center;
+}
+
+@media (max-width: 1100px) {
+  .ch-service-page__grid--four {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .ch-service-intro-grid,
+  .nisetai-intro-grid,
+  .nisetai-balance,
+  .ch-service-process {
+    grid-template-columns: 1fr;
+  }
+
+  .nisetai-zone-map div:nth-child(2) {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 720px) {
+  .iezukuri-subpage--chuko .ch-service-page__shell,
+  .iezukuri-subpage--nisetai .ch-service-page__shell {
+    width: min(100% - 32px, 1180px);
+  }
+
+  .ch-service-page__grid--four {
+    grid-template-columns: 1fr;
+  }
+
+  .nisetai-style-card {
+    grid-template-columns: 1fr;
+  }
+
+  .ch-service-process__list li {
+    grid-template-columns: 1fr;
+  }
+}/* shell width moved to subpage.css: /* === IEZUKURI SERVICE PAGE CONTENT FIX END === */  /* === IEZUKURI SUBPAGE CH-SHELL UNIFY START ===  * 目的:  * - /iezukuri トップとサブページの横幅を .ch-shell で統一  * - 中古 / 二世帯も .ch-shell の中に収める  * - base.css / ch-hero.css / hero.css は触らない  * ========================================================= */  /* トップ・サブページ共通の内側幅 */ .hub-customhome-page .ch-shell, .hub-customhome-subpage .ch-shell, .iezukuri-page .ch-shell, .iezukuri-subpage .ch-shell *//* shell width moved to subpage.css: /* 既存の古いshell名も .ch-shell と同じ幅へ寄せる */ .iezukuri-subpage .ch-service-shell, .iezukuri-subpage .ch-service-page__shell */
+
+/* 中古・二世帯の本文は外へ飛び出さない */
+.iezukuri-subpage--chuko .ch-service-page,
+.iezukuri-subpage--nisetai .ch-service-page {
+  overflow-x: clip;
+          box-sizing: border-box;
+}
+
+.iezukuri-subpage--chuko .ch-service-page *,
+.iezukuri-subpage--nisetai .ch-service-page * {
+  box-sizing: border-box;
+}
+
+/* セクションは全幅背景、内側だけ ch-shell */
+.iezukuri-subpage--chuko .ch-service-page__section,
+.iezukuri-subpage--nisetai .ch-service-page__section,
+.iezukuri-subpage--chuko .ch-service-section,
+.iezukuri-subpage--nisetai .ch-service-section {
+  width: 100%;
+  max-width: 100%;
+}
+
+/* 画像・カードのはみ出し防止 */
+.iezukuri-subpage--chuko .ch-service-page img,
+.iezukuri-subpage--nisetai .ch-service-page img {
+  max-width: 100%;
+  height: auto;
+}/* shell width moved to subpage.css: /* サービスカードも .ch-shell の中で整列 */ .iezukuri-subpage--chuko .ch-service-page__grid, .iezukuri-subpage--nisetai .ch-service-page__grid, .iezukuri-subpage--chuko .ch-service-grid, .iezukuri-subpage--nisetai .ch-service-grid */
+
+@media (max-width: 720px) {
+  /* shell width moved to subpage.css: .hub-customhome-page .ch-shell,   .hub-customhome-subpage .ch-shell,   .iezukuri-page .ch-shell,   .iezukuri-subpage .ch-shell,   .iezukuri-subpage .ch-service-shell,   .iezukuri-subpage .ch-service-page__shell */
+}/* shell width moved to subpage.css: /* === IEZUKURI SUBPAGE CH-SHELL UNIFY END === */  /* === IEZUKURI TRASH RESTORE CH-SHELL FIX START ===  * 対象:  * - /iezukuri/chuko/  * - /iezukuri/nisetai/  *  * 方針:  * - 本文は page-content/chuko.php / nisetai.php  * - 内側幅はトップページと同じ .ch-shell  * - 中古と二世帯は .ch-service-page--chuko / --nisetai で分ける  * - base.css / ch-hero.css / hero.css は触らない  * ========================================================= */  .hub-customhome-page .ch-shell, .hub-customhome-subpage .ch-shell, .iezukuri-page .ch-shell, .iezukuri-subpage .ch-shell */
+
+.iezukuri-subpage--chuko .ch-service-page,
+.iezukuri-subpage--nisetai .ch-service-page {
+  overflow-x: clip;
+          box-sizing: border-box;
+}
+
+.iezukuri-subpage--chuko .ch-service-page *,
+.iezukuri-subpage--nisetai .ch-service-page * {
+  box-sizing: border-box;
+}
+
+.iezukuri-subpage--chuko .ch-service-page__section,
+.iezukuri-subpage--nisetai .ch-service-page__section,
+.iezukuri-subpage--chuko .ch-service-section,
+.iezukuri-subpage--nisetai .ch-service-section {
+  width: 100%;
+  max-width: 100%;
+}
+
+.iezukuri-subpage--chuko .ch-service-page img,
+.iezukuri-subpage--nisetai .ch-service-page img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* 中古: 既存レイアウトを中古寄りに */
+body.iezukuri-chuko-page,
+body.iezukuri-used-house-page {
+  --service-accent: #8a6848;
+  --service-bg: #f6f0e7;
+  --service-soft: #fff8ee;
+  --service-panel: #fffaf2;
+}
+
+/* 二世帯: 中古とは色・見せ方を分ける */
+body.iezukuri-nisetai-page,
+body.iezukuri-two-family-page {
+  --service-accent: #5f725f;
+  --service-bg: #eef3ed;
+  --service-soft: #f7fbf6;
+  --service-panel: #fbfff9;
+}
+
+body.iezukuri-chuko-page,
+body.iezukuri-used-house-page,
+body.iezukuri-nisetai-page,
+body.iezukuri-two-family-page {
+  background: var(--service-bg);
+}
+
+.iezukuri-subpage--chuko .ch-service-page {
+  background:
+    radial-gradient(circle at 16% 4%, rgba(255,255,255,.72), rgba(255,255,255,0) 34%),
+    var(--service-bg);
+}
+
+.iezukuri-subpage--nisetai .ch-service-page {
+  background:
+    radial-gradient(circle at 84% 8%, rgba(255,255,255,.74), rgba(255,255,255,0) 32%),
+    linear-gradient(180deg, var(--service-bg), #f7fbf6);
+}
+
+.iezukuri-subpage--chuko .ch-service-page__card,
+.iezukuri-subpage--chuko .ch-card,
+.iezukuri-subpage--chuko article {
+  border-color: rgba(138, 104, 72, .16);
+}
+
+.iezukuri-subpage--nisetai .ch-service-page__card,
+.iezukuri-subpage--nisetai .ch-card,
+.iezukuri-subpage--nisetai article {
+  border-color: rgba(95, 114, 95, .18);
+}
+
+@media (max-width: 720px) {/* shell width moved to subpage.css: .hub-customhome-page .ch-shell,   .hub-customhome-subpage .ch-shell,   .iezukuri-page .ch-shell,   .iezukuri-subpage .ch-shell */
+}/* shell width moved to subpage.css: /* === IEZUKURI TRASH RESTORE CH-SHELL FIX END === */  /* === IEZUKURI HUB TEMPLATE CH-SHELL FINAL START ===  * 中古住宅 / 二世帯住宅  *  * - hub/pages/iezukuri/templates/template-iezukuri-chuko.php  * - hub/pages/iezukuri/templates/template-iezukuri-nisetai.php  *  * 幅はトップページと同じ .ch-shell で管理。  * base.css / ch-hero.css / hero.css は触らない。  * ========================================================= */  .hub-customhome-page .ch-shell, .hub-customhome-subpage .ch-shell, .iezukuri-page .ch-shell, .iezukuri-subpage .ch-shell, .ch-service-page .ch-shell */
+
+.ch-service-page {
+  overflow-x: clip;
+          box-sizing: border-box;
+}
+
+.ch-service-page *,
+.ch-service-page *::before,
+.ch-service-page *::after {
+  box-sizing: border-box;
+}
+
+.ch-service-page img {
+  max-width: 100%;
+  height: auto;
+}
+
+.ch-service-page--chuko {
+  --service-accent: #8a6848;
+  --service-bg: #f6f0e7;
+  --service-soft: #fff8ee;
+  --service-panel: #fffaf2;
+}
+
+.ch-service-page--nisetai {
+  --service-accent: #5f725f;
+  --service-bg: #eef3ed;
+  --service-soft: #f7fbf6;
+  --service-panel: #fbfff9;
+}
+
+body.iezukuri-chuko-page,
+body.iezukuri-used-house-page,
+body:has(.ch-service-page--chuko) {
+  background: #f6f0e7;
+}
+
+body.iezukuri-nisetai-page,
+body.iezukuri-two-family-page,
+body:has(.ch-service-page--nisetai) {
+  background: #eef3ed;
+}
+
+.ch-service-page--chuko {
+  background:
+    radial-gradient(circle at 16% 4%, rgba(255,255,255,.76), rgba(255,255,255,0) 34%),
+    var(--service-bg);
+}
+
+.ch-service-page--nisetai {
+  background:
+    radial-gradient(circle at 84% 8%, rgba(255,255,255,.74), rgba(255,255,255,0) 32%),
+    linear-gradient(180deg, var(--service-bg), #f7fbf6);
+}
+
+@media (max-width: 720px) {/* shell width moved to subpage.css: .hub-customhome-page .ch-shell,   .hub-customhome-subpage .ch-shell,   .iezukuri-page .ch-shell,   .iezukuri-subpage .ch-shell,   .ch-service-page .ch-shell */
+}
+
+/* === IEZUKURI HUB TEMPLATE CH-SHELL FINAL END === */
+
+/* === IEZUKURI THREE SERVICE PAGE FINAL START ===
+ * 対象:
+ * - /iezukuri/chuko/
+ * - /iezukuri/new-house/
+ * - /iezukuri/nisetai/
+ *
+ * 方針:
+ * - 専用テンプレートは使わない
+ * - template-iezukuri-subpage.php + page-content/{slug}/* .ch-shell width moved to subpage.css: /* shell width moved to subpage.css: .php  * - 幅はトップと同じ .ch-shell  * - 3ページを同じレイアウトにしない  * ========================================================= */  .iezukuri-subpage .ch-shell, .hub-customhome-subpage .ch-shell, .hub-customhome-page .ch-shell, .ch-service-page .ch-shell */  .iezukuri-subpage .ch-service-shell, .iezukuri-subpage .ch-service-page__shell, .ch-service-page .ch-service-shell, .ch-service-page .ch-service-page__shell */
+
+.ch-service-page,
+.ch-service-page * {
+  box-sizing: border-box;
+}
+
+.ch-service-page {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+.ch-service-page img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* 中古 */
+.ch-service-page--chuko,
+body.iezukuri-chuko-page {
+  --service-accent: #8a6848;
+  --service-bg: #f6f0e7;
+  --service-panel: #fffaf2;
+}
+
+.ch-service-page--chuko {
+  background:
+    radial-gradient(circle at 14% 6%, rgba(255,255,255,.82), rgba(255,255,255,0) 34%),
+    linear-gradient(180deg, #f7f1e8, var(--service-bg));
+}
+
+/* 新築 */
+.ch-service-page--new-house,
+body.iezukuri-new-house-page {
+  --service-accent: #7b5a36;
+  --service-bg: #f7efe2;
+  --service-panel: #fff9ed;
+}
+
+.ch-service-page--new-house {
+  background:
+    linear-gradient(135deg, rgba(123,90,54,.08), rgba(255,255,255,.78)),
+    var(--service-bg);
+}
+
+.ch-service-page--new-house .ch-service-page__hero-grid {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.ch-service-page--new-house .ch-service-page__media {
+  min-height: 260px;
+}
+
+/* 二世帯 */
+.ch-service-page--nisetai,
+body.iezukuri-nisetai-page {
+  --service-accent: #5f725f;
+  --service-bg: #eef3ed;
+  --service-panel: #fbfff9;
+}
+
+.ch-service-page--nisetai {
+  background:
+    radial-gradient(circle at 86% 8%, rgba(255,255,255,.78), rgba(255,255,255,0) 34%),
+    linear-gradient(180deg, #eef3ed, #f8fbf6);
+}
+
+.ch-service-page--nisetai .ch-service-page__hero-grid {
+  grid-template-columns: minmax(0, .82fr) minmax(340px, .9fr);
+}
+
+/* 共通部品 */
+.ch-service-page__hero {
+  padding: clamp(56px, 8vw, 108px) 0 clamp(42px, 6vw, 72px);
+}
+
+.ch-service-page__hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, .96fr) minmax(300px, .76fr);
+  gap: clamp(24px, 5vw, 64px);
+  align-items: center;
+}
+
+.ch-service-page__kicker {
+  color: var(--service-accent);
+}
+
+.ch-service-page__media,
+.ch-service-page__card,
+.ch-service-page__cta {
+  background: var(--service-panel, #fff);
+}
+
+.ch-service-page__section {
+  padding: clamp(50px, 7vw, 92px) 0;
+}
+
+@media (max-width: 960px) {
+  .ch-service-page__hero-grid,
+  .ch-service-page--nisetai .ch-service-page__hero-grid,
+  .ch-service-page--new-house .ch-service-page__hero-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {/* shell width moved to subpage.css: .iezukuri-subpage .ch-shell,   .hub-customhome-subpage .ch-shell,   .hub-customhome-page .ch-shell,   .ch-service-page .ch-shell,   .iezukuri-subpage .ch-service-shell,   .iezukuri-subpage .ch-service-page__shell,   .ch-service-page .ch-service-shell,   .ch-service-page .ch-service-page__shell */
+}
+
+/* === IEZUKURI THREE SERVICE PAGE FINAL END === */
+
+/* === IEZUKURI CHUKO REPAIR BODY START ===
+ * /iezukuri/chuko/
+ * 中古住宅の修理・補修ページ
+ * ========================================================= */
+
+.ch-repair-page {
+  --service-accent: #8a6848;
+  --service-bg: #f6f0e7;
+  --service-panel: #fffaf2;
+  background:
+    radial-gradient(circle at 14% 4%, rgba(255,255,255,.78), rgba(255,255,255,0) 34%),
+    linear-gradient(180deg, #f8f1e8, var(--service-bg));
+}
+
+.ch-repair-page .ch-service-page__grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.ch-repair-page .ch-service-page__card {
+  background: var(--service-panel, #fffaf2);
+}
+
+.ch-repair-priority__list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(16px, 2.4vw, 28px);
+}
+
+.ch-repair-priority__list article {
+  padding: clamp(22px, 3vw, 32px);
+  border: 1px solid rgba(138, 104, 72, .16);
+  border-radius: 24px;
+  background: #fffaf2;
+  box-shadow: 0 16px 42px rgba(54, 38, 21, .075);
+}
+
+.ch-repair-priority__list b {
+  display: inline-flex;
+  margin-bottom: 12px;
+  color: var(--service-accent);
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: .14em;
+}
+
+.ch-repair-priority__list h3 {
+  margin: 0;
+  font-size: 21px;
+  line-height: 1.45;
+}
+
+.ch-repair-priority__list p {
+  margin: 12px 0 0;
+  color: var(--iezukuri-text, #4d4033);
+  line-height: 1.85;
+}
+
+.ch-repair-flow {
+  display: grid;
+  grid-template-columns: minmax(240px, .36fr) minmax(0, 1fr);
+  gap: clamp(24px, 5vw, 64px);
+  align-items: start;
+}
+
+.ch-repair-flow__steps {
+  display: grid;
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ch-repair-flow__steps li {
+  display: grid;
+  grid-template-columns: 58px 1fr;
+  gap: 16px;
+  padding: 18px;
+  border: 1px solid rgba(138, 104, 72, .14);
+  border-radius: 20px;
+  background: #fffaf2;
+}
+
+.ch-repair-flow__steps span {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--service-accent) 16%, white);
+  color: var(--service-accent);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.ch-repair-flow__steps h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.ch-repair-flow__steps p {
+  margin: 8px 0 0;
+  color: var(--iezukuri-text, #4d4033);
+  line-height: 1.75;
+}
+
+.ch-repair-cost__panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, .48fr);
+  gap: clamp(24px, 5vw, 60px);
+  align-items: start;
+  padding: clamp(28px, 5vw, 54px);
+  border-radius: 32px;
+  background: #2f2a23;
+  color: #fff;
+}
+
+.ch-repair-cost__panel .ch-service-page__kicker {
+  color: #e8cda9;
+}
+
+.ch-repair-cost__panel h2 {
+  margin: 0;
+  font-size: clamp(28px, 4vw, 46px);
+  line-height: 1.35;
+}
+
+.ch-repair-cost__panel p {
+  margin: 16px 0 0;
+  line-height: 1.95;
+  opacity: .86;
+}
+
+.ch-repair-cost__panel ul {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ch-repair-cost__panel li {
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: rgba(255,255,255,.1);
+  font-weight: 800;
+}
+
+@media (max-width: 980px) {
+  .ch-repair-page .ch-service-page__grid,
+  .ch-repair-priority__list,
+  .ch-repair-flow,
+  .ch-repair-cost__panel {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .ch-repair-flow__steps li {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* === IEZUKURI CHUKO REPAIR BODY END === */
+
+/* === IEZUKURI CHUKO REPAIR CLEAN START ===
+ * /iezukuri/chuko/
+ * 既存heroは section-sub-hero.php / ch-hero.css に任せる。
+ * ここでは本文だけ管理する。
+ * ========================================================= */
+
+body.iezukuri-subpage--chuko,
+body.iezukuri-chuko-page,
+body.iezukuri-used-house-page {
+  --repair-accent: #8a6848;
+  --repair-bg: #f6f0e7;
+  --repair-panel: #fffaf2;
+}
+
+/* 本文全体。heroは触らない */
+.iezukuri-subpage--chuko .ch-repair-page {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
+  background: var(--repair-bg);
+  color: var(--iezukuri-text-strong, #2b2118);
+}/* shell width moved to subpage.css: /* トップと同じ内側幅 */ .iezukuri-subpage--chuko .ch-repair-page .ch-shell */
+
+/* セクション本文 */
+.iezukuri-subpage--chuko .ch-repair-page .ch-service-page__section {
+  padding: clamp(52px, 7vw, 96px) 0;
+}
+
+.iezukuri-subpage--chuko .ch-repair-page .ch-service-page__section.is-white {
+  background: rgba(255,255,255,.66);
+}
+
+.iezukuri-subpage--chuko .ch-repair-page .ch-service-page__head {
+  max-width: 820px;
+  margin-bottom: clamp(24px, 4vw, 44px);
+}
+
+.iezukuri-subpage--chuko .ch-repair-page .ch-service-page__kicker {
+  margin: 0 0 12px;
+  color: var(--repair-accent);
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+
+.iezukuri-subpage--chuko .ch-repair-page .ch-service-page__head h2 {
+  margin: 0;
+  font-size: clamp(28px, 4vw, 46px);
+  line-height: 1.35;
+}
+
+.iezukuri-subpage--chuko .ch-repair-page .ch-service-page__head p {
+  margin: 14px 0 0;
+  color: var(--iezukuri-text, #4d4033);
+  line-height: 1.95;
+}
+
+/* 修理カード */
+.iezukuri-subpage--chuko .ch-repair-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(16px, 2.4vw, 28px);
+}
+
+.iezukuri-subpage--chuko .ch-repair-page .ch-service-page__card {
+  min-width: 0;
+  padding: clamp(22px, 3vw, 32px);
+  border: 1px solid rgba(138, 104, 72, .16);
+  border-radius: 24px;
+  background: var(--repair-panel);
+  box-shadow: 0 16px 42px rgba(54, 38, 21, .075);
+}
+
+.iezukuri-subpage--chuko .ch-repair-page .ch-service-page__card-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  margin-bottom: 18px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--repair-accent) 16%, white);
+  color: var(--repair-accent);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+/* 優先順位 */
+.iezukuri-subpage--chuko .ch-repair-priority__list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(16px, 2.4vw, 28px);
+}
+
+.iezukuri-subpage--chuko .ch-repair-priority__list article {
+  padding: clamp(22px, 3vw, 32px);
+  border: 1px solid rgba(138, 104, 72, .16);
+  border-radius: 24px;
+  background: var(--repair-panel);
+  box-shadow: 0 16px 42px rgba(54, 38, 21, .075);
+}
+
+.iezukuri-subpage--chuko .ch-repair-priority__list b {
+  display: inline-flex;
+  margin-bottom: 12px;
+  color: var(--repair-accent);
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: .14em;
+}
+
+/* フロー */
+.iezukuri-subpage--chuko .ch-repair-flow {
+  display: grid;
+  grid-template-columns: minmax(240px, .36fr) minmax(0, 1fr);
+  gap: clamp(24px, 5vw, 64px);
+  align-items: start;
+}
+
+.iezukuri-subpage--chuko .ch-repair-flow__steps {
+  display: grid;
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.iezukuri-subpage--chuko .ch-repair-flow__steps li {
+  display: grid;
+  grid-template-columns: 58px 1fr;
+  gap: 16px;
+  padding: 18px;
+  border: 1px solid rgba(138, 104, 72, .14);
+  border-radius: 20px;
+  background: var(--repair-panel);
+}
+
+.iezukuri-subpage--chuko .ch-repair-flow__steps span {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--repair-accent) 16%, white);
+  color: var(--repair-accent);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+/* 費用パネル */
+.iezukuri-subpage--chuko .ch-repair-cost__panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, .48fr);
+  gap: clamp(24px, 5vw, 60px);
+  align-items: start;
+  padding: clamp(28px, 5vw, 54px);
+  border-radius: 32px;
+  background: #2f2a23;
+  color: #fff;
+}
+
+.iezukuri-subpage--chuko .ch-repair-cost__panel .ch-service-page__kicker {
+  color: #e8cda9;
+}
+
+.iezukuri-subpage--chuko .ch-repair-cost__panel h2 {
+  margin: 0;
+  color: inherit;
+  font-size: clamp(28px, 4vw, 46px);
+  line-height: 1.35;
+}
+
+.iezukuri-subpage--chuko .ch-repair-cost__panel p {
+  margin: 16px 0 0;
+  color: inherit;
+  line-height: 1.95;
+  opacity: .86;
+}
+
+.iezukuri-subpage--chuko .ch-repair-cost__panel ul {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.iezukuri-subpage--chuko .ch-repair-cost__panel li {
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: rgba(255,255,255,.1);
+  font-weight: 800;
+}
+
+@media (max-width: 980px) {
+  .iezukuri-subpage--chuko .ch-repair-grid,
+  .iezukuri-subpage--chuko .ch-repair-priority__list,
+  .iezukuri-subpage--chuko .ch-repair-flow,
+  .iezukuri-subpage--chuko .ch-repair-cost__panel {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {/* shell width moved to subpage.css: .iezukuri-subpage--chuko .ch-repair-page .ch-shell */
+
+  .iezukuri-subpage--chuko .ch-repair-flow__steps li {
+  grid-template-columns: 1fr;
+}
+}
+
+/* === IEZUKURI CHUKO REPAIR CLEAN END === */
+
+/* === IEZUKURI CHUKO MOTHER CONTENT START ===
+ * /iezukuri/chuko/
+ * 母体: template-iezukuri-subpage.php
+ * 本文: page-content/chuko.php
+ * hero / cta は母体側を使う
+ * ========================================================= */
+
+.iezukuri-subpage--chuko .ch-repair-content {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
+  background: #f6f0e7;
+  color: var(--iezukuri-text-strong, #2b2118);
+}/* shell width moved to subpage.css: .iezukuri-subpage--chuko .ch-repair-content .ch-shell */
+
+.iezukuri-subpage--chuko .ch-repair-section {
+  padding: clamp(52px, 7vw, 96px) 0;
+}
+
+.iezukuri-subpage--chuko .ch-repair-section.is-white {
+  background: rgba(255,255,255,.66);
+}
+
+.iezukuri-subpage--chuko .ch-repair-head {
+  max-width: 820px;
+  margin-bottom: clamp(24px, 4vw, 44px);
+}
+
+.iezukuri-subpage--chuko .ch-repair-kicker {
+  margin: 0 0 12px;
+  color: #8a6848;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+
+.iezukuri-subpage--chuko .ch-repair-head h2 {
+  margin: 0;
+  font-size: clamp(28px, 4vw, 46px);
+  line-height: 1.35;
+}
+
+.iezukuri-subpage--chuko .ch-repair-head p {
+  margin: 14px 0 0;
+  color: var(--iezukuri-text, #4d4033);
+  line-height: 1.95;
+}
+
+.iezukuri-subpage--chuko .ch-repair-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(16px, 2.4vw, 28px);
+}
+
+.iezukuri-subpage--chuko .ch-repair-card,
+.iezukuri-subpage--chuko .ch-repair-priority__list article {
+  min-width: 0;
+  padding: clamp(22px, 3vw, 32px);
+  border: 1px solid rgba(138, 104, 72, .16);
+  border-radius: 24px;
+  background: #fffaf2;
+  box-shadow: 0 16px 42px rgba(54, 38, 21, .075);
+}
+
+.iezukuri-subpage--chuko .ch-repair-card__num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  margin-bottom: 18px;
+  border-radius: 50%;
+  background: color-mix(in srgb, #8a6848 16%, white);
+  color: #8a6848;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.iezukuri-subpage--chuko .ch-repair-card h3,
+.iezukuri-subpage--chuko .ch-repair-priority__list h3 {
+  margin: 0;
+  font-size: 20px;
+  line-height: 1.45;
+}
+
+.iezukuri-subpage--chuko .ch-repair-card p,
+.iezukuri-subpage--chuko .ch-repair-priority__list p {
+  margin: 12px 0 0;
+  color: var(--iezukuri-text, #4d4033);
+  line-height: 1.85;
+}
+
+.iezukuri-subpage--chuko .ch-repair-priority__list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(16px, 2.4vw, 28px);
+}
+
+.iezukuri-subpage--chuko .ch-repair-priority__list b {
+  display: inline-flex;
+  margin-bottom: 12px;
+  color: #8a6848;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: .14em;
+}
+
+.iezukuri-subpage--chuko .ch-repair-flow {
+  display: grid;
+  grid-template-columns: minmax(240px, .36fr) minmax(0, 1fr);
+  gap: clamp(24px, 5vw, 64px);
+  align-items: start;
+}
+
+.iezukuri-subpage--chuko .ch-repair-flow__steps {
+  display: grid;
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.iezukuri-subpage--chuko .ch-repair-flow__steps li {
+  display: grid;
+  grid-template-columns: 58px 1fr;
+  gap: 16px;
+  padding: 18px;
+  border: 1px solid rgba(138, 104, 72, .14);
+  border-radius: 20px;
+  background: #fffaf2;
+}
+
+.iezukuri-subpage--chuko .ch-repair-flow__steps span {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: color-mix(in srgb, #8a6848 16%, white);
+  color: #8a6848;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.iezukuri-subpage--chuko .ch-repair-cost__panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, .48fr);
+  gap: clamp(24px, 5vw, 60px);
+  align-items: start;
+  padding: clamp(28px, 5vw, 54px);
+  border-radius: 32px;
+  background: #2f2a23;
+  color: #fff;
+}
+
+.iezukuri-subpage--chuko .ch-repair-cost__panel .ch-repair-kicker {
+  color: #e8cda9;
+}
+
+.iezukuri-subpage--chuko .ch-repair-cost__panel h2 {
+  margin: 0;
+  color: inherit;
+  font-size: clamp(28px, 4vw, 46px);
+  line-height: 1.35;
+}
+
+.iezukuri-subpage--chuko .ch-repair-cost__panel p {
+  margin: 16px 0 0;
+  color: inherit;
+  line-height: 1.95;
+  opacity: .86;
+}
+
+.iezukuri-subpage--chuko .ch-repair-cost__panel ul {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.iezukuri-subpage--chuko .ch-repair-cost__panel li {
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: rgba(255,255,255,.1);
+  font-weight: 800;
+}
+
+@media (max-width: 980px) {
+  .iezukuri-subpage--chuko .ch-repair-grid,
+  .iezukuri-subpage--chuko .ch-repair-priority__list,
+  .iezukuri-subpage--chuko .ch-repair-flow,
+  .iezukuri-subpage--chuko .ch-repair-cost__panel {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {/* shell width moved to subpage.css: .iezukuri-subpage--chuko .ch-repair-content .ch-shell */
+
+  .iezukuri-subpage--chuko .ch-repair-flow__steps li {
+  grid-template-columns: 1fr;
+}
+}
+
+/* === IEZUKURI CHUKO MOTHER CONTENT END === */
+
+/* === IEZUKURI CHUKO COMPLETE CONTENT START ===
+ * /iezukuri/chuko/
+ * 母体: template-iezukuri-subpage.php
+ * 本文: page-content/chuko.php
+ * hero / CTA は母体側。
+ * ========================================================= */
+
+.iezukuri-subpage--chuko .ch-repair-content {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
+  background: #f6f0e7;
+  color: var(--iezukuri-text-strong, #2b2118);
+}/* shell width moved to subpage.css: .iezukuri-subpage--chuko .ch-repair-content .ch-shell */
+
+.iezukuri-subpage--chuko .ch-repair-section {
+  padding: clamp(52px, 7vw, 96px) 0;
+}
+
+.iezukuri-subpage--chuko .ch-repair-section.is-white {
+  background: rgba(255,255,255,.66);
+}
+
+.iezukuri-subpage--chuko .ch-repair-lead,
+.iezukuri-subpage--chuko .ch-repair-head {
+  max-width: 860px;
+  margin-bottom: clamp(24px, 4vw, 44px);
+}
+
+.iezukuri-subpage--chuko .ch-repair-kicker {
+  margin: 0 0 12px;
+  color: #8a6848;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+
+.iezukuri-subpage--chuko .ch-repair-lead h2,
+.iezukuri-subpage--chuko .ch-repair-head h2 {
+  margin: 0;
+  font-size: clamp(28px, 4vw, 46px);
+  line-height: 1.35;
+}
+
+.iezukuri-subpage--chuko .ch-repair-lead p,
+.iezukuri-subpage--chuko .ch-repair-head p {
+  margin: 14px 0 0;
+  color: var(--iezukuri-text, #4d4033);
+  line-height: 1.95;
+}
+
+.iezukuri-subpage--chuko .ch-repair-grid,
+.iezukuri-subpage--chuko .ch-repair-priority__list,
+.iezukuri-subpage--chuko .ch-repair-cost-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(16px, 2.4vw, 28px);
+}
+
+.iezukuri-subpage--chuko .ch-repair-card,
+.iezukuri-subpage--chuko .ch-repair-priority__list article,
+.iezukuri-subpage--chuko .ch-repair-cost-cards article {
+  min-width: 0;
+  padding: clamp(22px, 3vw, 32px);
+  border: 1px solid rgba(138, 104, 72, .16);
+  border-radius: 24px;
+  background: #fffaf2;
+  box-shadow: 0 16px 42px rgba(54, 38, 21, .075);
+}
+
+.iezukuri-subpage--chuko .ch-repair-card__num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  margin-bottom: 18px;
+  border-radius: 50%;
+  background: color-mix(in srgb, #8a6848 16%, white);
+  color: #8a6848;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.iezukuri-subpage--chuko .ch-repair-card h3,
+.iezukuri-subpage--chuko .ch-repair-priority__list h3,
+.iezukuri-subpage--chuko .ch-repair-cost-cards h3 {
+  margin: 0;
+  font-size: 20px;
+  line-height: 1.45;
+}
+
+.iezukuri-subpage--chuko .ch-repair-card p,
+.iezukuri-subpage--chuko .ch-repair-priority__list p,
+.iezukuri-subpage--chuko .ch-repair-cost-cards p {
+  margin: 12px 0 0;
+  color: var(--iezukuri-text, #4d4033);
+  line-height: 1.85;
+}
+
+.iezukuri-subpage--chuko .ch-repair-priority__list b {
+  display: inline-flex;
+  margin-bottom: 12px;
+  color: #8a6848;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: .14em;
+}
+
+.iezukuri-subpage--chuko .ch-repair-split,
+.iezukuri-subpage--chuko .ch-repair-flow {
+  display: grid;
+  grid-template-columns: minmax(240px, .38fr) minmax(0, 1fr);
+  gap: clamp(24px, 5vw, 64px);
+  align-items: start;
+}
+
+.iezukuri-subpage--chuko .ch-repair-check-list {
+  display: grid;
+  gap: 14px;
+}
+
+.iezukuri-subpage--chuko .ch-repair-check-list article {
+  padding: 18px;
+  border: 1px solid rgba(138, 104, 72, .14);
+  border-radius: 20px;
+  background: #fffaf2;
+}
+
+.iezukuri-subpage--chuko .ch-repair-check-list b {
+  display: block;
+  margin-bottom: 6px;
+  color: #8a6848;
+}
+
+.iezukuri-subpage--chuko .ch-repair-check-list span {
+  color: var(--iezukuri-text, #4d4033);
+  line-height: 1.7;
+}
+
+.iezukuri-subpage--chuko .ch-repair-flow__steps {
+  display: grid;
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.iezukuri-subpage--chuko .ch-repair-flow__steps li {
+  display: grid;
+  grid-template-columns: 58px 1fr;
+  gap: 16px;
+  padding: 18px;
+  border: 1px solid rgba(138, 104, 72, .14);
+  border-radius: 20px;
+  background: #fffaf2;
+}
+
+.iezukuri-subpage--chuko .ch-repair-flow__steps span {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: color-mix(in srgb, #8a6848 16%, white);
+  color: #8a6848;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.iezukuri-subpage--chuko .ch-repair-note {
+  max-width: 920px;
+  padding: clamp(28px, 4vw, 42px);
+  border: 1px solid rgba(138, 104, 72, .16);
+  border-radius: 28px;
+  background: #fffaf2;
+}
+
+.iezukuri-subpage--chuko .ch-repair-note h2 {
+  margin: 0;
+  font-size: clamp(26px, 3vw, 38px);
+  line-height: 1.4;
+}
+
+.iezukuri-subpage--chuko .ch-repair-note p {
+  margin: 14px 0 0;
+  line-height: 1.9;
+}
+
+@media (max-width: 980px) {
+  .iezukuri-subpage--chuko .ch-repair-grid,
+  .iezukuri-subpage--chuko .ch-repair-priority__list,
+  .iezukuri-subpage--chuko .ch-repair-cost-cards,
+  .iezukuri-subpage--chuko .ch-repair-split,
+  .iezukuri-subpage--chuko .ch-repair-flow {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {/* shell width moved to subpage.css: .iezukuri-subpage--chuko .ch-repair-content .ch-shell */
+
+  .iezukuri-subpage--chuko .ch-repair-flow__steps li {
+  grid-template-columns: 1fr;
+}
+}
+
+/* === IEZUKURI CHUKO COMPLETE CONTENT END === */
+
+/* === IEZUKURI CHUKO REPAIR TABLE START ===
+ * /iezukuri/chuko/
+ * 修理とリノベーションの違いをテーブルで表示
+ * ========================================================= */
+
+.iezukuri-subpage--chuko .ch-repair-table-wrap {
+  overflow-x: auto;
+  border: 1px solid rgba(138, 104, 72, .16);
+  border-radius: 24px;
+  background: #fffaf2;
+  box-shadow: 0 16px 42px rgba(54, 38, 21, .075);
+}
+
+.iezukuri-subpage--chuko .ch-repair-table {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: collapse;
+  color: var(--iezukuri-text-strong, #2b2118);
+}
+
+.iezukuri-subpage--chuko .ch-repair-table th,
+.iezukuri-subpage--chuko .ch-repair-table td {
+  padding: 18px 20px;
+  border-bottom: 1px solid rgba(138, 104, 72, .14);
+  text-align: left;
+  vertical-align: top;
+  line-height: 1.8;
+}
+
+.iezukuri-subpage--chuko .ch-repair-table thead th {
+  background: rgba(138, 104, 72, .12);
+  color: #5b432e;
+  font-weight: 900;
+}
+
+.iezukuri-subpage--chuko .ch-repair-table tbody th {
+  width: 150px;
+  color: #8a6848;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.iezukuri-subpage--chuko .ch-repair-table tbody tr:last-child th,
+.iezukuri-subpage--chuko .ch-repair-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.iezukuri-subpage--chuko .ch-repair-table-note {
+  margin: 18px 0 0;
+  padding: 16px 18px;
+  border-left: 4px solid #8a6848;
+  border-radius: 14px;
+  background: rgba(255, 250, 242, .86);
+  color: var(--iezukuri-text, #4d4033);
+  line-height: 1.85;
+}
+
+@media (max-width: 720px) {
+  .iezukuri-subpage--chuko .ch-repair-table th,
+  .iezukuri-subpage--chuko .ch-repair-table td {
+    padding: 14px 16px;
+  }
+}
+
+/* === IEZUKURI CHUKO REPAIR TABLE END === */
+
+/* === IEZUKURI CHUKO PREP BLOCK START === */
+
+.iezukuri-subpage--chuko .ch-repair-prep {
+  padding: clamp(28px, 4vw, 42px);
+  border: 1px solid rgba(138, 104, 72, .16);
+  border-radius: 28px;
+  background: #fffaf2;
+}
+
+.iezukuri-subpage--chuko .ch-repair-prep__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 24px;
+}
+
+.iezukuri-subpage--chuko .ch-repair-prep__grid article {
+  padding: 18px;
+  border-radius: 18px;
+  background: rgba(255,255,255,.72);
+  border: 1px solid rgba(138, 104, 72, .12);
+}
+
+.iezukuri-subpage--chuko .ch-repair-prep__grid h3 {
+  margin: 0;
+  color: #8a6848;
+  font-size: 17px;
+  line-height: 1.45;
+}
+
+.iezukuri-subpage--chuko .ch-repair-prep__grid p {
+  margin: 10px 0 0;
+  color: var(--iezukuri-text, #4d4033);
+  line-height: 1.75;
+}
+
+@media (max-width: 980px) {
+  .iezukuri-subpage--chuko .ch-repair-prep__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .iezukuri-subpage--chuko .ch-repair-prep__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* === IEZUKURI CHUKO PREP BLOCK END === */
+
+
+/* === IEZUKURI CHUKO TABLE NOTE SIMPLE START ===
+ * /iezukuri/chuko/
+ * テーブル下の補足は装飾せず、※ 注釈として表示する
+ * ========================================================= */
+
+.iezukuri-subpage--chuko .ch-repair-table-note {
+  margin: 12px 0 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--iezukuri-text, #4d4033);
+  font-size: 13px;
+  line-height: 1.8;
+  box-shadow: none;
+}/* shell width moved to subpage.css: /* === IEZUKURI CHUKO TABLE NOTE SIMPLE END === */  /* === IEZUKURI TOP STABLE FIX START ===  * /iezukuri トップページ  * 3つの住まい: 新築住宅 / 二世帯住宅 / 住宅リフォーム  * ========================================================= */  body.iezukuri-page .ch-shell, body.hub-customhome-page .ch-shell, body.hub-customhome-subpage .ch-shell */
+
+body.iezukuri-page,
+body.hub-customhome-page,
+body.hub-customhome-subpage {
+  overflow-x: clip;
+}
+
+/* 3つの住まいカード系だけ整える */
+.iezukuri-page :is(
+  .iez-home-types__grid,
+  .iez-route-grid,
+  .iez-routes__grid,
+  .ch-home-types__grid,
+  .ch-route-grid,
+  .iez-card-grid
+) {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(18px, 2.4vw, 30px);
+  align-items: stretch;
+}
+
+.iezukuri-page :is(
+  .iez-home-types__card,
+  .iez-route-card,
+  .iez-routes__card,
+  .ch-route-card,
+  .ch-card,
+  .iez-card
+) {
+  min-width: 0;
+  height: 100%;
+  padding: clamp(22px, 3vw, 34px);
+  border: 1px solid rgba(138,104,72,.14);
+  border-radius: 26px;
+  background: #fffaf2;
+  box-shadow: 0 16px 42px rgba(54, 38, 21, .075);
+  color: var(--iezukuri-text-strong, #2b2118);
+}
+
+.iezukuri-page :is(
+  .iez-home-types__card,
+  .iez-route-card,
+  .iez-routes__card,
+  .ch-route-card,
+  .ch-card,
+  .iez-card
+) h3 {
+  margin: 0;
+  font-size: clamp(21px, 2.4vw, 30px);
+  line-height: 1.35;
+}
+
+.iezukuri-page :is(
+  .iez-home-types__card,
+  .iez-route-card,
+  .iez-routes__card,
+  .ch-route-card,
+  .ch-card,
+  .iez-card
+) p {
+  margin: 12px 0 0;
+  line-height: 1.85;
+  color: var(--iezukuri-text, #4d4033);
+}
+
+/* sub hero 画像が枠から飛び出さないようにする */
+.iez-sub-hero {
+  position: relative;
+  overflow: hidden;
+}
+
+.iez-sub-hero__media {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.iez-sub-hero__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.iez-sub-hero__inner {
+  position: relative;
+  z-index: 2;
+}
+
+.iez-sub-hero__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+@media (max-width: 980px) {
+  .iezukuri-page :is(
+    .iez-home-types__grid,
+    .iez-route-grid,
+    .iez-routes__grid,
+    .ch-home-types__grid,
+    .ch-route-grid,
+    .iez-card-grid
+  ) {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {/* shell width moved to subpage.css: body.iezukuri-page .ch-shell,   body.hub-customhome-page .ch-shell,   body.hub-customhome-subpage .ch-shell */
+}
+
+/* === IEZUKURI TOP STABLE FIX END === */
+
+
+/* === IEZUKURI TOP REPAIR START === */
+/*
+ * 対象:
+ * - /iezukuri トップページ
+ *
+ * 目的:
+ * - 3つの住まいカードの文字が縦に潰れる問題を止める
+ * - トップ専用カードを横並び・読みやすい本文に戻す
+ *
+ * 注意:
+ * - サブページ共通CSSは css/subpage/subpage.css
+ * - ページ個別CSSは css/page-styles/*.css
+ */
+
+body.hub-customhome-page,
+body.page-template-template-iezukuri,
+body.page-template-template-iezukuri-php,
+body.iezukuri-top-page {
+  overflow-x: hidden;
+}/* shell width moved to subpage.css: body.hub-customhome-page .ch-shell, body.page-template-template-iezukuri .ch-shell, body.page-template-template-iezukuri-php .ch-shell, body.iezukuri-top-page .ch-shell */
+
+body.hub-customhome-page :is(.ch-route-grid, .ch-service-grid, .ch-card-grid, .ch-purpose-grid, .iez-route-grid, .iez-service-grid),
+body.page-template-template-iezukuri :is(.ch-route-grid, .ch-service-grid, .ch-card-grid, .ch-purpose-grid, .iez-route-grid, .iez-service-grid),
+body.page-template-template-iezukuri-php :is(.ch-route-grid, .ch-service-grid, .ch-card-grid, .ch-purpose-grid, .iez-route-grid, .iez-service-grid),
+body.iezukuri-top-page :is(.ch-route-grid, .ch-service-grid, .ch-card-grid, .ch-purpose-grid, .iez-route-grid, .iez-service-grid) {
+  display: grid !important;
+          grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+          gap: clamp(20px, 2.6vw, 36px) !important;
+          align-items: stretch !important;
+}
+
+body.hub-customhome-page :is(.ch-route-card, .ch-service-card, .ch-purpose-card, .iez-route-card, .iez-service-card),
+body.page-template-template-iezukuri :is(.ch-route-card, .ch-service-card, .ch-purpose-card, .iez-route-card, .iez-service-card),
+body.page-template-template-iezukuri-php :is(.ch-route-card, .ch-service-card, .ch-purpose-card, .iez-route-card, .iez-service-card),
+body.iezukuri-top-page :is(.ch-route-card, .ch-service-card, .ch-purpose-card, .iez-route-card, .iez-service-card),
+body.hub-customhome-page [class*="route"][class*="card"],
+body.hub-customhome-page [class*="service"][class*="card"] {
+  min-width: 0 !important;
+  min-height: 360px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  gap: 22px !important;
+  padding: clamp(24px, 3vw, 40px) !important;
+  border-radius: 28px !important;
+  overflow: hidden !important;
+}
+
+body.hub-customhome-page :is(.ch-route-card, .ch-service-card, .ch-purpose-card, .iez-route-card, .iez-service-card) *,
+body.page-template-template-iezukuri :is(.ch-route-card, .ch-service-card, .ch-purpose-card, .iez-route-card, .iez-service-card) *,
+body.page-template-template-iezukuri-php :is(.ch-route-card, .ch-service-card, .ch-purpose-card, .iez-route-card, .iez-service-card) *,
+body.iezukuri-top-page :is(.ch-route-card, .ch-service-card, .ch-purpose-card, .iez-route-card, .iez-service-card) *,
+body.hub-customhome-page [class*="route"][class*="card"] *,
+body.hub-customhome-page [class*="service"][class*="card"] * {
+  writing-mode: horizontal-tb !important;
+  text-orientation: mixed !important;
+  word-break: normal !important;
+  overflow-wrap: anywhere !important;
+}
+
+body.hub-customhome-page :is(.ch-route-card__body, .ch-service-card__body, .ch-purpose-card__body, .iez-route-card__body, .iez-service-card__body),
+body.hub-customhome-page :is(.ch-route-card__content, .ch-service-card__content, .ch-purpose-card__content, .iez-route-card__content, .iez-service-card__content),
+body.hub-customhome-page [class*="route"][class*="card"] :is([class*="body"], [class*="content"], [class*="text"]),
+body.hub-customhome-page [class*="service"][class*="card"] :is([class*="body"], [class*="content"], [class*="text"]) {
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+}
+
+body.hub-customhome-page :is(.ch-route-card p, .ch-service-card p, .ch-purpose-card p, .iez-route-card p, .iez-service-card p),
+body.page-template-template-iezukuri :is(.ch-route-card p, .ch-service-card p, .ch-purpose-card p, .iez-route-card p, .iez-service-card p),
+body.page-template-template-iezukuri-php :is(.ch-route-card p, .ch-service-card p, .ch-purpose-card p, .iez-route-card p, .iez-service-card p),
+body.iezukuri-top-page :is(.ch-route-card p, .ch-service-card p, .ch-purpose-card p, .iez-route-card p, .iez-service-card p) {
+  max-width: 42em !important;
+  font-size: clamp(15px, 1.05vw, 17px) !important;
+  line-height: 1.9 !important;
+  letter-spacing: 0.06em !important;
+}
+
+body.hub-customhome-page :is(.ch-route-card__number, .ch-service-card__number, .ch-purpose-card__number, .iez-route-card__number, .iez-service-card__number),
+body.hub-customhome-page [class*="route"][class*="card"] [class*="number"],
+body.hub-customhome-page [class*="service"][class*="card"] [class*="number"] {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 92px !important;
+  height: 92px !important;
+  border-radius: 999px !important;
+  flex: 0 0 auto !important;
+}
+
+body.hub-customhome-page :is(.ch-route-card__visual, .ch-service-card__visual, .ch-purpose-card__visual, .iez-route-card__visual, .iez-service-card__visual, .ch-route-card__media, .ch-service-card__media),
+body.hub-customhome-page [class*="route"][class*="card"] :is([class*="visual"], [class*="media"], [class*="image"]),
+body.hub-customhome-page [class*="service"][class*="card"] :is([class*="visual"], [class*="media"], [class*="image"]) {
+  width: 100% !important;
+  min-height: 150px !important;
+  max-height: 220px !important;
+  flex: 0 0 auto !important;
+}
+
+@media (max-width: 980px) {
+  body.hub-customhome-page :is(.ch-route-grid, .ch-service-grid, .ch-card-grid, .ch-purpose-grid, .iez-route-grid, .iez-service-grid),
+  body.page-template-template-iezukuri :is(.ch-route-grid, .ch-service-grid, .ch-card-grid, .ch-purpose-grid, .iez-route-grid, .iez-service-grid),
+  body.page-template-template-iezukuri-php :is(.ch-route-grid, .ch-service-grid, .ch-card-grid, .ch-purpose-grid, .iez-route-grid, .iez-service-grid),
+  body.iezukuri-top-page :is(.ch-route-grid, .ch-service-grid, .ch-card-grid, .ch-purpose-grid, .iez-route-grid, .iez-service-grid) {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 640px) {/* shell width moved to subpage.css: body.hub-customhome-page .ch-shell,   body.page-template-template-iezukuri .ch-shell,   body.page-template-template-iezukuri-php .ch-shell,   body.iezukuri-top-page .ch-shell */
+
+  body.hub-customhome-page :is(.ch-route-card, .ch-service-card, .ch-purpose-card, .iez-route-card, .iez-service-card),
+  body.page-template-template-iezukuri :is(.ch-route-card, .ch-service-card, .ch-purpose-card, .iez-route-card, .iez-service-card),
+  body.page-template-template-iezukuri-php :is(.ch-route-card, .ch-service-card, .ch-purpose-card, .iez-route-card, .iez-service-card),
+  body.iezukuri-top-page :is(.ch-route-card, .ch-service-card, .ch-purpose-card, .iez-route-card, .iez-service-card) {
+  min-height: auto !important;
+            padding: 22px !important;
+}
+}
+/* === IEZUKURI TOP REPAIR END === */
+
+/* === MOVED FROM top.css: chuko nisetai service common END === */

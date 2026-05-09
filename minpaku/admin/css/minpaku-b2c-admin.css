@@ -1,0 +1,554 @@
+/* =========================================================
+ * 民泊B2C 管理画面（復旧版・1カラム）
+ * ========================================================= */
+
+.mpbfix-wrap {
+  display: grid;
+  gap: 18px;
+  margin-top: 12px;
+}
+
+.mpbfix-section {
+  padding: 16px;
+  border: 1px solid #dcdcde;
+  border-radius: 10px;
+  background: #f6f7f7;
+}
+
+.mpbfix-section > h2 {
+  margin: 0 0 14px;
+  font-size: 20px;
+}
+
+.mpbfix-item {
+  margin: 0 0 16px;
+  padding: 14px;
+  border: 1px solid #dcdcde;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.mpbfix-item > h3 {
+  margin: 0 0 12px;
+  font-size: 16px;
+}
+
+.mpbfix-field {
+  margin: 0 0 14px;
+}
+
+.mpbfix-field label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 700;
+}
+
+.mpbfix-checkbox {
+  display: flex !important;
+  align-items: center;
+  gap: 8px;
+}
+
+.mpbfix-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.mpbfix-media-preview,
+.mpbfix-gallery-preview {
+  display: grid;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.mpbfix-media-card,
+.mpbfix-gallery-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  border: 1px solid #dcdcde;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.mpbfix-media-card img,
+.mpbfix-gallery-card img {
+  display: block;
+  width: 84px;
+  height: 84px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.mpbfix-media-meta {
+  font-size: 12px;
+  color: #50575e;
+  word-break: break-all;
+}
+
+.mpbfix-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 10px;
+}
+
+.mpbfix-gallery-card {
+  display: block;
+}
+
+.mpbfix-gallery-card img {
+  width: 100%;
+  height: 120px;
+  margin-bottom: 8px;
+}
+
+/* =========================================================
+ * Hero mp4 動画プレビュー
+ * ========================================================= */
+.mpbfix-video-preview {
+  display: grid;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.mpbfix-video-card {
+  padding: 10px 12px;
+  border: 1px solid #dcdcde;
+  border-radius: 8px;
+  background: #fff;
+}
+
+/* =========================================================
+ * 管理画面レイアウト整理
+ * - PC: 2カラム
+ * - モバイル: 1カラム
+ * ========================================================= */
+
+.mpbfix-wrap {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+}
+
+.mpbfix-section {
+  height: fit-content;
+}
+
+.mpbfix-section.is-wide {
+  grid-column: 1 / -1;
+}
+
+.mpbfix-section.is-half {
+  grid-column: span 1;
+}
+
+@media (max-width: 960px) {
+  .mpbfix-wrap {
+    grid-template-columns: 1fr;
+  }
+
+  .mpbfix-section,
+  .mpbfix-section.is-wide,
+  .mpbfix-section.is-half {
+    grid-column: auto;
+  }
+}
+
+/* =========================================================
+ * Hero gallery / mp4 排他UI
+ * ========================================================= */
+.mpbfix-video-preview {
+  display: grid;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.mpbfix-video-card {
+  padding: 10px 12px;
+  border: 1px solid #dcdcde;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.mpbfix-hero-media-note {
+  margin-top: 8px;
+}
+
+.button.is-disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+
+
+
+/* =========================================================
+ * MPBFIX ADMIN COMPACT UI START
+ * ---------------------------------------------------------
+ * B2C管理画面の見せ方を整理する。
+ *
+ * 方針:
+ * - 上部メニューは必ず全幅
+ * - セクションは基本1カラムで崩れを防ぐ
+ * - 折りたたみで縦長問題を抑える
+ * - Feature / Guide / Flow / FAQ の追加UIは維持
+ * - 比較表も閉じられるようにする
+ * ========================================================= */
+
+.mpbfix-wrap {
+  display: block !important;
+  max-width: 1280px;
+}
+
+.mpbfix-admin-nav {
+  position: sticky;
+  top: 32px;
+  z-index: 50;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  align-items: center;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  margin: 0 0 14px;
+  background: #fff;
+  border: 1px solid #dcdcde;
+  border-radius: 10px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, .06);
+}
+
+.mpbfix-admin-nav a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 30px;
+  padding: 4px 11px;
+  border: 1px solid #c3c4c7;
+  border-radius: 999px;
+  background: #f6f7f7;
+  color: #1d2327;
+  text-decoration: none;
+  font-size: 12px;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.mpbfix-admin-nav a:hover,
+.mpbfix-admin-nav a:focus {
+  background: #e9f5f8;
+  border-color: #72aee6;
+  color: #0a4b78;
+}
+
+.mpbfix-section {
+  width: 100%;
+  box-sizing: border-box;
+  scroll-margin-top: 92px;
+}
+
+.mpbfix-section.mpbfix-is-collapsible {
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+.mpbfix-section.mpbfix-is-collapsible > h2 {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0 !important;
+  padding: 12px 14px;
+  cursor: pointer;
+  background: #f6f7f7;
+  border-bottom: 1px solid #dcdcde;
+  user-select: none;
+}
+
+.mpbfix-section.mpbfix-is-collapsible > h2::after {
+  content: "閉じる";
+  flex: 0 0 auto;
+  padding: 3px 9px;
+  border: 1px solid #c3c4c7;
+  border-radius: 999px;
+  background: #fff;
+  color: #50575e;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.mpbfix-section.mpbfix-is-collapsed > h2::after {
+  content: "開く";
+}
+
+.mpbfix-section.mpbfix-is-collapsed > :not(h2) {
+  display: none !important;
+}
+
+.mpbfix-section.mpbfix-is-collapsible > :not(h2) {
+  margin-left: 14px;
+  margin-right: 14px;
+}
+
+.mpbfix-section .description {
+  color: #646970;
+  font-size: 12px;
+}
+
+.mpbfix-field {
+  margin: 8px 0;
+}
+
+.mpbfix-field input[type="text"],
+.mpbfix-field input[type="url"],
+.mpbfix-field input[type="number"],
+.mpbfix-field select,
+.mpbfix-field textarea {
+  max-width: 100%;
+}
+
+.mpbfix-item {
+  margin: 10px 0;
+  padding: 12px;
+  border: 1px solid #dcdcde;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.mpbfix-item > h3 {
+  margin: -12px -12px 10px;
+  padding: 9px 12px;
+  background: #f6f7f7;
+  border-bottom: 1px solid #dcdcde;
+  font-size: 13px;
+}
+
+/* 追加型の各項目は中身だけ2カラム化して、セクション自体は1カラムにする */
+@media (min-width: 1100px) {
+  .mpbfix-repeat-section .mpbfix-item {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px 14px;
+    align-items: start;
+  }
+
+  .mpbfix-repeat-section .mpbfix-item > h3 {
+    grid-column: 1 / -1;
+  }
+
+  .mpbfix-repeat-section .mpbfix-item .mpbfix-media-picker,
+  .mpbfix-repeat-section .mpbfix-item .mpbfix-gallery-picker,
+  .mpbfix-repeat-section .mpbfix-item .mpbfix-video-picker {
+    grid-column: 1 / -1;
+  }
+}
+
+.mpbfix-repeat-section .js-mpbfix-repeat-add {
+  margin: 2px 0 8px;
+}
+
+/* 比較表は横に広がりやすいので中だけスクロール許可 */
+.mpbfix-section table {
+  max-width: 100%;
+}
+
+.mpbfix-section:has(h2) {
+  clear: both;
+}
+
+@media (max-width: 782px) {
+  .mpbfix-admin-nav {
+    top: 46px;
+    max-height: 118px;
+    overflow: auto;
+  }
+
+  .mpbfix-admin-nav a {
+    font-size: 11px;
+  }
+}
+
+/* MPBFIX ADMIN COMPACT UI END */
+
+
+/* =========================================================
+ * MPBFIX ADMIN COUNT BADGES START
+ * ---------------------------------------------------------
+ * 役割:
+ * - B2C管理画面メニュー/見出しに入力済み件数を表示する
+ * - Feature / Guide / Flow / FAQ は入力済み行数を表示
+ * - 比較表は入力済み列数 / 行数を表示
+ * ========================================================= */
+
+.mpbfix-admin-nav a {
+  gap: 6px;
+}
+
+.mpbfix-count-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  min-height: 18px;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: #dff2f7;
+  color: #0a4b78;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.mpbfix-count-badge.is-empty {
+  background: #f0f0f1;
+  color: #646970;
+}
+
+.mpbfix-section > h2 .mpbfix-count-badge {
+  margin-left: 8px;
+}
+
+.mpbfix-section-title-main {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+/* MPBFIX ADMIN COUNT BADGES END */
+
+
+/* =========================================================
+ * MPBFIX COMPARE BUILDER ADMIN START
+ * ---------------------------------------------------------
+ * 役割:
+ * - 比較表を「＋列追加」「＋行追加」で扱いやすくする
+ * - 列/行が多い場合でも管理画面が崩れないようにする
+ *
+ * 将来ビルダー対応:
+ * - ここは見た目だけ
+ * - 比較表データ本体は _mpb_compare_table_json に保存
+ * ========================================================= */
+
+.mpbfix-compare-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 10px 14px 12px;
+}
+
+.mpbfix-compare-note {
+  margin: 0 14px 12px;
+  padding: 10px 12px;
+  border: 1px solid #dcdcde;
+  border-radius: 8px;
+  background: #f6f7f7;
+  color: #50575e;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.mpbfix-compare-subtitle {
+  margin: 14px 14px 8px;
+  padding: 0;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.mpbfix-compare-column-list,
+.mpbfix-compare-row-list {
+  margin: 0 14px 14px;
+}
+
+@media (min-width: 1100px) {
+  .mpbfix-compare-column-list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+  }
+}
+
+.mpbfix-compare-row-cells {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+
+@media (min-width: 1100px) {
+  .mpbfix-compare-row-cells {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.mpbfix-compare-cell {
+  min-width: 0;
+}
+
+.mpbfix-compare-cell textarea {
+  min-height: 84px;
+}
+
+/* MPBFIX COMPARE BUILDER ADMIN END */
+
+
+/* =========================================================
+ * MPBFIX SECTIONS BUILDER ADMIN START
+ * ---------------------------------------------------------
+ * B2Cページビルダー準備UI。
+ *
+ * 役割:
+ * - セクションの表示/非表示
+ * - セクションの並び順
+ * - 保存先は _mpb_sections_json
+ *
+ * 注意:
+ * - このCSSは管理画面専用
+ * - フロント反映は次段階で page.php 側に実装する
+ * ========================================================= */
+
+.mpbfix-builder-list {
+  display: grid;
+  gap: 8px;
+  margin: 12px 14px;
+}
+
+.mpbfix-builder-item {
+  display: grid;
+  grid-template-columns: minmax(120px, 1fr) auto auto auto;
+  gap: 10px;
+  align-items: center;
+  padding: 10px 12px;
+  border: 1px solid #dcdcde;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.mpbfix-builder-item__label {
+  font-size: 13px;
+}
+
+.mpbfix-builder-item__type {
+  color: #646970;
+}
+
+.mpbfix-builder-item__order input {
+  width: 78px;
+}
+
+.mpbfix-builder-item__enabled {
+  white-space: nowrap;
+}
+
+@media (max-width: 782px) {
+  .mpbfix-builder-item {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+}
+
+/* MPBFIX SECTIONS BUILDER ADMIN END */

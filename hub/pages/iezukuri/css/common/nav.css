@@ -1,0 +1,643 @@
+/* IEZUKURI_NAV_CSS_ROLE_START */
+/* =========================================================
+ * hub/pages/iezukuri/css/common/nav.css
+ *
+ * 役割:
+ * - iezukuri ヘッダー/ナビの見た目だけを管理する
+ *
+ * 管理しないもの:
+ * - ロゴやブランド文言の重複制御
+ *
+ * 文言方針:
+ * - Header側もHero側も、英字 CUSTOM HOME を重複表示しない
+ * - 必要なブランド表記は「内外グループ」「内外建設株式会社」に寄せる
+ * ========================================================= */
+/* IEZUKURI_NAV_CSS_ROLE_END */
+
+/* =========================================================
+ * hub/pages/iezukuri/css/common/nav.css
+ *
+ * 対象:
+ * - header-customhome.php
+ * - /iezukuri/
+ * - /iezukuri/{subpage}/
+ * - /iezukuri/plans/
+ * - /iezukuri/plan/{slug}/
+ *
+ * 役割:
+ * - 注文住宅ヘッダー
+ * - PCナビ
+ * - モバイルトグル
+ * - モバイルドロワー
+ * - サブページ中間ナビ .ch-localnav
+ *
+ * 方針:
+ * - admin-bar 用の top:32px / 46px 補正は使わない
+ * - drawer の開閉は hidden 属性 + body class で管理
+ * - CSSにJS的な状態を増やさない
+ * - このファイルだけでナビ周りの見た目を管理する
+ * ========================================================= */
+
+
+/* =========================================================
+ * 01. header base
+ * ========================================================= */
+
+.ch-site-header {
+  --ch-header-bg: rgba(255, 250, 242, 0.94);
+  --ch-header-border: rgba(36, 25, 16, 0.12);
+  --ch-header-text: var(--iezukuri-text);
+  --ch-header-muted: rgba(36, 25, 16, 0.62);
+  --ch-header-accent: #7a4f24;
+  --ch-header-shadow: 0 10px 30px rgba(36, 25, 16, 0.08);
+
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 1000 !important;
+
+  width: 100%;
+  background: var(--ch-header-bg);
+  color: var(--ch-header-text);
+  border-bottom: 1px solid var(--ch-header-border);
+  box-shadow: var(--ch-header-shadow);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+/* admin bar があっても header を下にずらさない */
+body.admin-bar .ch-site-header {
+  top: 0 !important;
+}
+
+@media (max-width: 782px) {
+  body.admin-bar .ch-site-header {
+    top: 0 !important;
+  }
+}
+
+.ch-site-header__inner {
+  width: min(1280px, calc(100% - 48px));
+  min-height: 72px;
+  margin: 0 auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.ch-site-header a {
+  color: inherit;
+  text-decoration: none;
+}
+
+
+/* =========================================================
+ * 02. brand
+ * ========================================================= */
+
+.ch-site-header__brand {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 3px;
+
+  min-width: 0;
+  color: var(--ch-header-text);
+}
+
+.ch-site-header__brand-main {
+  display: block;
+  font-size: 18px;
+  font-weight: 900;
+  line-height: 1.15;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+
+.ch-site-header__brand-sub {
+  display: block;
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: 0.18em;
+  color: var(--ch-header-muted);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+
+/* =========================================================
+ * 03. desktop nav
+ * ========================================================= */
+
+.ch-site-header__nav--desktop {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-width: 0;
+}
+
+.ch-site-header__list {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ch-site-header__list > li {
+  margin: 0;
+  padding: 0;
+}
+
+.ch-site-header__list a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 40px;
+  padding: 0 13px;
+  border-radius: 999px;
+
+  color: var(--ch-header-text);
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+
+  transition:
+    background-color 0.18s ease,
+    color 0.18s ease,
+    transform 0.18s ease;
+}
+
+.ch-site-header__list a:hover,
+.ch-site-header__list a:focus-visible,
+.ch-site-header__list .current-menu-item > a,
+.ch-site-header__list .current_page_item > a {
+  background: rgba(122, 79, 36, 0.12);
+  color: var(--ch-header-accent);
+}
+
+
+/* =========================================================
+ * 04. mobile toggle
+ * ========================================================= */
+
+.ch-site-header__toggle {
+  display: none;
+
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid rgba(36, 25, 16, 0.16);
+  border-radius: 999px;
+  background: var(--iezukuri-surface)af2;
+  color: var(--ch-header-text);
+  box-shadow: 0 8px 20px rgba(36, 25, 16, 0.08);
+
+  cursor: pointer;
+  appearance: none;
+}
+
+.ch-site-header__toggle:focus-visible {
+  outline: 3px solid rgba(122, 79, 36, 0.28);
+  outline-offset: 3px;
+}
+
+.ch-site-header__toggle-icon,
+.ch-site-header__toggle span {
+  pointer-events: none;
+}
+
+.ch-site-header__toggle-icon {
+  position: relative;
+  display: block;
+  width: 18px;
+  height: 2px;
+  margin: 0 auto;
+  background: currentColor;
+  border-radius: 999px;
+}
+
+.ch-site-header__toggle-icon::before,
+.ch-site-header__toggle-icon::after {
+  content: "";
+  position: absolute;
+  left: 0;
+
+  width: 18px;
+  height: 2px;
+  background: currentColor;
+  border-radius: 999px;
+
+  transition:
+    transform 0.18s ease,
+    top 0.18s ease,
+    opacity 0.18s ease;
+}
+
+.ch-site-header__toggle-icon::before {
+  top: -6px;
+}
+
+.ch-site-header__toggle-icon::after {
+  top: 6px;
+}
+
+body.ch-menu-is-open .ch-site-header__toggle-icon,
+body.is-customhome-drawer-open .ch-site-header__toggle-icon {
+  background: transparent;
+}
+
+body.ch-menu-is-open .ch-site-header__toggle-icon::before,
+body.is-customhome-drawer-open .ch-site-header__toggle-icon::before {
+  top: 0;
+  transform: rotate(45deg);
+}
+
+body.ch-menu-is-open .ch-site-header__toggle-icon::after,
+body.is-customhome-drawer-open .ch-site-header__toggle-icon::after {
+  top: 0;
+  transform: rotate(-45deg);
+}
+
+
+/* =========================================================
+ * 05. drawer
+ * ========================================================= */
+
+.ch-site-header__drawer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  z-index: 9999;
+
+  width: 100%;
+  background: rgba(255, 250, 242, 0.98);
+  border-bottom: 1px solid rgba(36, 25, 16, 0.12);
+  box-shadow: 0 18px 44px rgba(36, 25, 16, 0.14);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.ch-site-header__drawer[hidden] {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+body.ch-menu-is-open .ch-site-header__drawer:not([hidden]),
+body.is-customhome-drawer-open .ch-site-header__drawer:not([hidden]) {
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+
+.ch-site-header__drawer-inner {
+  width: min(1280px, calc(100% - 32px));
+  max-height: calc(100vh - 86px);
+  margin: 0 auto;
+  padding: 18px 0 22px;
+  overflow-y: auto;
+}
+
+.ch-site-header__drawer-list,
+.ch-site-header__drawer-index-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ch-site-header__drawer-list li,
+.ch-site-header__drawer-index-list li {
+  margin: 0;
+  padding: 0;
+}
+
+.ch-site-header__drawer-list a,
+.ch-site-header__drawer-index-list a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+
+  min-height: 48px;
+  padding: 0 16px;
+  border: 1px solid rgba(36, 25, 16, 0.12);
+  border-radius: 16px;
+  background: var(--iezukuri-surface);
+
+  color: var(--ch-header-text);
+  font-size: 14px;
+  font-weight: 850;
+  line-height: 1.3;
+  text-decoration: none;
+}
+
+.ch-site-header__drawer-list a::after,
+.ch-site-header__drawer-index-list a::after {
+  content: "›";
+  color: rgba(36, 25, 16, 0.44);
+  font-size: 18px;
+  line-height: 1;
+}
+
+.ch-site-header__drawer-list a:hover,
+.ch-site-header__drawer-list a:focus-visible,
+.ch-site-header__drawer-list .current-menu-item > a,
+.ch-site-header__drawer-list .current_page_item > a,
+.ch-site-header__drawer-index-list a:hover,
+.ch-site-header__drawer-index-list a:focus-visible {
+  border-color: rgba(122, 79, 36, 0.26);
+  background: rgba(122, 79, 36, 0.08);
+  color: var(--ch-header-accent);
+}
+
+
+/* =========================================================
+ * 06. local nav
+ * ========================================================= */
+
+.ch-localnav {
+  position: sticky;
+  top: 0;
+  z-index: 900;
+
+  background: rgba(245, 242, 236, 0.94);
+  border-top: 1px solid rgba(36, 25, 16, 0.08);
+  border-bottom: 1px solid rgba(36, 25, 16, 0.1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.ch-localnav .ch-shell {
+  width: min(1280px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 10px 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.ch-localnav__list {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  width: max-content;
+  min-width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ch-localnav__list li {
+  margin: 0;
+  padding: 0;
+}
+
+.ch-localnav__list a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 38px;
+  padding: 0 14px;
+  border: 1px solid rgba(36, 25, 16, 0.12);
+  border-radius: 999px;
+  background: var(--iezukuri-surface)af2;
+
+  color: var(--iezukuri-text);
+  font-size: 13px;
+  font-weight: 850;
+  line-height: 1;
+  white-space: nowrap;
+  text-decoration: none;
+
+  box-shadow: 0 6px 14px rgba(36, 25, 16, 0.05);
+}
+
+.ch-localnav__list a:hover,
+.ch-localnav__list a:focus-visible,
+.ch-localnav__list .current-menu-item > a,
+.ch-localnav__list .current_page_item > a {
+  border-color: rgba(122, 79, 36, 0.28);
+  background: rgba(122, 79, 36, 0.1);
+  color: #7a4f24;
+}
+
+
+/* =========================================================
+ * 07. responsive
+ * ========================================================= */
+
+@media (max-width: 1080px) {
+  .ch-site-header__inner {
+    width: min(1280px, calc(100% - 32px));
+    min-height: 66px;
+  }
+
+  .ch-site-header__brand-main {
+    font-size: 16px;
+  }
+
+  .ch-site-header__brand-sub {
+    font-size: 10px;
+  }
+
+  .ch-site-header__nav--desktop {
+    display: none !important;
+  }
+
+  .ch-site-header__toggle {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+  }
+
+  .ch-localnav .ch-shell {
+    width: min(1280px, calc(100% - 28px));
+  }
+}
+
+@media (max-width: 640px) {
+  .ch-site-header__inner {
+    width: calc(100% - 24px);
+    min-height: 62px;
+    gap: 12px;
+  }
+
+  .ch-site-header__brand-main {
+    max-width: 220px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .ch-site-header__drawer-inner {
+    width: calc(100% - 24px);
+    max-height: calc(100vh - 76px);
+    padding: 14px 0 18px;
+  }
+
+  .ch-localnav .ch-shell {
+    width: calc(100% - 24px);
+    padding: 8px 0;
+  }
+
+  .ch-localnav__list a {
+    min-height: 36px;
+    padding: 0 12px;
+    font-size: 12px;
+  }
+}
+
+
+/* =========================================================
+ * 08. dark mode
+ * ========================================================= */
+
+:is(body.dark-mode, body.is-dark, body.theme-dark) .ch-site-header {
+  --ch-header-bg: rgba(24, 21, 18, 0.94);
+  --ch-header-border: rgba(255, 255, 255, 0.12);
+  --ch-header-text: var(--iezukuri-surface)7eb;
+  --ch-header-muted: rgba(255, 247, 235, 0.64);
+  --ch-header-accent: #e2b36d;
+  --ch-header-shadow: 0 10px 30px rgba(0, 0, 0, 0.26);
+}
+
+:is(body.dark-mode, body.is-dark, body.theme-dark) .ch-site-header__toggle,
+:is(body.dark-mode, body.is-dark, body.theme-dark) .ch-site-header__drawer,
+:is(body.dark-mode, body.is-dark, body.theme-dark) .ch-site-header__drawer-list a,
+:is(body.dark-mode, body.is-dark, body.theme-dark) .ch-site-header__drawer-index-list a {
+  background: rgba(28, 24, 20, 0.98);
+  color: var(--iezukuri-surface)7eb;
+  border-color: rgba(255, 255, 255, 0.14);
+}
+
+:is(body.dark-mode, body.is-dark, body.theme-dark) .ch-localnav {
+  background: rgba(24, 21, 18, 0.92);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+:is(body.dark-mode, body.is-dark, body.theme-dark) .ch-localnav__list a {
+  background: rgba(28, 24, 20, 0.98);
+  color: var(--iezukuri-surface)7eb;
+  border-color: rgba(255, 255, 255, 0.14);
+}
+
+/* =========================================================
+ * IEZUKURI HEADER TOGGLE ICON FIX
+ *
+ * 対象:
+ * - /iezukuri/
+ * - /iezukuri/* サブページ
+ *
+ * 役割:
+ * - モバイルトグルの線を3本に固定
+ * - 開いたら × に変形
+ * - 既存の崩れた1本線表示を上書きする
+ * ========================================================= */
+
+.ch-site-header__toggle {
+  position: relative !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 44px !important;
+  height: 44px !important;
+  padding: 0 !important;
+  border: 1px solid rgba(36, 25, 16, 0.18) !important;
+  border-radius: 999px !important;
+  background: var(--iezukuri-surface)af2 !important;
+  color: var(--iezukuri-text) !important;
+  overflow: hidden !important;
+  font-size: 0 !important;
+  line-height: 0 !important;
+}
+
+/* 既存の内側要素があっても一旦無効化 */
+.ch-site-header__toggle .ch-site-header__toggle-icon,
+.ch-site-header__toggle > span,
+.ch-site-header__toggle > i {
+  position: absolute !important;
+  inset: 0 !important;
+  margin: auto !important;
+  width: 0 !important;
+  height: 0 !important;
+  font-size: 0 !important;
+  line-height: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+/* 線は button 自体の疑似要素で描く */
+.ch-site-header__toggle::before,
+.ch-site-header__toggle::after {
+  content: "" !important;
+  position: absolute !important;
+  left: 50% !important;
+  width: 18px !important;
+  height: 2px !important;
+  margin-left: -9px !important;
+  background: var(--iezukuri-text) !important;
+  border-radius: 999px !important;
+  transition:
+    transform 0.2s ease,
+    top 0.2s ease,
+    opacity 0.2s ease !important;
+}
+
+.ch-site-header__toggle::before {
+  top: 15px !important;
+  box-shadow: 0 6px 0 var(--iezukuri-text) !important; /* 真ん中線 */
+}
+
+.ch-site-header__toggle::after {
+  top: 27px !important;
+}
+
+/* 開いたら × */
+body.ch-menu-is-open .ch-site-header__toggle::before,
+body.is-customhome-drawer-open .ch-site-header__toggle::before {
+  top: 21px !important;
+  box-shadow: none !important;
+  transform: rotate(45deg) !important;
+}
+
+body.ch-menu-is-open .ch-site-header__toggle::after,
+body.is-customhome-drawer-open .ch-site-header__toggle::after {
+  top: 21px !important;
+  transform: rotate(-45deg) !important;
+}
+
+/* ダークモード */
+:is(body.dark-mode, body.is-dark, body.theme-dark) .ch-site-header__toggle {
+  background: rgba(28, 24, 20, 0.98) !important;
+  color: var(--iezukuri-surface)7eb !important;
+  border-color: rgba(255, 255, 255, 0.16) !important;
+}
+
+:is(body.dark-mode, body.is-dark, body.theme-dark) .ch-site-header__toggle::before,
+:is(body.dark-mode, body.is-dark, body.theme-dark) .ch-site-header__toggle::after {
+  background: var(--iezukuri-surface)7eb !important;
+}
+
+:is(body.dark-mode, body.is-dark, body.theme-dark) .ch-site-header__toggle::before {
+  box-shadow: 0 6px 0 var(--iezukuri-surface)7eb !important;
+}
+
+/* IEZUKURI HEADER TOGGLE ICON FIX END */

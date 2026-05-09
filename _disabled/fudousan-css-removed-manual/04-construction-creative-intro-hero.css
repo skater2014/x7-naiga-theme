@@ -1,0 +1,340 @@
+/* =========================================================
+ * hub.css
+ * Hub 3ページ専用CSS
+ * 対象:
+ * - front  : 総合窓口
+ * - construction : 注文住宅の窓口
+ * - realestate   : 不動産の窓口
+ *
+ * 方針:
+ * - 末尾の重複上書きを廃止
+ * - 1ファイルで見通せる構成へ戻す
+ * - 色差分は CSS 変数で吸収
+ * - flow 矢印は共通1本
+ * - construction の動画ヒーローは creative LP 風
+ * ========================================================= */
+
+/* =========================================================
+ * 1) 共通変数
+ * ========================================================= */
+body.hub-page {
+  --hub-bg: #f6f5f2;
+  --hub-surface: #ffffff;
+  --hub-surface-2: #f3f1ec;
+  --hub-surface-3: #ece7dd;
+  --hub-border: rgba(18, 28, 42, 0.08);
+  --hub-shadow-xs: 0 6px 14px rgba(15, 23, 42, 0.04);
+  --hub-shadow: 0 14px 32px rgba(15, 23, 42, 0.08);
+  --hub-shadow-lg: 0 22px 56px rgba(15, 23, 42, 0.12);
+  --hub-text: #253140;
+  --hub-text-soft: #5c6776;
+  --hub-heading: #1b2430;
+  --hub-accent: #a97a43;
+  --hub-accent-strong: #83592d;
+  --hub-accent-soft: #f0dfc9;
+  --hub-radius-sm: 12px;
+  --hub-radius-md: 18px;
+  --hub-radius-lg: 24px;
+  --hub-radius-xl: 32px;
+  /* background removed: page wrapper/body background is not used. Section backgrounds are controlled from style.css. */
+  color: var(--hub-text);
+}
+
+
+/* removed from fudousan.css: hub-context-front variables */
+
+/* removed from fudousan.css: hub-context-construction variables */
+body.hub-page.hub-context-realestate {
+  --hub-bg: #f1f6fa;
+  --hub-surface: #ffffff;
+  --hub-surface-2: #e9f2f8;
+  --hub-surface-3: #d9eaf3;
+  --hub-border: rgba(38, 87, 121, 0.12);
+  --hub-shadow: 0 14px 32px rgba(32, 74, 108, 0.08);
+  --hub-shadow-lg: 0 22px 56px rgba(32, 74, 108, 0.12);
+  --hub-text: #223847;
+  --hub-text-soft: #5e7688;
+  --hub-heading: #173040;
+  --hub-accent: #4f87b2;
+  --hub-accent-strong: #2f6690;
+  --hub-accent-soft: #dcecf7;
+}
+
+/* =========================================================
+ * 2) dark mode
+ * ========================================================= */
+:is(
+  body.dark-mode,
+  body.is-dark,
+  body.theme-dark,
+  body.dark-theme,
+  body.dark,
+  body[data-theme='dark'],
+  html.dark body,
+  html.is-dark body,
+  html.theme-dark body,
+  html.dark-theme body,
+  html[data-theme='dark'] body
+).hub-page {
+  --hub-bg: #121518;
+  --hub-surface: #1a1f24;
+  --hub-surface-2: #21272d;
+  --hub-surface-3: #2a3138;
+  --hub-border: rgba(236, 236, 236, 0.08);
+  --hub-shadow-xs: 0 6px 14px rgba(0, 0, 0, 0.2);
+  --hub-shadow: 0 14px 32px rgba(0, 0, 0, 0.3);
+  --hub-shadow-lg: 0 22px 56px rgba(0, 0, 0, 0.36);
+  --hub-text: #e9edf2;
+  --hub-text-soft: #b1bcc8;
+  --hub-heading: #f5f8fb;
+}
+
+/* =========================================================
+ * 3) 基本レイアウト
+ * ========================================================= */
+body.hub-page :where(input, textarea, select) {
+  color: inherit;
+}
+
+body.hub-page .hub-container,
+body.hub-page .hub-section__inner,
+body.hub-page .hub-hero__inner {
+  width: min(1200px, calc(100% - 32px));
+  margin: 0 auto;
+}
+
+body.hub-page .hub-section {
+  padding: clamp(24px, 3.5vw, 48px) 0;
+}
+
+body.hub-page .hub-title,
+body.hub-page .hub-heading {
+  margin: 0;
+  color: var(--hub-heading);
+  line-height: 1.24;
+}
+
+body.hub-page .hub-title {
+  font-size: clamp(1.9rem, 3.6vw, 3rem);
+  letter-spacing: -0.03em;
+}
+
+body.hub-page .hub-heading.is-lg {
+  font-size: clamp(1.5rem, 2.8vw, 2.2rem);
+}
+
+body.hub-page .hub-kicker,
+body.hub-page .hub-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  min-height: 34px;
+  padding: 0 13px;
+  border-radius: 999px;
+  background: var(--hub-accent-soft);
+  color: var(--hub-accent-strong);
+  font-size: 0.875rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+body.hub-page .hub-lead {
+  margin: 0;
+  color: var(--hub-text-soft);
+  line-height: 1.85;
+}
+
+body.hub-page .hub-section-head {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+body.hub-page .hub-section-head > * {
+  margin: 0;
+}
+
+/* =========================================================
+ * 4) ボタン
+ * ========================================================= */
+body.hub-page .hub-btn,
+body.hub-page .hub-cta-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 0 18px;
+  border: 1px solid var(--hub-accent);
+  border-radius: 14px;
+  background: var(--hub-accent);
+  color: #fff;
+  text-decoration: none;
+  font-weight: 700;
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}
+
+body.hub-page .hub-btn:hover,
+body.hub-page .hub-cta-button:hover {
+  opacity: 0.94;
+  transform: translateY(-1px);
+}
+
+body.hub-page .hub-btn.is-secondary,
+body.hub-page .hub-cta-button--secondary {
+  background: transparent;
+  color: var(--hub-accent-strong);
+}
+
+body.hub-page .hub-cta-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* =========================================================
+ * 5) construction creative intro hero
+ * ========================================================= */
+body.hub-page .hub-intro-hero {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--hub-border);
+  border-radius: var(--hub-radius-xl);
+  background:
+    radial-gradient(circle at top left, rgba(255, 255, 255, 0.18), transparent 36%),
+    linear-gradient(135deg, var(--hub-surface-3), var(--hub-surface));
+  box-shadow: var(--hub-shadow-lg);
+}
+
+body.hub-page .hub-intro-hero__media {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+body.hub-page .hub-intro-hero__media video,
+body.hub-page .hub-intro-hero__media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+body.hub-page .hub-intro-hero__media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(10, 12, 16, 0.64) 0%,
+    rgba(10, 12, 16, 0.38) 42%,
+    rgba(10, 12, 16, 0.18) 100%
+  );
+}
+
+body.hub-page .hub-intro-hero__inner {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) 300px;
+  gap: 18px;
+  align-items: end;
+  min-height: 470px;
+  padding: 28px;
+}
+
+body.hub-page .hub-intro-hero__body {
+  display: grid;
+  gap: 14px;
+  align-self: center;
+  max-width: 760px;
+  color: #fff;
+}
+
+body.hub-page .hub-intro-hero__body .hub-kicker {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+body.hub-page .hub-intro-hero__title {
+  margin: 0;
+  color: #fff;
+  font-size: clamp(1.9rem, 3.6vw, 3rem);
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  white-space: pre-line;
+}
+
+body.hub-page .hub-intro-hero__lead {
+  margin: 0;
+  max-width: 25em;
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 0.94rem;
+  line-height: 1.8;
+}
+
+body.hub-page .hub-intro-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+body.hub-page .hub-intro-hero__side {
+  display: grid;
+  gap: 12px;
+}
+
+body.hub-page .hub-intro-hero__panel {
+  display: grid;
+  gap: 8px;
+  padding: 14px 15px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(8px);
+  color: #fff;
+}
+
+body.hub-page .hub-intro-hero__panel-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  opacity: 0.82;
+}
+
+body.hub-page .hub-intro-hero__panel-title {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.42;
+}
+
+body.hub-page .hub-intro-hero__panel-text {
+  margin: 0;
+  font-size: 0.84rem;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+body.hub-page .hub-intro-hero__nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+body.hub-page .hub-intro-hero__nav-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  padding: 0 12px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+  background: rgba(8, 10, 14, 0.28);
+  color: rgba(255, 255, 255, 0.96);
+  text-decoration: none;
+  font-size: 0.87rem;
+  font-weight: 700;
+}
+

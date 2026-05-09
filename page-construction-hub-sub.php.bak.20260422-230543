@@ -1,0 +1,138 @@
+<?php
+/*
+Template Name: Construction Hub Sub Page
+Template Post Type: page
+*/
+
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+$post_id    = get_the_ID();
+$post_slug  = get_post_field('post_name', $post_id);
+$title      = get_the_title($post_id);
+$lead       = has_excerpt($post_id) ? get_the_excerpt($post_id) : '';
+$hero_image = get_the_post_thumbnail_url($post_id, 'full');
+$parent_url = home_url('/construction-hub/');
+$contact_url = home_url('/construction-hub/contact/');
+
+/**
+ * 注文住宅サブページ共通CSS
+ * - root 直下へ新規テンプレートは増やさない
+ * - 現行の注文住宅構成で読み込む
+ */
+$base_css_rel = '/hub/css/hub-customhome.css';
+$base_css_abs = get_template_directory() . $base_css_rel;
+if (file_exists($base_css_abs)) {
+    wp_enqueue_style(
+        'hub-customhome',
+        get_template_directory_uri() . $base_css_rel,
+        array(),
+        filemtime($base_css_abs)
+    );
+}
+
+$sub_css_rel = '/hub/css/hub-customhome-subpage.css';
+$sub_css_abs = get_template_directory() . $sub_css_rel;
+if (file_exists($sub_css_abs)) {
+    wp_enqueue_style(
+        'hub-customhome-subpage',
+        get_template_directory_uri() . $sub_css_rel,
+        array('hub-customhome'),
+        filemtime($sub_css_abs)
+    );
+}
+
+/**
+ * スラッグごとの専用本文テンプレート
+ * - 今回は concept だけ専用化
+ * - 他の固定ページはこの共通テンプレートをそのまま使う
+ */
+$template_map = array(
+    'concept'       => get_template_directory() . '/hub/templates/customhome-pages/page-concept.php',
+    'design-policy' => get_template_directory() . '/hub/templates/customhome-pages/page-design-policy.php',
+    'nasu-house'    => get_template_directory() . '/hub/templates/customhome-pages/page-nasu-house.php',
+    'design-office' => get_template_directory() . '/hub/templates/customhome-pages/page-design-office.php',
+    'company'       => get_template_directory() . '/hub/templates/customhome-pages/page-company.php',
+    'contact'       => get_template_directory() . '/hub/templates/customhome-pages/page-contact.php',
+);
+
+if (isset($template_map[$post_slug]) && file_exists($template_map[$post_slug])) {
+    require $template_map[$post_slug];
+    return;
+}
+
+get_header('customhome');
+?>
+<main class="hub-customhome-page hub-customhome-subpage" data-localnav-mode="hero_to_cta">
+    <section class="ch-hero ch-fullbleed ch-subpage-hero">
+        <div class="ch-hero__media">
+            <?php if ($hero_image) : ?>
+                <img class="ch-hero__image" src="<?php echo esc_url($hero_image); ?>" alt="<?php echo esc_attr($title); ?>">
+            <?php endif; ?>
+            <div class="ch-hero__overlay"></div>
+        </div>
+
+        <div class="ch-shell ch-hero__inner">
+            <div class="ch-hero__content">
+                <div class="ch-kicker">CUSTOM HOME HUB</div>
+                <h1 class="ch-hero__title"><?php echo esc_html($title); ?></h1>
+                <?php if ($lead !== '') : ?>
+                    <p class="ch-hero__lead"><?php echo nl2br(esc_html($lead)); ?></p>
+                <?php endif; ?>
+                <div class="ch-hero__actions">
+                    <a class="ch-btn ch-btn--primary" href="<?php echo esc_url($contact_url); ?>">無料相談・資料請求</a>
+                    <a class="ch-btn ch-btn--ghost" href="<?php echo esc_url($parent_url); ?>">注文住宅トップへ戻る</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <nav class="ch-localnav ch-localnav--construction" data-customhome-localnav aria-label="注文住宅固定ナビ">
+        <div class="ch-shell">
+            <?php if (has_nav_menu('customhome-page-menu')) : ?>
+                <?php
+                wp_nav_menu(array(
+                    'theme_location' => 'customhome-page-menu',
+                    'container'      => false,
+                    'menu_class'     => 'ch-localnav__list',
+                    'fallback_cb'    => false,
+                ));
+                ?>
+            <?php else : ?>
+                <ul class="ch-localnav__list">
+                    <li><a href="<?php echo esc_url(home_url('/construction-hub/concept/')); ?>">注文住宅の考え方</a></li>
+                    <li><a href="<?php echo esc_url(home_url('/construction-hub/design-policy/')); ?>">設計姿勢</a></li>
+                    <li><a href="<?php echo esc_url(home_url('/construction-hub/nasu-house/')); ?>">那須での家づくり</a></li>
+                    <li><a href="<?php echo esc_url(home_url('/construction-hub/design-office/')); ?>">デザインと設計</a></li>
+                    <li><a href="<?php echo esc_url(home_url('/construction-hub/company/')); ?>">会社概要</a></li>
+                    <li><a href="<?php echo esc_url(home_url('/construction-hub/contact/')); ?>">ご相談・資料請求</a></li>
+                </ul>
+            <?php endif; ?>
+        </div>
+    </nav>
+
+    <section class="ch-section ch-section--white ch-subpage-section">
+        <div class="ch-shell">
+            <div class="ch-subpage-layout">
+                <article class="ch-subpage-main">
+                    <?php
+                    while (have_posts()) :
+                        the_post();
+                        the_content();
+                    endwhile;
+                    ?>
+                </article>
+
+                <aside class="ch-subpage-side">
+                    <div class="ch-subpage-side__card">
+                        <h3>ご相談内容の例</h3>
+                        <p>土地探し、設計の方向性、予算感、那須での住まい方まで、構想段階から整理できます。</p>
+                        <a class="ch-btn ch-btn--primary" href="<?php echo esc_url($contact_url); ?>">ご相談ページへ</a>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </section>
+</main>
+<?php get_footer('customhome'); ?>

@@ -1,0 +1,13 @@
+=== removed blocks ===
+1. hub-context-front variables: 60 chars -> _disabled/fudousan-css-removed-manual/01-hub-context-front-variables.css
+2. hub-context-front variables: 450 chars -> _disabled/fudousan-css-removed-manual/02-hub-context-front-variables.css
+3. hub-context-construction variables: 458 chars -> _disabled/fudousan-css-removed-manual/03-hub-context-construction-variables.css
+4. construction creative intro hero: 7865 chars -> _disabled/fudousan-css-removed-manual/04-construction-creative-intro-hero.css
+5. front title and front hero tweaks: 668 chars -> _disabled/fudousan-css-removed-manual/05-front-title-and-front-hero-tweaks.css
+6. front legacy home-box: 11108 chars -> _disabled/fudousan-css-removed-manual/06-front-legacy-home-box.css
+7. front home-box redesign: 5655 chars -> _disabled/fudousan-css-removed-manual/07-front-home-box-redesign.css
+8. NAIGAI FRONT HUB MANAGED: 13310 chars -> _disabled/fudousan-css-removed-manual/08-NAIGAI-FRONT-HUB-MANAGED.css
+
+before: 67566 chars
+after : 28493 chars
+diff  : 39073 chars

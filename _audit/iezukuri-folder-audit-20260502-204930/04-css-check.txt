@@ -1,0 +1,431 @@
+----- CSS files -----
+hub/pages/iezukuri/admin/css/customhome-builder-admin.css
+hub/pages/iezukuri/admin/css/customhome-subpage-admin.css
+hub/pages/iezukuri/css/ch-hero.css
+hub/pages/iezukuri/css/iezukuri-subpage.css
+hub/pages/iezukuri/css/iezukuri.css
+hub/pages/iezukuri/css/pages/company.css
+hub/pages/iezukuri/css/pages/design-office.css
+hub/pages/iezukuri/css/pages/nasu-house.css
+iezukuri/css/ch-hero.css
+iezukuri/css/iezukuri-subpage.css
+iezukuri/css/iezukuri.css
+iezukuri/css/pages/nasu-house.css
+
+----- hero selectors inside CSS -----
+iezukuri/css/iezukuri-subpage.css:34:/* IEZUKURI SUBPAGE HERO MOVED TO ch-hero.css
+iezukuri/css/iezukuri-subpage.css:35:.hub-customhome-subpage .ch-subpage-hero {
+iezukuri/css/iezukuri-subpage.css:42:.hub-customhome-subpage .ch-subpage-hero.is-has-media {
+iezukuri/css/iezukuri-subpage.css:46:.hub-customhome-subpage .ch-subpage-hero .ch-hero__media {
+iezukuri/css/iezukuri-subpage.css:56:.hub-customhome-subpage .ch-subpage-hero .ch-hero__image,
+iezukuri/css/iezukuri-subpage.css:57:.hub-customhome-subpage .ch-subpage-hero .ch-hero__video {
+iezukuri/css/iezukuri-subpage.css:64:.hub-customhome-subpage .ch-subpage-hero .ch-hero__inner {
+iezukuri/css/iezukuri-subpage.css:72:.hub-customhome-subpage .ch-subpage-hero .ch-hero__overlay {
+iezukuri/css/iezukuri-subpage.css:83:.hub-customhome-subpage .ch-subpage-hero .ch-hero__content {
+iezukuri/css/iezukuri-subpage.css:89:.hub-customhome-subpage .ch-subpage-hero .ch-kicker {
+iezukuri/css/iezukuri-subpage.css:103:.hub-customhome-subpage .ch-subpage-hero .ch-hero__title {
+iezukuri/css/iezukuri-subpage.css:111:.hub-customhome-subpage .ch-subpage-hero .ch-hero__lead {
+iezukuri/css/iezukuri-subpage.css:118:.hub-customhome-subpage .ch-subpage-hero .ch-hero__actions {
+iezukuri/css/iezukuri-subpage.css:125:.hub-customhome-subpage .ch-subpage-hero .ch-hero__actions .ch-btn {
+iezukuri/css/iezukuri-subpage.css:131:.hub-customhome-subpage .ch-subpage-hero .ch-hero__actions .ch-btn--primary {
+iezukuri/css/iezukuri-subpage.css:137:.hub-customhome-subpage .ch-subpage-hero .ch-hero__actions .ch-btn--ghost {
+iezukuri/css/iezukuri-subpage.css:143:.hub-customhome-subpage .ch-subpage-hero .ch-hero__actions .ch-btn--ghost:hover {
+iezukuri/css/iezukuri-subpage.css:149:/* IEZUKURI SUBPAGE HERO MOVED TO ch-hero.css
+iezukuri/css/iezukuri-subpage.css:150:.hub-customhome-subpage .ch-subpage-hero.is-no-media {
+iezukuri/css/iezukuri-subpage.css:155:.hub-customhome-subpage .ch-subpage-hero.is-no-media .ch-hero__media,
+iezukuri/css/iezukuri-subpage.css:156:.hub-customhome-subpage .ch-subpage-hero.is-no-media .ch-hero__overlay {
+iezukuri/css/iezukuri-subpage.css:160:.hub-customhome-subpage .ch-subpage-hero.is-no-media .ch-hero__inner {
+iezukuri/css/iezukuri-subpage.css:164:.hub-customhome-subpage .ch-subpage-hero.is-no-media .ch-hero__content {
+iezukuri/css/iezukuri-subpage.css:168:.hub-customhome-subpage .ch-subpage-hero.is-no-media .ch-kicker {
+iezukuri/css/iezukuri-subpage.css:174:.hub-customhome-subpage .ch-subpage-hero.is-no-media .ch-hero__title {
+iezukuri/css/iezukuri-subpage.css:178:.hub-customhome-subpage .ch-subpage-hero.is-no-media .ch-hero__lead {
+iezukuri/css/iezukuri-subpage.css:182:.hub-customhome-subpage .ch-subpage-hero.is-no-media .ch-hero__actions .ch-btn--ghost {
+iezukuri/css/iezukuri-subpage.css:188:.hub-customhome-subpage .ch-subpage-hero.is-no-media .ch-hero__actions .ch-btn--ghost:hover {
+iezukuri/css/iezukuri-subpage.css:882:/* IEZUKURI SUBPAGE HERO MOVED TO ch-hero.css
+iezukuri/css/iezukuri-subpage.css:970:  .hub-customhome-subpage .ch-subpage-hero {
+iezukuri/css/iezukuri-subpage.css:976:  .hub-customhome-subpage .ch-subpage-hero .ch-hero__media {
+iezukuri/css/iezukuri-subpage.css:985:  .hub-customhome-subpage .ch-subpage-hero .ch-hero__overlay {
+iezukuri/css/iezukuri-subpage.css:989:  .hub-customhome-subpage .ch-subpage-hero .ch-hero__inner {
+iezukuri/css/iezukuri-subpage.css:996:  .hub-customhome-subpage .ch-subpage-hero .ch-hero__content {
+iezukuri/css/iezukuri-subpage.css:1003:  .hub-customhome-subpage .ch-subpage-hero .ch-kicker {
+iezukuri/css/iezukuri-subpage.css:1010:  .hub-customhome-subpage .ch-subpage-hero .ch-hero__title {
+iezukuri/css/iezukuri-subpage.css:1017:  .hub-customhome-subpage .ch-subpage-hero .ch-hero__lead {
+iezukuri/css/iezukuri-subpage.css:1024:  .hub-customhome-subpage .ch-subpage-hero .ch-hero__actions {
+iezukuri/css/iezukuri-subpage.css:1032:  .hub-customhome-subpage .ch-subpage-hero .ch-hero__actions .ch-btn {
+iezukuri/css/iezukuri-subpage.css:1042:  .hub-customhome-subpage .ch-subpage-hero .ch-hero__actions .ch-btn--primary {
+iezukuri/css/iezukuri-subpage.css:1048:  .hub-customhome-subpage .ch-subpage-hero .ch-hero__actions .ch-btn--ghost {
+iezukuri/css/iezukuri-subpage.css:1054:  .hub-customhome-subpage .ch-subpage-hero.is-no-media .ch-hero__inner {
+iezukuri/css/iezukuri-subpage.css:1058:  .hub-customhome-subpage .ch-subpage-hero.is-no-media .ch-hero__content {
+iezukuri/css/iezukuri-subpage.css:1138: * NASU HOUSE META CTA FINAL
+iezukuri/css/iezukuri-subpage.css:1173:.hub-customhome-subpage--nasu-house .ch-nasu-shot-cta__overlay {
+iezukuri/css/iezukuri-subpage.css:1211:.hub-customhome-subpage--nasu-house .ch-nasu-shot-cta .ch-hero__actions {
+iezukuri/css/iezukuri-subpage.css:1241:  .hub-customhome-subpage--nasu-house .ch-nasu-shot-cta .ch-hero__actions {
+iezukuri/css/iezukuri-subpage.css:1252: * NASU HOUSE META CTA FINAL END
+iezukuri/css/iezukuri-subpage.css:1256: * SUBPAGE GENERIC CTA FINAL
+iezukuri/css/iezukuri-subpage.css:1293:.hub-customhome-subpage .ch-customhome-cta .ch-nasu-shot-cta__overlay {
+iezukuri/css/iezukuri-subpage.css:1331:.hub-customhome-subpage .ch-customhome-cta .ch-hero__actions {
+iezukuri/css/iezukuri-subpage.css:1343:  .hub-customhome-subpage .ch-customhome-cta .ch-hero__actions {
+iezukuri/css/iezukuri-subpage.css:1354: * SUBPAGE GENERIC CTA FINAL END
+iezukuri/css/iezukuri-subpage.css:1358: * CUSTOMHOME SUBPAGE FAQ FINAL
+iezukuri/css/iezukuri-subpage.css:1423: * CUSTOMHOME SUBPAGE FAQ FINAL END
+iezukuri/css/iezukuri-subpage.css:1427: * CUSTOMHOME SUBPAGE CTA MEDIA FINAL
+iezukuri/css/iezukuri-subpage.css:1472:.hub-customhome-subpage .ch-customhome-cta .ch-nasu-shot-cta__overlay {
+iezukuri/css/iezukuri-subpage.css:1506:.hub-customhome-subpage .ch-customhome-cta .ch-hero__actions {
+iezukuri/css/iezukuri-subpage.css:1553:  .hub-customhome-subpage .ch-customhome-cta .ch-hero__actions {
+iezukuri/css/iezukuri-subpage.css:1564: * CUSTOMHOME SUBPAGE CTA MEDIA FINAL END
+iezukuri/css/iezukuri-subpage.css:1569: * CUSTOMHOME CONTACT FLOW / FORM FINAL
+iezukuri/css/iezukuri-subpage.css:1695: * CUSTOMHOME CONTACT FLOW / FORM FINAL END
+iezukuri/css/iezukuri-subpage.css:1699: * CUSTOMHOME COMPANY MAP FINAL
+iezukuri/css/iezukuri-subpage.css:1735: * CUSTOMHOME COMPANY MAP FINAL END
+iezukuri/css/iezukuri-subpage.css:1742: * 黒背景・黒overlayで画像を潰さない。
+iezukuri/css/iezukuri-subpage.css:1746:body.page-template-page-construction-hub-sub .ch-subpage-hero,
+iezukuri/css/iezukuri-subpage.css:1747:body.page-template-page-construction-hub-sub-php .ch-subpage-hero {
+iezukuri/css/iezukuri-subpage.css:1753:body.page-template-page-construction-hub-sub .ch-subpage-hero::before,
+iezukuri/css/iezukuri-subpage.css:1754:body.page-template-page-construction-hub-sub-php .ch-subpage-hero::before,
+iezukuri/css/iezukuri-subpage.css:1755:body.page-template-page-construction-hub-sub .ch-hero.ch-fullbleed.ch-subpage-hero::before,
+iezukuri/css/iezukuri-subpage.css:1756:body.page-template-page-construction-hub-sub-php .ch-hero.ch-fullbleed.ch-subpage-hero::before {
+iezukuri/css/iezukuri-subpage.css:1763:body.page-template-page-construction-hub-sub .ch-subpage-hero .ch-hero__media,
+iezukuri/css/iezukuri-subpage.css:1764:body.page-template-page-construction-hub-sub-php .ch-subpage-hero .ch-hero__media {
+iezukuri/css/iezukuri-subpage.css:1770:body.page-template-page-construction-hub-sub .ch-subpage-hero .ch-hero__image,
+iezukuri/css/iezukuri-subpage.css:1771:body.page-template-page-construction-hub-sub-php .ch-subpage-hero .ch-hero__image,
+iezukuri/css/iezukuri-subpage.css:1772:body.page-template-page-construction-hub-sub .ch-subpage-hero img,
+iezukuri/css/iezukuri-subpage.css:1773:body.page-template-page-construction-hub-sub-php .ch-subpage-hero img {
+iezukuri/css/iezukuri-subpage.css:1782:/* overlayは文字を読むためだけに薄くする */
+iezukuri/css/iezukuri-subpage.css:1783:body.page-template-page-construction-hub-sub .ch-subpage-hero .ch-hero__overlay,
+iezukuri/css/iezukuri-subpage.css:1784:body.page-template-page-construction-hub-sub-php .ch-subpage-hero .ch-hero__overlay {
+iezukuri/css/iezukuri-subpage.css:1795:body.page-template-page-construction-hub-sub .ch-subpage-hero.is-no-media,
+iezukuri/css/iezukuri-subpage.css:1796:body.page-template-page-construction-hub-sub-php .ch-subpage-hero.is-no-media,
+iezukuri/css/iezukuri-subpage.css:1797:body.page-template-page-construction-hub-sub .ch-subpage-hero.is-no-media .ch-hero__media,
+iezukuri/css/iezukuri-subpage.css:1798:body.page-template-page-construction-hub-sub-php .ch-subpage-hero.is-no-media .ch-hero__media {
+iezukuri/css/iezukuri.css:212:.hub-customhome-page .ch-hero {
+iezukuri/css/iezukuri.css:215:  background: #111;
+iezukuri/css/iezukuri.css:219:.hub-customhome-page .ch-hero__media,
+iezukuri/css/iezukuri.css:220:.hub-customhome-page .ch-hero__video,
+iezukuri/css/iezukuri.css:221:.hub-customhome-page .ch-hero__image {
+iezukuri/css/iezukuri.css:228:.hub-customhome-page .ch-hero__video,
+iezukuri/css/iezukuri.css:229:.hub-customhome-page .ch-hero__image {
+iezukuri/css/iezukuri.css:234:.hub-customhome-page .ch-hero__overlay {
+iezukuri/css/iezukuri.css:247:.hub-customhome-page .ch-hero__inner {
+iezukuri/css/iezukuri.css:255:.hub-customhome-page .ch-hero__content {
+iezukuri/css/iezukuri.css:262:.hub-customhome-page .ch-hero__brand-logo-wrap {
+iezukuri/css/iezukuri.css:266:.hub-customhome-page .ch-hero__brand-logo {
+iezukuri/css/iezukuri.css:273:.hub-customhome-page .ch-hero__company {
+iezukuri/css/iezukuri.css:281:.hub-customhome-page .ch-hero__company-sub {
+iezukuri/css/iezukuri.css:303:.hub-customhome-page .ch-hero__title {
+iezukuri/css/iezukuri.css:311:.hub-customhome-page .ch-hero__lead {
+iezukuri/css/iezukuri.css:320:.hub-customhome-page .ch-hero__actions {
+iezukuri/css/iezukuri.css:911:  .hub-customhome-page .ch-hero {
+iezukuri/css/iezukuri.css:915:  .hub-customhome-page .ch-hero__inner {
+iezukuri/css/iezukuri.css:919:  .hub-customhome-page .ch-hero__content {
+iezukuri/css/iezukuri.css:924:  .hub-customhome-page .ch-hero__title {
+iezukuri/css/iezukuri.css:928:  .hub-customhome-page .ch-hero__lead {
+iezukuri/css/iezukuri.css:980:  .hub-customhome-page .ch-hero {
+iezukuri/css/iezukuri.css:984:  .hub-customhome-page .ch-hero__inner {
+iezukuri/css/iezukuri.css:989:  .hub-customhome-page .ch-hero__content {
+iezukuri/css/iezukuri.css:1000:  .hub-customhome-page .ch-hero__title {
+iezukuri/css/iezukuri.css:1006:  .hub-customhome-page .ch-hero__lead {
+iezukuri/css/iezukuri.css:1013:  .hub-customhome-page .ch-hero__company {
+iezukuri/css/iezukuri.css:1017:  .hub-customhome-page .ch-hero__actions,
+iezukuri/css/iezukuri.css:1110:  .hub-customhome-page:not(.hub-customhome-subpage) .ch-hero {
+iezukuri/css/iezukuri.css:1116:  .hub-customhome-page:not(.hub-customhome-subpage) .ch-hero__media {
+iezukuri/css/iezukuri.css:1127:  .hub-customhome-page:not(.hub-customhome-subpage) .ch-hero__video,
+iezukuri/css/iezukuri.css:1128:  .hub-customhome-page:not(.hub-customhome-subpage) .ch-hero__image {
+iezukuri/css/iezukuri.css:1136:  .hub-customhome-page:not(.hub-customhome-subpage) .ch-hero__overlay {
+iezukuri/css/iezukuri.css:1140:  .hub-customhome-page:not(.hub-customhome-subpage) .ch-hero__inner {
+iezukuri/css/iezukuri.css:1147:  .hub-customhome-page:not(.hub-customhome-subpage) .ch-hero__content {
+iezukuri/css/iezukuri.css:1170:  .hub-customhome-page:not(.hub-customhome-subpage) .ch-hero__title {
+iezukuri/css/iezukuri.css:1178:  .hub-customhome-page:not(.hub-customhome-subpage) .ch-hero__lead {
+iezukuri/css/iezukuri.css:1186:  .hub-customhome-page:not(.hub-customhome-subpage) .ch-hero__actions {
+iezukuri/css/iezukuri.css:1194:  .hub-customhome-page:not(.hub-customhome-subpage) .ch-hero__actions .ch-btn {
+iezukuri/css/iezukuri.css:1205:  .hub-customhome-page:not(.hub-customhome-subpage) .ch-hero__actions .ch-btn--primary {
+iezukuri/css/iezukuri.css:1211:  .hub-customhome-page:not(.hub-customhome-subpage) .ch-hero__actions .ch-btn--ghost,
+iezukuri/css/iezukuri.css:1212:  .hub-customhome-page:not(.hub-customhome-subpage) .ch-hero__actions .ch-btn--ghost-light {
+iezukuri/css/iezukuri.css:1218:  .hub-customhome-page:not(.hub-customhome-subpage) .ch-hero__actions .ch-btn--ghost:hover,
+iezukuri/css/iezukuri.css:1219:  .hub-customhome-page:not(.hub-customhome-subpage) .ch-hero__actions .ch-btn--ghost-light:hover {
+iezukuri/css/iezukuri.css:1229:  .hub-customhome-page:not(.hub-customhome-subpage) .ch-hero {
+iezukuri/css/iezukuri.css:1233:  .hub-customhome-page:not(.hub-customhome-subpage) .ch-hero__media {
+iezukuri/css/iezukuri.css:1238:  .hub-customhome-page:not(.hub-customhome-subpage) .ch-hero__inner {
+iezukuri/css/iezukuri.css:1242:  .hub-customhome-page:not(.hub-customhome-subpage) .ch-hero__content {
+iezukuri/css/iezukuri.css:1247:  .hub-customhome-page:not(.hub-customhome-subpage) .ch-hero__title {
+iezukuri/css/iezukuri.css:1251:  .hub-customhome-page:not(.hub-customhome-subpage) .ch-hero__lead {
+iezukuri/css/iezukuri.css:1261:  .hub-customhome-page:not(.hub-customhome-subpage) .ch-hero__actions .ch-btn--primary {
+iezukuri/css/iezukuri.css:1267:  .hub-customhome-page:not(.hub-customhome-subpage) .ch-hero__actions .ch-btn--ghost,
+iezukuri/css/iezukuri.css:1268:  .hub-customhome-page:not(.hub-customhome-subpage) .ch-hero__actions .ch-btn--ghost-light {
+iezukuri/css/iezukuri.css:1587: * CTA MEDIA FIT FINAL
+iezukuri/css/iezukuri.css:1668: * CTA MEDIA FIT FINAL END
+iezukuri/css/iezukuri.css:1672: * CTA COMPACT HEIGHT FINAL
+iezukuri/css/iezukuri.css:1717: * CTA COMPACT HEIGHT FINAL END
+iezukuri/css/iezukuri.css:1721: * CTA MEDIA COVER MODE FINAL
+iezukuri/css/iezukuri.css:1744: * CTA MEDIA COVER MODE FINAL END
+iezukuri/css/iezukuri.css:1749: * IEZUKURI SUBPAGE HERO GUARD
+iezukuri/css/iezukuri.css:1753:main.hub-customhome-page.hub-customhome-subpage .ch-subpage-hero,
+iezukuri/css/iezukuri.css:1754:main.hub-customhome-page.hub-customhome-subpage .ch-subpage-hero .ch-hero__media,
+iezukuri/css/iezukuri.css:1755:main.hub-customhome-page.hub-customhome-subpage .ch-subpage-hero .ch-hero__inner,
+iezukuri/css/iezukuri.css:1756:main.hub-customhome-page.hub-customhome-subpage .ch-subpage-hero .ch-hero__content {
+iezukuri/css/iezukuri.css:1761:main.hub-customhome-page.hub-customhome-subpage .ch-subpage-hero .ch-hero__overlay {
+iezukuri/css/iezukuri.css:1768: * IEZUKURI SUBPAGE HERO GUARD END
+iezukuri/css/ch-hero.css:14: * - 背景色・疑似要素・overlayで画像を隠さない
+iezukuri/css/ch-hero.css:19:.hub-customhome-subpage .ch-subpage-hero {
+iezukuri/css/ch-hero.css:33:.hub-customhome-subpage .ch-subpage-hero::before,
+iezukuri/css/ch-hero.css:34:.hub-customhome-subpage .ch-subpage-hero::after,
+iezukuri/css/ch-hero.css:35:.hub-customhome-subpage .ch-subpage-hero .ch-hero__media::before,
+iezukuri/css/ch-hero.css:36:.hub-customhome-subpage .ch-subpage-hero .ch-hero__media::after {
+iezukuri/css/ch-hero.css:42:.hub-customhome-subpage .ch-subpage-hero .ch-hero__media.is-empty {
+iezukuri/css/ch-hero.css:46:/* ただし、is-emptyが残っても中に画像があるなら表示 */
+iezukuri/css/ch-hero.css:47:.hub-customhome-subpage .ch-subpage-hero .ch-hero__media.is-empty:has(img),
+iezukuri/css/ch-hero.css:48:.hub-customhome-subpage .ch-subpage-hero .ch-hero__media.is-empty:has(video) {
+iezukuri/css/ch-hero.css:53:.hub-customhome-subpage .ch-subpage-hero .ch-hero__media {
+iezukuri/css/ch-hero.css:66:.hub-customhome-subpage .ch-subpage-hero .ch-hero__image,
+iezukuri/css/ch-hero.css:67:.hub-customhome-subpage .ch-subpage-hero .ch-hero__video,
+iezukuri/css/ch-hero.css:68:.hub-customhome-subpage .ch-subpage-hero .ch-hero__media img,
+iezukuri/css/ch-hero.css:69:.hub-customhome-subpage .ch-subpage-hero .ch-hero__media video {
+iezukuri/css/ch-hero.css:87:/* overlayは一旦停止。画像確認を優先 */
+iezukuri/css/ch-hero.css:88:.hub-customhome-subpage .ch-subpage-hero .ch-hero__overlay {
+iezukuri/css/ch-hero.css:95:.hub-customhome-subpage .ch-subpage-hero .ch-hero__inner {
+iezukuri/css/ch-hero.css:104:.hub-customhome-subpage .ch-subpage-hero .ch-hero__content {
+iezukuri/css/ch-hero.css:113:.hub-customhome-subpage .ch-subpage-hero .ch-kicker {
+iezukuri/css/ch-hero.css:126:.hub-customhome-subpage .ch-subpage-hero .ch-hero__title {
+iezukuri/css/ch-hero.css:134:.hub-customhome-subpage .ch-subpage-hero .ch-hero__lead {
+iezukuri/css/ch-hero.css:143:.hub-customhome-subpage .ch-subpage-hero .ch-hero__actions {
+iezukuri/css/ch-hero.css:151:.hub-customhome-subpage .ch-subpage-hero:not(:has(.ch-hero__image)) {
+iezukuri/css/ch-hero.css:156:.hub-customhome-subpage .ch-subpage-hero:not(:has(.ch-hero__image)) .ch-hero__content,
+iezukuri/css/ch-hero.css:157:.hub-customhome-subpage .ch-subpage-hero:not(:has(.ch-hero__image)) .ch-hero__title,
+iezukuri/css/ch-hero.css:158:.hub-customhome-subpage .ch-subpage-hero:not(:has(.ch-hero__image)) .ch-hero__lead {
+iezukuri/css/ch-hero.css:164:  .hub-customhome-subpage .ch-subpage-hero {
+iezukuri/css/ch-hero.css:169:  .hub-customhome-subpage .ch-subpage-hero .ch-hero__media {
+iezukuri/css/ch-hero.css:177:  .hub-customhome-subpage .ch-subpage-hero .ch-hero__image,
+iezukuri/css/ch-hero.css:178:  .hub-customhome-subpage .ch-subpage-hero .ch-hero__video,
+iezukuri/css/ch-hero.css:179:  .hub-customhome-subpage .ch-subpage-hero .ch-hero__media img,
+iezukuri/css/ch-hero.css:180:  .hub-customhome-subpage .ch-subpage-hero .ch-hero__media video {
+iezukuri/css/ch-hero.css:185:  .hub-customhome-subpage .ch-subpage-hero .ch-hero__inner {
+iezukuri/css/ch-hero.css:191:  .hub-customhome-subpage .ch-subpage-hero .ch-hero__content {
+iezukuri/css/ch-hero.css:196:  .hub-customhome-subpage .ch-subpage-hero .ch-hero__title,
+iezukuri/css/ch-hero.css:197:  .hub-customhome-subpage .ch-subpage-hero .ch-hero__lead {
+iezukuri/css/pages/nasu-house.css:228:.hub-customhome-subpage--nasu-house .ch-nasu-shot-cta .ch-hero__actions {
+hub/pages/iezukuri/css/iezukuri-subpage.css:34:/* IEZUKURI SUBPAGE HERO MOVED TO ch-hero.css
+hub/pages/iezukuri/css/iezukuri-subpage.css:35:.hub-customhome-subpage .ch-subpage-hero {
+hub/pages/iezukuri/css/iezukuri-subpage.css:42:.hub-customhome-subpage .ch-subpage-hero.is-has-media {
+hub/pages/iezukuri/css/iezukuri-subpage.css:46:.hub-customhome-subpage .ch-subpage-hero .ch-hero__media {
+hub/pages/iezukuri/css/iezukuri-subpage.css:56:.hub-customhome-subpage .ch-subpage-hero .ch-hero__image,
+hub/pages/iezukuri/css/iezukuri-subpage.css:57:.hub-customhome-subpage .ch-subpage-hero .ch-hero__video {
+hub/pages/iezukuri/css/iezukuri-subpage.css:64:.hub-customhome-subpage .ch-subpage-hero .ch-hero__inner {
+hub/pages/iezukuri/css/iezukuri-subpage.css:72:.hub-customhome-subpage .ch-subpage-hero .ch-hero__overlay {
+hub/pages/iezukuri/css/iezukuri-subpage.css:83:.hub-customhome-subpage .ch-subpage-hero .ch-hero__content {
+hub/pages/iezukuri/css/iezukuri-subpage.css:89:.hub-customhome-subpage .ch-subpage-hero .ch-kicker {
+hub/pages/iezukuri/css/iezukuri-subpage.css:103:.hub-customhome-subpage .ch-subpage-hero .ch-hero__title {
+hub/pages/iezukuri/css/iezukuri-subpage.css:111:.hub-customhome-subpage .ch-subpage-hero .ch-hero__lead {
+hub/pages/iezukuri/css/iezukuri-subpage.css:118:.hub-customhome-subpage .ch-subpage-hero .ch-hero__actions {
+hub/pages/iezukuri/css/iezukuri-subpage.css:125:.hub-customhome-subpage .ch-subpage-hero .ch-hero__actions .ch-btn {
+hub/pages/iezukuri/css/iezukuri-subpage.css:131:.hub-customhome-subpage .ch-subpage-hero .ch-hero__actions .ch-btn--primary {
+hub/pages/iezukuri/css/iezukuri-subpage.css:137:.hub-customhome-subpage .ch-subpage-hero .ch-hero__actions .ch-btn--ghost {
+hub/pages/iezukuri/css/iezukuri-subpage.css:143:.hub-customhome-subpage .ch-subpage-hero .ch-hero__actions .ch-btn--ghost:hover {
+hub/pages/iezukuri/css/iezukuri-subpage.css:149:/* IEZUKURI SUBPAGE HERO MOVED TO ch-hero.css
+hub/pages/iezukuri/css/iezukuri-subpage.css:150:.hub-customhome-subpage .ch-subpage-hero.is-no-media {
+hub/pages/iezukuri/css/iezukuri-subpage.css:155:.hub-customhome-subpage .ch-subpage-hero.is-no-media .ch-hero__media,
+hub/pages/iezukuri/css/iezukuri-subpage.css:156:.hub-customhome-subpage .ch-subpage-hero.is-no-media .ch-hero__overlay {
+hub/pages/iezukuri/css/iezukuri-subpage.css:160:.hub-customhome-subpage .ch-subpage-hero.is-no-media .ch-hero__inner {
+hub/pages/iezukuri/css/iezukuri-subpage.css:164:.hub-customhome-subpage .ch-subpage-hero.is-no-media .ch-hero__content {
+hub/pages/iezukuri/css/iezukuri-subpage.css:168:.hub-customhome-subpage .ch-subpage-hero.is-no-media .ch-kicker {
+hub/pages/iezukuri/css/iezukuri-subpage.css:174:.hub-customhome-subpage .ch-subpage-hero.is-no-media .ch-hero__title {
+hub/pages/iezukuri/css/iezukuri-subpage.css:178:.hub-customhome-subpage .ch-subpage-hero.is-no-media .ch-hero__lead {
+hub/pages/iezukuri/css/iezukuri-subpage.css:182:.hub-customhome-subpage .ch-subpage-hero.is-no-media .ch-hero__actions .ch-btn--ghost {
+hub/pages/iezukuri/css/iezukuri-subpage.css:188:.hub-customhome-subpage .ch-subpage-hero.is-no-media .ch-hero__actions .ch-btn--ghost:hover {
+hub/pages/iezukuri/css/iezukuri-subpage.css:882:/* IEZUKURI SUBPAGE HERO MOVED TO ch-hero.css
+hub/pages/iezukuri/css/iezukuri-subpage.css:970:  .hub-customhome-subpage .ch-subpage-hero {
+hub/pages/iezukuri/css/iezukuri-subpage.css:976:  .hub-customhome-subpage .ch-subpage-hero .ch-hero__media {
+hub/pages/iezukuri/css/iezukuri-subpage.css:985:  .hub-customhome-subpage .ch-subpage-hero .ch-hero__overlay {
+hub/pages/iezukuri/css/iezukuri-subpage.css:989:  .hub-customhome-subpage .ch-subpage-hero .ch-hero__inner {
+hub/pages/iezukuri/css/iezukuri-subpage.css:996:  .hub-customhome-subpage .ch-subpage-hero .ch-hero__content {
+hub/pages/iezukuri/css/iezukuri-subpage.css:1003:  .hub-customhome-subpage .ch-subpage-hero .ch-kicker {
+hub/pages/iezukuri/css/iezukuri-subpage.css:1010:  .hub-customhome-subpage .ch-subpage-hero .ch-hero__title {
+hub/pages/iezukuri/css/iezukuri-subpage.css:1017:  .hub-customhome-subpage .ch-subpage-hero .ch-hero__lead {
+hub/pages/iezukuri/css/iezukuri-subpage.css:1024:  .hub-customhome-subpage .ch-subpage-hero .ch-hero__actions {
+hub/pages/iezukuri/css/iezukuri-subpage.css:1032:  .hub-customhome-subpage .ch-subpage-hero .ch-hero__actions .ch-btn {
+hub/pages/iezukuri/css/iezukuri-subpage.css:1042:  .hub-customhome-subpage .ch-subpage-hero .ch-hero__actions .ch-btn--primary {
+hub/pages/iezukuri/css/iezukuri-subpage.css:1048:  .hub-customhome-subpage .ch-subpage-hero .ch-hero__actions .ch-btn--ghost {
+hub/pages/iezukuri/css/iezukuri-subpage.css:1054:  .hub-customhome-subpage .ch-subpage-hero.is-no-media .ch-hero__inner {
+hub/pages/iezukuri/css/iezukuri-subpage.css:1058:  .hub-customhome-subpage .ch-subpage-hero.is-no-media .ch-hero__content {
+hub/pages/iezukuri/css/iezukuri-subpage.css:1138: * NASU HOUSE META CTA FINAL
+hub/pages/iezukuri/css/iezukuri-subpage.css:1173:.hub-customhome-subpage--nasu-house .ch-nasu-shot-cta__overlay {
+hub/pages/iezukuri/css/iezukuri-subpage.css:1211:.hub-customhome-subpage--nasu-house .ch-nasu-shot-cta .ch-hero__actions {
+hub/pages/iezukuri/css/iezukuri-subpage.css:1241:  .hub-customhome-subpage--nasu-house .ch-nasu-shot-cta .ch-hero__actions {
+hub/pages/iezukuri/css/iezukuri-subpage.css:1252: * NASU HOUSE META CTA FINAL END
+hub/pages/iezukuri/css/iezukuri-subpage.css:1256: * SUBPAGE GENERIC CTA FINAL
+hub/pages/iezukuri/css/iezukuri-subpage.css:1293:.hub-customhome-subpage .ch-customhome-cta .ch-nasu-shot-cta__overlay {
+hub/pages/iezukuri/css/iezukuri-subpage.css:1331:.hub-customhome-subpage .ch-customhome-cta .ch-hero__actions {
+hub/pages/iezukuri/css/iezukuri-subpage.css:1343:  .hub-customhome-subpage .ch-customhome-cta .ch-hero__actions {
+hub/pages/iezukuri/css/iezukuri-subpage.css:1354: * SUBPAGE GENERIC CTA FINAL END
+hub/pages/iezukuri/css/iezukuri-subpage.css:1358: * CUSTOMHOME SUBPAGE FAQ FINAL
+hub/pages/iezukuri/css/iezukuri-subpage.css:1423: * CUSTOMHOME SUBPAGE FAQ FINAL END
+hub/pages/iezukuri/css/iezukuri-subpage.css:1427: * CUSTOMHOME SUBPAGE CTA MEDIA FINAL
+hub/pages/iezukuri/css/iezukuri-subpage.css:1472:.hub-customhome-subpage .ch-customhome-cta .ch-nasu-shot-cta__overlay {
+hub/pages/iezukuri/css/iezukuri-subpage.css:1506:.hub-customhome-subpage .ch-customhome-cta .ch-hero__actions {
+hub/pages/iezukuri/css/iezukuri-subpage.css:1553:  .hub-customhome-subpage .ch-customhome-cta .ch-hero__actions {
+hub/pages/iezukuri/css/iezukuri-subpage.css:1564: * CUSTOMHOME SUBPAGE CTA MEDIA FINAL END
+hub/pages/iezukuri/css/iezukuri-subpage.css:1569: * CUSTOMHOME CONTACT FLOW / FORM FINAL
+hub/pages/iezukuri/css/iezukuri-subpage.css:1695: * CUSTOMHOME CONTACT FLOW / FORM FINAL END
+hub/pages/iezukuri/css/iezukuri-subpage.css:1699: * CUSTOMHOME COMPANY MAP FINAL
+hub/pages/iezukuri/css/iezukuri-subpage.css:1735: * CUSTOMHOME COMPANY MAP FINAL END
+hub/pages/iezukuri/css/iezukuri.css:212:.hub-customhome-page .ch-hero {
+hub/pages/iezukuri/css/iezukuri.css:215:  background: #111;
+hub/pages/iezukuri/css/iezukuri.css:219:.hub-customhome-page .ch-hero__media,
+hub/pages/iezukuri/css/iezukuri.css:220:.hub-customhome-page .ch-hero__video,
+hub/pages/iezukuri/css/iezukuri.css:221:.hub-customhome-page .ch-hero__image {
+hub/pages/iezukuri/css/iezukuri.css:228:.hub-customhome-page .ch-hero__video,
+hub/pages/iezukuri/css/iezukuri.css:229:.hub-customhome-page .ch-hero__image {
+hub/pages/iezukuri/css/iezukuri.css:234:.hub-customhome-page .ch-hero__overlay {
+hub/pages/iezukuri/css/iezukuri.css:247:.hub-customhome-page .ch-hero__inner {
+hub/pages/iezukuri/css/iezukuri.css:255:.hub-customhome-page .ch-hero__content {
+hub/pages/iezukuri/css/iezukuri.css:262:.hub-customhome-page .ch-hero__brand-logo-wrap {
+hub/pages/iezukuri/css/iezukuri.css:266:.hub-customhome-page .ch-hero__brand-logo {
+hub/pages/iezukuri/css/iezukuri.css:273:.hub-customhome-page .ch-hero__company {
+hub/pages/iezukuri/css/iezukuri.css:281:.hub-customhome-page .ch-hero__company-sub {
+hub/pages/iezukuri/css/iezukuri.css:303:.hub-customhome-page .ch-hero__title {
+hub/pages/iezukuri/css/iezukuri.css:311:.hub-customhome-page .ch-hero__lead {
+hub/pages/iezukuri/css/iezukuri.css:320:.hub-customhome-page .ch-hero__actions {
+hub/pages/iezukuri/css/iezukuri.css:911:  .hub-customhome-page .ch-hero {
+hub/pages/iezukuri/css/iezukuri.css:915:  .hub-customhome-page .ch-hero__inner {
+hub/pages/iezukuri/css/iezukuri.css:919:  .hub-customhome-page .ch-hero__content {
+hub/pages/iezukuri/css/iezukuri.css:924:  .hub-customhome-page .ch-hero__title {
+hub/pages/iezukuri/css/iezukuri.css:928:  .hub-customhome-page .ch-hero__lead {
+hub/pages/iezukuri/css/iezukuri.css:980:  .hub-customhome-page .ch-hero {
+hub/pages/iezukuri/css/iezukuri.css:984:  .hub-customhome-page .ch-hero__inner {
+hub/pages/iezukuri/css/iezukuri.css:989:  .hub-customhome-page .ch-hero__content {
+hub/pages/iezukuri/css/iezukuri.css:1000:  .hub-customhome-page .ch-hero__title {
+hub/pages/iezukuri/css/iezukuri.css:1006:  .hub-customhome-page .ch-hero__lead {
+hub/pages/iezukuri/css/iezukuri.css:1013:  .hub-customhome-page .ch-hero__company {
+hub/pages/iezukuri/css/iezukuri.css:1017:  .hub-customhome-page .ch-hero__actions,
+hub/pages/iezukuri/css/iezukuri.css:1110:  .hub-customhome-page:not(.hub-customhome-subpage) .ch-hero {
+hub/pages/iezukuri/css/iezukuri.css:1116:  .hub-customhome-page:not(.hub-customhome-subpage) .ch-hero__media {
+hub/pages/iezukuri/css/iezukuri.css:1127:  .hub-customhome-page:not(.hub-customhome-subpage) .ch-hero__video,
+hub/pages/iezukuri/css/iezukuri.css:1128:  .hub-customhome-page:not(.hub-customhome-subpage) .ch-hero__image {
+hub/pages/iezukuri/css/iezukuri.css:1136:  .hub-customhome-page:not(.hub-customhome-subpage) .ch-hero__overlay {
+hub/pages/iezukuri/css/iezukuri.css:1140:  .hub-customhome-page:not(.hub-customhome-subpage) .ch-hero__inner {
+hub/pages/iezukuri/css/iezukuri.css:1147:  .hub-customhome-page:not(.hub-customhome-subpage) .ch-hero__content {
+hub/pages/iezukuri/css/iezukuri.css:1170:  .hub-customhome-page:not(.hub-customhome-subpage) .ch-hero__title {
+hub/pages/iezukuri/css/iezukuri.css:1178:  .hub-customhome-page:not(.hub-customhome-subpage) .ch-hero__lead {
+hub/pages/iezukuri/css/iezukuri.css:1186:  .hub-customhome-page:not(.hub-customhome-subpage) .ch-hero__actions {
+hub/pages/iezukuri/css/iezukuri.css:1194:  .hub-customhome-page:not(.hub-customhome-subpage) .ch-hero__actions .ch-btn {
+hub/pages/iezukuri/css/iezukuri.css:1205:  .hub-customhome-page:not(.hub-customhome-subpage) .ch-hero__actions .ch-btn--primary {
+hub/pages/iezukuri/css/iezukuri.css:1211:  .hub-customhome-page:not(.hub-customhome-subpage) .ch-hero__actions .ch-btn--ghost,
+hub/pages/iezukuri/css/iezukuri.css:1212:  .hub-customhome-page:not(.hub-customhome-subpage) .ch-hero__actions .ch-btn--ghost-light {
+hub/pages/iezukuri/css/iezukuri.css:1218:  .hub-customhome-page:not(.hub-customhome-subpage) .ch-hero__actions .ch-btn--ghost:hover,
+hub/pages/iezukuri/css/iezukuri.css:1219:  .hub-customhome-page:not(.hub-customhome-subpage) .ch-hero__actions .ch-btn--ghost-light:hover {
+hub/pages/iezukuri/css/iezukuri.css:1229:  .hub-customhome-page:not(.hub-customhome-subpage) .ch-hero {
+hub/pages/iezukuri/css/iezukuri.css:1233:  .hub-customhome-page:not(.hub-customhome-subpage) .ch-hero__media {
+hub/pages/iezukuri/css/iezukuri.css:1238:  .hub-customhome-page:not(.hub-customhome-subpage) .ch-hero__inner {
+hub/pages/iezukuri/css/iezukuri.css:1242:  .hub-customhome-page:not(.hub-customhome-subpage) .ch-hero__content {
+hub/pages/iezukuri/css/iezukuri.css:1247:  .hub-customhome-page:not(.hub-customhome-subpage) .ch-hero__title {
+hub/pages/iezukuri/css/iezukuri.css:1251:  .hub-customhome-page:not(.hub-customhome-subpage) .ch-hero__lead {
+hub/pages/iezukuri/css/iezukuri.css:1261:  .hub-customhome-page:not(.hub-customhome-subpage) .ch-hero__actions .ch-btn--primary {
+hub/pages/iezukuri/css/iezukuri.css:1267:  .hub-customhome-page:not(.hub-customhome-subpage) .ch-hero__actions .ch-btn--ghost,
+hub/pages/iezukuri/css/iezukuri.css:1268:  .hub-customhome-page:not(.hub-customhome-subpage) .ch-hero__actions .ch-btn--ghost-light {
+hub/pages/iezukuri/css/iezukuri.css:1587: * CTA MEDIA FIT FINAL
+hub/pages/iezukuri/css/iezukuri.css:1668: * CTA MEDIA FIT FINAL END
+hub/pages/iezukuri/css/iezukuri.css:1672: * CTA COMPACT HEIGHT FINAL
+hub/pages/iezukuri/css/iezukuri.css:1717: * CTA COMPACT HEIGHT FINAL END
+hub/pages/iezukuri/css/iezukuri.css:1721: * CTA MEDIA COVER MODE FINAL
+hub/pages/iezukuri/css/iezukuri.css:1744: * CTA MEDIA COVER MODE FINAL END
+hub/pages/iezukuri/css/ch-hero.css:4: * hub/pages/iezukuri/css/ch-hero.css
+hub/pages/iezukuri/css/ch-hero.css:17:.hub-customhome-subpage .ch-subpage-hero.ch-hero,
+hub/pages/iezukuri/css/ch-hero.css:18:.hub-customhome-subpage .ch-hero.ch-fullbleed,
+hub/pages/iezukuri/css/ch-hero.css:19:.ch-hero.ch-fullbleed.ch-subpage-hero {
+hub/pages/iezukuri/css/ch-hero.css:28:  background: #151515 !important;
+hub/pages/iezukuri/css/ch-hero.css:33:.ch-subpage-hero.ch-hero::before,
+hub/pages/iezukuri/css/ch-hero.css:34:.ch-hero.ch-fullbleed.ch-subpage-hero::before {
+hub/pages/iezukuri/css/ch-hero.css:40:.ch-subpage-hero > .ch-hero__media,
+hub/pages/iezukuri/css/ch-hero.css:41:.ch-hero.ch-fullbleed > .ch-hero__media,
+hub/pages/iezukuri/css/ch-hero.css:42:.ch-subpage-hero > .ch-hero__media[data-ch-hero-bridge="1"],
+hub/pages/iezukuri/css/ch-hero.css:43:.ch-hero.ch-fullbleed > .ch-hero__media[data-ch-hero-bridge="1"] {
+hub/pages/iezukuri/css/ch-hero.css:54:  background: #151515 !important;
+hub/pages/iezukuri/css/ch-hero.css:58:.ch-hero__media.is-empty,
+hub/pages/iezukuri/css/ch-hero.css:59:.ch-hero__media[data-ch-hero-bridge="1"].is-empty {
+hub/pages/iezukuri/css/ch-hero.css:66:.ch-hero__media .swiper,
+hub/pages/iezukuri/css/ch-hero.css:67:.ch-hero__media .swiper-wrapper,
+hub/pages/iezukuri/css/ch-hero.css:68:.ch-hero__media .swiper-slide,
+hub/pages/iezukuri/css/ch-hero.css:69:.ch-hero__media[data-ch-hero-bridge="1"] .swiper,
+hub/pages/iezukuri/css/ch-hero.css:70:.ch-hero__media[data-ch-hero-bridge="1"] .swiper-wrapper,
+hub/pages/iezukuri/css/ch-hero.css:71:.ch-hero__media[data-ch-hero-bridge="1"] .swiper-slide {
+hub/pages/iezukuri/css/ch-hero.css:78:.ch-hero__media img,
+hub/pages/iezukuri/css/ch-hero.css:79:.ch-hero__media video,
+hub/pages/iezukuri/css/ch-hero.css:80:.ch-hero__media .ch-hero__image,
+hub/pages/iezukuri/css/ch-hero.css:81:.ch-hero__media .ch-hero__video,
+hub/pages/iezukuri/css/ch-hero.css:82:.ch-hero__media[data-ch-hero-bridge="1"] img,
+hub/pages/iezukuri/css/ch-hero.css:83:.ch-hero__media[data-ch-hero-bridge="1"] video,
+hub/pages/iezukuri/css/ch-hero.css:84:.ch-hero__media[data-ch-hero-bridge="1"] .ch-hero__image,
+hub/pages/iezukuri/css/ch-hero.css:85:.ch-hero__media[data-ch-hero-bridge="1"] .ch-hero__video {
+hub/pages/iezukuri/css/ch-hero.css:97:.ch-subpage-hero .ch-hero__overlay,
+hub/pages/iezukuri/css/ch-hero.css:98:.ch-hero.ch-fullbleed .ch-hero__overlay {
+hub/pages/iezukuri/css/ch-hero.css:108:.ch-subpage-hero > .ch-shell.ch-hero__inner,
+hub/pages/iezukuri/css/ch-hero.css:109:.ch-hero.ch-fullbleed > .ch-shell.ch-hero__inner {
+hub/pages/iezukuri/css/ch-hero.css:118:.ch-subpage-hero .ch-hero__content,
+hub/pages/iezukuri/css/ch-hero.css:119:.ch-subpage-hero .ch-hero__actions,
+hub/pages/iezukuri/css/ch-hero.css:120:.ch-subpage-hero .ch-hero__actions a,
+hub/pages/iezukuri/css/ch-hero.css:121:.ch-subpage-hero .ch-btn {
+hub/pages/iezukuri/css/ch-hero.css:125:.ch-subpage-hero .ch-hero__title,
+hub/pages/iezukuri/css/ch-hero.css:126:.ch-subpage-hero .ch-hero__lead,
+hub/pages/iezukuri/css/ch-hero.css:127:.ch-subpage-hero .ch-kicker {
+hub/pages/iezukuri/css/ch-hero.css:133:.ch-hero-ui {
+hub/pages/iezukuri/css/ch-hero.css:140:.ch-hero-ui__arrow {
+hub/pages/iezukuri/css/ch-hero.css:164:.ch-hero-ui__arrow:hover {
+hub/pages/iezukuri/css/ch-hero.css:168:.ch-hero-ui__arrow--prev {
+hub/pages/iezukuri/css/ch-hero.css:172:.ch-hero-ui__arrow--next {
+hub/pages/iezukuri/css/ch-hero.css:176:.ch-hero-ui__dots {
+hub/pages/iezukuri/css/ch-hero.css:191:.ch-hero-ui__dot {
+hub/pages/iezukuri/css/ch-hero.css:204:.ch-hero-ui__dot.is-active {
+hub/pages/iezukuri/css/ch-hero.css:211:.ch-hero__media .swiper-button-prev,
+hub/pages/iezukuri/css/ch-hero.css:212:.ch-hero__media .swiper-button-next,
+hub/pages/iezukuri/css/ch-hero.css:213:.ch-hero__media .swiper-pagination {
+hub/pages/iezukuri/css/ch-hero.css:218:  .hub-customhome-subpage .ch-subpage-hero.ch-hero,
+hub/pages/iezukuri/css/ch-hero.css:219:  .hub-customhome-subpage .ch-hero.ch-fullbleed,
+hub/pages/iezukuri/css/ch-hero.css:220:  .ch-hero.ch-fullbleed.ch-subpage-hero,
+hub/pages/iezukuri/css/ch-hero.css:221:  .ch-subpage-hero > .ch-shell.ch-hero__inner,
+hub/pages/iezukuri/css/ch-hero.css:222:  .ch-hero.ch-fullbleed > .ch-shell.ch-hero__inner,
+hub/pages/iezukuri/css/ch-hero.css:223:  .ch-hero__media .swiper,
+hub/pages/iezukuri/css/ch-hero.css:224:  .ch-hero__media .swiper-wrapper,
+hub/pages/iezukuri/css/ch-hero.css:225:  .ch-hero__media .swiper-slide,
+hub/pages/iezukuri/css/ch-hero.css:226:  .ch-hero__media img,
+hub/pages/iezukuri/css/ch-hero.css:227:  .ch-hero__media video {
+hub/pages/iezukuri/css/ch-hero.css:231:  .ch-hero-ui__arrow {
+hub/pages/iezukuri/css/ch-hero.css:239:  .ch-hero-ui__arrow--prev {
+hub/pages/iezukuri/css/ch-hero.css:243:  .ch-hero-ui__arrow--next {
+hub/pages/iezukuri/css/ch-hero.css:247:  .ch-hero-ui__dots {
+hub/pages/iezukuri/css/pages/nasu-house.css:228:.hub-customhome-subpage--nasu-house .ch-nasu-shot-cta .ch-hero__actions {
+
+----- duplicated CTA / FAQ / final markers -----
+iezukuri/css/iezukuri-subpage.css:1138: * NASU HOUSE META CTA FINAL
+iezukuri/css/iezukuri-subpage.css:1252: * NASU HOUSE META CTA FINAL END
+iezukuri/css/iezukuri-subpage.css:1256: * SUBPAGE GENERIC CTA FINAL
+iezukuri/css/iezukuri-subpage.css:1354: * SUBPAGE GENERIC CTA FINAL END
+iezukuri/css/iezukuri-subpage.css:1358: * CUSTOMHOME SUBPAGE FAQ FINAL
+iezukuri/css/iezukuri-subpage.css:1423: * CUSTOMHOME SUBPAGE FAQ FINAL END
+iezukuri/css/iezukuri-subpage.css:1427: * CUSTOMHOME SUBPAGE CTA MEDIA FINAL
+iezukuri/css/iezukuri-subpage.css:1564: * CUSTOMHOME SUBPAGE CTA MEDIA FINAL END
+iezukuri/css/iezukuri-subpage.css:1569: * CUSTOMHOME CONTACT FLOW / FORM FINAL
+iezukuri/css/iezukuri-subpage.css:1695: * CUSTOMHOME CONTACT FLOW / FORM FINAL END
+iezukuri/css/iezukuri-subpage.css:1699: * CUSTOMHOME COMPANY MAP FINAL
+iezukuri/css/iezukuri-subpage.css:1735: * CUSTOMHOME COMPANY MAP FINAL END
+iezukuri/css/iezukuri.css:1587: * CTA MEDIA FIT FINAL
+iezukuri/css/iezukuri.css:1668: * CTA MEDIA FIT FINAL END
+iezukuri/css/iezukuri.css:1672: * CTA COMPACT HEIGHT FINAL
+iezukuri/css/iezukuri.css:1717: * CTA COMPACT HEIGHT FINAL END
+iezukuri/css/iezukuri.css:1721: * CTA MEDIA COVER MODE FINAL
+iezukuri/css/iezukuri.css:1744: * CTA MEDIA COVER MODE FINAL END
+hub/pages/iezukuri/css/iezukuri-subpage.css:1138: * NASU HOUSE META CTA FINAL
+hub/pages/iezukuri/css/iezukuri-subpage.css:1252: * NASU HOUSE META CTA FINAL END
+hub/pages/iezukuri/css/iezukuri-subpage.css:1256: * SUBPAGE GENERIC CTA FINAL
+hub/pages/iezukuri/css/iezukuri-subpage.css:1354: * SUBPAGE GENERIC CTA FINAL END
+hub/pages/iezukuri/css/iezukuri-subpage.css:1358: * CUSTOMHOME SUBPAGE FAQ FINAL
+hub/pages/iezukuri/css/iezukuri-subpage.css:1423: * CUSTOMHOME SUBPAGE FAQ FINAL END
+hub/pages/iezukuri/css/iezukuri-subpage.css:1427: * CUSTOMHOME SUBPAGE CTA MEDIA FINAL
+hub/pages/iezukuri/css/iezukuri-subpage.css:1564: * CUSTOMHOME SUBPAGE CTA MEDIA FINAL END
+hub/pages/iezukuri/css/iezukuri-subpage.css:1569: * CUSTOMHOME CONTACT FLOW / FORM FINAL
+hub/pages/iezukuri/css/iezukuri-subpage.css:1695: * CUSTOMHOME CONTACT FLOW / FORM FINAL END
+hub/pages/iezukuri/css/iezukuri-subpage.css:1699: * CUSTOMHOME COMPANY MAP FINAL
+hub/pages/iezukuri/css/iezukuri-subpage.css:1735: * CUSTOMHOME COMPANY MAP FINAL END
+hub/pages/iezukuri/css/iezukuri.css:1587: * CTA MEDIA FIT FINAL
+hub/pages/iezukuri/css/iezukuri.css:1668: * CTA MEDIA FIT FINAL END
+hub/pages/iezukuri/css/iezukuri.css:1672: * CTA COMPACT HEIGHT FINAL
+hub/pages/iezukuri/css/iezukuri.css:1717: * CTA COMPACT HEIGHT FINAL END
+hub/pages/iezukuri/css/iezukuri.css:1721: * CTA MEDIA COVER MODE FINAL
+hub/pages/iezukuri/css/iezukuri.css:1744: * CTA MEDIA COVER MODE FINAL END

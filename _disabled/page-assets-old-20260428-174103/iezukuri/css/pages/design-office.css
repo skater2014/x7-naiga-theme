@@ -1,0 +1,390 @@
+.hub-customhome-template--design-office .ch-plan-tabs,
+.hub-customhome-subpage--design-office .ch-plan-tabs {
+  margin-top: 48px;
+}
+
+.hub-customhome-template--design-office .ch-plan-tabs__lead,
+.hub-customhome-subpage--design-office .ch-plan-tabs__lead {
+  margin: 16px auto 0;
+  max-width: 760px;
+  text-align: center;
+  color: #6a5d4f;
+  font-size: 16px;
+  line-height: 1.9;
+}
+
+.hub-customhome-template--design-office .ch-plan-tabs__box,
+.hub-customhome-subpage--design-office .ch-plan-tabs__box {
+  margin-top: 32px;
+}
+
+.hub-customhome-template--design-office .ch-plan-tabs__radio,
+.hub-customhome-subpage--design-office .ch-plan-tabs__radio {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.hub-customhome-template--design-office .ch-plan-tabs__nav,
+.hub-customhome-subpage--design-office .ch-plan-tabs__nav {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.hub-customhome-template--design-office .ch-plan-tabs__tab,
+.hub-customhome-subpage--design-office .ch-plan-tabs__tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 52px;
+  padding: 0 20px;
+  border: 1px solid rgba(77, 53, 29, 0.14);
+  background: #fff;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.hub-customhome-template--design-office .ch-plan-tabs__tab-badge,
+.hub-customhome-subpage--design-office .ch-plan-tabs__tab-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 72px;
+  min-height: 32px;
+  padding: 0 10px;
+  background: #b78242;
+  color: #fff;
+  font-size: 13px;
+}
+
+.hub-customhome-template--design-office .ch-plan-tabs__tab-type,
+.hub-customhome-subpage--design-office .ch-plan-tabs__tab-type {
+  color: #241910;
+  font-size: 16px;
+}
+
+.hub-customhome-template--design-office .ch-plan-tabs__panel,
+.hub-customhome-subpage--design-office .ch-plan-tabs__panel {
+  display: none;
+  padding: 26px;
+  border: 1px solid rgba(77, 53, 29, 0.10);
+  background: #fff;
+}
+
+#plan-tab-a:checked ~ .ch-plan-tabs__nav label[for="plan-tab-a"],
+#plan-tab-b:checked ~ .ch-plan-tabs__nav label[for="plan-tab-b"],
+#plan-tab-c:checked ~ .ch-plan-tabs__nav label[for="plan-tab-c"] {
+  border-color: rgba(183, 130, 66, 0.34);
+  box-shadow: inset 0 -2px 0 #b78242;
+}
+
+#plan-tab-a:checked ~ .ch-plan-tabs__panels .ch-plan-tabs__panel--a,
+#plan-tab-b:checked ~ .ch-plan-tabs__panels .ch-plan-tabs__panel--b,
+#plan-tab-c:checked ~ .ch-plan-tabs__panels .ch-plan-tabs__panel--c {
+  display: block;
+}
+
+.hub-customhome-template--design-office .ch-plan-tabs__panel-grid,
+.hub-customhome-subpage--design-office .ch-plan-tabs__panel-grid {
+  display: grid;
+  grid-template-columns: 320px minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.hub-customhome-template--design-office .ch-plan-tabs__media,
+.hub-customhome-template--design-office .ch-plan-tabs__detail,
+.hub-customhome-subpage--design-office .ch-plan-tabs__media,
+.hub-customhome-subpage--design-office .ch-plan-tabs__detail {
+  display: grid;
+  gap: 18px;
+}
+
+.hub-customhome-template--design-office .ch-plan-tabs__hero-image,
+.hub-customhome-template--design-office .ch-plan-tabs__plan-image,
+.hub-customhome-subpage--design-office .ch-plan-tabs__hero-image,
+.hub-customhome-subpage--design-office .ch-plan-tabs__plan-image {
+  margin: 0;
+  border: 1px solid rgba(77, 53, 29, 0.08);
+  background: #f8f4ec;
+}
+
+.hub-customhome-template--design-office .ch-plan-tabs__hero-image img,
+.hub-customhome-template--design-office .ch-plan-tabs__plan-image img,
+.hub-customhome-subpage--design-office .ch-plan-tabs__hero-image img,
+.hub-customhome-subpage--design-office .ch-plan-tabs__plan-image img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.hub-customhome-template--design-office .ch-plan-tabs__summary-card,
+.hub-customhome-subpage--design-office .ch-plan-tabs__summary-card {
+  padding: 18px;
+  border: 1px solid rgba(77, 53, 29, 0.10);
+  background: #fbf8f3;
+}
+
+.hub-customhome-template--design-office .ch-plan-tabs__summary-head,
+.hub-customhome-subpage--design-office .ch-plan-tabs__summary-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.hub-customhome-template--design-office .ch-plan-tabs__summary-badge,
+.hub-customhome-subpage--design-office .ch-plan-tabs__summary-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 72px;
+  min-height: 30px;
+  padding: 0 10px;
+  background: #b78242;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.hub-customhome-template--design-office .ch-plan-tabs__stats,
+.hub-customhome-subpage--design-office .ch-plan-tabs__stats {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+}
+
+.hub-customhome-template--design-office .ch-plan-tabs__stats div,
+.hub-customhome-subpage--design-office .ch-plan-tabs__stats div {
+  display: grid;
+  gap: 2px;
+}
+
+.hub-customhome-template--design-office .ch-plan-tabs__stats dt,
+.hub-customhome-subpage--design-office .ch-plan-tabs__stats dt {
+  color: #6a5d4f;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.hub-customhome-template--design-office .ch-plan-tabs__stats dd,
+.hub-customhome-subpage--design-office .ch-plan-tabs__stats dd {
+  margin: 0;
+  color: #241910;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.hub-customhome-template--design-office .ch-plan-tabs__text h3,
+.hub-customhome-subpage--design-office .ch-plan-tabs__text h3 {
+  margin: 0 0 14px;
+  color: #241910;
+  font-size: 26px;
+  line-height: 1.45;
+}
+
+.hub-customhome-template--design-office .ch-plan-tabs__points,
+.hub-customhome-subpage--design-office .ch-plan-tabs__points {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.hub-customhome-template--design-office .ch-plan-tabs__points li,
+.hub-customhome-subpage--design-office .ch-plan-tabs__points li {
+  position: relative;
+  padding-left: 22px;
+  color: #4d4136;
+  font-size: 15px;
+  line-height: 1.85;
+}
+
+.hub-customhome-template--design-office .ch-plan-tabs__points li::before,
+.hub-customhome-subpage--design-office .ch-plan-tabs__points li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: #b78242;
+  font-weight: 700;
+}
+
+.hub-customhome-template--design-office .ch-plan-tabs__text .ch-btn,
+.hub-customhome-subpage--design-office .ch-plan-tabs__text .ch-btn {
+  margin-top: 18px;
+}
+
+.hub-customhome-template--design-office .ch-plan-tabs__thumbs,
+.hub-customhome-subpage--design-office .ch-plan-tabs__thumbs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.hub-customhome-template--design-office .ch-plan-tabs__thumb,
+.hub-customhome-subpage--design-office .ch-plan-tabs__thumb {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 12px;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid rgba(77, 53, 29, 0.10);
+  background: #fff;
+  cursor: pointer;
+}
+
+.hub-customhome-template--design-office .ch-plan-tabs__thumb img,
+.hub-customhome-subpage--design-office .ch-plan-tabs__thumb img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.hub-customhome-template--design-office .ch-plan-tabs__thumb-meta,
+.hub-customhome-subpage--design-office .ch-plan-tabs__thumb-meta {
+  display: grid;
+  gap: 4px;
+}
+
+.hub-customhome-template--design-office .ch-plan-tabs__thumb-meta strong,
+.hub-customhome-subpage--design-office .ch-plan-tabs__thumb-meta strong {
+  color: #241910;
+  font-size: 15px;
+}
+
+.hub-customhome-template--design-office .ch-plan-tabs__thumb-meta span,
+.hub-customhome-subpage--design-office .ch-plan-tabs__thumb-meta span {
+  color: #6a5d4f;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+@media (max-width: 1024px) {
+  .hub-customhome-template--design-office .ch-plan-tabs__panel-grid,
+  .hub-customhome-subpage--design-office .ch-plan-tabs__panel-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hub-customhome-template--design-office .ch-plan-tabs__thumbs,
+  .hub-customhome-subpage--design-office .ch-plan-tabs__thumbs {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 767px) {
+  .hub-customhome-template--design-office .ch-plan-tabs__nav,
+  .hub-customhome-subpage--design-office .ch-plan-tabs__nav {
+    justify-content: flex-start;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: 4px;
+  }
+
+  .hub-customhome-template--design-office .ch-plan-tabs__tab,
+  .hub-customhome-subpage--design-office .ch-plan-tabs__tab {
+    white-space: nowrap;
+  }
+
+  .hub-customhome-template--design-office .ch-plan-tabs__panel,
+  .hub-customhome-subpage--design-office .ch-plan-tabs__panel {
+    padding: 18px;
+  }
+
+  .hub-customhome-template--design-office .ch-plan-tabs__text h3,
+  .hub-customhome-subpage--design-office .ch-plan-tabs__text h3 {
+    font-size: 22px;
+  }
+
+  .hub-customhome-template--design-office .ch-plan-tabs__thumb,
+  .hub-customhome-subpage--design-office .ch-plan-tabs__thumb {
+    grid-template-columns: 92px 1fr;
+  }
+}
+
+/* === design-office density tune v2 === */
+.hub-customhome-template--design-office .ch-plan-tabs,
+.hub-customhome-subpage--design-office .ch-plan-tabs {
+  margin-top: 36px;
+}
+
+.hub-customhome-template--design-office .ch-plan-tabs__nav,
+.hub-customhome-subpage--design-office .ch-plan-tabs__nav {
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.hub-customhome-template--design-office .ch-plan-tabs__tab,
+.hub-customhome-subpage--design-office .ch-plan-tabs__tab {
+  min-height: 48px;
+  padding: 0 18px;
+}
+
+.hub-customhome-template--design-office .ch-plan-tabs__panel,
+.hub-customhome-subpage--design-office .ch-plan-tabs__panel {
+  padding: 22px;
+  border-radius: 24px;
+}
+
+.hub-customhome-template--design-office .ch-plan-tabs__panel-grid,
+.hub-customhome-subpage--design-office .ch-plan-tabs__panel-grid {
+  grid-template-columns: 360px minmax(0, 1fr);
+  gap: 20px;
+}
+
+.hub-customhome-template--design-office .ch-plan-tabs__hero-image,
+.hub-customhome-subpage--design-office .ch-plan-tabs__hero-image {
+  overflow: hidden;
+  border-radius: 20px;
+}
+
+.hub-customhome-template--design-office .ch-plan-tabs__hero-image img,
+.hub-customhome-subpage--design-office .ch-plan-tabs__hero-image img {
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.hub-customhome-template--design-office .ch-plan-tabs__plan-image,
+.hub-customhome-subpage--design-office .ch-plan-tabs__plan-image {
+  padding: 16px;
+  border-radius: 20px;
+  background: #ffffff;
+}
+
+.hub-customhome-template--design-office .ch-plan-tabs__plan-image img,
+.hub-customhome-subpage--design-office .ch-plan-tabs__plan-image img {
+  display: block;
+  width: 100%;
+  max-height: 480px;
+  margin: 0 auto;
+  object-fit: contain;
+}
+
+.hub-customhome-template--design-office .ch-plan-tabs__summary-card,
+.hub-customhome-subpage--design-office .ch-plan-tabs__summary-card {
+  padding: 16px;
+  border-radius: 18px;
+}
+
+.hub-customhome-template--design-office .ch-plan-tabs__thumbs,
+.hub-customhome-subpage--design-office .ch-plan-tabs__thumbs {
+  gap: 12px;
+}
+
+.hub-customhome-template--design-office .ch-plan-tabs__thumb,
+.hub-customhome-subpage--design-office .ch-plan-tabs__thumb {
+  padding: 8px;
+  border-radius: 18px;
+}
+
+@media (max-width: 1024px) {
+  .hub-customhome-template--design-office .ch-plan-tabs__panel-grid,
+  .hub-customhome-subpage--design-office .ch-plan-tabs__panel-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,172 @@
+<?php
+/**
+ * /iezukuri トップLP
+ * 3カード選択後に出すストーリーカードデータ。
+ *
+ * 旧テーブル表の代わりに、
+ * - ストーリー
+ * - Before / Action
+ * - 間取りの考え方
+ * - ＋カード
+ * を表示する。
+ */
+
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+return array(
+    'two-family' => array(
+        'label' => 'Family Plan',
+        'heading' => '家族構成に合わせて暮らす',
+        'title' => '家族の距離感から、間取りを考える。',
+        'lead' => '二世帯だけでなく、夫婦、新婚、子育て、親世帯との同居、将来の介護まで含めて、共有する場所と分ける場所を整理します。',
+        'story' => '親世帯と子世帯、夫婦、子育て中の家族では、「一緒に過ごしたい場所」と「少し距離を置きたい場所」が違います。LDKは共有したいけれど、玄関や水回りは分けたい。寝室は近くても、生活音が気にならない位置にしたい。先に家族の距離感を整理すると、玄関・LDK・水回り・個室の配置が決めやすくなります。',
+        'before_image' => home_url('/wp-content/uploads/2026/04/lifestyle08.jpg'),
+        'action_image' => home_url('/wp-content/uploads/2026/05/hiraya-project-03-1024x768.png'),
+        'before' => array(
+            '近すぎると、お互いに気を使ってしまう。',
+            '離れすぎると、助け合いにくくなる。',
+            '生活時間が違うと、水回りや音が負担になる。',
+        ),
+        'action' => array(
+            '共有する場所と、分ける場所を先に決める。',
+            'LDK・玄関・水回り・寝室の距離を整理する。',
+            '家族それぞれの生活時間に合わせて動線を考える。',
+        ),
+        'layouts' => array(
+            array(
+                'title' => '共有LDK型',
+                'image' => home_url('/wp-content/uploads/2026/05/hiraya-project-03-1024x768.png'),
+                'text' => '食事や団らんは一緒にしやすく、個室で距離を取る考え方です。',
+                'point' => 'LDK / 個室 / 廊下',
+            ),
+            array(
+                'title' => '玄関分離型',
+                'image' => home_url('/wp-content/uploads/2026/05/hiraya-project-03-1024x768.png'),
+                'text' => '出入りの時間が違っても、お互いに気を使いにくい考え方です。',
+                'point' => '玄関 / 収納 / 来客動線',
+            ),
+            array(
+                'title' => '水回り分離型',
+                'image' => home_url('/wp-content/uploads/2026/05/hiraya-project-03-1024x768.png'),
+                'text' => '朝・夜・来客時の使い方が重なりにくくなる考え方です。',
+                'point' => '洗面 / 浴室 / トイレ',
+            ),
+        ),
+        'more' => array(
+            array(
+                'title' => '子育て・仕事・趣味の場所を分ける',
+                'text' => '子どもの勉強、在宅ワーク、趣味の時間を、それぞれ邪魔しにくい位置で考えます。',
+            ),
+            array(
+                'title' => '将来の介護やバリアフリーを見越す',
+                'text' => '寝室、水回り、廊下幅、段差を将来目線で整理します。',
+            ),
+            array(
+                'title' => '収納・駐車・来客動線を整える',
+                'text' => '家族人数、車の台数、来客時の使い方まで含めて外構と収納を考えます。',
+            ),
+        ),
+    ),
+
+    'one-family' => array(
+        'label' => 'New House',
+        'heading' => '自分たちだけの間取りで建てる',
+        'title' => '暮らし方から、間取りを組み立てる。',
+        'lead' => '土地、駐車スペース、庭、収納、ワークスペースまで含めて、暮らし方から一つずつ間取りを決めていきます。',
+        'story' => '家を建てるときに大切なのは、部屋数だけではありません。仕事、趣味、家事、家族の時間、庭とのつながりをどう使いたいかで、必要な間取りは変わります。先に暮らし方を整理すると、外観・動線・収納・水回りの優先順位が見えやすくなります。',
+        'before_image' => home_url('/wp-content/uploads/2026/04/lifestyle-5-1024x541.jpg'),
+        'action_image' => home_url('/wp-content/uploads/2026/05/hiraya-project-03-1024x768.png'),
+        'before' => array(
+            '既成の間取りでは、自分たちの暮らしに合いにくい。',
+            '収納、仕事場所、趣味の場所が後回しになりやすい。',
+            '土地や庭の使い方が間取りに反映されにくい。',
+        ),
+        'action' => array(
+            '暮らし方を先に整理して、必要な部屋と動線を決める。',
+            '収納・水回り・ワークスペースを最初から計画に入れる。',
+            '土地の向き、庭、駐車スペースとのつながりを考える。',
+        ),
+        'layouts' => array(
+            array(
+                'title' => '庭とつながるLDK',
+                'image' => home_url('/wp-content/uploads/2026/05/hiraya-project-03-1024x768.png'),
+                'text' => 'リビングと庭をつなげ、休日や二拠点生活でも過ごしやすくします。',
+                'point' => 'LDK / 庭 / デッキ',
+            ),
+            array(
+                'title' => '仕事と暮らしの分離',
+                'image' => home_url('/wp-content/uploads/2026/05/hiraya-project-03-1024x768.png'),
+                'text' => '在宅ワークや趣味の時間を、生活音から少し離して考えます。',
+                'point' => '書斎 / 収納 / 個室',
+            ),
+            array(
+                'title' => '将来に備える平面計画',
+                'image' => home_url('/wp-content/uploads/2026/05/hiraya-project-03-1024x768.png'),
+                'text' => '段差や移動距離を抑え、長く使える住まいにします。',
+                'point' => '寝室 / 水回り / 廊下',
+            ),
+        ),
+        'more' => array(
+            array(
+                'title' => '趣味収納を考える',
+                'text' => 'アウトドア用品、楽器、本、工具など、暮らしに合わせた収納を計画します。',
+            ),
+            array(
+                'title' => '外観と内装の好みを整理する',
+                'text' => '素材、色、光の入り方を見ながら、住む人らしい印象に整えます。',
+            ),
+        ),
+    ),
+
+    'used-renovation' => array(
+        'label' => 'Renovation',
+        'heading' => '今ある住まいを整える',
+        'title' => 'Before / Actionで、暮らしを改善する。',
+        'lead' => 'ただ直すだけではなく、水回り、収納、湿気対策、趣味部屋など、今の住まいに新しい使い道を足していきます。',
+        'story' => 'リフォームでは、古い部分を直すだけでなく、暮らし方に合わなくなった場所を見直すことが大切です。水回りを分ける、空き部屋を趣味に使う、湿気や収納を整える。小さな改善を重ねることで、今ある住まいの使い道が広がります。',
+        'before_image' => home_url('/wp-content/uploads/2026/04/lifestyle08.jpg'),
+        'action_image' => home_url('/wp-content/uploads/2026/05/hiraya-project-03-1024x768.png'),
+        'before' => array(
+            '水回りや収納が使いにくく、生活動線が重なりやすい。',
+            '空き部屋が物置になり、趣味や作業に使えていない。',
+            '湿気、外回り、内装の古さが気になっている。',
+        ),
+        'action' => array(
+            '水回り、収納、個室の使い方を見直す。',
+            '空き部屋を趣味・仕事・来客用に使えるよう整える。',
+            '湿気対策、壁塗り、外回り補修を優先順位で考える。',
+        ),
+        'layouts' => array(
+            array(
+                'title' => '水回り改善',
+                'image' => home_url('/wp-content/uploads/2026/05/hiraya-project-03-1024x768.png'),
+                'text' => 'トイレ、洗面、浴室の使い方を整理して、来客時も使いやすくします。',
+                'point' => 'トイレ / 洗面 / 浴室',
+            ),
+            array(
+                'title' => '趣味部屋化',
+                'image' => home_url('/wp-content/uploads/2026/05/hiraya-project-03-1024x768.png'),
+                'text' => '空き部屋をピアノ練習、制作、仕事などに使える場所へ変えます。',
+                'point' => '空き部屋 / 防音 / 収納',
+            ),
+            array(
+                'title' => '湿気・外回り対策',
+                'image' => home_url('/wp-content/uploads/2026/05/hiraya-project-03-1024x768.png'),
+                'text' => '那須の気候や使わない期間も考えて、維持しやすい状態に整えます。',
+                'point' => '換気 / 外壁 / 床下',
+            ),
+        ),
+        'more' => array(
+            array(
+                'title' => '収納改善',
+                'text' => '押入れ、玄関収納、季節物の置き場を見直し、生活感を抑えます。',
+            ),
+            array(
+                'title' => '内装の印象を整える',
+                'text' => '壁、床、照明を見直し、古さを隠すのではなく今の暮らしに合わせます。',
+            ),
+        ),
+    ),
+);

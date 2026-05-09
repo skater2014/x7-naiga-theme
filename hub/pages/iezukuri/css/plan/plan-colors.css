@@ -1,0 +1,52 @@
+/* =========================================================
+ * hub/pages/iezukuri/css/plan/plan-colors.css
+ *
+ * 対象:
+ * - /iezukuri/plans/
+ * - /iezukuri/plan/{slug}/
+ *
+ * 役割:
+ * - 間取り一覧・間取り詳細だけの共通色
+ * - 緑系は使わない
+ * - 茶色＋白＋薄ベージュ＋濃茶でコントラストを作る
+ * ========================================================= */
+
+body.post-type-archive-iez_plan,
+body.single-iez_plan {
+  --plan-page-bg: #f6f2ec;
+  --plan-panel-bg: #fffaf3;
+  --plan-card-bg: #ffffff;
+  --plan-card-bg-alt: #fbf2e6;
+  --plan-image-bg: #eee3d4;
+
+  --plan-text: #23170f;
+  --plan-text-strong: #160d08;
+  --plan-muted: #5e4a39;
+  --plan-muted-2: #7c6855;
+
+  --plan-accent: #9a6a3a;
+  --plan-accent-dark: #4d2b16;
+  --plan-accent-soft: #ead7bd;
+
+  --plan-border: rgba(77, 43, 22, 0.18);
+  --plan-border-strong: rgba(77, 43, 22, 0.34);
+  --plan-shadow: 0 14px 34px rgba(35, 23, 15, 0.10);
+
+  --plan-button-bg: #6f4422;
+  --plan-button-bg-hover: #4d2b16;
+  --plan-button-text: #ffffff;
+
+  --plan-secondary-bg: #ffffff;
+  --plan-secondary-text: #4d2b16;
+  --plan-secondary-border: rgba(77, 43, 22, 0.34);
+
+  --plan-chip-bg: #efe0cc;
+  --plan-chip-text: #4d2b16;
+
+  --plan-zoom-bg: rgba(255, 250, 244, 0.96);
+  --plan-zoom-text: #4d2b16;
+
+  --plan-lightbox-overlay: rgba(37, 24, 16, 0.66);
+  --plan-lightbox-control-bg: #fff7ed;
+  --plan-lightbox-control-text: #4d2b16;
+}

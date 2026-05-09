@@ -1,0 +1,250 @@
+/* =========================================================
+ * /iezukuri 共通Hero
+ * 管理場所:
+ * hub/pages/iezukuri/css/ch-hero.css
+ *
+ * 役割:
+ * - /iezukuri サブページHeroだけを管理
+ * - 画像 / MP4 / Swiper の表示を壊さない
+ *
+ * 禁止:
+ * - 本文レイアウトを書かない
+ * - ページ固有CSSを書かない
+ * - Hero全体をクリーム色で塗りつぶさない
+ * ========================================================= */
+
+/* Hero outer */
+.hub-customhome-subpage .ch-subpage-hero.ch-hero,
+.hub-customhome-subpage .ch-hero.ch-fullbleed,
+.ch-hero.ch-fullbleed.ch-subpage-hero {
+  position: relative !important;
+  width: 100vw !important;
+  max-width: none !important;
+  margin-left: calc(50% - 50vw) !important;
+  margin-right: calc(50% - 50vw) !important;
+  min-height: clamp(520px, 72vh, 760px) !important;
+  overflow: hidden !important;
+  isolation: isolate !important;
+  background: #151515 !important;
+  color: #fff !important;
+}
+
+/* 古い疑似要素の塗りを無効化 */
+.ch-subpage-hero.ch-hero::before,
+.ch-hero.ch-fullbleed.ch-subpage-hero::before {
+  content: none !important;
+  display: none !important;
+}
+
+/* Hero media area */
+.ch-subpage-hero > .ch-hero__media,
+.ch-hero.ch-fullbleed > .ch-hero__media,
+.ch-subpage-hero > .ch-hero__media[data-ch-hero-bridge="1"],
+.ch-hero.ch-fullbleed > .ch-hero__media[data-ch-hero-bridge="1"] {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  background: #151515 !important;
+}
+
+/* 空Heroの保険。クリーム塗りつぶしは禁止 */
+.ch-hero__media.is-empty,
+.ch-hero__media[data-ch-hero-bridge="1"].is-empty {
+  background:
+    linear-gradient(90deg, rgba(6, 8, 10, .72), rgba(6, 8, 10, .24)),
+    #151515 !important;
+}
+
+/* Swiper base */
+.ch-hero__media .swiper,
+.ch-hero__media .swiper-wrapper,
+.ch-hero__media .swiper-slide,
+.ch-hero__media[data-ch-hero-bridge="1"] .swiper,
+.ch-hero__media[data-ch-hero-bridge="1"] .swiper-wrapper,
+.ch-hero__media[data-ch-hero-bridge="1"] .swiper-slide {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: clamp(520px, 72vh, 760px) !important;
+}
+
+/* Image / Video */
+.ch-hero__media img,
+.ch-hero__media video,
+.ch-hero__media .ch-hero__image,
+.ch-hero__media .ch-hero__video,
+.ch-hero__media[data-ch-hero-bridge="1"] img,
+.ch-hero__media[data-ch-hero-bridge="1"] video,
+.ch-hero__media[data-ch-hero-bridge="1"] .ch-hero__image,
+.ch-hero__media[data-ch-hero-bridge="1"] .ch-hero__video {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: clamp(520px, 72vh, 760px) !important;
+  object-fit: cover !important;
+  object-position: center center !important;
+  display: block !important;
+  filter: none !important;
+  opacity: 1 !important;
+}
+
+/* Overlay */
+.ch-subpage-hero .ch-hero__overlay,
+.ch-hero.ch-fullbleed .ch-hero__overlay {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 1 !important;
+  pointer-events: none !important;
+  background:
+    linear-gradient(90deg, rgba(6, 8, 10, .68) 0%, rgba(6, 8, 10, .36) 48%, rgba(6, 8, 10, .16) 100%) !important;
+}
+
+/* Text area */
+.ch-subpage-hero > .ch-shell.ch-hero__inner,
+.ch-hero.ch-fullbleed > .ch-shell.ch-hero__inner {
+  position: relative !important;
+  z-index: 2 !important;
+  min-height: clamp(520px, 72vh, 760px) !important;
+  display: flex !important;
+  align-items: center !important;
+  pointer-events: none !important;
+}
+
+.ch-subpage-hero .ch-hero__content,
+.ch-subpage-hero .ch-hero__actions,
+.ch-subpage-hero .ch-hero__actions a,
+.ch-subpage-hero .ch-btn {
+  pointer-events: auto !important;
+}
+
+.ch-subpage-hero .ch-hero__title,
+.ch-subpage-hero .ch-hero__lead,
+.ch-subpage-hero .ch-kicker {
+  color: #fff !important;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, .36) !important;
+}
+
+/* Custom Hero UI */
+.ch-hero-ui {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 9 !important;
+  pointer-events: none !important;
+}
+
+.ch-hero-ui__arrow {
+  position: absolute !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  width: 42px !important;
+  height: 42px !important;
+  min-width: 42px !important;
+  min-height: 42px !important;
+  padding: 0 !important;
+  border: 1px solid rgba(255, 255, 255, .72) !important;
+  border-radius: 999px !important;
+  background: rgba(255, 255, 255, .88) !important;
+  color: #1f2933 !important;
+  font-size: 32px !important;
+  line-height: 1 !important;
+  font-weight: 700 !important;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, .16) !important;
+  cursor: pointer !important;
+  pointer-events: auto !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.ch-hero-ui__arrow:hover {
+  background: #fff !important;
+}
+
+.ch-hero-ui__arrow--prev {
+  left: 18px !important;
+}
+
+.ch-hero-ui__arrow--next {
+  right: 18px !important;
+}
+
+.ch-hero-ui__dots {
+  position: absolute !important;
+  left: 50% !important;
+  bottom: 28px !important;
+  transform: translateX(-50%) !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  pointer-events: auto !important;
+}
+
+.ch-hero-ui__dot {
+  width: 10px !important;
+  height: 10px !important;
+  min-width: 10px !important;
+  min-height: 10px !important;
+  padding: 0 !important;
+  border: 2px solid rgba(255, 255, 255, .88) !important;
+  border-radius: 999px !important;
+  background: rgba(75, 85, 99, .72) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .22) !important;
+  cursor: pointer !important;
+}
+
+.ch-hero-ui__dot.is-active {
+  width: 34px !important;
+  background: rgba(55, 65, 81, .95) !important;
+  border-color: #fff !important;
+}
+
+/* Swiper default UI は独自UIと重複するので隠す */
+.ch-hero__media .swiper-button-prev,
+.ch-hero__media .swiper-button-next,
+.ch-hero__media .swiper-pagination {
+  display: none !important;
+}
+
+@media (max-width: 767px) {
+  .hub-customhome-subpage .ch-subpage-hero.ch-hero,
+  .hub-customhome-subpage .ch-hero.ch-fullbleed,
+  .ch-hero.ch-fullbleed.ch-subpage-hero,
+  .ch-subpage-hero > .ch-shell.ch-hero__inner,
+  .ch-hero.ch-fullbleed > .ch-shell.ch-hero__inner,
+  .ch-hero__media .swiper,
+  .ch-hero__media .swiper-wrapper,
+  .ch-hero__media .swiper-slide,
+  .ch-hero__media img,
+  .ch-hero__media video {
+    min-height: 460px !important;
+  }
+
+  .ch-hero-ui__arrow {
+    width: 38px !important;
+    height: 38px !important;
+    min-width: 38px !important;
+    min-height: 38px !important;
+    font-size: 30px !important;
+  }
+
+  .ch-hero-ui__arrow--prev {
+    left: 10px !important;
+  }
+
+  .ch-hero-ui__arrow--next {
+    right: 10px !important;
+  }
+
+  .ch-hero-ui__dots {
+    bottom: 20px !important;
+  }
+}

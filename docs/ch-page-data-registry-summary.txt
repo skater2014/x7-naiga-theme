@@ -1,0 +1,6 @@
+concept / fields=49 / text=35 / images=14 / blocks=11 / hub/pages/iezukuri/templates/page-concept.php
+design_policy / fields=38 / text=37 / images=1 / blocks=8 / hub/pages/iezukuri/templates/page-design-policy.php
+nasu_shot / fields=38 / text=34 / images=4 / blocks=26 / hub/pages/iezukuri/templates/page-nasu-house.php
+design_office / fields=13 / text=12 / images=1 / blocks=8 / hub/pages/iezukuri/templates/page-design-office.php
+company / fields=50 / text=37 / images=13 / blocks=8 / hub/pages/iezukuri/templates/page-company.php
+contact / fields=30 / text=30 / images=0 / blocks=7 / hub/pages/iezukuri/templates/page-contact.php

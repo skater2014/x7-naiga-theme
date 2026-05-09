@@ -1,0 +1,920 @@
+/* =========================================================
+ * 3) nasu-guide-page
+ * ========================================================= */
+body.page-template-page-nasu-guide-php .page-wrapper {
+  max-width: none !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: visible !important;
+  background: transparent !important;
+}
+
+body.page-template-page-nasu-guide-php #primary.nasu-guide-page {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+}
+
+.nasu-guide-page {
+  --ngu-bg: #e9eef3;
+  --ngu-bg-soft: #f4f7fa;
+  --ngu-surface: #ffffff;
+  --ngu-surface-2: #e4ebf1;
+  --ngu-text: #1e2933;
+  --ngu-text-soft: #5d6a76;
+  --ngu-border: #d4dde6;
+  --ngu-primary: #274e70;
+  --ngu-primary-hover: #1e405c;
+  --ngu-accent: #9c7b55;
+  --ngu-shadow: 0 16px 40px rgba(20, 27, 34, 0.08);
+  --ngu-shadow-lg: 0 28px 60px rgba(20, 27, 34, 0.14);
+  --ngu-radius: 22px;
+  --ngu-radius-lg: 32px;
+  background: var(--ngu-bg);
+  color: var(--ngu-text);
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+:is(
+    body.dark-mode,
+    body.is-dark,
+    body.theme-dark,
+    body.dark-theme,
+    body.dark,
+    html.dark,
+    html.is-dark,
+    html.theme-dark,
+    html.dark-theme,
+    html[data-theme='dark'],
+    body[data-theme='dark']
+  )
+  .nasu-guide-page {
+  --ngu-bg: #0f1419;
+  --ngu-bg-soft: #141a20;
+  --ngu-surface: #171e26;
+  --ngu-surface-2: #121920;
+  --ngu-text: #edf2f7;
+  --ngu-text-soft: #a9b5c1;
+  --ngu-border: #2a3440;
+  --ngu-primary: #2d5f93;
+  --ngu-primary-hover: #3972af;
+  --ngu-accent: #d1aa72;
+  --ngu-shadow: 0 18px 42px rgba(0, 0, 0, 0.26);
+  --ngu-shadow-lg: 0 28px 60px rgba(0, 0, 0, 0.34);
+}
+
+body.page-template-page-nasu-guide-php .nasu-guide-page,
+body.page-template-page-nasu-guide-php .nasu-guide-page * {
+  box-sizing: border-box;
+}
+
+body.page-template-page-nasu-guide-php .nasu-guide-page .inner,
+body.page-template-page-nasu-guide-php .nasu-guide-hero .inner,
+body.page-template-page-nasu-guide-php .ngu-cta .inner {
+  width: min(1180px, calc(100% - 48px));
+  margin: 0 auto;
+}
+
+.nasu-guide-page section {
+  padding: 72px 0;
+}
+
+.ngu-intro {
+  padding-top: 56px;
+  padding-bottom: 40px;
+}
+
+.nasu-guide-page a {
+  color: inherit;
+}
+
+.nasu-guide-page .ngu-btn,
+.nasu-guide-page .ngu-btn:link,
+.nasu-guide-page .ngu-btn:visited,
+.nasu-guide-page .ngu-btn:hover,
+.nasu-guide-page .ngu-btn:focus,
+.nasu-guide-page .ngu-btn:active {
+  text-decoration: none !important;
+}
+
+.nasu-guide-page .ngu-section-head h2,
+.nasu-guide-page .ngu-card__body h3,
+.nasu-guide-page .ngu-company__body h2,
+.nasu-guide-page .ngu-biz-card h3,
+.nasu-guide-page .ngu-faq__question {
+  color: var(--ngu-text) !important;
+}
+
+.nasu-guide-page .ngu-section-head p,
+.nasu-guide-page .ngu-card__body p,
+.nasu-guide-page .ngu-company__body p,
+.nasu-guide-page .ngu-biz-card p,
+.nasu-guide-page .ngu-faq__answer-inner,
+.nasu-guide-page .ngu-intro__box p {
+  color: var(--ngu-text-soft) !important;
+}
+
+/* ---------- nasu hero ---------- */
+body.page-template-page-nasu-guide-php .nasu-guide-hero {
+  position: relative;
+  width: 100%;
+  max-width: none;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden;
+  isolation: isolate;
+  background-color: #1b2127 !important;
+  background-repeat: no-repeat !important;
+  background-position: center center !important;
+  background-size: cover !important;
+  min-height: clamp(420px, 42vw, 580px);
+}
+
+body.page-template-page-nasu-guide-php .nasu-guide-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(20, 28, 36, 0.42) 0%,
+      rgba(20, 28, 36, 0.24) 34%,
+      rgba(20, 28, 36, 0.1) 68%,
+      rgba(20, 28, 36, 0) 100%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(20, 28, 36, 0.12) 0%,
+      rgba(20, 28, 36, 0.04) 52%,
+      rgba(20, 28, 36, 0.16) 100%
+    );
+}
+
+:is(
+    body.dark-mode,
+    body.is-dark,
+    body.theme-dark,
+    body.dark-theme,
+    body.dark,
+    html.dark,
+    html.is-dark,
+    html.theme-dark,
+    html.dark-theme,
+    html[data-theme='dark'],
+    body[data-theme='dark']
+  )
+  body.page-template-page-nasu-guide-php
+  .nasu-guide-hero::before {
+  background:
+    linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.5) 0%,
+      rgba(0, 0, 0, 0.26) 34%,
+      rgba(0, 0, 0, 0.1) 68%,
+      rgba(0, 0, 0, 0) 100%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.12) 0%,
+      rgba(0, 0, 0, 0.05) 52%,
+      rgba(0, 0, 0, 0.2) 100%
+    );
+}
+
+body.page-template-page-nasu-guide-php .nasu-guide-hero::after {
+  display: none !important;
+}
+
+body.page-template-page-nasu-guide-php .nasu-guide-hero .inner {
+  position: relative;
+  z-index: 2;
+  min-height: clamp(420px, 42vw, 580px);
+  display: flex;
+  align-items: center;
+  padding-top: 64px;
+  padding-bottom: 64px;
+}
+
+body.page-template-page-nasu-guide-php .nasu-guide-hero__content {
+  max-width: 560px;
+  color: #fff !important;
+}
+
+body.page-template-page-nasu-guide-php .nasu-guide-hero__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 14px;
+  padding: 10px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(6px);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #fff !important;
+}
+
+body.page-template-page-nasu-guide-php .nasu-guide-hero__eyebrow::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--ngu-accent);
+  flex: 0 0 auto;
+}
+
+body.page-template-page-nasu-guide-php .nasu-guide-hero__title {
+  margin: 0 0 14px;
+  max-width: 100%;
+  font-size: clamp(2.1rem, 3.6vw, 3.8rem);
+  line-height: 1.08;
+  color: #fff !important;
+  text-shadow: 0 4px 18px rgba(0, 0, 0, 0.22);
+}
+
+body.page-template-page-nasu-guide-php .nasu-guide-hero__lead {
+  margin: 0;
+  max-width: 560px;
+  font-size: clamp(0.98rem, 1vw, 1.02rem);
+  line-height: 1.85;
+  color: rgba(255, 255, 255, 0.96) !important;
+}
+
+body.page-template-page-nasu-guide-php .nasu-guide-hero__buttons {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 24px;
+}
+
+body.page-template-page-nasu-guide-php .nasu-guide-hero__buttons .ngu-btn {
+  min-width: 180px;
+  padding: 14px 22px;
+}
+
+/* ---------- nasu btn ---------- */
+.nasu-guide-page .ngu-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-width: 180px;
+  padding: 14px 22px;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.98rem;
+  line-height: 1.2;
+  border: 1px solid transparent;
+  transition:
+    transform 0.22s ease,
+    background-color 0.22s ease,
+    border-color 0.22s ease,
+    color 0.22s ease;
+}
+
+.nasu-guide-page .ngu-btn:hover {
+  transform: translateY(-2px);
+}
+
+.nasu-guide-page .ngu-btn--primary,
+.nasu-guide-page .ngu-btn--primary:link,
+.nasu-guide-page .ngu-btn--primary:visited,
+.nasu-guide-page .ngu-btn--primary:hover,
+.nasu-guide-page .ngu-btn--primary:focus,
+.nasu-guide-page .ngu-btn--primary:active {
+  background: var(--ngu-primary);
+  border-color: var(--ngu-primary);
+  color: #fff !important;
+}
+
+.nasu-guide-page .ngu-btn--primary:hover {
+  background: var(--ngu-primary-hover);
+  border-color: var(--ngu-primary-hover);
+}
+
+.nasu-guide-page .ngu-btn--outline {
+  background: transparent;
+  border-color: var(--ngu-border);
+  color: var(--ngu-text);
+}
+
+.nasu-guide-page .ngu-btn--outline:hover {
+  border-color: var(--ngu-primary);
+  color: var(--ngu-primary);
+}
+
+body.page-template-page-nasu-guide-php .nasu-guide-hero__buttons .ngu-btn--outline,
+body.page-template-page-nasu-guide-php .nasu-guide-hero__buttons .ngu-btn--outline:link,
+body.page-template-page-nasu-guide-php .nasu-guide-hero__buttons .ngu-btn--outline:visited,
+body.page-template-page-nasu-guide-php .nasu-guide-hero__buttons .ngu-btn--outline:hover,
+body.page-template-page-nasu-guide-php .nasu-guide-hero__buttons .ngu-btn--outline:focus,
+body.page-template-page-nasu-guide-php .nasu-guide-hero__buttons .ngu-btn--outline:active,
+.nasu-guide-page .ngu-card__actions .ngu-btn--primary,
+.nasu-guide-page .ngu-company__actions .ngu-btn--primary {
+  color: #fff !important;
+}
+
+body.page-template-page-nasu-guide-php .nasu-guide-hero__buttons .ngu-btn--outline {
+  border-color: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+body.page-template-page-nasu-guide-php .nasu-guide-hero__buttons .ngu-btn--outline:hover {
+  border-color: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.14);
+}
+
+/* ---------- nasu section head ---------- */
+.ngu-section-head {
+  max-width: 900px;
+  margin: 0 auto 42px;
+  text-align: center;
+}
+
+.ngu-section-head__eyebrow {
+  margin: 0 0 12px;
+  color: var(--ngu-accent);
+  font-size: 0.84rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.ngu-section-head h2 {
+  margin: 0 0 14px;
+  font-size: clamp(2rem, 3.3vw, 3.3rem);
+  line-height: 1.2;
+}
+
+.ngu-section-head p {
+  margin: 0;
+  line-height: 1.95;
+  font-size: 1rem;
+}
+
+/* ---------- nasu intro ---------- */
+.ngu-intro .ngu-section-head {
+  max-width: 980px;
+  margin: 0 auto 18px;
+}
+
+.ngu-intro .ngu-section-head h2 {
+  margin-bottom: 0;
+}
+
+.ngu-intro__box {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  text-align: center;
+}
+
+.ngu-intro__box p {
+  max-width: 980px;
+  margin: 0 auto;
+  text-align: center;
+  font-size: clamp(1rem, 1.2vw, 1.08rem);
+  line-height: 2;
+}
+
+.ngu-intro__box::after {
+  content: '';
+  display: block;
+  width: min(160px, 28%);
+  height: 1px;
+  margin: 28px auto 0;
+  background: var(--ngu-border);
+  opacity: 0.8;
+}
+
+/* ---------- nasu cards ---------- */
+.ngu-card-grid {
+  display: grid;
+  gap: 28px;
+}
+
+.ngu-card-grid--2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.ngu-card-grid--3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.ngu-card,
+.ngu-biz-card,
+.ngu-company__body,
+.ngu-faq__item,
+.ngu-faq__answer {
+  background: var(--ngu-surface) !important;
+  border: 1px solid var(--ngu-border) !important;
+  border-radius: var(--ngu-radius);
+  box-shadow: var(--ngu-shadow);
+}
+
+.ngu-card,
+.ngu-biz-card,
+.ngu-company__body {
+  overflow: hidden;
+}
+
+.ngu-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.ngu-card__img {
+  position: relative;
+  overflow: hidden;
+  background: var(--ngu-surface-2);
+}
+
+.ngu-card__img img,
+.ngu-company__img img {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.ngu-card__img img {
+  height: 320px;
+  transition: transform 0.5s ease;
+}
+
+.ngu-card:hover .ngu-card__img img {
+  transform: scale(1.04);
+}
+
+.ngu-card__body,
+.ngu-biz-card,
+.ngu-company__body {
+  background: var(--ngu-surface) !important;
+  color: var(--ngu-text) !important;
+}
+
+.ngu-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  flex: 1 1 auto;
+  padding: 30px;
+}
+
+.ngu-card__body h3 {
+  margin: 0;
+  font-size: clamp(1.35rem, 2vw, 1.9rem);
+  line-height: 1.25;
+}
+
+.ngu-card__body p,
+.ngu-biz-card p,
+.ngu-company__body p,
+.ngu-faq__answer-inner {
+  margin: 0;
+  line-height: 1.9;
+}
+
+.ngu-card__actions {
+  margin-top: auto;
+}
+
+/* ---------- nasu branches ---------- */
+.ngu-branches {
+  background: var(--ngu-bg-soft);
+}
+
+.ngu-branch-anchor,
+.ngu-style-anchor {
+  scroll-margin-top: 120px;
+}
+
+/* ---------- nasu land ---------- */
+.ngu-land {
+  background: var(--ngu-bg);
+}
+
+.ngu-land__single {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 32px;
+  align-items: stretch;
+}
+
+.ngu-land__single .ngu-card__img img {
+  height: 100%;
+  min-height: 460px;
+}
+
+.ngu-land__single .ngu-card {
+  min-height: 100%;
+}
+
+/* ---------- nasu style ---------- */
+.ngu-style {
+  background: var(--ngu-surface-2);
+}
+
+/* ---------- nasu biz ---------- */
+.ngu-biz {
+  background: var(--ngu-bg);
+}
+
+.ngu-biz-grid {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.ngu-biz-card {
+  padding: 34px 30px;
+  text-align: center;
+}
+
+.ngu-biz-card h3 {
+  margin: 0 0 14px;
+  font-size: clamp(1.45rem, 2vw, 2rem);
+  line-height: 1.2;
+}
+
+/* ---------- nasu company ---------- */
+.ngu-company {
+  background: var(--ngu-bg-soft);
+}
+
+.ngu-company__grid {
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  gap: 28px;
+  align-items: center;
+}
+
+.ngu-company__img {
+  border-radius: var(--ngu-radius);
+  overflow: hidden;
+  box-shadow: var(--ngu-shadow-lg);
+  background: var(--ngu-surface-2);
+}
+
+.ngu-company__img img {
+  min-height: 420px;
+  height: 100%;
+}
+
+.ngu-company__body {
+  padding: 38px;
+}
+
+.ngu-company__body h2 {
+  margin: 0 0 16px;
+  font-size: clamp(1.9rem, 3vw, 2.6rem);
+  line-height: 1.2;
+}
+
+.ngu-company__actions {
+  margin-top: 22px;
+}
+
+/* ---------- nasu faq ---------- */
+.ngu-faq {
+  background: var(--ngu-bg);
+}
+
+.ngu-faq__list {
+  max-width: 980px;
+  margin: 0 auto;
+  display: grid;
+  gap: 16px;
+}
+
+.ngu-faq__item {
+  overflow: hidden;
+  border-radius: 18px;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.ngu-faq__question,
+.ngu-faq__answer,
+.ngu-faq__answer-inner {
+  transform: none !important;
+  filter: none !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
+  box-shadow: none !important;
+  -webkit-font-smoothing: antialiased;
+  backface-visibility: hidden;
+}
+
+.ngu-faq__question {
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: 0;
+  padding: 24px 64px 24px 24px;
+  font-size: 1.03rem;
+  font-weight: 700;
+  line-height: 1.6;
+  cursor: pointer;
+  position: relative;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.ngu-faq__question:hover,
+.ngu-faq__question:focus {
+  background: rgba(32, 77, 121, 0.04);
+  color: var(--ngu-text) !important;
+  outline: none;
+}
+
+:is(
+    body.dark-mode,
+    body.is-dark,
+    body.theme-dark,
+    body.dark-theme,
+    body.dark,
+    html.dark,
+    html.is-dark,
+    html.theme-dark,
+    html.dark-theme,
+    html[data-theme='dark'],
+    body[data-theme='dark']
+  )
+  .ngu-faq__question:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.ngu-faq__question::before,
+.ngu-faq__question::after {
+  content: '';
+  position: absolute;
+  right: 24px;
+  top: 50%;
+  width: 14px;
+  height: 2px;
+  background: var(--ngu-primary);
+  transform: translateY(-50%);
+  transition:
+    transform 0.22s ease,
+    opacity 0.22s ease;
+  border-radius: 999px;
+}
+
+.ngu-faq__question::after {
+  transform: translateY(-50%) rotate(90deg);
+}
+
+.ngu-faq__item.is-open .ngu-faq__question::after {
+  opacity: 0;
+  transform: translateY(-50%) rotate(90deg) scaleX(0);
+}
+
+.ngu-faq__answer {
+  display: none;
+  padding: 0 24px 24px;
+  border-top: 0 !important;
+}
+
+.ngu-faq__item.is-open .ngu-faq__answer {
+  display: block;
+}
+
+.ngu-faq__answer-inner > *:first-child {
+  margin-top: 0;
+}
+
+.ngu-faq__answer-inner > *:last-child {
+  margin-bottom: 0;
+}
+
+/* ---------- nasu cta ---------- */
+.ngu-cta {
+  width: 100%;
+  max-width: none;
+  background: linear-gradient(135deg, #223847 0%, #314b60 46%, #3a566d 100%);
+  color: #fff !important;
+}
+
+:is(
+    body.dark-mode,
+    body.is-dark,
+    body.theme-dark,
+    body.dark-theme,
+    body.dark,
+    html.dark,
+    html.is-dark,
+    html.theme-dark,
+    html.dark-theme,
+    html[data-theme='dark'],
+    body[data-theme='dark']
+  )
+  .ngu-cta {
+  background: linear-gradient(135deg, #10202f 0%, #183043 46%, #203d54 100%);
+}
+
+.ngu-cta__box {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 48px 32px;
+  text-align: center;
+  border-radius: var(--ngu-radius-lg);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(10px);
+}
+
+.ngu-cta__box h2 {
+  margin: 0 0 16px;
+  font-size: clamp(2rem, 4vw, 3.3rem);
+  line-height: 1.15;
+  color: #fff !important;
+  text-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+}
+
+.ngu-cta__box p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.92) !important;
+  line-height: 1.9;
+}
+
+.nasu-guide-cta__buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-top: 24px;
+}
+
+.nasu-guide-cta__buttons .ngu-btn {
+  min-width: 200px;
+}
+
+.ngu-cta .ngu-btn--primary,
+.ngu-cta .ngu-btn--primary:link,
+.ngu-cta .ngu-btn--primary:visited {
+  background: #ffffff;
+  border-color: #ffffff;
+  color: #22384b !important;
+}
+
+.ngu-cta .ngu-btn--primary:hover,
+.ngu-cta .ngu-btn--primary:focus,
+.ngu-cta .ngu-btn--primary:active {
+  background: #edf3f8;
+  border-color: #edf3f8;
+  color: #1b2f40 !important;
+}
+
+.ngu-cta .ngu-btn--outline,
+.ngu-cta .ngu-btn--outline:link,
+.ngu-cta .ngu-btn--outline:visited {
+  border-color: rgba(255, 255, 255, 0.72);
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff !important;
+}
+
+.ngu-cta .ngu-btn--outline:hover,
+.ngu-cta .ngu-btn--outline:focus,
+.ngu-cta .ngu-btn--outline:active {
+  border-color: rgba(255, 255, 255, 0.96);
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff !important;
+}
+
+/* ---------- nasu debug ---------- */
+.ngu-debug {
+  background: #fff8d9;
+  color: #111;
+  border: 2px solid #d4aa00;
+  padding: 16px;
+  margin: 20px auto;
+  width: min(1180px, 92%);
+  font-size: 14px;
+  line-height: 1.7;
+  white-space: pre-wrap;
+}
+
+/* ---------- nasu responsive ---------- */
+@media (max-width: 1100px) {
+  .ngu-land__single {
+    grid-template-columns: 1fr;
+  }
+
+  .ngu-land__single .ngu-card__img img {
+    min-height: 320px;
+  }
+}
+
+@media (max-width: 980px) {
+  .ngu-card-grid--2,
+  .ngu-card-grid--3,
+  .ngu-biz-grid,
+  .ngu-company__grid {
+    grid-template-columns: 1fr;
+  }
+
+  body.page-template-page-nasu-guide-php .nasu-guide-hero,
+  body.page-template-page-nasu-guide-php .nasu-guide-hero .inner {
+    min-height: 500px;
+  }
+
+  body.page-template-page-nasu-guide-php .nasu-guide-hero .inner {
+    align-items: center;
+    padding-top: 56px;
+    padding-bottom: 56px;
+  }
+
+  .ngu-card__img img {
+    height: 280px;
+  }
+
+  .ngu-company__img img {
+    min-height: 320px;
+  }
+}
+
+@media (max-width: 767px) {
+  body.page-template-page-nasu-guide-php .nasu-guide-page .inner,
+  body.page-template-page-nasu-guide-php .nasu-guide-hero .inner,
+  body.page-template-page-nasu-guide-php .ngu-cta .inner {
+    width: calc(100% - 32px);
+  }
+
+  .nasu-guide-page section {
+    padding: 52px 0;
+  }
+
+  .ngu-intro {
+    padding-top: 44px;
+    padding-bottom: 32px;
+  }
+
+  body.page-template-page-nasu-guide-php .nasu-guide-hero,
+  body.page-template-page-nasu-guide-php .nasu-guide-hero .inner {
+    min-height: 400px;
+  }
+
+  body.page-template-page-nasu-guide-php .nasu-guide-hero .inner {
+    align-items: flex-end;
+    padding-top: 48px;
+    padding-bottom: 24px;
+  }
+
+  body.page-template-page-nasu-guide-php .nasu-guide-hero__title {
+    max-width: 100%;
+    font-size: 2rem;
+    line-height: 1.08;
+  }
+
+  body.page-template-page-nasu-guide-php .nasu-guide-hero__lead {
+    font-size: 0.95rem;
+    line-height: 1.75;
+  }
+
+  body.page-template-page-nasu-guide-php .nasu-guide-hero__buttons,
+  .nasu-guide-cta__buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  body.page-template-page-nasu-guide-php .nasu-guide-hero__buttons .ngu-btn,
+  .nasu-guide-page .ngu-btn,
+  .nasu-guide-cta__buttons .ngu-btn {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .ngu-card__body,
+  .ngu-company__body,
+  .ngu-biz-card,
+  .ngu-cta__box {
+    padding: 26px 22px;
+  }
+
+  .ngu-faq__question {
+    padding: 20px 54px 20px 20px;
+  }
+
+  .ngu-faq__answer {
+    padding: 0 20px 20px;
+  }
+}
+

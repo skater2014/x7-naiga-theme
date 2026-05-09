@@ -1,0 +1,2266 @@
+[
+  {
+    "file": "hub/inc/customhome-company-info.php",
+    "page_key": "ch-company-map-section",
+    "blocks": [
+      {
+        "tag": "div",
+        "line": 124,
+        "id": "",
+        "classes": [
+          "naigai-admin-guide"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 129,
+        "id": "",
+        "classes": [
+          "naigai-admin-section"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 159,
+        "id": "",
+        "classes": [
+          "naigai-admin-section"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 173,
+        "id": "",
+        "classes": [
+          "naigai-admin-section"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "section",
+        "line": 251,
+        "id": "",
+        "classes": [
+          "ch-section-block",
+          "ch-company-map-section"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 252,
+        "id": "",
+        "classes": [
+          "ch-section-head"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 266,
+        "id": "",
+        "classes": [
+          "ch-company-map-embed"
+        ],
+        "data_attrs": []
+      }
+    ],
+    "text_items": [
+      {
+        "tag": "strong",
+        "line": 125,
+        "classes": [],
+        "text": "会社情報の取得方法"
+      },
+      {
+        "tag": "p",
+        "line": 126,
+        "classes": [],
+        "text": "住所・Google Mapを /company から参照するか、このページ専用で入力するか選びます。"
+      },
+      {
+        "tag": "h3",
+        "line": 130,
+        "classes": [],
+        "text": "会社情報の取得方法"
+      },
+      {
+        "tag": "p",
+        "line": 132,
+        "classes": [],
+        "text": "/company の会社情報を使う"
+      },
+      {
+        "tag": "p",
+        "line": 139,
+        "classes": [],
+        "text": "このページ専用に入力する"
+      },
+      {
+        "tag": "p",
+        "line": 146,
+        "classes": [],
+        "text": "参照元ページ 自動: /company"
+      },
+      {
+        "tag": "h3",
+        "line": 160,
+        "classes": [],
+        "text": "表示文言"
+      },
+      {
+        "tag": "p",
+        "line": 162,
+        "classes": [],
+        "text": "見出し"
+      },
+      {
+        "tag": "p",
+        "line": 167,
+        "classes": [],
+        "text": "説明文"
+      },
+      {
+        "tag": "h3",
+        "line": 174,
+        "classes": [],
+        "text": "このページ専用の会社情報"
+      },
+      {
+        "tag": "p",
+        "line": 175,
+        "classes": [
+          "description"
+        ],
+        "text": "「このページ専用に入力する」を選んだ場合だけ使われます。"
+      },
+      {
+        "tag": "p",
+        "line": 177,
+        "classes": [],
+        "text": "住所"
+      },
+      {
+        "tag": "p",
+        "line": 182,
+        "classes": [],
+        "text": "Google Map iframe"
+      },
+      {
+        "tag": "span",
+        "line": 253,
+        "classes": [
+          "ch-eyebrow"
+        ],
+        "text": "ACCESS"
+      }
+    ],
+    "meta_keys": [
+      "_ch_company_address",
+      "_ch_company_info_source",
+      "_ch_company_map_iframe",
+      "_ch_company_map_text",
+      "_ch_company_map_title",
+      "_ch_company_source_page_id",
+      "_ch_subpage_template"
+    ],
+    "functions": [
+      "naigai_ch_company_is_target",
+      "naigai_ch_company_find_meta",
+      "naigai_ch_company_source_page_id",
+      "naigai_ch_company_get_access_data",
+      "naigai_ch_company_allowed_iframe",
+      "naigai_ch_company_info_box",
+      "naigai_ch_company_info_add_box",
+      "naigai_ch_company_info_save",
+      "naigai_ch_render_company_access_section"
+    ]
+  },
+  {
+    "file": "hub/inc/customhome-contact-sections.php",
+    "page_key": "ch-contact-flow-section",
+    "blocks": [
+      {
+        "tag": "section",
+        "line": 83,
+        "id": "",
+        "classes": [
+          "ch-section",
+          "ch-section--white",
+          "ch-contact-flow-section"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 84,
+        "id": "",
+        "classes": [
+          "ch-shell"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 85,
+        "id": "",
+        "classes": [
+          "ch-section-head",
+          "ch-section-head--center"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 93,
+        "id": "",
+        "classes": [
+          "ch-contact-flow"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "article",
+        "line": 95,
+        "id": "",
+        "classes": [
+          "ch-contact-flow__item"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 140,
+        "id": "",
+        "classes": [
+          "ch-contact-form-fallback"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "section",
+        "line": 159,
+        "id": "",
+        "classes": [
+          "ch-section",
+          "ch-section--white",
+          "ch-contact-form-section"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 160,
+        "id": "",
+        "classes": [
+          "ch-shell"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 161,
+        "id": "",
+        "classes": [
+          "ch-section-head",
+          "ch-section-head--center"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 169,
+        "id": "",
+        "classes": [
+          "ch-contact-form-shell"
+        ],
+        "data_attrs": []
+      }
+    ],
+    "text_items": [
+      {
+        "tag": "span",
+        "line": 86,
+        "classes": [
+          "ch-eyebrow"
+        ],
+        "text": "FLOW"
+      },
+      {
+        "tag": "p",
+        "line": 141,
+        "classes": [],
+        "text": "既存のお問い合わせフォームは下記ページからご利用いただけます。"
+      },
+      {
+        "tag": "a",
+        "line": 142,
+        "classes": [
+          "ch-btn",
+          "ch-btn--primary"
+        ],
+        "text": "お問い合わせフォームを開く"
+      },
+      {
+        "tag": "span",
+        "line": 162,
+        "classes": [
+          "ch-eyebrow"
+        ],
+        "text": "CONTACT FORM"
+      }
+    ],
+    "meta_keys": [
+      "_ch_contact_form_shortcode",
+      "_ch_contact_form_source_page_id"
+    ],
+    "functions": [
+      "naigai_ch_meta",
+      "naigai_ch_contact_source_page_id",
+      "naigai_ch_render_contact_flow_section",
+      "naigai_ch_contact_form_source_html",
+      "naigai_ch_render_contact_form_section",
+      "naigai_ch_contact_flow_shortcode",
+      "naigai_ch_contact_form_shortcode"
+    ]
+  },
+  {
+    "file": "hub/inc/customhome-phase2.php",
+    "page_key": "customhome-phase2",
+    "blocks": [
+      {
+        "tag": "div",
+        "line": 256,
+        "id": "",
+        "classes": [
+          "naigai-ch-phase2"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 257,
+        "id": "",
+        "classes": [
+          "naigai-ch-phase2__section"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 259,
+        "id": "",
+        "classes": [
+          "naigai-ch-phase2__hero-grid"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 260,
+        "id": "",
+        "classes": [
+          "naigai-ch-phase2__field"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 265,
+        "id": "",
+        "classes": [
+          "naigai-ch-phase2__field"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 276,
+        "id": "",
+        "classes": [
+          "naigai-ch-phase2__section"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 280,
+        "id": "",
+        "classes": [
+          "naigai-ch-phase2__list"
+        ],
+        "data_attrs": [
+          [
+            "data-phase2-list",
+            "works"
+          ]
+        ]
+      },
+      {
+        "tag": "div",
+        "line": 287,
+        "id": "",
+        "classes": [
+          "naigai-ch-phase2__item"
+        ],
+        "data_attrs": [
+          [
+            "data-phase2-item",
+            "works"
+          ]
+        ]
+      },
+      {
+        "tag": "div",
+        "line": 288,
+        "id": "",
+        "classes": [
+          "naigai-ch-phase2__item-head"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 293,
+        "id": "",
+        "classes": [
+          "naigai-ch-phase2__grid"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 295,
+        "id": "",
+        "classes": [
+          "naigai-ch-phase2__preview"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 303,
+        "id": "",
+        "classes": [
+          "naigai-ch-phase2__buttons"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 310,
+        "id": "",
+        "classes": [
+          "naigai-ch-phase2__fields"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 311,
+        "id": "",
+        "classes": [
+          "naigai-ch-phase2__field"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 316,
+        "id": "",
+        "classes": [
+          "naigai-ch-phase2__field"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 325,
+        "id": "",
+        "classes": [
+          "naigai-ch-phase2__item",
+          "naigai-ch-phase2__item-template"
+        ],
+        "data_attrs": [
+          [
+            "data-phase2-template",
+            "works"
+          ]
+        ]
+      },
+      {
+        "tag": "div",
+        "line": 326,
+        "id": "",
+        "classes": [
+          "naigai-ch-phase2__item-head"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 331,
+        "id": "",
+        "classes": [
+          "naigai-ch-phase2__grid"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 333,
+        "id": "",
+        "classes": [
+          "naigai-ch-phase2__preview"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 337,
+        "id": "",
+        "classes": [
+          "naigai-ch-phase2__buttons"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 344,
+        "id": "",
+        "classes": [
+          "naigai-ch-phase2__fields"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 345,
+        "id": "",
+        "classes": [
+          "naigai-ch-phase2__field"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 350,
+        "id": "",
+        "classes": [
+          "naigai-ch-phase2__field"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 359,
+        "id": "",
+        "classes": [
+          "naigai-ch-phase2__actions"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 364,
+        "id": "",
+        "classes": [
+          "naigai-ch-phase2__section"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 368,
+        "id": "",
+        "classes": [
+          "naigai-ch-phase2__list"
+        ],
+        "data_attrs": [
+          [
+            "data-phase2-list",
+            "cta"
+          ]
+        ]
+      },
+      {
+        "tag": "div",
+        "line": 374,
+        "id": "",
+        "classes": [
+          "naigai-ch-phase2__item"
+        ],
+        "data_attrs": [
+          [
+            "data-phase2-item",
+            "cta"
+          ]
+        ]
+      },
+      {
+        "tag": "div",
+        "line": 375,
+        "id": "",
+        "classes": [
+          "naigai-ch-phase2__item-head"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 380,
+        "id": "",
+        "classes": [
+          "naigai-ch-phase2__grid"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 382,
+        "id": "",
+        "classes": [
+          "naigai-ch-phase2__preview"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 392,
+        "id": "",
+        "classes": [
+          "naigai-ch-phase2__buttons"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 399,
+        "id": "",
+        "classes": [
+          "naigai-ch-phase2__fields"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 400,
+        "id": "",
+        "classes": [
+          "naigai-ch-phase2__field"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 412,
+        "id": "",
+        "classes": [
+          "naigai-ch-phase2__item",
+          "naigai-ch-phase2__item-template"
+        ],
+        "data_attrs": [
+          [
+            "data-phase2-template",
+            "cta"
+          ]
+        ]
+      },
+      {
+        "tag": "div",
+        "line": 413,
+        "id": "",
+        "classes": [
+          "naigai-ch-phase2__item-head"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 418,
+        "id": "",
+        "classes": [
+          "naigai-ch-phase2__grid"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 420,
+        "id": "",
+        "classes": [
+          "naigai-ch-phase2__preview"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 424,
+        "id": "",
+        "classes": [
+          "naigai-ch-phase2__buttons"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 431,
+        "id": "",
+        "classes": [
+          "naigai-ch-phase2__fields"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 432,
+        "id": "",
+        "classes": [
+          "naigai-ch-phase2__field"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 444,
+        "id": "",
+        "classes": [
+          "naigai-ch-phase2__actions"
+        ],
+        "data_attrs": []
+      }
+    ],
+    "text_items": [
+      {
+        "tag": "p",
+        "line": 145,
+        "classes": [],
+        "text": "この設定は注文住宅ページ専用です。"
+      },
+      {
+        "tag": "h3",
+        "line": 258,
+        "classes": [],
+        "text": "Hero 会社名"
+      },
+      {
+        "tag": "h3",
+        "line": 277,
+        "classes": [],
+        "text": "施工事例カード"
+      },
+      {
+        "tag": "p",
+        "line": 278,
+        "classes": [
+          "naigai-ch-phase2__desc"
+        ],
+        "text": "画像・タイトル・説明文です。＋で必要な分だけ増やします。"
+      },
+      {
+        "tag": "h4",
+        "line": 289,
+        "classes": [
+          "naigai-ch-phase2__item-title"
+        ],
+        "text": "施工事例"
+      },
+      {
+        "tag": "button",
+        "line": 290,
+        "classes": [
+          "button-link-delete"
+        ],
+        "text": "削除"
+      },
+      {
+        "tag": "span",
+        "line": 299,
+        "classes": [],
+        "text": "未選択"
+      },
+      {
+        "tag": "button",
+        "line": 305,
+        "classes": [
+          "button"
+        ],
+        "text": "画像を選択"
+      },
+      {
+        "tag": "button",
+        "line": 306,
+        "classes": [
+          "button"
+        ],
+        "text": "クリア"
+      },
+      {
+        "tag": "h4",
+        "line": 327,
+        "classes": [
+          "naigai-ch-phase2__item-title"
+        ],
+        "text": "施工事例 __INDEX_LABEL__"
+      },
+      {
+        "tag": "button",
+        "line": 328,
+        "classes": [
+          "button-link-delete"
+        ],
+        "text": "削除"
+      },
+      {
+        "tag": "span",
+        "line": 334,
+        "classes": [],
+        "text": "未選択"
+      },
+      {
+        "tag": "button",
+        "line": 339,
+        "classes": [
+          "button"
+        ],
+        "text": "画像を選択"
+      },
+      {
+        "tag": "button",
+        "line": 340,
+        "classes": [
+          "button"
+        ],
+        "text": "クリア"
+      },
+      {
+        "tag": "button",
+        "line": 360,
+        "classes": [
+          "button",
+          "button-primary"
+        ],
+        "text": "＋ 施工事例を追加"
+      },
+      {
+        "tag": "h3",
+        "line": 365,
+        "classes": [],
+        "text": "CTA メディア"
+      },
+      {
+        "tag": "p",
+        "line": 366,
+        "classes": [
+          "naigai-ch-phase2__desc"
+        ],
+        "text": "通常のメディア選択です。複数あれば Swiper、1件ならそのまま表示します。"
+      },
+      {
+        "tag": "h4",
+        "line": 376,
+        "classes": [
+          "naigai-ch-phase2__item-title"
+        ],
+        "text": "CTA メディア"
+      },
+      {
+        "tag": "button",
+        "line": 377,
+        "classes": [
+          "button-link-delete"
+        ],
+        "text": "削除"
+      },
+      {
+        "tag": "span",
+        "line": 388,
+        "classes": [],
+        "text": "未選択"
+      },
+      {
+        "tag": "button",
+        "line": 394,
+        "classes": [
+          "button"
+        ],
+        "text": "\">メディアを選択"
+      },
+      {
+        "tag": "button",
+        "line": 395,
+        "classes": [
+          "button"
+        ],
+        "text": "クリア"
+      },
+      {
+        "tag": "h4",
+        "line": 414,
+        "classes": [
+          "naigai-ch-phase2__item-title"
+        ],
+        "text": "CTA メディア __INDEX_LABEL__"
+      },
+      {
+        "tag": "button",
+        "line": 415,
+        "classes": [
+          "button-link-delete"
+        ],
+        "text": "削除"
+      },
+      {
+        "tag": "span",
+        "line": 421,
+        "classes": [],
+        "text": "未選択"
+      },
+      {
+        "tag": "button",
+        "line": 426,
+        "classes": [
+          "button"
+        ],
+        "text": "メディアを選択"
+      },
+      {
+        "tag": "button",
+        "line": 427,
+        "classes": [
+          "button"
+        ],
+        "text": "クリア"
+      },
+      {
+        "tag": "button",
+        "line": 445,
+        "classes": [
+          "button",
+          "button-primary"
+        ],
+        "text": "＋ CTA メディアを追加"
+      },
+      {
+        "tag": "span",
+        "line": 457,
+        "classes": [],
+        "text": "未選択"
+      },
+      {
+        "tag": "span",
+        "line": 462,
+        "classes": [],
+        "text": "未選択"
+      },
+      {
+        "tag": "span",
+        "line": 469,
+        "classes": [],
+        "text": "未選択"
+      },
+      {
+        "tag": "span",
+        "line": 529,
+        "classes": [],
+        "text": "未選択"
+      }
+    ],
+    "meta_keys": [
+      "_hub_ch_cta_media_items",
+      "_hub_ch_hero_company",
+      "_hub_ch_hero_company_position",
+      "_hub_ch_work_items",
+      "naigai_ch_cta_media_items[<?php echo (int) $index; ?>][attachment_id]",
+      "naigai_ch_cta_media_items[<?php echo (int) $index; ?>][type]",
+      "naigai_ch_cta_media_items[__INDEX__][attachment_id]",
+      "naigai_ch_cta_media_items[__INDEX__][type]",
+      "naigai_ch_work_items[<?php echo (int) $index; ?>][attachment_id]",
+      "naigai_ch_work_items[<?php echo (int) $index; ?>][text]",
+      "naigai_ch_work_items[<?php echo (int) $index; ?>][title]",
+      "naigai_ch_work_items[__INDEX__][attachment_id]",
+      "naigai_ch_work_items[__INDEX__][text]",
+      "naigai_ch_work_items[__INDEX__][title]"
+    ],
+    "functions": [
+      "naigai_customhome_phase2_is_target",
+      "naigai_customhome_phase2_enqueue_front",
+      "naigai_customhome_phase2_enqueue_admin",
+      "naigai_customhome_phase2_hide_legacy_admin",
+      "naigai_customhome_phase2_add_meta_box",
+      "naigai_customhome_phase2_get_attachment_preview",
+      "naigai_customhome_phase2_render_meta_box",
+      "naigai_customhome_phase2_save"
+    ]
+  },
+  {
+    "file": "hub/inc/customhome-plan-tabs.php",
+    "page_key": "plan-layout",
+    "blocks": [],
+    "text_items": [
+      {
+        "tag": "p",
+        "line": 49,
+        "classes": [],
+        "text": "'; echo ' ' . esc_html($label) . ' '; echo ' '; echo '"
+      },
+      {
+        "tag": "p",
+        "line": 59,
+        "classes": [],
+        "text": "'; echo ' ' . esc_html($label) . ' '; echo ' ' . esc_textarea($value) . ' '; echo '"
+      },
+      {
+        "tag": "button",
+        "line": 75,
+        "classes": [
+          "button",
+          "button-secondary",
+          "naigai-plan-media-button"
+        ],
+        "text": "画像を選択"
+      },
+      {
+        "tag": "button",
+        "line": 76,
+        "classes": [
+          "button",
+          "naigai-plan-media-remove"
+        ],
+        "text": "画像を削除"
+      },
+      {
+        "tag": "span",
+        "line": 82,
+        "classes": [],
+        "text": "画像未設定"
+      },
+      {
+        "tag": "p",
+        "line": 97,
+        "classes": [],
+        "text": "design-office 用の平屋プラン一覧を編集します。"
+      },
+      {
+        "tag": "h3",
+        "line": 130,
+        "classes": [],
+        "text": "' . esc_html($label) . '"
+      },
+      {
+        "tag": "span",
+        "line": 179,
+        "classes": [],
+        "text": "画像未設定"
+      }
+    ],
+    "meta_keys": [
+      "_ch_plan_{$key}_area",
+      "_ch_plan_{$key}_build_area",
+      "_ch_plan_{$key}_desc",
+      "_ch_plan_{$key}_detail_url",
+      "_ch_plan_{$key}_hero",
+      "_ch_plan_{$key}_label",
+      "_ch_plan_{$key}_plan",
+      "_ch_plan_{$key}_point1",
+      "_ch_plan_{$key}_point2",
+      "_ch_plan_{$key}_point3",
+      "_ch_plan_{$key}_type",
+      "_ch_subpage_template"
+    ],
+    "functions": [
+      "naigai_plan_tabs_is_target_page",
+      "naigai_plan_tabs_add_meta_box",
+      "naigai_plan_tabs_render_text_field",
+      "naigai_plan_tabs_render_textarea_field",
+      "naigai_plan_tabs_render_media_field",
+      "naigai_plan_tabs_render_meta_box",
+      "naigai_plan_tabs_save_meta_box"
+    ]
+  },
+  {
+    "file": "hub/inc/customhome-section-builder.php",
+    "page_key": "customhome-section-builder",
+    "blocks": [
+      {
+        "tag": "div",
+        "line": 106,
+        "id": "",
+        "classes": [
+          "naigai-ch-builder"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 107,
+        "id": "",
+        "classes": [
+          "naigai-ch-builder__toolbar"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 117,
+        "id": "",
+        "classes": [
+          "naigai-ch-builder__list"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "section",
+        "line": 335,
+        "id": "",
+        "classes": [
+          "ch-section",
+          "ch-section--white",
+          "ch-subpage-faq-section"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 336,
+        "id": "",
+        "classes": [
+          "ch-shell"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 337,
+        "id": "",
+        "classes": [
+          "ch-subpage-faq-placeholder"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 341,
+        "id": "",
+        "classes": [
+          "ch-faq-answer"
+        ],
+        "data_attrs": []
+      }
+    ],
+    "text_items": [
+      {
+        "tag": "p",
+        "line": 100,
+        "classes": [],
+        "text": "このページに表示するセクションを上から順番に並べます。文章・画像・CTAはこのページ自身のメタから表示します。"
+      },
+      {
+        "tag": "button",
+        "line": 113,
+        "classes": [
+          "button",
+          "button-primary"
+        ],
+        "text": "セクションを追加"
+      },
+      {
+        "tag": "button",
+        "line": 114,
+        "classes": [
+          "button"
+        ],
+        "text": "初期構成に戻す"
+      },
+      {
+        "tag": "strong",
+        "line": 169,
+        "classes": [],
+        "text": "' + sectionLabel(type) + '"
+      },
+      {
+        "tag": "button",
+        "line": 175,
+        "classes": [
+          "button"
+        ],
+        "text": "上へ"
+      },
+      {
+        "tag": "button",
+        "line": 176,
+        "classes": [
+          "button"
+        ],
+        "text": "下へ"
+      },
+      {
+        "tag": "button",
+        "line": 177,
+        "classes": [
+          "button"
+        ],
+        "text": "複製"
+      },
+      {
+        "tag": "button",
+        "line": 178,
+        "classes": [
+          "button",
+          "button-link-delete"
+        ],
+        "text": "削除"
+      },
+      {
+        "tag": "p",
+        "line": 438,
+        "classes": [],
+        "text": "company / design-office / plan-tabs / FAQ / CTA などを、構成ビルダーの順番で合算表示します。"
+      }
+    ],
+    "meta_keys": [
+      "_ch_builder_mode_enabled",
+      "_ch_builder_sections_json",
+      "_ch_faq_",
+      "_ch_subpage_template"
+    ],
+    "functions": [
+      "naigai_ch_builder_is_target",
+      "naigai_ch_builder_sections_catalog",
+      "naigai_ch_builder_default_sections",
+      "naigai_ch_builder_get_sections",
+      "naigai_ch_builder_box",
+      "naigai_ch_builder_add_meta_box",
+      "naigai_ch_builder_save",
+      "naigai_ch_render_builder_faq",
+      "naigai_ch_render_builder_sections",
+      "naigai_ch_builder_shortcode",
+      "naigai_ch_builder_mode_box",
+      "naigai_ch_builder_mode_add_box",
+      "naigai_ch_builder_mode_save"
+    ]
+  },
+  {
+    "file": "hub/pages/iezukuri/templates/page-builder.php",
+    "page_key": "builder",
+    "blocks": [],
+    "text_items": [],
+    "meta_keys": [],
+    "functions": []
+  },
+  {
+    "file": "hub/pages/iezukuri/templates/page-company.php",
+    "page_key": "ch-company-page",
+    "blocks": [
+      {
+        "tag": "div",
+        "line": 38,
+        "id": "",
+        "classes": [
+          "ch-page-stack",
+          "ch-company-page"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "section",
+        "line": 39,
+        "id": "",
+        "classes": [
+          "ch-page-intro"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 42,
+        "id": "",
+        "classes": [
+          "ch-intro-prose"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "section",
+        "line": 58,
+        "id": "",
+        "classes": [
+          "ch-split"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 59,
+        "id": "",
+        "classes": [
+          "ch-split__body"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "section",
+        "line": 99,
+        "id": "",
+        "classes": [
+          "ch-section-block",
+          "ch-company-map-section"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 100,
+        "id": "",
+        "classes": [
+          "ch-section-head"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 113,
+        "id": "",
+        "classes": [
+          "ch-company-map-embed"
+        ],
+        "data_attrs": []
+      }
+    ],
+    "text_items": [
+      {
+        "tag": "a",
+        "line": 63,
+        "classes": [
+          "ch-btn",
+          "ch-btn--primary"
+        ],
+        "text": "\">"
+      },
+      {
+        "tag": "span",
+        "line": 101,
+        "classes": [
+          "ch-eyebrow"
+        ],
+        "text": "ACCESS"
+      }
+    ],
+    "meta_keys": [
+      "_ch_company_address",
+      "_ch_company_map_iframe",
+      "_ch_company_map_text",
+      "_ch_company_map_title"
+    ],
+    "functions": []
+  },
+  {
+    "file": "hub/pages/iezukuri/templates/page-concept.php",
+    "page_key": "ch-concept-page",
+    "blocks": [
+      {
+        "tag": "div",
+        "line": 41,
+        "id": "",
+        "classes": [
+          "ch-concept-page"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 42,
+        "id": "",
+        "classes": [
+          "ch-page-band",
+          "ch-page-band--white"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 43,
+        "id": "",
+        "classes": [
+          "ch-page-inner"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "section",
+        "line": 44,
+        "id": "",
+        "classes": [
+          "ch-page-intro"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 48,
+        "id": "",
+        "classes": [
+          "ch-intro-prose"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "section",
+        "line": 57,
+        "id": "",
+        "classes": [
+          "ch-card-grid",
+          "ch-card-grid--3"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "article",
+        "line": 65,
+        "id": "",
+        "classes": [
+          "ch-surface-card"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 77,
+        "id": "",
+        "classes": [
+          "ch-page-band",
+          "ch-page-band--sand"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 78,
+        "id": "",
+        "classes": [
+          "ch-page-inner"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "section",
+        "line": 79,
+        "id": "",
+        "classes": [
+          "ch-split"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 80,
+        "id": "",
+        "classes": [
+          "ch-split__body"
+        ],
+        "data_attrs": []
+      }
+    ],
+    "text_items": [
+      {
+        "tag": "a",
+        "line": 85,
+        "classes": [
+          "ch-btn",
+          "ch-btn--primary"
+        ],
+        "text": "\">"
+      }
+    ],
+    "meta_keys": [],
+    "functions": []
+  },
+  {
+    "file": "hub/pages/iezukuri/templates/page-contact.php",
+    "page_key": "ch-contact-page",
+    "blocks": [
+      {
+        "tag": "div",
+        "line": 31,
+        "id": "",
+        "classes": [
+          "ch-page-stack",
+          "ch-contact-page"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "section",
+        "line": 32,
+        "id": "",
+        "classes": [
+          "ch-page-intro"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 36,
+        "id": "",
+        "classes": [
+          "ch-intro-prose"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "section",
+        "line": 66,
+        "id": "",
+        "classes": [
+          "ch-section-block"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 67,
+        "id": "",
+        "classes": [
+          "ch-section-head"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 71,
+        "id": "",
+        "classes": [
+          "ch-card-grid",
+          "ch-card-grid--2"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "article",
+        "line": 78,
+        "id": "",
+        "classes": [
+          "ch-surface-card"
+        ],
+        "data_attrs": []
+      }
+    ],
+    "text_items": [
+      {
+        "tag": "h2",
+        "line": 68,
+        "classes": [],
+        "text": "よくあるご質問"
+      }
+    ],
+    "meta_keys": [],
+    "functions": []
+  },
+  {
+    "file": "hub/pages/iezukuri/templates/page-design-office.php",
+    "page_key": "ch-design-office-page",
+    "blocks": [
+      {
+        "tag": "div",
+        "line": 67,
+        "id": "",
+        "classes": [
+          "ch-page-stack",
+          "ch-design-office-page"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "section",
+        "line": 69,
+        "id": "",
+        "classes": [
+          "ch-page-intro"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 79,
+        "id": "",
+        "classes": [
+          "ch-intro-prose"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 83,
+        "id": "",
+        "classes": [
+          "ch-intro-prose"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "section",
+        "line": 90,
+        "id": "",
+        "classes": [
+          "ch-split"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 91,
+        "id": "",
+        "classes": [
+          "ch-split__body"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "section",
+        "line": 128,
+        "id": "",
+        "classes": [
+          "ch-section-block",
+          "ch-design-office-plan-section"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 129,
+        "id": "",
+        "classes": [
+          "ch-section-head",
+          "ch-section-head--center"
+        ],
+        "data_attrs": []
+      }
+    ],
+    "text_items": [
+      {
+        "tag": "a",
+        "line": 105,
+        "classes": [
+          "ch-btn",
+          "ch-btn--primary"
+        ],
+        "text": "\">"
+      }
+    ],
+    "meta_keys": [
+      "_ch_design_office_split_image_id",
+      "_ch_show_plan_tabs"
+    ],
+    "functions": []
+  },
+  {
+    "file": "hub/pages/iezukuri/templates/page-design-policy.php",
+    "page_key": "ch-design-policy-page",
+    "blocks": [
+      {
+        "tag": "div",
+        "line": 44,
+        "id": "",
+        "classes": [
+          "ch-page-stack",
+          "ch-design-policy-page"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "section",
+        "line": 45,
+        "id": "",
+        "classes": [
+          "ch-page-intro"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 48,
+        "id": "",
+        "classes": [
+          "ch-intro-prose"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 69,
+        "id": "",
+        "classes": [
+          "ch-section-head"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 74,
+        "id": "",
+        "classes": [
+          "ch-card-grid",
+          "ch-card-grid--5"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "article",
+        "line": 81,
+        "id": "",
+        "classes": [
+          "ch-surface-card",
+          "ch-step-card"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "section",
+        "line": 93,
+        "id": "",
+        "classes": [
+          "ch-split"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 94,
+        "id": "",
+        "classes": [
+          "ch-split__body"
+        ],
+        "data_attrs": []
+      }
+    ],
+    "text_items": [
+      {
+        "tag": "a",
+        "line": 99,
+        "classes": [
+          "ch-btn",
+          "ch-btn--primary"
+        ],
+        "text": "\">"
+      }
+    ],
+    "meta_keys": [],
+    "functions": []
+  },
+  {
+    "file": "hub/pages/iezukuri/templates/page-nasu-house.php",
+    "page_key": "ch-nasu-shot-page",
+    "blocks": [
+      {
+        "tag": "div",
+        "line": 76,
+        "id": "",
+        "classes": [
+          "ch-nasu-shot-page"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "section",
+        "line": 78,
+        "id": "intro",
+        "classes": [
+          "ch-nasu-shot-intro"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 79,
+        "id": "",
+        "classes": [
+          "ch-nasu-shot-intro__header"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "section",
+        "line": 87,
+        "id": "body",
+        "classes": [
+          "ch-nasu-shot-body"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 88,
+        "id": "",
+        "classes": [
+          "ch-nasu-shot-body__inner"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 90,
+        "id": "",
+        "classes": [
+          "ch-nasu-shot-body__content"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "section",
+        "line": 97,
+        "id": "cards",
+        "classes": [
+          "ch-nasu-shot-cards-wrap"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 100,
+        "id": "",
+        "classes": [
+          "ch-nasu-shot-cards"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "article",
+        "line": 101,
+        "id": "",
+        "classes": [
+          "ch-nasu-shot-card"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 102,
+        "id": "",
+        "classes": [
+          "ch-nasu-shot-card__icon"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "article",
+        "line": 110,
+        "id": "",
+        "classes": [
+          "ch-nasu-shot-card"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 111,
+        "id": "",
+        "classes": [
+          "ch-nasu-shot-card__icon"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "article",
+        "line": 119,
+        "id": "",
+        "classes": [
+          "ch-nasu-shot-card"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 120,
+        "id": "",
+        "classes": [
+          "ch-nasu-shot-card__icon"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "section",
+        "line": 130,
+        "id": "feature",
+        "classes": [
+          "ch-nasu-shot-feature"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 131,
+        "id": "",
+        "classes": [
+          "ch-nasu-shot-feature__text"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "section",
+        "line": 144,
+        "id": "values",
+        "classes": [
+          "ch-nasu-shot-values"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 147,
+        "id": "",
+        "classes": [
+          "ch-nasu-shot-values__grid"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "article",
+        "line": 148,
+        "id": "",
+        "classes": [
+          "ch-nasu-shot-value"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 149,
+        "id": "",
+        "classes": [
+          "ch-nasu-shot-value__icon"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "article",
+        "line": 154,
+        "id": "",
+        "classes": [
+          "ch-nasu-shot-value"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 155,
+        "id": "",
+        "classes": [
+          "ch-nasu-shot-value__icon"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "article",
+        "line": 160,
+        "id": "",
+        "classes": [
+          "ch-nasu-shot-value"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 161,
+        "id": "",
+        "classes": [
+          "ch-nasu-shot-value__icon"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "article",
+        "line": 166,
+        "id": "",
+        "classes": [
+          "ch-nasu-shot-value"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 167,
+        "id": "",
+        "classes": [
+          "ch-nasu-shot-value__icon"
+        ],
+        "data_attrs": []
+      }
+    ],
+    "text_items": [
+      {
+        "tag": "span",
+        "line": 35,
+        "classes": [],
+        "text": "3つの視点"
+      },
+      {
+        "tag": "a",
+        "line": 136,
+        "classes": [
+          "ch-btn",
+          "ch-btn--primary"
+        ],
+        "text": "\">"
+      }
+    ],
+    "meta_keys": [],
+    "functions": []
+  },
+  {
+    "file": "page-construction-hub-sub.php",
+    "page_key": "construction-hub-sub",
+    "blocks": [
+      {
+        "tag": "section",
+        "line": 184,
+        "id": "",
+        "classes": [
+          "ch-hero",
+          "ch-fullbleed",
+          "ch-subpage-hero"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 185,
+        "id": "",
+        "classes": [
+          "ch-hero__media"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 189,
+        "id": "",
+        "classes": [
+          "ch-hero__overlay"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 192,
+        "id": "",
+        "classes": [
+          "ch-shell",
+          "ch-hero__inner"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 193,
+        "id": "",
+        "classes": [
+          "ch-hero__content"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 194,
+        "id": "",
+        "classes": [
+          "ch-kicker"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 201,
+        "id": "",
+        "classes": [
+          "ch-hero__actions"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 211,
+        "id": "",
+        "classes": [
+          "ch-shell"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "section",
+        "line": 237,
+        "id": "",
+        "classes": [
+          "ch-section",
+          "ch-section--white",
+          "ch-subpage-section"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 238,
+        "id": "",
+        "classes": [
+          "ch-shell"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "article",
+        "line": 239,
+        "id": "",
+        "classes": [
+          "ch-subpage-main",
+          "ch-subpage-main--fallback"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "section",
+        "line": 279,
+        "id": "",
+        "classes": [
+          "ch-section",
+          "ch-section--white",
+          "ch-subpage-form-section"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 280,
+        "id": "",
+        "classes": [
+          "ch-shell"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 281,
+        "id": "",
+        "classes": [
+          "ch-subpage-form-placeholder"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "section",
+        "line": 289,
+        "id": "",
+        "classes": [
+          "ch-section",
+          "ch-section--white",
+          "ch-subpage-faq-section"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 290,
+        "id": "",
+        "classes": [
+          "ch-shell"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 291,
+        "id": "",
+        "classes": [
+          "ch-subpage-faq-placeholder"
+        ],
+        "data_attrs": []
+      },
+      {
+        "tag": "div",
+        "line": 295,
+        "id": "",
+        "classes": [
+          "ch-faq-answer"
+        ],
+        "data_attrs": []
+      }
+    ],
+    "text_items": [
+      {
+        "tag": "a",
+        "line": 202,
+        "classes": [
+          "ch-btn",
+          "ch-btn--primary"
+        ],
+        "text": "\">"
+      },
+      {
+        "tag": "a",
+        "line": 203,
+        "classes": [
+          "ch-btn",
+          "ch-btn--ghost"
+        ],
+        "text": "\">"
+      },
+      {
+        "tag": "li",
+        "line": 223,
+        "classes": [],
+        "text": "注文住宅の考え方"
+      },
+      {
+        "tag": "li",
+        "line": 224,
+        "classes": [],
+        "text": "設計姿勢"
+      },
+      {
+        "tag": "li",
+        "line": 225,
+        "classes": [],
+        "text": "那須での家づくり"
+      },
+      {
+        "tag": "li",
+        "line": 226,
+        "classes": [],
+        "text": "デザインと設計"
+      },
+      {
+        "tag": "li",
+        "line": 227,
+        "classes": [],
+        "text": "会社概要"
+      },
+      {
+        "tag": "li",
+        "line": 228,
+        "classes": [],
+        "text": "ご相談・資料請求"
+      }
+    ],
+    "meta_keys": [
+      "_ch_back_url",
+      "_ch_common_form_shortcode",
+      "_ch_contact_url",
+      "_ch_faq_",
+      "_ch_hero_image_id",
+      "_ch_hero_kicker",
+      "_ch_hero_lead",
+      "_ch_hero_primary_label",
+      "_ch_hero_secondary_label",
+      "_ch_hero_title",
+      "_ch_layout_mode",
+      "_ch_show_common_faq",
+      "_ch_show_common_form",
+      "_ch_show_customhome_cta",
+      "_ch_subpage_template",
+      "_ch_use_parent_flow",
+      "_ch_use_parent_works"
+    ],
+    "functions": []
+  }
+]
