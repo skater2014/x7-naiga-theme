@@ -167,11 +167,11 @@
          * - opacity だけにして、transform演出を使わない。
          */
         hiddenStyle: {
-          opacity: 0
+          opacity: 0,
         },
         visibleStyle: {
-          opacity: 1
-        }
+          opacity: 1,
+        },
       };
     }
 
@@ -217,17 +217,15 @@
       }
     });
 
-    $tabs
-      .off('click.fudousanIsotope')
-      .on('click.fudousanIsotope', function (e) {
-        e.preventDefault();
+    $tabs.off('click.fudousanIsotope').on('click.fudousanIsotope', function (e) {
+      e.preventDefault();
 
-        var $tab = $(this);
-        var filter = getFilterFromTab($tab);
+      var $tab = $(this);
+      var filter = getFilterFromTab($tab);
 
-        setActiveTab($tab);
-        applyFilter(filter, true);
-      });
+      setActiveTab($tab);
+      applyFilter(filter, true);
+    });
   });
 })(jQuery);
 
@@ -298,17 +296,13 @@
 
     var $thumb = $modal.find('#reservation-property-thumbnail');
 
-    if ($thumb.length) {
-      if (image) {
-        $thumb.css({
-          backgroundImage: 'url("' + image + '")',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center center',
-          backgroundRepeat: 'no-repeat',
-        });
-      } else {
-        $thumb.css('backgroundImage', '');
-      }
+    if ($thumb.length && image) {
+      $thumb.css({
+        backgroundImage: 'url("' + image + '")',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center center',
+        backgroundRepeat: 'no-repeat',
+      });
     }
   }
 

@@ -1,43 +1,27 @@
-/* IEZUKURI_NAV_CSS_ROLE_START */
 /* =========================================================
  * hub/pages/iezukuri/css/common/nav.css
  *
- * 役割:
- * - iezukuri ヘッダー/ナビの見た目だけを管理する
- *
- * 管理しないもの:
- * - ロゴやブランド文言の重複制御
- *
- * 文言方針:
- * - Header側もHero側も、英字 CUSTOM HOME を重複表示しない
- * - 必要なブランド表記は「内外グループ」「内外建設株式会社」に寄せる
- * ========================================================= */
-/* IEZUKURI_NAV_CSS_ROLE_END */
-
-/* =========================================================
- * hub/pages/iezukuri/css/common/nav.css
+ * 家づくり共通ナビCSS
  *
  * 対象:
- * - header-customhome.php
  * - /iezukuri/
- * - /iezukuri/{subpage}/
+ * - /iezukuri/* サブページ
  * - /iezukuri/plans/
  * - /iezukuri/plan/{slug}/
  *
  * 役割:
- * - 注文住宅ヘッダー
+ * - 上部ヘッダー
  * - PCナビ
- * - モバイルトグル
+ * - ハンバーガーボタン
  * - モバイルドロワー
  * - サブページ中間ナビ .ch-localnav
  *
  * 方針:
- * - admin-bar 用の top:32px / 46px 補正は使わない
- * - drawer の開閉は hidden 属性 + body class で管理
- * - CSSにJS的な状態を増やさない
- * - このファイルだけでナビ周りの見た目を管理する
+ * - ヘッダー位置はこのファイルだけで管理する。
+ * - top.css / subpage.css / page-styles/*.css では .ch-site-header 系を管理しない。
+ * - 管理画面のメニュー項目選択は PHP / wp_nav_menu 側。
+ * - 管理画面の header style は背景・影・色だけ反映し、gap / padding / 位置は変えない。
  * ========================================================= */
-
 
 /* =========================================================
  * 01. header base
@@ -51,9 +35,17 @@
   --ch-header-accent: #7a4f24;
   --ch-header-shadow: 0 10px 30px rgba(36, 25, 16, 0.08);
 
-  position: sticky !important;
-  top: 0 !important;
-  z-index: 1000 !important;
+  --ch-header-inner-width: min(1280px, calc(100% - 48px));
+  --ch-header-inner-height: 64px;
+  --ch-header-inner-gap: 24px;
+  --ch-header-list-gap: 4px;
+  --ch-header-link-x: 13px;
+  --ch-header-toggle-size: 44px;
+  --ch-header-toggle-gap: 18px;
+
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 
   width: 100%;
   background: var(--ch-header-bg);
@@ -64,26 +56,21 @@
   -webkit-backdrop-filter: blur(14px);
 }
 
-/* admin bar があっても header を下にずらさない */
 body.admin-bar .ch-site-header {
-  top: 0 !important;
-}
-
-@media (max-width: 782px) {
-  body.admin-bar .ch-site-header {
-    top: 0 !important;
-  }
+  top: 0;
 }
 
 .ch-site-header__inner {
-  width: min(1280px, calc(100% - 48px));
-  min-height: 72px;
+  box-sizing: border-box;
+  width: var(--ch-header-inner-width);
+  min-height: var(--ch-header-inner-height);
   margin: 0 auto;
+  padding: 0;
 
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 24px;
+  gap: var(--ch-header-inner-gap);
 }
 
 .ch-site-header a {
@@ -91,18 +78,21 @@ body.admin-bar .ch-site-header {
   text-decoration: none;
 }
 
-
 /* =========================================================
  * 02. brand
  * ========================================================= */
 
 .ch-site-header__brand {
   display: inline-flex;
+  flex: 0 0 auto;
   flex-direction: column;
   justify-content: center;
   gap: 3px;
 
   min-width: 0;
+  margin: 0;
+  padding: 0;
+
   color: var(--ch-header-text);
 }
 
@@ -126,6 +116,12 @@ body.admin-bar .ch-site-header {
   white-space: nowrap;
 }
 
+.ch-site-header__brand-logo {
+  display: block;
+  width: auto;
+  max-width: 180px;
+  max-height: 42px;
+}
 
 /* =========================================================
  * 03. desktop nav
@@ -133,16 +129,20 @@ body.admin-bar .ch-site-header {
 
 .ch-site-header__nav--desktop {
   display: flex;
+  flex: 0 1 auto;
   align-items: center;
   justify-content: flex-end;
+
   min-width: 0;
+  margin: 0 0 0 auto;
+  padding: 0;
 }
 
 .ch-site-header__list {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 4px;
+  gap: var(--ch-header-list-gap);
 
   margin: 0;
   padding: 0;
@@ -160,7 +160,7 @@ body.admin-bar .ch-site-header {
   justify-content: center;
 
   min-height: 40px;
-  padding: 0 13px;
+  padding: 0 var(--ch-header-link-x);
   border-radius: 999px;
 
   color: var(--ch-header-text);
@@ -184,25 +184,33 @@ body.admin-bar .ch-site-header {
   color: var(--ch-header-accent);
 }
 
-
 /* =========================================================
- * 04. mobile toggle
+ * 04. hamburger toggle
  * ========================================================= */
 
 .ch-site-header__toggle {
-  display: none;
+  position: relative;
+  display: inline-flex;
+  flex: 0 0 var(--ch-header-toggle-size);
+  align-items: center;
+  justify-content: center;
 
-  width: 44px;
-  height: 44px;
+  width: var(--ch-header-toggle-size);
+  height: var(--ch-header-toggle-size);
+  margin: 0 0 0 var(--ch-header-toggle-gap);
   padding: 0;
-  border: 1px solid rgba(36, 25, 16, 0.16);
+
+  border: 1px solid rgba(36, 25, 16, 0.18);
   border-radius: 999px;
-  background: var(--iezukuri-surface)af2;
+  background: rgba(255, 255, 255, 0.42);
   color: var(--ch-header-text);
   box-shadow: 0 8px 20px rgba(36, 25, 16, 0.08);
 
   cursor: pointer;
   appearance: none;
+  overflow: hidden;
+  font-size: 0;
+  line-height: 0;
 }
 
 .ch-site-header__toggle:focus-visible {
@@ -210,63 +218,60 @@ body.admin-bar .ch-site-header {
   outline-offset: 3px;
 }
 
-.ch-site-header__toggle-icon,
-.ch-site-header__toggle span {
-  pointer-events: none;
-}
-
-.ch-site-header__toggle-icon {
-  position: relative;
-  display: block;
-  width: 18px;
-  height: 2px;
-  margin: 0 auto;
-  background: currentColor;
-  border-radius: 999px;
-}
-
-.ch-site-header__toggle-icon::before,
-.ch-site-header__toggle-icon::after {
-  content: "";
+.ch-site-header__toggle .ch-site-header__toggle-icon,
+.ch-site-header__toggle > span,
+.ch-site-header__toggle > i {
   position: absolute;
-  left: 0;
+  inset: 0;
+  width: 0;
+  height: 0;
+  margin: auto;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  font-size: 0;
+  line-height: 0;
+}
+
+.ch-site-header__toggle::before,
+.ch-site-header__toggle::after {
+  content: '';
+  position: absolute;
+  left: 50%;
 
   width: 18px;
   height: 2px;
+  margin-left: -9px;
   background: currentColor;
   border-radius: 999px;
 
   transition:
-    transform 0.18s ease,
-    top 0.18s ease,
-    opacity 0.18s ease;
+    transform 0.2s ease,
+    top 0.2s ease,
+    opacity 0.2s ease;
 }
 
-.ch-site-header__toggle-icon::before {
-  top: -6px;
+.ch-site-header__toggle::before {
+  top: 15px;
+  box-shadow: 0 6px 0 currentColor;
 }
 
-.ch-site-header__toggle-icon::after {
-  top: 6px;
+.ch-site-header__toggle::after {
+  top: 27px;
 }
 
-body.ch-menu-is-open .ch-site-header__toggle-icon,
-body.is-customhome-drawer-open .ch-site-header__toggle-icon {
-  background: transparent;
-}
-
-body.ch-menu-is-open .ch-site-header__toggle-icon::before,
-body.is-customhome-drawer-open .ch-site-header__toggle-icon::before {
-  top: 0;
+body.ch-menu-is-open .ch-site-header__toggle::before,
+body.is-customhome-drawer-open .ch-site-header__toggle::before {
+  top: 21px;
+  box-shadow: none;
   transform: rotate(45deg);
 }
 
-body.ch-menu-is-open .ch-site-header__toggle-icon::after,
-body.is-customhome-drawer-open .ch-site-header__toggle-icon::after {
-  top: 0;
+body.ch-menu-is-open .ch-site-header__toggle::after,
+body.is-customhome-drawer-open .ch-site-header__toggle::after {
+  top: 21px;
   transform: rotate(-45deg);
 }
-
 
 /* =========================================================
  * 05. drawer
@@ -288,18 +293,18 @@ body.is-customhome-drawer-open .ch-site-header__toggle-icon::after {
 }
 
 .ch-site-header__drawer[hidden] {
-  display: none !important;
-  opacity: 0 !important;
-  visibility: hidden !important;
-  pointer-events: none !important;
+  display: none;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
 }
 
 body.ch-menu-is-open .ch-site-header__drawer:not([hidden]),
 body.is-customhome-drawer-open .ch-site-header__drawer:not([hidden]) {
-  display: block !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-  pointer-events: auto !important;
+  display: block;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
 }
 
 .ch-site-header__drawer-inner {
@@ -339,8 +344,8 @@ body.is-customhome-drawer-open .ch-site-header__drawer:not([hidden]) {
   border: 1px solid rgba(36, 25, 16, 0.12);
   border-radius: 16px;
   background: var(--iezukuri-surface);
-
   color: var(--ch-header-text);
+
   font-size: 14px;
   font-weight: 850;
   line-height: 1.3;
@@ -349,7 +354,7 @@ body.is-customhome-drawer-open .ch-site-header__drawer:not([hidden]) {
 
 .ch-site-header__drawer-list a::after,
 .ch-site-header__drawer-index-list a::after {
-  content: "›";
+  content: '›';
   color: rgba(36, 25, 16, 0.44);
   font-size: 18px;
   line-height: 1;
@@ -365,7 +370,6 @@ body.is-customhome-drawer-open .ch-site-header__drawer:not([hidden]) {
   background: rgba(122, 79, 36, 0.08);
   color: var(--ch-header-accent);
 }
-
 
 /* =========================================================
  * 06. local nav
@@ -417,7 +421,7 @@ body.is-customhome-drawer-open .ch-site-header__drawer:not([hidden]) {
   padding: 0 14px;
   border: 1px solid rgba(36, 25, 16, 0.12);
   border-radius: 999px;
-  background: var(--iezukuri-surface)af2;
+  background: rgba(255, 255, 255, 0.7);
 
   color: var(--iezukuri-text);
   font-size: 13px;
@@ -438,15 +442,142 @@ body.is-customhome-drawer-open .ch-site-header__drawer:not([hidden]) {
   color: #7a4f24;
 }
 
+/* =========================================================
+ * 07. header menu style variants
+ *
+ * 管理画面「ヘッダーナビデザイン」を反映する。
+ *
+ * ここで変える:
+ * - 背景
+ * - 影
+ * - 区切り線
+ * - hover/current の見た目
+ *
+ * ここで変えない:
+ * - gap
+ * - padding
+ * - width
+ * - margin
+ * - min-height
+ * - flex配置
+ * ========================================================= */
+
+/* default / standard: 標準 */
+body.iez-header-menu--default .ch-site-header,
+body.iez-header-menu--standard .ch-site-header,
+.ch-site-header.ch-site-header--default,
+.ch-site-header.ch-site-header--standard {
+  --ch-header-bg: rgba(255, 250, 242, 0.94);
+  --ch-header-border: rgba(36, 25, 16, 0.12);
+  --ch-header-shadow: 0 10px 30px rgba(36, 25, 16, 0.08);
+}
+
+body.iez-header-menu--default .ch-site-header__list a,
+body.iez-header-menu--standard .ch-site-header__list a,
+.ch-site-header.ch-site-header--default .ch-site-header__list a,
+.ch-site-header.ch-site-header--standard .ch-site-header__list a {
+  background: transparent;
+  text-decoration: none;
+}
+
+/* pipe: 位置は変えず、区切り線だけ出す */
+body.iez-header-menu--pipe .ch-site-header,
+.ch-site-header.ch-site-header--pipe {
+  --ch-header-bg: rgba(255, 250, 242, 0.94);
+  --ch-header-border: rgba(36, 25, 16, 0.1);
+  --ch-header-shadow: none;
+}
+
+body.iez-header-menu--pipe .ch-site-header__list > li,
+.ch-site-header.ch-site-header--pipe .ch-site-header__list > li {
+  position: relative;
+}
+
+body.iez-header-menu--pipe .ch-site-header__list > li + li::before,
+.ch-site-header.ch-site-header--pipe .ch-site-header__list > li + li::before {
+  content: '';
+  position: absolute;
+  left: -2px;
+  top: 50%;
+  width: 1px;
+  height: 1.1em;
+  background: rgba(36, 25, 16, 0.24);
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+body.iez-header-menu--pipe .ch-site-header__list a,
+.ch-site-header.ch-site-header--pipe .ch-site-header__list a {
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* minimal: 位置は変えず、装飾を弱める */
+body.iez-header-menu--minimal .ch-site-header,
+.ch-site-header.ch-site-header--minimal {
+  --ch-header-bg: rgba(255, 250, 242, 0.86);
+  --ch-header-border: transparent;
+  --ch-header-shadow: none;
+  box-shadow: none;
+}
+
+body.iez-header-menu--minimal .ch-site-header__list a,
+.ch-site-header.ch-site-header--minimal .ch-site-header__list a {
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* default / standard の hover/current */
+body.iez-header-menu--default .ch-site-header__list a:hover,
+body.iez-header-menu--default .ch-site-header__list a:focus-visible,
+body.iez-header-menu--default .ch-site-header__list .current-menu-item > a,
+body.iez-header-menu--default .ch-site-header__list .current_page_item > a,
+body.iez-header-menu--standard .ch-site-header__list a:hover,
+body.iez-header-menu--standard .ch-site-header__list a:focus-visible,
+body.iez-header-menu--standard .ch-site-header__list .current-menu-item > a,
+body.iez-header-menu--standard .ch-site-header__list .current_page_item > a,
+.ch-site-header.ch-site-header--default .ch-site-header__list a:hover,
+.ch-site-header.ch-site-header--default .ch-site-header__list a:focus-visible,
+.ch-site-header.ch-site-header--default .ch-site-header__list .current-menu-item > a,
+.ch-site-header.ch-site-header--default .ch-site-header__list .current_page_item > a,
+.ch-site-header.ch-site-header--standard .ch-site-header__list a:hover,
+.ch-site-header.ch-site-header--standard .ch-site-header__list a:focus-visible,
+.ch-site-header.ch-site-header--standard .ch-site-header__list .current-menu-item > a,
+.ch-site-header.ch-site-header--standard .ch-site-header__list .current_page_item > a {
+  color: var(--ch-header-accent);
+}
+
+/* pipe / minimal の hover/current */
+body.iez-header-menu--pipe .ch-site-header__list a:hover,
+body.iez-header-menu--pipe .ch-site-header__list a:focus-visible,
+body.iez-header-menu--pipe .ch-site-header__list .current-menu-item > a,
+body.iez-header-menu--pipe .ch-site-header__list .current_page_item > a,
+.ch-site-header.ch-site-header--pipe .ch-site-header__list a:hover,
+.ch-site-header.ch-site-header--pipe .ch-site-header__list a:focus-visible,
+.ch-site-header.ch-site-header--pipe .ch-site-header__list .current-menu-item > a,
+.ch-site-header.ch-site-header--pipe .ch-site-header__list .current_page_item > a,
+body.iez-header-menu--minimal .ch-site-header__list a:hover,
+body.iez-header-menu--minimal .ch-site-header__list a:focus-visible,
+body.iez-header-menu--minimal .ch-site-header__list .current-menu-item > a,
+body.iez-header-menu--minimal .ch-site-header__list .current_page_item > a,
+.ch-site-header.ch-site-header--minimal .ch-site-header__list a:hover,
+.ch-site-header.ch-site-header--minimal .ch-site-header__list a:focus-visible,
+.ch-site-header.ch-site-header--minimal .ch-site-header__list .current-menu-item > a,
+.ch-site-header.ch-site-header--minimal .ch-site-header__list .current_page_item > a {
+  background: transparent;
+  color: var(--ch-header-accent);
+}
 
 /* =========================================================
- * 07. responsive
+ * 08. responsive
  * ========================================================= */
 
 @media (max-width: 1080px) {
-  .ch-site-header__inner {
-    width: min(1280px, calc(100% - 32px));
-    min-height: 66px;
+  .ch-site-header {
+    --ch-header-inner-width: min(1280px, calc(100% - 32px));
+    --ch-header-inner-height: 64px;
   }
 
   .ch-site-header__brand-main {
@@ -457,27 +588,31 @@ body.is-customhome-drawer-open .ch-site-header__drawer:not([hidden]) {
     font-size: 10px;
   }
 
-  .ch-site-header__nav--desktop {
-    display: none !important;
-  }
-
-  .ch-site-header__toggle {
-    display: inline-flex !important;
-    align-items: center;
-    justify-content: center;
-    flex: 0 0 auto;
-  }
-
   .ch-localnav .ch-shell {
     width: min(1280px, calc(100% - 28px));
   }
 }
 
+@media (max-width: 860px) {
+  .ch-site-header {
+    --ch-header-inner-width: min(100% - 32px, 1280px);
+    --ch-header-inner-gap: 16px;
+  }
+
+  .ch-site-header__nav--desktop {
+    display: none;
+  }
+
+  .ch-site-header__toggle {
+    margin-left: auto;
+  }
+}
+
 @media (max-width: 640px) {
-  .ch-site-header__inner {
-    width: calc(100% - 24px);
-    min-height: 62px;
-    gap: 12px;
+  .ch-site-header {
+    --ch-header-inner-width: calc(100% - 24px);
+    --ch-header-inner-height: 62px;
+    --ch-header-inner-gap: 12px;
   }
 
   .ch-site-header__brand-main {
@@ -504,15 +639,14 @@ body.is-customhome-drawer-open .ch-site-header__drawer:not([hidden]) {
   }
 }
 
-
 /* =========================================================
- * 08. dark mode
+ * 09. dark mode
  * ========================================================= */
 
 :is(body.dark-mode, body.is-dark, body.theme-dark) .ch-site-header {
   --ch-header-bg: rgba(24, 21, 18, 0.94);
   --ch-header-border: rgba(255, 255, 255, 0.12);
-  --ch-header-text: var(--iezukuri-surface)7eb;
+  --ch-header-text: #fff7eb;
   --ch-header-muted: rgba(255, 247, 235, 0.64);
   --ch-header-accent: #e2b36d;
   --ch-header-shadow: 0 10px 30px rgba(0, 0, 0, 0.26);
@@ -523,7 +657,7 @@ body.is-customhome-drawer-open .ch-site-header__drawer:not([hidden]) {
 :is(body.dark-mode, body.is-dark, body.theme-dark) .ch-site-header__drawer-list a,
 :is(body.dark-mode, body.is-dark, body.theme-dark) .ch-site-header__drawer-index-list a {
   background: rgba(28, 24, 20, 0.98);
-  color: var(--iezukuri-surface)7eb;
+  color: #fff7eb;
   border-color: rgba(255, 255, 255, 0.14);
 }
 
@@ -534,110 +668,6 @@ body.is-customhome-drawer-open .ch-site-header__drawer:not([hidden]) {
 
 :is(body.dark-mode, body.is-dark, body.theme-dark) .ch-localnav__list a {
   background: rgba(28, 24, 20, 0.98);
-  color: var(--iezukuri-surface)7eb;
+  color: #fff7eb;
   border-color: rgba(255, 255, 255, 0.14);
 }
-
-/* =========================================================
- * IEZUKURI HEADER TOGGLE ICON FIX
- *
- * 対象:
- * - /iezukuri/
- * - /iezukuri/* サブページ
- *
- * 役割:
- * - モバイルトグルの線を3本に固定
- * - 開いたら × に変形
- * - 既存の崩れた1本線表示を上書きする
- * ========================================================= */
-
-.ch-site-header__toggle {
-  position: relative !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  width: 44px !important;
-  height: 44px !important;
-  padding: 0 !important;
-  border: 1px solid rgba(36, 25, 16, 0.18) !important;
-  border-radius: 999px !important;
-  background: var(--iezukuri-surface)af2 !important;
-  color: var(--iezukuri-text) !important;
-  overflow: hidden !important;
-  font-size: 0 !important;
-  line-height: 0 !important;
-}
-
-/* 既存の内側要素があっても一旦無効化 */
-.ch-site-header__toggle .ch-site-header__toggle-icon,
-.ch-site-header__toggle > span,
-.ch-site-header__toggle > i {
-  position: absolute !important;
-  inset: 0 !important;
-  margin: auto !important;
-  width: 0 !important;
-  height: 0 !important;
-  font-size: 0 !important;
-  line-height: 0 !important;
-  background: transparent !important;
-  border: 0 !important;
-  box-shadow: none !important;
-}
-
-/* 線は button 自体の疑似要素で描く */
-.ch-site-header__toggle::before,
-.ch-site-header__toggle::after {
-  content: "" !important;
-  position: absolute !important;
-  left: 50% !important;
-  width: 18px !important;
-  height: 2px !important;
-  margin-left: -9px !important;
-  background: var(--iezukuri-text) !important;
-  border-radius: 999px !important;
-  transition:
-    transform 0.2s ease,
-    top 0.2s ease,
-    opacity 0.2s ease !important;
-}
-
-.ch-site-header__toggle::before {
-  top: 15px !important;
-  box-shadow: 0 6px 0 var(--iezukuri-text) !important; /* 真ん中線 */
-}
-
-.ch-site-header__toggle::after {
-  top: 27px !important;
-}
-
-/* 開いたら × */
-body.ch-menu-is-open .ch-site-header__toggle::before,
-body.is-customhome-drawer-open .ch-site-header__toggle::before {
-  top: 21px !important;
-  box-shadow: none !important;
-  transform: rotate(45deg) !important;
-}
-
-body.ch-menu-is-open .ch-site-header__toggle::after,
-body.is-customhome-drawer-open .ch-site-header__toggle::after {
-  top: 21px !important;
-  transform: rotate(-45deg) !important;
-}
-
-/* ダークモード */
-:is(body.dark-mode, body.is-dark, body.theme-dark) .ch-site-header__toggle {
-  background: rgba(28, 24, 20, 0.98) !important;
-  color: var(--iezukuri-surface)7eb !important;
-  border-color: rgba(255, 255, 255, 0.16) !important;
-}
-
-:is(body.dark-mode, body.is-dark, body.theme-dark) .ch-site-header__toggle::before,
-:is(body.dark-mode, body.is-dark, body.theme-dark) .ch-site-header__toggle::after {
-  background: var(--iezukuri-surface)7eb !important;
-}
-
-:is(body.dark-mode, body.is-dark, body.theme-dark) .ch-site-header__toggle::before {
-  box-shadow: 0 6px 0 var(--iezukuri-surface)7eb !important;
-}
-
-/* IEZUKURI HEADER TOGGLE ICON FIX END */

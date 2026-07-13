@@ -221,15 +221,16 @@
             ?>
 
                 <div class="related-posts">
-                    <div class="side-title">関連する物採用詳細の記事</div>
+                    <div class="side-title">関連する採用詳細記事</div>
 
                     <?php if ($related->have_posts()) : ?>
                         <ul id="related-posts">
                             <?php while ($related->have_posts()) : $related->the_post(); ?>
                                 <li <?php post_class('clearfix custom-post'); ?>>
-                                    <h2><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
+                                    <div class="post-meta">
+                                        <h2 class="related-post-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
 
-                                    <p class="post-meta">
+                                        <p class="post-meta-row">
                                         <svg class="icon icon-price-tags">
                                             <use xlink:href="#icon-price-tags">
                                                 <?php
@@ -246,6 +247,8 @@
                                             <?php comments_popup_link('<i class="far fa-comments"></i> : 0', '<i class="far fa-comments"></i> : 1', '<i class="far fa-comments"></i> : %'); ?>
                                         </span>
                                     </p>
+                                    </div>
+
                                     <!-- Thumbnail Box -->
                                     <div class="blog-thumbnail-box1">
                                         <?php

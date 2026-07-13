@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Frontpage settings admin
  *
@@ -16,14 +17,30 @@ if (!defined('ABSPATH')) {
 }
 
 if (!function_exists('naigai_fp_get')) {
-    function naigai_fp_get($post_id, $key, $default = '') {
-        $v = get_post_meta($post_id, $key, true);
-        return ($v !== '' && $v !== null) ? $v : $default;
+    function naigai_fp_get($post_id, $key, $default = '')
+    {
+        /*
+         * 管理画面用の値取得
+         *
+         * 役割:
+         * - まだ一度も保存されていない項目だけ、管理画面にデフォルト値を表示する
+         * - 一度保存された項目は、空文字でもユーザーの入力として尊重する
+         *
+         * 重要:
+         * - フロント側で勝手にデフォルト文言を出さないための前提
+         * - 管理画面でデフォルト文言を消して保存した場合、空欄のまま維持される
+         */
+        if (metadata_exists('post', $post_id, $key)) {
+            return get_post_meta($post_id, $key, true);
+        }
+
+        return $default;
     }
 }
 
 if (!function_exists('naigai_fp_media_field')) {
-    function naigai_fp_media_field($post_id, $key, $label, $library_type = 'image', $allowed_mime = 'image') {
+    function naigai_fp_media_field($post_id, $key, $label, $library_type = 'image', $allowed_mime = 'image')
+    {
         $id  = (int) get_post_meta($post_id, $key, true);
         $src = '';
 
@@ -37,7 +54,7 @@ if (!function_exists('naigai_fp_media_field')) {
                 }
             }
         }
-        ?>
+?>
         <div class="fp-admin-media">
             <div class="fp-admin-media__preview">
                 <?php if ($src) : ?>
@@ -54,25 +71,92 @@ if (!function_exists('naigai_fp_media_field')) {
                 class="button fp-admin-select-media"
                 data-target="<?php echo esc_attr($key); ?>"
                 data-library="<?php echo esc_attr($library_type); ?>"
-                data-mime="<?php echo esc_attr($allowed_mime); ?>"
-            >
+                data-mime="<?php echo esc_attr($allowed_mime); ?>">
                 <?php echo esc_html($label); ?>
             </button>
 
             <button
                 type="button"
                 class="button fp-admin-clear-media"
-                data-target="<?php echo esc_attr($key); ?>"
-            >
+                data-target="<?php echo esc_attr($key); ?>">
                 クリア
             </button>
         </div>
-        <?php
+    <?php
+    }
+}
+
+
+if (!function_exists('naigai_fp_render_url_select')) {
+    function naigai_fp_render_url_select($name, $current_url, $default_url = '')
+    {
+        /*
+         * URL選択フィールド
+         *
+         * 役割:
+         * - 管理画面でURLを手入力させず、選択一覧から選べるようにする
+         * - valueには固定ページIDではなく、URL文字列を保存する
+         * - 未保存の場合は $default_url を選択状態にする
+         * - 固定ページのURLが変わる可能性がある場合でも、管理画面で再選択できる
+         *
+         * 保存される値:
+         * - /contact/ などのURL文字列
+         * - 「リンクなし」は __none__ として保存する
+         */
+        $current_url = trim((string) $current_url);
+        $default_url = trim((string) $default_url);
+
+        if ($current_url === '' && $default_url !== '') {
+            $current_url = $default_url;
+        }
+
+        $url_options = array(
+            home_url('/')                         => 'トップページ',
+            home_url('/fudousan/')                => '不動産を見る',
+            home_url('/iezukuri/')                => '家づくりを見る',
+            home_url('/iezukuri/plans/')          => '間取りプラン一覧',
+            home_url('/minpaku/')                 => '宿泊を探す',
+            home_url('/contact/')                 => 'お問い合わせ',
+            home_url('/reservation/')             => '来店予約',
+            home_url('/nasu-ideal-home/')         => '那須の魅力',
+            home_url('/room-gallary/')            => 'お部屋ギャラリー / 分譲地案内',
+            home_url('/zairai-kouhou/')           => '自然素材・在来工法',
+            home_url('/hokubei-jutaku/')          => '北米住宅',
+            home_url('/nasu-used-renovation/')    => '中古住宅リノベーション',
+        );
+
+        $pages = get_posts(array(
+            'post_type'      => 'page',
+            'post_status'    => array('publish', 'private', 'draft'),
+            'posts_per_page' => -1,
+            'orderby'        => 'menu_order title',
+            'order'          => 'ASC',
+        ));
+
+        foreach ($pages as $page) {
+            $page_url = get_permalink($page->ID);
+            if (!$page_url) {
+                continue;
+            }
+
+            $url_options[$page_url] = get_the_title($page->ID) . ' / ' . wp_make_link_relative($page_url);
+        }
+    ?>
+        <select name="<?php echo esc_attr($name); ?>">
+            <option value="__none__" <?php selected($current_url, '__none__'); ?>>リンクなし</option>
+            <?php foreach ($url_options as $url => $label) : ?>
+                <option value="<?php echo esc_url($url); ?>" <?php selected(untrailingslashit($current_url), untrailingslashit($url)); ?>>
+                    <?php echo esc_html($label); ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+    <?php
     }
 }
 
 if (!function_exists('naigai_fp_normalize_media_values')) {
-    function naigai_fp_normalize_media_values($post_id) {
+    function naigai_fp_normalize_media_values($post_id)
+    {
         for ($i = 1; $i <= 5; $i++) {
             $type = get_post_meta($post_id, "_fp_hero_media_{$i}_type", true);
             if (!in_array($type, array('image', 'mp4', 'youtube', 'vimeo'), true)) {
@@ -110,7 +194,8 @@ if (!function_exists('naigai_fp_normalize_media_values')) {
 }
 
 if (!function_exists('naigai_fp_save_settings')) {
-    function naigai_fp_save_settings($post_id) {
+    function naigai_fp_save_settings($post_id)
+    {
         $text_keys = array(
             '_fp_hero_kicker',
             '_fp_hero_title',
@@ -168,6 +253,31 @@ if (!function_exists('naigai_fp_save_settings')) {
         $text_keys[] = '_fp_life_button_label';
         $text_keys[] = '_fp_life_button_url';
 
+        /*
+         * 暮らしカード保存項目
+         *
+         * 役割:
+         * - 「那須での暮らし」スライダーの各カードを保存する
+         * - タイトル / 本文 / リンクURL / 画像ID を保存する
+         * - リンク先は「固定ページID」ではなく、URL文字列として保存する
+         *
+         * 理由:
+         * - 管理画面でURLを選択できるようにするため
+         * - フロント側では保存されたURLをそのままカードリンクに反映するため
+         *
+         * メタキー:
+         * - _fp_life_point_1_title
+         * - _fp_life_point_1_text
+         * - _fp_life_point_1_url
+         * - _fp_life_point_1_image_id
+         */
+        for ($i = 1; $i <= 4; $i++) {
+            $text_keys[] = "_fp_life_point_{$i}_title";
+            $text_keys[] = "_fp_life_point_{$i}_text";
+            $text_keys[] = "_fp_life_point_{$i}_url";
+            $id_keys[]   = "_fp_life_point_{$i}_image_id";
+        }
+
         $text_keys[] = '_fp_cta_title';
         $text_keys[] = '_fp_cta_btn1_label';
         $text_keys[] = '_fp_cta_btn1_url';
@@ -176,12 +286,6 @@ if (!function_exists('naigai_fp_save_settings')) {
 
         $id_keys[] = '_fp_life_image_id';
         $id_keys[] = '_fp_cta_image_id';
-
-        for ($i = 1; $i <= 3; $i++) {
-            $text_keys[] = "_fp_life_point_{$i}_title";
-            $text_keys[] = "_fp_life_point_{$i}_text";
-            $id_keys[]   = "_fp_life_point_{$i}_image_id";
-        }
 
         foreach ($text_keys as $key) {
             if (isset($_POST[$key])) {
@@ -200,14 +304,15 @@ if (!function_exists('naigai_fp_save_settings')) {
 }
 
 if (!function_exists('naigai_fp_render_media_slot')) {
-    function naigai_fp_render_media_slot($post_id, $i) {
+    function naigai_fp_render_media_slot($post_id, $i)
+    {
         $type = naigai_fp_get($post_id, "_fp_hero_media_{$i}_type", 'image');
         if (!in_array($type, array('image', 'mp4', 'youtube', 'vimeo'), true)) {
             $type = 'image';
         }
 
         $slot_label = $i === 1 ? 'メディア1（大）' : 'メディア' . $i . '（小）';
-        ?>
+    ?>
         <section class="fp-admin-card fp-admin-media-slot" data-fp-media-slot>
             <h2><?php echo esc_html($slot_label); ?></h2>
 
@@ -241,8 +346,7 @@ if (!function_exists('naigai_fp_render_media_slot')) {
                     type="text"
                     name="_fp_hero_media_<?php echo (int) $i; ?>_youtube"
                     value="<?php echo esc_attr(naigai_fp_get($post_id, "_fp_hero_media_{$i}_youtube", '')); ?>"
-                    placeholder="例: dQw4w9WgXcQ または YouTube URL"
-                >
+                    placeholder="例: dQw4w9WgXcQ または YouTube URL">
             </div>
 
             <div class="fp-admin-media-row" data-fp-row="vimeo">
@@ -252,8 +356,7 @@ if (!function_exists('naigai_fp_render_media_slot')) {
                     type="text"
                     name="_fp_hero_media_<?php echo (int) $i; ?>_vimeo"
                     value="<?php echo esc_attr(naigai_fp_get($post_id, "_fp_hero_media_{$i}_vimeo", '')); ?>"
-                    placeholder="例: 123456789 または Vimeo URL"
-                >
+                    placeholder="例: 123456789 または Vimeo URL">
             </div>
 
             <div class="fp-admin-field">
@@ -262,16 +365,16 @@ if (!function_exists('naigai_fp_render_media_slot')) {
                     type="text"
                     name="_fp_hero_media_<?php echo (int) $i; ?>_label"
                     value="<?php echo esc_attr(naigai_fp_get($post_id, "_fp_hero_media_{$i}_label", '')); ?>"
-                    placeholder="未入力なら種類名を表示"
-                >
+                    placeholder="未入力なら種類名を表示">
             </div>
         </section>
-        <?php
+    <?php
     }
 }
 
 if (!function_exists('naigai_fp_render_settings_page')) {
-    function naigai_fp_render_settings_page() {
+    function naigai_fp_render_settings_page()
+    {
         $post_id = (int) get_option('page_on_front');
         $post    = $post_id ? get_post($post_id) : null;
 
@@ -295,7 +398,7 @@ if (!function_exists('naigai_fp_render_settings_page')) {
         echo '<input type="hidden" name="frontpage_post_id" value="' . esc_attr($post_id) . '">';
         wp_nonce_field('naigai_save_frontpage_settings', 'naigai_frontpage_nonce');
 
-        ?>
+    ?>
         <section class="fp-admin-card">
             <h2>ヒーロー文言</h2>
 
@@ -306,12 +409,12 @@ if (!function_exists('naigai_fp_render_settings_page')) {
 
             <div class="fp-admin-field">
                 <label>大見出し</label>
-                <textarea name="_fp_hero_title"><?php echo esc_textarea(naigai_fp_get($post_id, '_fp_hero_title', "那須で暮らす・建てる・泊まる。\n住まいも、事業も。\nまるごと相談できる総合窓口")); ?></textarea>
+                <textarea name="_fp_hero_title"><?php echo esc_textarea(naigai_fp_get($post_id, '_fp_hero_title', "那須の住まいと暮らしの相談窓口")); ?></textarea>
             </div>
 
             <div class="fp-admin-field">
                 <label>リード文</label>
-                <textarea name="_fp_hero_lead"><?php echo esc_textarea(naigai_fp_get($post_id, '_fp_hero_lead', "不動産探しから家づくり、民泊のご相談まで。\n那須の暮らしをもっと豊かに、もっと自由に。")); ?></textarea>
+                <textarea name="_fp_hero_lead"><?php echo esc_textarea(naigai_fp_get($post_id, '_fp_hero_lead', "不動産探しから家づくり、宿泊・民泊、事業活用まで。那須での暮らしをまとめて相談できます。")); ?></textarea>
             </div>
         </section>
 
@@ -327,16 +430,6 @@ if (!function_exists('naigai_fp_render_settings_page')) {
             }
             ?>
         </div>
-
-        <section class="fp-admin-card">
-            <h2>下部CTA設定</h2>
-            <p class="description">画像を入れた場合だけ、フロントページ下部CTAに画像を表示します。未設定なら今まで通りテキストCTAだけで表示します。</p>
-
-            <div class="fp-admin-field">
-                <label>CTA画像</label>
-                <?php naigai_fp_media_field($post_id, "_fp_cta_image_id", 'CTA背景画像を選択', 'image', 'image'); ?>
-            </div>
-        </section>
 
         <section class="fp-admin-card">
             <h2>お知らせ・コラム 簡易入力</h2>
@@ -372,14 +465,24 @@ if (!function_exists('naigai_fp_render_settings_page')) {
 
                     <div class="fp-admin-field">
                         <label>リンクURL</label>
-                        <input type="url" name="_fp_notice_<?php echo (int) $i; ?>_url" value="<?php echo esc_attr(naigai_fp_get($post_id, "_fp_notice_{$i}_url", '')); ?>">
+                        <?php
+                        /*
+                         * お知らせ・コラムURL
+                         *
+                         * 役割:
+                         * - カスタム投稿を作る前でも、PR用の固定ページや通常ページへ誘導できるようにする
+                         * - URLは手入力ではなく選択一覧から選ぶ
+                         */
+                        naigai_fp_render_url_select(
+                            "_fp_notice_{$i}_url",
+                            get_post_meta($post_id, "_fp_notice_{$i}_url", true),
+                            home_url('/')
+                        );
+                        ?>
                     </div>
                 </div>
             <?php endfor; ?>
         </section>
-        <?php
-        ?>
-        ?>
         <!-- Frontpage Managed Content Fields -->
 
         <section class="fp-admin-card">
@@ -399,7 +502,7 @@ if (!function_exists('naigai_fp_render_settings_page')) {
                     $btn_label = naigai_fp_get($post_id, "_fp_hero_btn_{$i}_label", $fp_hero_btn_defaults[$i][0]);
                     $btn_url   = naigai_fp_get($post_id, "_fp_hero_btn_{$i}_url", $fp_hero_btn_defaults[$i][1]);
                     $btn_color = naigai_fp_get($post_id, "_fp_hero_btn_{$i}_color", $fp_hero_btn_defaults[$i][2]);
-                    ?>
+                ?>
                     <section class="fp-admin-card fp-admin-media-slot">
                         <h2>Hero CTA <?php echo (int) $i; ?></h2>
 
@@ -410,7 +513,18 @@ if (!function_exists('naigai_fp_render_settings_page')) {
 
                         <div class="fp-admin-field">
                             <label>URL</label>
-                            <input type="url" name="_fp_hero_btn_<?php echo (int) $i; ?>_url" value="<?php echo esc_attr($btn_url); ?>">
+                            <?php
+                            /*
+                             * Hero CTA URL
+                             * - URLを直接入力させず、管理画面の選択一覧から選ぶ
+                             * - デフォルトは既存の $fp_hero_btn_defaults を使う
+                             */
+                            naigai_fp_render_url_select(
+                                "_fp_hero_btn_{$i}_url",
+                                get_post_meta($post_id, "_fp_hero_btn_{$i}_url", true),
+                                $fp_hero_btn_defaults[$i][1]
+                            );
+                            ?>
                         </div>
 
                         <div class="fp-admin-field">
@@ -448,7 +562,7 @@ if (!function_exists('naigai_fp_render_settings_page')) {
                 );
 
                 foreach ($fp_service_defaults as $service_key => $defaults) :
-                    ?>
+                ?>
                     <section class="fp-admin-card fp-admin-media-slot">
                         <h2><?php echo esc_html($fp_service_labels[$service_key]); ?></h2>
 
@@ -464,7 +578,17 @@ if (!function_exists('naigai_fp_render_settings_page')) {
 
                         <div class="fp-admin-field">
                             <label>URL</label>
-                            <input type="url" name="_fp_service_<?php echo esc_attr($service_key); ?>_url" value="<?php echo esc_attr(naigai_fp_get($post_id, "_fp_service_{$service_key}_url", $defaults[2])); ?>">
+                            <?php
+                            /*
+                             * サービスカードURL
+                             * - 不動産 / 家づくり / 民泊 / 法人相談 のリンク先を選択式で管理する
+                             */
+                            naigai_fp_render_url_select(
+                                "_fp_service_{$service_key}_url",
+                                get_post_meta($post_id, "_fp_service_{$service_key}_url", true),
+                                $defaults[2]
+                            );
+                            ?>
                         </div>
                     </section>
                 <?php endforeach; ?>
@@ -494,7 +618,7 @@ if (!function_exists('naigai_fp_render_settings_page')) {
                 );
 
                 for ($i = 1; $i <= 4; $i++) :
-                    ?>
+                ?>
                     <div class="fp-admin-field">
                         <label>チェック項目<?php echo (int) $i; ?></label>
                         <input type="text" name="_fp_business_check_<?php echo (int) $i; ?>" value="<?php echo esc_attr(naigai_fp_get($post_id, "_fp_business_check_{$i}", $fp_business_check_defaults[$i])); ?>">
@@ -509,12 +633,96 @@ if (!function_exists('naigai_fp_render_settings_page')) {
 
             <div class="fp-admin-field">
                 <label>ボタンURL</label>
-                <input type="url" name="_fp_business_button_url" value="<?php echo esc_attr(naigai_fp_get($post_id, '_fp_business_button_url', home_url('/contact/'))); ?>">
+                <?php
+                /*
+                 * 法人向けブロックのボタンURL
+                 * - PR・問い合わせ・法人向け固定ページなどに差し替えられるようにする
+                 */
+                naigai_fp_render_url_select(
+                    '_fp_business_button_url',
+                    get_post_meta($post_id, '_fp_business_button_url', true),
+                    home_url('/contact/')
+                );
+                ?>
             </div>
         </section>
 
         <section class="fp-admin-card">
             <h2>那須での暮らし</h2>
+
+            <?php
+            /*
+             * URL選択肢
+             *
+             * 役割:
+             * - 「那須での暮らし」内で使うURLを、管理画面のselectから選べるようにする
+             * - selectのvalueには固定ページIDではなくURL文字列を入れる
+             * - 既定の4ページに加えて、存在する固定ページも一覧に出す
+             *
+             * 重要:
+             * - デフォルトURLは今までの指定をそのまま使う
+             * - 保存される値は _fp_life_button_url / _fp_life_point_1_url など
+             */
+            $fp_life_default_urls = array(
+                'life_button' => home_url('/nasu-ideal-home/'),
+                1 => home_url('/room-gallary/'),
+                2 => home_url('/zairai-kouhou/'),
+                3 => home_url('/hokubei-jutaku/'),
+                4 => home_url('/nasu-used-renovation/'),
+            );
+
+            $fp_life_url_options = array(
+                home_url('/nasu-ideal-home/')        => '那須の魅力',
+                home_url('/room-gallary/')           => 'お部屋ギャラリー / 分譲地案内',
+                home_url('/zairai-kouhou/')          => '自然素材・在来工法',
+                home_url('/hokubei-jutaku/')         => '北米住宅',
+                home_url('/nasu-used-renovation/')   => '中古住宅リノベーション',
+            );
+
+            $fp_life_pages = get_posts(array(
+                'post_type'      => 'page',
+                'post_status'    => array('publish', 'private', 'draft'),
+                'posts_per_page' => -1,
+                'orderby'        => 'menu_order title',
+                'order'          => 'ASC',
+            ));
+
+            foreach ($fp_life_pages as $link_page) {
+                $page_url = get_permalink($link_page->ID);
+                if (!$page_url) {
+                    continue;
+                }
+
+                $fp_life_url_options[$page_url] = get_the_title($link_page->ID) . ' / ' . wp_make_link_relative($page_url);
+            }
+
+            $fp_life_render_url_select = function ($name, $current_url, $default_url) use ($fp_life_url_options) {
+                /*
+                 * URL選択select
+                 *
+                 * 役割:
+                 * - 未保存なら default_url を選択状態にする
+                 * - 「リンクなし」を選んだ場合は __none__ を保存する
+                 * - URL文字列をそのまま保存するので、フロント側はそのURLをそのまま使える
+                 */
+                $current_url = trim((string) $current_url);
+
+                if ($current_url === '') {
+                    $current_url = $default_url;
+                }
+            ?>
+                <select name="<?php echo esc_attr($name); ?>">
+                    <option value="__none__" <?php selected($current_url, '__none__'); ?>>リンクなし</option>
+
+                    <?php foreach ($fp_life_url_options as $url => $label) : ?>
+                        <option value="<?php echo esc_url($url); ?>" <?php selected(untrailingslashit($current_url), untrailingslashit($url)); ?>>
+                            <?php echo esc_html($label); ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            <?php
+            };
+            ?>
 
             <div class="fp-admin-field">
                 <label>ラベル</label>
@@ -532,13 +740,28 @@ if (!function_exists('naigai_fp_render_settings_page')) {
             </div>
 
             <div class="fp-admin-field">
-                <label>ボタン文言</label>
+                <label>CTAボタン文言</label>
                 <input type="text" name="_fp_life_button_label" value="<?php echo esc_attr(naigai_fp_get($post_id, '_fp_life_button_label', '那須の魅力をもっと見る')); ?>">
+                <p class="description">左側CTAボタンの文言です。空にするとフロントには表示しません。</p>
             </div>
 
             <div class="fp-admin-field">
-                <label>ボタンURL</label>
-                <input type="url" name="_fp_life_button_url" value="<?php echo esc_attr(naigai_fp_get($post_id, '_fp_life_button_url', home_url('/'))); ?>">
+                <label>CTAリンク先URL（那須の魅力をもっと見る）</label>
+                <?php
+                /*
+                 * 左側CTAボタンURL
+                 *
+                 * 役割:
+                 * - 「那須の魅力をもっと見る」のリンク先URLを管理画面で選択する
+                 * - 未保存なら /nasu-ideal-home/ をデフォルトにする
+                 */
+                $fp_life_render_url_select(
+                    '_fp_life_button_url',
+                    get_post_meta($post_id, '_fp_life_button_url', true),
+                    $fp_life_default_urls['life_button']
+                );
+                ?>
+                <p class="description">左側CTA「那須の魅力をもっと見る」のリンク先です。未保存なら /nasu-ideal-home/、リンクなしならフロントではボタンを出しません。</p>
             </div>
 
             <div class="fp-admin-field">
@@ -558,25 +781,66 @@ if (!function_exists('naigai_fp_render_settings_page')) {
             <h3>暮らしカード</h3>
             <div class="fp-admin-media-grid">
                 <?php
-                $fp_life_point_defaults = array(
-                    1 => array('自然と共に暮らす', '美しい自然を身近に感じられる環境。'),
-                    2 => array('アクセスも快適', '週末利用や拠点づくりにも対応。'),
-                    3 => array('家族にやさしい環境', '安心して暮らせる地域環境。'),
-                );
-
-                for ($i = 1; $i <= 3; $i++) :
-                    ?>
+                /*
+                 * 暮らしカード入力欄
+                 *
+                 * 役割:
+                 * - タイトル / 本文 / リンク先URL / 画像をカードごとに管理する
+                 * - リンク先URLはselectで選ぶ
+                 * - フロント表示の空判定は「タイトル・本文・画像」だけで行う
+                 * - リンク先URLだけ選んでいてもカードは表示しない
+                 *
+                 * 保存されるメタキー:
+                 * - _fp_life_point_1_title
+                 * - _fp_life_point_1_text
+                 * - _fp_life_point_1_url
+                 * - _fp_life_point_1_image_id
+                 */
+                for ($i = 1; $i <= 4; $i++) :
+                    if ($i === 1) {
+                        $default_title = '自然と共に暮らす';
+                        $default_text  = '美しい自然を身近に感じられる環境。';
+                        $default_url   = $fp_life_default_urls[1];
+                    } elseif ($i === 2) {
+                        $default_title = 'アクセスも快適';
+                        $default_text  = '週末利用や拠点づくりにも対応。';
+                        $default_url   = $fp_life_default_urls[2];
+                    } elseif ($i === 3) {
+                        $default_title = '家族にやさしい環境';
+                        $default_text  = '安心して暮らせる地域環境。';
+                        $default_url   = $fp_life_default_urls[3];
+                    } else {
+                        $default_title = '';
+                        $default_text  = '';
+                        $default_url   = $fp_life_default_urls[4];
+                    }
+                ?>
                     <section class="fp-admin-card fp-admin-media-slot">
                         <h2>カード<?php echo (int) $i; ?></h2>
 
                         <div class="fp-admin-field">
                             <label>タイトル</label>
-                            <input type="text" name="_fp_life_point_<?php echo (int) $i; ?>_title" value="<?php echo esc_attr(naigai_fp_get($post_id, "_fp_life_point_{$i}_title", $fp_life_point_defaults[$i][0])); ?>">
+                            <input
+                                type="text"
+                                name="_fp_life_point_<?php echo (int) $i; ?>_title"
+                                value="<?php echo esc_attr(naigai_fp_get($post_id, "_fp_life_point_{$i}_title", $default_title)); ?>">
                         </div>
 
                         <div class="fp-admin-field">
                             <label>本文</label>
-                            <textarea name="_fp_life_point_<?php echo (int) $i; ?>_text"><?php echo esc_textarea(naigai_fp_get($post_id, "_fp_life_point_{$i}_text", $fp_life_point_defaults[$i][1])); ?></textarea>
+                            <textarea name="_fp_life_point_<?php echo (int) $i; ?>_text"><?php echo esc_textarea(naigai_fp_get($post_id, "_fp_life_point_{$i}_text", $default_text)); ?></textarea>
+                        </div>
+
+                        <div class="fp-admin-field">
+                            <label>リンク先URL</label>
+                            <?php
+                            $fp_life_render_url_select(
+                                "_fp_life_point_{$i}_url",
+                                get_post_meta($post_id, "_fp_life_point_{$i}_url", true),
+                                $default_url
+                            );
+                            ?>
+                            <p class="description">このカードをクリックした時のURLです。URLだけではフロントに表示しません。タイトル・本文・カード画像が全部空なら、このカードは非表示です。</p>
                         </div>
 
                         <div class="fp-admin-field">
@@ -593,7 +857,27 @@ if (!function_exists('naigai_fp_render_settings_page')) {
 
             <div class="fp-admin-field">
                 <label>CTA見出し</label>
-                <textarea name="_fp_cta_title"><?php echo esc_textarea(naigai_fp_get($post_id, '_fp_cta_title', "暮らし・不動産・家づくり・宿泊・事業まで\nお気軽にご相談ください")); ?></textarea>
+                <?php
+                /*
+                 * 最後のCTA見出し
+                 *
+                 * 役割:
+                 * - 最後の横長CTAに表示する見出しを管理する
+                 * - ここは段落を増やしたくないので textarea ではなく input にする
+                 * - 既にDBに改行入りで保存されている場合も、管理画面表示時に1行へ戻す
+                 * - フロント側でも wp_strip_all_tags + preg_replace で1行化して表示する
+                 *
+                 * 保存メタキー:
+                 * - _fp_cta_title
+                 */
+                $fp_cta_title_admin = naigai_fp_get($post_id, '_fp_cta_title', '那須の住まい・不動産・宿泊のこと、お気軽にご相談ください');
+                $fp_cta_title_admin = trim(preg_replace('/\s+/u', ' ', wp_strip_all_tags((string) $fp_cta_title_admin)));
+                ?>
+                <input
+                    type="text"
+                    name="_fp_cta_title"
+                    value="<?php echo esc_attr($fp_cta_title_admin); ?>">
+                <p class="description">改行なしの1行見出しです。不要な段落や改行を作りません。</p>
             </div>
 
             <div class="fp-admin-field">
@@ -603,7 +887,17 @@ if (!function_exists('naigai_fp_render_settings_page')) {
 
             <div class="fp-admin-field">
                 <label>ボタン1 URL</label>
-                <input type="url" name="_fp_cta_btn1_url" value="<?php echo esc_attr(naigai_fp_get($post_id, '_fp_cta_btn1_url', home_url('/contact/'))); ?>">
+                <?php
+                /*
+                 * 最後のCTA ボタン1 URL
+                 * - デフォルトはお問い合わせ
+                 */
+                naigai_fp_render_url_select(
+                    '_fp_cta_btn1_url',
+                    get_post_meta($post_id, '_fp_cta_btn1_url', true),
+                    home_url('/contact/')
+                );
+                ?>
             </div>
 
             <div class="fp-admin-field">
@@ -613,7 +907,17 @@ if (!function_exists('naigai_fp_render_settings_page')) {
 
             <div class="fp-admin-field">
                 <label>ボタン2 URL</label>
-                <input type="url" name="_fp_cta_btn2_url" value="<?php echo esc_attr(naigai_fp_get($post_id, '_fp_cta_btn2_url', home_url('/reservation/'))); ?>">
+                <?php
+                /*
+                 * 最後のCTA ボタン2 URL
+                 * - デフォルトは来店予約
+                 */
+                naigai_fp_render_url_select(
+                    '_fp_cta_btn2_url',
+                    get_post_meta($post_id, '_fp_cta_btn2_url', true),
+                    home_url('/reservation/')
+                );
+                ?>
             </div>
 
             <div class="fp-admin-field">
@@ -622,7 +926,7 @@ if (!function_exists('naigai_fp_render_settings_page')) {
             </div>
         </section>
 
-        <?php
+    <?php
         submit_button('保存する');
 
         echo '</form>';
@@ -952,85 +1256,89 @@ add_action('admin_footer', function () {
     }
     ?>
     <script>
-    jQuery(function($){
-      function updateMediaSlot(slot) {
-        var type = slot.find('.js-fp-media-type').val() || 'image';
-        slot.find('[data-fp-row]').removeClass('is-active');
-        slot.find('[data-fp-row="' + type + '"]').addClass('is-active');
-      }
+        jQuery(function($) {
+            function updateMediaSlot(slot) {
+                var type = slot.find('.js-fp-media-type').val() || 'image';
+                slot.find('[data-fp-row]').removeClass('is-active');
+                slot.find('[data-fp-row="' + type + '"]').addClass('is-active');
+            }
 
-      $('[data-fp-media-slot]').each(function(){
-        updateMediaSlot($(this));
-      });
+            $('[data-fp-media-slot]').each(function() {
+                updateMediaSlot($(this));
+            });
 
-      $(document)
-        .off('change.fpMediaType', '.js-fp-media-type')
-        .on('change.fpMediaType', '.js-fp-media-type', function(){
-          updateMediaSlot($(this).closest('[data-fp-media-slot]'));
+            $(document)
+                .off('change.fpMediaType', '.js-fp-media-type')
+                .on('change.fpMediaType', '.js-fp-media-type', function() {
+                    updateMediaSlot($(this).closest('[data-fp-media-slot]'));
+                });
+
+            $(document).off('click', '.fp-admin-select-media');
+            $(document).on('click', '.fp-admin-select-media', function(e) {
+                e.preventDefault();
+
+                var btn = $(this);
+                var target = btn.data('target');
+                var field = $('input[name="' + target + '"]');
+                var preview = btn.closest('.fp-admin-media').find('.fp-admin-media__preview, .fp-admin-media-preview');
+
+                var libraryType = btn.data('library') || 'image';
+                var allowedMime = btn.data('mime') || 'image';
+
+                var frame = wp.media({
+                    title: libraryType === 'video' ? 'MP4動画を選択' : '画像を選択',
+                    button: {
+                        text: '選択する'
+                    },
+                    multiple: false,
+                    library: {
+                        type: libraryType
+                    }
+                });
+
+                frame.on('select', function() {
+                    var attachment = frame.state().get('selection').first().toJSON();
+                    var mime = String(attachment.mime || '');
+
+                    if (allowedMime === 'video/mp4' && mime !== 'video/mp4') {
+                        alert('MP4動画欄では MP4（video/mp4）だけ選択できます。');
+                        return;
+                    }
+
+                    if (allowedMime === 'image' && !mime.match(/^image\//)) {
+                        alert('画像欄では画像ファイルだけ選択できます。');
+                        return;
+                    }
+
+                    field.val(attachment.id);
+
+                    if (libraryType === 'video') {
+                        preview.html('<span>MP4選択済み<br>ID: ' + attachment.id + '</span>');
+                    } else if (attachment.sizes && attachment.sizes.thumbnail) {
+                        preview.html('<img src="' + attachment.sizes.thumbnail.url + '" alt="">');
+                    } else if (attachment.icon) {
+                        preview.html('<img src="' + attachment.icon + '" alt="">');
+                    } else {
+                        preview.html('<span>選択済み<br>ID: ' + attachment.id + '</span>');
+                    }
+                });
+
+                frame.open();
+            });
+
+            $(document).off('click', '.fp-admin-clear-media');
+            $(document).on('click', '.fp-admin-clear-media', function(e) {
+                e.preventDefault();
+
+                var btn = $(this);
+                var target = btn.data('target');
+
+                $('input[name="' + target + '"]').val('');
+                btn.closest('.fp-admin-media').find('.fp-admin-media__preview, .fp-admin-media-preview').html('<span>未選択</span>');
+            });
         });
-
-      $(document).off('click', '.fp-admin-select-media');
-      $(document).on('click', '.fp-admin-select-media', function(e){
-        e.preventDefault();
-
-        var btn = $(this);
-        var target = btn.data('target');
-        var field = $('input[name="'+target+'"]');
-        var preview = btn.closest('.fp-admin-media').find('.fp-admin-media__preview, .fp-admin-media-preview');
-
-        var libraryType = btn.data('library') || 'image';
-        var allowedMime = btn.data('mime') || 'image';
-
-        var frame = wp.media({
-          title: libraryType === 'video' ? 'MP4動画を選択' : '画像を選択',
-          button: { text: '選択する' },
-          multiple: false,
-          library: { type: libraryType }
-        });
-
-        frame.on('select', function(){
-          var attachment = frame.state().get('selection').first().toJSON();
-          var mime = String(attachment.mime || '');
-
-          if (allowedMime === 'video/mp4' && mime !== 'video/mp4') {
-            alert('MP4動画欄では MP4（video/mp4）だけ選択できます。');
-            return;
-          }
-
-          if (allowedMime === 'image' && !mime.match(/^image\//)) {
-            alert('画像欄では画像ファイルだけ選択できます。');
-            return;
-          }
-
-          field.val(attachment.id);
-
-          if (libraryType === 'video') {
-            preview.html('<span>MP4選択済み<br>ID: '+ attachment.id +'</span>');
-          } else if (attachment.sizes && attachment.sizes.thumbnail) {
-            preview.html('<img src="'+ attachment.sizes.thumbnail.url +'" alt="">');
-          } else if (attachment.icon) {
-            preview.html('<img src="'+ attachment.icon +'" alt="">');
-          } else {
-            preview.html('<span>選択済み<br>ID: '+ attachment.id +'</span>');
-          }
-        });
-
-        frame.open();
-      });
-
-      $(document).off('click', '.fp-admin-clear-media');
-      $(document).on('click', '.fp-admin-clear-media', function(e){
-        e.preventDefault();
-
-        var btn = $(this);
-        var target = btn.data('target');
-
-        $('input[name="'+target+'"]').val('');
-        btn.closest('.fp-admin-media').find('.fp-admin-media__preview, .fp-admin-media-preview').html('<span>未選択</span>');
-      });
-    });
     </script>
-    <?php
+<?php
 });
 
 
@@ -1044,29 +1352,28 @@ add_action('admin_footer', function () {
     if (!$screen || $screen->id !== 'toplevel_page_naigai-frontpage-settings') {
         return;
     }
-    ?>
+?>
     <script>
-    jQuery(function($){
-      if ($('.fp-mobile-cta-rule-notice').length) {
-        return;
-      }
+        jQuery(function($) {
+            if ($('.fp-mobile-cta-rule-notice').length) {
+                return;
+            }
 
-      var notice = $(
-        '<div class="fp-admin-card fp-mobile-cta-rule-notice">' +
-          '<h2>スマホ表示のCTAルール</h2>' +
-          '<p class="description">スマホのヒーロー上部では、ボタンが多すぎると見づらいため、表示は2つだけに制限しています。</p>' +
-          '<ul style="margin-left:1.2em;list-style:disc;">' +
-            '<li><strong>表示:</strong> 不動産を見る / お問い合わせ</li>' +
-            '<li><strong>非表示:</strong> 家づくりを見る / 宿泊を探す</li>' +
-            '<li>家づくり・宿泊は下のサービスカードから案内します。</li>' +
-            '<li>スマホでは、CTAは画像・動画Swiperの下に表示します。</li>' +
-          '</ul>' +
-        '</div>'
-      );
+            var notice = $(
+                '<div class="fp-admin-card fp-mobile-cta-rule-notice">' +
+                '<h2>スマホ表示のCTAルール</h2>' +
+                '<p class="description">スマホのヒーロー上部では、ボタンが多すぎると見づらいため、表示は2つだけに制限しています。</p>' +
+                '<ul style="margin-left:1.2em;list-style:disc;">' +
+                '<li><strong>表示:</strong> 不動産を見る / お問い合わせ</li>' +
+                '<li><strong>非表示:</strong> 家づくりを見る / 宿泊を探す</li>' +
+                '<li>家づくり・宿泊は下のサービスカードから案内します。</li>' +
+                '<li>スマホでは、CTAは画像・動画Swiperの下に表示します。</li>' +
+                '</ul>' +
+                '</div>'
+            );
 
-      $('.fp-admin-wrap h1').first().after(notice);
-    });
+            $('.fp-admin-wrap h1').first().after(notice);
+        });
     </script>
-    <?php
+<?php
 });
-

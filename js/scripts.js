@@ -2661,51 +2661,6 @@ jQuery(document).ready(function ($) {
     }
 });*/
 
-// モーダル地図を開く関数　修正中
-document.addEventListener('DOMContentLoaded', function () {
-  // モーダル要素（Googleマップ表示用のポップアップ）をIDで取得
-  var modal = document.getElementById('googleMapModal'); // モーダルのIDは 'googleMapModal' です
-
-  // Google位置リンクをクリックしてモーダルを表示するためのリンク要素をIDで取得
-  var openMapLink = document.getElementById('openMapLink'); // リンクのIDは 'openMapLink' です
-
-  // モーダルを閉じるためのボタンをIDで取得
-  var closeModal = document.getElementById('closeModal'); // 閉じるボタンのIDは 'closeModal' です
-
-  // アイコンのSVG要素をクラス名で取得（クリックでモーダル表示）
-  var iconLocation = document.querySelector('.icon-location'); // クラス名でアイコン（'icon-location'）を取得
-
-  // 必要な要素がすべて存在する場合に処理を続ける
-  if (modal && openMapLink && closeModal && iconLocation) {
-    // Google位置リンク（ID: openMapLink）をクリックしたとき、モーダルを表示
-    openMapLink.addEventListener('click', function () {
-      modal.style.display = 'block'; // モーダルを表示するためにスタイルを 'block' に設定
-    });
-
-    // アイコン（クラス: icon-location）をクリックしたとき、モーダルを表示
-    iconLocation.addEventListener('click', function () {
-      modal.style.display = 'block'; // モーダルを表示するためにスタイルを 'block' に設定
-    });
-
-    // モーダル内の閉じるボタン（ID: closeModal）をクリックしたとき、モーダルを非表示
-    closeModal.addEventListener('click', function () {
-      modal.style.display = 'none'; // モーダルを非表示にするためにスタイルを 'none' に設定
-    });
-
-    // モーダル自体（背景部分）をクリックしたとき、モーダルを非表示にする処理
-    modal.addEventListener('click', function (event) {
-      if (event.target === modal) {
-        // クリックされたターゲットがモーダル本体か確認
-        modal.style.display = 'none'; // モーダルを非表示にする
-      }
-    });
-  } else {
-    console.error(
-      '必要な要素が見つかりません: googleMapModal, openMapLink, icon-location, or closeModal',
-    );
-  }
-});
-
 // =========================================================
 // 予約モーダルの初期化
 // - DOMの読み込み完了後に実行

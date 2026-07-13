@@ -1,4 +1,24 @@
 <?php
+/*
+ * 中間ナビ表示方式 / サブページ用
+ *
+ * このファイルは WordPress の nav location ではない。
+ * template-iezukuri-subpage.php から include される、サブページ用の中間ナビ。
+ *
+ * 役割:
+ * - サブページ内の見出し・セクションへ移動するページ内アンカー
+ * - footer メニューとは別役割
+ *
+ * 表示方式:
+ * - PHP側で項目配列を作り、href="#セクションID" のリンクを出す
+ * - WordPress管理画面 > 外観 > メニュー の location では管理していない
+ *
+ * CSS:
+ * - hub/pages/iezukuri/css/common/nav.css
+ * - hub/pages/iezukuri/css/subpage/subpage.css
+ * - 主な対象クラス: .iez-sub-localnav
+ */
+
 if (!defined('ABSPATH')) {
   exit;
 }

@@ -431,3 +431,193 @@ add_filter('body_class', function ($classes) {
 
 /* === IEZUKURI THREE SERVICE BODY CLASS END === */
 
+/* === IEZUKURI FOOTER MENU START === */
+
+/**
+ * いえづくり footer メニュー。
+ *
+ * footer:
+ * - 全ページ共通のサイトマップ
+ * - 主要ページをすべて表示する
+ *
+ * 中間ナビ:
+ * - ページ途中の回遊導線
+ * - footerとは別役割
+ */
+if (!function_exists('naigai_iezukuri_footer_menu_items')) {
+    function naigai_iezukuri_footer_menu_items() {
+        return array(
+            array('label' => 'トップ',             'url' => home_url('/iezukuri/')),
+            array('label' => '家づくりの考え方',   'url' => home_url('/iezukuri/concept/')),
+            array('label' => '設計方針',           'url' => home_url('/iezukuri/design-policy/')),
+            array('label' => '新築住宅',           'url' => home_url('/iezukuri/new-house/')),
+            array('label' => '中古住宅',           'url' => home_url('/iezukuri/chuko/')),
+            array('label' => '二世帯住宅',         'url' => home_url('/iezukuri/nisetai/')),
+            array('label' => '住まいリフォーム',   'url' => home_url('/iezukuri/renovation/')),
+            array('label' => '間取り・プラン',     'url' => home_url('/iezukuri/plans/')),
+            array('label' => '暮らしのポイント',   'url' => home_url('/iezukuri/point/')),
+            array('label' => '会社概要',           'url' => home_url('/iezukuri/company/')),
+            array('label' => 'お問い合わせ',       'url' => home_url('/iezukuri/contact/')),
+        );
+    }
+}
+
+add_action('after_setup_theme', function () {
+    register_nav_menus(array(
+        'iezukuri_footer_menu' => '家づくりFooter：全メニュー',
+    ));
+}, 20);
+
+/* === IEZUKURI FOOTER MENU END === */
+
+
+/* === IEZUKURI GLOBAL HEADER MENU STYLE START === */
+
+/**
+ * 上部ヘッダーナビデザインの全ページ共通反映。
+ *
+ * 目的:
+ * - 管理画面「ヘッダーナビデザイン」の選択を、
+ *   /iezukuri/ トップだけでなく、サブページ・アーカイブ・single・カスタムテンプレートにも反映する。
+ *
+ * 対象:
+ * - 画面最上部の .ch-site-header
+ * - 内外グループ / 注文住宅トップ / 会社概要 / ご相談・資料請求 / 間取り図 / ハンバーガー
+ *
+ * 正本:
+ * - 設定値の正本は /iezukuri/ トップページの _hub_ch_header_menu_style。
+ * - サブページごとの post_meta を正本にしない。
+ *
+ * 理由:
+ * - サブページや archive は現在ページの post_id がトップページと違う。
+ * - archive では通常の固定ページ post_meta を直接読めない。
+ * - そのため現在ページの _hub_ch_header_menu_style を読む方式だと、トップだけ反映される。
+ *
+ * CSS連携:
+ * - このPHPは body class に iez-header-menu--default / pipe / minimal を出す。
+ * - 見た目の正本は hub/pages/iezukuri/css/common/nav.css。
+ * - top.css には .ch-site-header 系CSSを置かない。
+ *
+ * 注意:
+ * - これは中間ナビではない。
+ * - section-localnav.php / section-sub-localnav.php とは別。
+ * - footerメニューとも別。
+ * - <main> の data属性では、<main> より前に出る header へCSSを当てられないため body class を使う。
+ */
+if (!function_exists('naigai_iezukuri_header_menu_allowed_styles')) {
+    function naigai_iezukuri_header_menu_allowed_styles() {
+        return array('default', 'standard', 'pipe', 'minimal');
+    }
+}
+
+if (!function_exists('naigai_iezukuri_is_global_header_menu_target')) {
+    function naigai_iezukuri_is_global_header_menu_target() {
+        $request_path = isset($_SERVER['REQUEST_URI'])
+            ? trim((string) parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/')
+            : '';
+
+        return (
+            $request_path === 'iezukuri'
+            || strpos($request_path, 'iezukuri/') === 0
+            || is_post_type_archive('iez_plan')
+            || is_singular('iez_plan')
+        );
+    }
+}
+
+if (!function_exists('naigai_iezukuri_get_global_header_menu_style')) {
+    function naigai_iezukuri_get_global_header_menu_style() {
+        $allowed = naigai_iezukuri_header_menu_allowed_styles();
+        $style = '';
+
+        /*
+         * 1. /iezukuri/ トップページの設定を正本にする。
+         */
+        $top_page = get_page_by_path('iezukuri');
+
+        if ($top_page && !is_wp_error($top_page)) {
+            $style = get_post_meta($top_page->ID, '_hub_ch_header_menu_style', true);
+        }
+
+        /*
+         * 2. 保険として option を見る。
+         */
+        if ($style === '') {
+            $style = get_option('naigai_iez_header_menu_style', '');
+        }
+
+        /*
+         * 3. さらに保険として現在ページのメタを見る。
+         */
+        if ($style === '') {
+            $post_id = get_queried_object_id();
+
+            if (!$post_id && function_exists('get_the_ID')) {
+                $post_id = get_the_ID();
+            }
+
+            if ($post_id) {
+                $style = get_post_meta($post_id, '_hub_ch_header_menu_style', true);
+            }
+        }
+
+        if ($style === '') {
+            $style = 'default';
+        }
+
+        if (!in_array($style, $allowed, true)) {
+            $style = 'default';
+        }
+
+        return $style;
+    }
+}
+
+/**
+ * トップページや各ページで保存した値を option にも同期する。
+ * archive / custom page 用の保険。
+ */
+add_action('save_post', function ($post_id) {
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+        return;
+    }
+
+    if (wp_is_post_revision($post_id) || wp_is_post_autosave($post_id)) {
+        return;
+    }
+
+    if (!isset($_POST['_hub_ch_header_menu_style'])) {
+        return;
+    }
+
+    $style = sanitize_key((string) $_POST['_hub_ch_header_menu_style']);
+    $allowed = naigai_iezukuri_header_menu_allowed_styles();
+
+    if (!in_array($style, $allowed, true)) {
+        $style = 'default';
+    }
+
+    update_option('naigai_iez_header_menu_style', $style, false);
+}, 99);
+
+/**
+ * 全いえづくりページの body class に上部ヘッダーナビデザインを出す。
+ */
+add_filter('body_class', function ($classes) {
+    if (!naigai_iezukuri_is_global_header_menu_target()) {
+        return $classes;
+    }
+
+    $style = naigai_iezukuri_get_global_header_menu_style();
+
+    $classes[] = sanitize_html_class('iez-header-menu--' . $style);
+
+    if ($style === 'standard') {
+        $classes[] = 'iez-header-menu--default';
+    }
+
+    return array_values(array_unique($classes));
+}, 45);
+
+/* === IEZUKURI GLOBAL HEADER MENU STYLE END === */
+

@@ -10,7 +10,7 @@
     ?>
         <div class="popular-post-slider">
             <!-- Add the slick slider container -->
-            <ul id="sidebar-recent-posts" class="sidebar-posts popular-slick-slider slick-slider">
+            <ul class="sidebar-posts sidebar-recent-posts popular-slick-slider slick-slider">
                 <?php while ($my_query->have_posts()) : $my_query->the_post(); ?>
                     <li class="sidebar-post-item">
                         <div id="post-<?php the_ID(); ?>" <?php post_class('custom-post'); ?>>

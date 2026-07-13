@@ -55,12 +55,24 @@ if (!defined('ABSPATH')) {
 if (!function_exists('naigai_fudousan_enqueue_assets')) {
     function naigai_fudousan_enqueue_assets()
     {
+        $theme_dir = get_template_directory();
+        $theme_uri = get_template_directory_uri();
+
+        $map_js = '/js/front-map-modal.js';
+
+        if (file_exists($theme_dir . $map_js)) {
+            wp_enqueue_script(
+                'naigai-front-map-modal',
+                $theme_uri . $map_js,
+                array(),
+                filemtime($theme_dir . $map_js),
+                true
+            );
+        }
+
         if (!is_page('fudousan') && !is_page_template('template-realestate-hub.php')) {
             return;
         }
-
-        $theme_dir = get_template_directory();
-        $theme_uri = get_template_directory_uri();
 
         $css = '/hub/pages/fudousan/css/fudousan.css';
         if (file_exists($theme_dir . $css)) {
@@ -82,20 +94,11 @@ if (!function_exists('naigai_fudousan_enqueue_assets')) {
          * 読み込み順:
          * - fudousan-page.js より先に読む。
          */
-        $map_js = '/js/front-map-modal.js';
-        $fudousan_js_deps = array('jquery', 'isotope');
-
-        if (file_exists($theme_dir . $map_js)) {
-            wp_enqueue_script(
-                'naigai-front-map-modal',
-                $theme_uri . $map_js,
-                array(),
-                filemtime($theme_dir . $map_js),
-                true
-            );
-
-            $fudousan_js_deps[] = 'naigai-front-map-modal';
-        }
+        $fudousan_js_deps = array(
+            'jquery',
+            'isotope',
+            'naigai-front-map-modal',
+        );
 
         /**
          * Isotope 依存関係。

@@ -48,5 +48,4 @@ get_header('customhome');
     ?>
 </main>
 
-<?php
-get_footer();
+<?php get_footer('iezukuri'); ?>

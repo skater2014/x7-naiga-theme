@@ -9,9 +9,6 @@
  * - 末尾追記で逃げない
  * - サブページ固有レイアウトは入れない
  * ========================================================= */
-
-@import url("./top-footer.css");
-
 /* =========================================================
  * 01. Base
  * ========================================================= */
@@ -38,179 +35,6 @@
   width: 100vw;
   margin-left: calc(50% - 50vw);
   margin-right: calc(50% - 50vw);
-}
-
-/* =========================================================
- * 02. Header
- * ========================================================= */
-
-.ch-site-header {
-  position: sticky;
-  top: 0;
-  z-index: 80;
-  border-bottom: 1px solid rgba(77, 53, 29, 0.1);
-  background: rgba(255, 255, 255, 0.96);
-  backdrop-filter: blur(10px);
-}
-
-.ch-site-header__inner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-  width: calc(100% - 40px);
-  max-width: 1280px;
-  min-height: 72px;
-  margin: 0 auto;
-}
-
-.ch-site-header__brand {
-  display: inline-flex;
-  align-items: center;
-  min-height: 48px;
-  color: var(--iezukuri-text);
-  text-decoration: none;
-}
-
-.ch-site-header__brand-logo {
-  display: block;
-  max-width: 180px;
-  max-height: 42px;
-  width: auto;
-  height: auto;
-}
-
-.ch-site-header__brand-main {
-  font-size: 22px;
-  font-weight: 800;
-  line-height: 1.2;
-}
-
-.ch-site-header__brand-sub {
-  margin-left: 10px;
-  color: #9b6a31;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-}
-
-.ch-site-header__nav--desktop {
-  margin-left: auto;
-}
-
-.ch-site-header__list,
-.ch-site-header__drawer-list {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.ch-site-header__list li,
-.ch-site-header__drawer-list li {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.ch-site-header__list a,
-.ch-site-header__drawer-list a {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 42px;
-  padding: 0 16px;
-  border-radius: 999px;
-  color: var(--iezukuri-text);
-  text-decoration: none;
-  font-size: 14px;
-  font-weight: 700;
-  white-space: nowrap;
-}
-
-.ch-site-header__list a:hover,
-.ch-site-header__drawer-list a:hover {
-  background: #f5ecdf;
-}
-
-.ch-site-header--pipe .ch-site-header__list {
-  gap: 0;
-}
-
-.ch-site-header--pipe .ch-site-header__list li + li::before {
-  content: '|';
-  margin: 0 10px;
-  color: #8b7e71;
-}
-
-.ch-site-header--pipe .ch-site-header__list a,
-.ch-site-header--minimal .ch-site-header__list a {
-  min-height: auto;
-  border-radius: 0;
-}
-
-.ch-site-header--pipe .ch-site-header__list a {
-  padding: 0;
-}
-
-.ch-site-header--minimal .ch-site-header__list a {
-  padding: 0 8px;
-}
-
-.ch-site-header--pipe .ch-site-header__list a:hover,
-.ch-site-header--minimal .ch-site-header__list a:hover {
-  background: transparent;
-  color: #9b6a31;
-}
-
-.ch-site-header__toggle {
-  display: none;
-  width: 44px;
-  height: 44px;
-  padding: 0;
-  border: 1px solid rgba(77, 53, 29, 0.16);
-  border-radius: 999px;
-  background: var(--iezukuri-surface);
-  cursor: pointer;
-}
-
-.ch-site-header__toggle span {
-  display: block;
-  width: 18px;
-  height: 2px;
-  margin: 4px auto;
-  background: var(--iezukuri-text);
-}
-
-.ch-site-header__drawer[hidden] {
-  display: none !important;
-}
-
-.ch-site-header__drawer {
-  position: fixed;
-  inset: 72px 0 0 0;
-  z-index: 79;
-  background: rgba(10, 10, 10, 0.34);
-}
-
-.ch-site-header__drawer-inner {
-  padding: 18px;
-  background: var(--iezukuri-surface);
-  border-top: 1px solid rgba(77, 53, 29, 0.1);
-}
-
-.ch-site-header__drawer-list {
-  flex-direction: column;
-  align-items: stretch;
-}
-
-.ch-site-header__drawer-list a {
-  justify-content: flex-start;
-  min-height: 46px;
-  padding: 0 8px;
-  border-bottom: 1px solid #f1f1f1;
 }
 
 /* =========================================================
@@ -889,7 +713,6 @@
   }
 }
 
-
 /* =========================================================
  * 11. Animation
  * ========================================================= */
@@ -949,13 +772,6 @@
 }
 
 @media (max-width: 960px) {
-  .ch-site-header__nav--desktop {
-    display: none;
-  }
-
-  .ch-site-header__toggle {
-    display: block;
-  }
 
   .hub-customhome-page .ch-localnav {
     top: 72px;
@@ -1091,17 +907,10 @@
 }
 
 @media (max-width: 782px) {
-  body.admin-bar .ch-site-header {
-    top: 46px;
-  }
 
   body.admin-bar .hub-customhome-page .ch-localnav {
     top: 118px;
   }
-}
-
-body.admin-bar .ch-site-header {
-  top: 32px;
 }
 
 body.admin-bar .hub-customhome-page .ch-localnav {

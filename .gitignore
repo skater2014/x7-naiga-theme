@@ -1,39 +1,45 @@
-# Mac / editor
+# local backups
+*.bak
+*.bak-*
+*.broken-*
+*.destroyed-*
+*.tar.gz
+*_backup/
+_repair-backup/
+_rollback-css/
+
+# mac / editor
 .DS_Store
 .vscode/
 .idea/
 
-# Node
-node_modules/
-.npm/
-.cache/
+# temp weird files
+=
 
-# Logs / temp
-*.log
-*.tmp
-*.swp
-
-# DB dumps / exports
-*.sql
-*.sql.*
-*.dump
-backup.sql.new
-
-# Generated reports / work folders
+# local reports / work trash
+_debug/
 _reports/
-_tmp/
 _work/
-_trash/
 _trash_theme_candidates_*/
+active_plugins.before.txt
 
-# Local backups
-_backup/
-backup/
-backups/
-*.bak
-*.backup
-*.orig
-*.broken
-*.BROKEN_NOW*
-*.before*
-*.disabled*
+# disabled / old local files
+*.disabled
+*.disabled-*
+
+# extra local snapshots
+*.bak.*
+*.before
+*.before-*
+*.before_*
+*.BROKEN_NOW.*
+*.original
+*.log
+
+# local check reports
+full-file-check-*.txt
+theme-error-check-*.txt
+live-theme-check-*.txt
+iezukuri-*-check-*.txt
+iezukuri-current-audit-*.txt
+iezukuri-cta-*.txt

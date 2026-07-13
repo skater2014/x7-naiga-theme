@@ -271,7 +271,15 @@ get_header('customhome');
         }
         ?>
     <?php endif; ?>
-</main>
 
 <?php
-get_footer('customhome');
+$iezukuri_common_footer = get_template_directory() . '/hub/pages/iezukuri/templates/shared/section-footer.php';
+
+if (file_exists($iezukuri_common_footer)) {
+    include $iezukuri_common_footer;
+}
+?>
+
+</main>
+
+<?php get_footer('customhome'); ?>

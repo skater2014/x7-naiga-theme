@@ -13,7 +13,7 @@
 .naigai-slider-wrap {
   width: 100%;
   max-width: 1100px;
-  margin: 10 auto;
+  margin: 10px auto;
   padding: 0;
   box-sizing: border-box;
 }
@@ -157,7 +157,6 @@
   border: 1px solid rgba(0, 0, 0, 0.14);
   border-radius: 10px;
   overflow: hidden;
-  background: #fff;
   box-sizing: border-box;
 }
 
@@ -276,13 +275,26 @@ body.light-theme .color-mode .color-mode-label {
   width: 100%;
 }
 
+
+body:not(:is(
+  .single-minpaku,
+  .minpaku-single,
+  .post-type-archive-minpaku,
+  .post-type-archive-minpaku_page,
+  .page-template-page-minpaku-b2c,
+  .page-template-page-minpaku-b2c-php,
+  .page-template-page-minpaku-support,
+  .page-template-page-minpaku-support-php
+)) .header__top {
+  background: var(--header-bg);
+}
+
 .header__top {
   position: relative;
   max-width: 1200px;
   margin: 0 auto;
   padding: 8px 12px;
   box-sizing: border-box;
-  background: var(--header-bg);
   color: var(--header-fg);
   border-bottom: 1px solid var(--border);
 }
@@ -307,15 +319,14 @@ body.dark-theme .header__top {
 
 /* トグルは absolute/fixed にしない。重なりの元を止める */
 #touch-menu {
-  position: relative;
   top: auto;
   left: auto;
   right: auto;
-  margin: 0;
   transform: none;
   z-index: 23000;
   justify-self: start;
   align-self: center;
+  grid-area: touch;
 }
 
 /* 開いている間は header 側のハンバーガーを消す
@@ -330,12 +341,8 @@ body.menu-open #touch-menu,
 
 .header__top > .color-mode {
   margin: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
   gap: 8px;
   min-width: 0;
-  white-space: nowrap;
 }
 
 .header__top > .top-header {
@@ -344,12 +351,14 @@ body.menu-open #touch-menu,
   margin: 0;
   padding: 0;
   min-height: 0;
+  grid-area: crumb;
 }
 
 #breadcrumb {
   margin: 0;
   padding: 0;
   line-height: 1.4;
+  text-align: left;
 }
 
 /* -----------------------------
@@ -432,11 +441,13 @@ body.menu-open #touch-menu,
   margin: 0;
 }
 
-.header__top > .search-form-container .search-form-20 input[type='text'],
-.header__top > .search-form-container .search-form-20 input[type='search'] {
+.header__top > .search-form-container
+.search-form-20
+:is(input[type='text'], input[type='search']) {
   display: block;
   width: 100%;
   height: 44px;
+  min-width: 0;
   margin: 0;
   padding: 0 12px;
   border: 0;
@@ -446,7 +457,13 @@ body.menu-open #touch-menu,
   background: var(--color-surface);
   color: var(--color-text);
   font-size: 14px;
-  min-width: 0;
+}
+
+.header__top > .search-form-container
+.search-form-30
+:is(input[type='text'], input[type='search']) {
+  background: var(--color-surface);
+  color: var(--color-text);
 }
 
 .header__top > .search-form-container .search-form-20 input[type='text']::placeholder,
@@ -494,45 +511,8 @@ body.dark-theme
 }
 
 /* search-form-30 */
-.header__top > .search-form-container .search-form-30 {
-  border: 1px solid rgba(0, 0, 0, 0.14);
-}
-
 .header__top > .search-form-container .search-form-30 label {
-  display: block;
-  flex: 1 1 auto;
-  margin: 0;
   min-width: 0;
-}
-
-.header__top > .search-form-container .search-form-30 input[type='text'],
-.header__top > .search-form-container .search-form-30 input[type='search'] {
-  display: block;
-  width: 100%;
-  height: 42px;
-  padding: 0 12px;
-  margin: 0;
-  border: 0;
-  border-radius: 0;
-  outline: none;
-  box-sizing: border-box;
-  background: var(--color-surface);
-  color: var(--color-text);
-  font-size: 14px;
-}
-
-.header__top > .search-form-container .search-form-30 button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex: 0 0 42px;
-  width: 42px;
-  height: 42px;
-  padding: 0;
-  margin: 0;
-  border: 0;
-  cursor: pointer;
-  background: #2589d0;
 }
 
 body.dark-theme .header__top > .search-form-container .search-form-30 {
@@ -544,20 +524,6 @@ body.dark-theme .header__top > .search-form-container .search-form-30 input[type
 body.dark-theme .header__top > .search-form-container .search-form-30 input[type='search'] {
   background: #111827;
   color: #f3f4f6;
-}
-
-body.dark-theme
-  .header__top
-  > .search-form-container
-  .search-form-30
-  input[type='text']::placeholder,
-body.dark-theme
-  .header__top
-  > .search-form-container
-  .search-form-30
-  input[type='search']::placeholder {
-  color: #9ca3af;
-  opacity: 1;
 }
 
 /* =========================================================
@@ -588,11 +554,7 @@ body.dark-theme
     padding: 8px 12px;
   }
 
-  #touch-menu {
-    grid-area: touch;
-  }
-
-  .header__top > .color-mode {
+.header__top > .color-mode {
     grid-area: toggle;
     justify-self: center;
   }
@@ -636,16 +598,25 @@ body.dark-theme
     display: block;
   }
 
-  .header__top > .top-header {
-    grid-area: crumb;
-  }
-
-  #breadcrumb {
+#breadcrumb {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 6px;
     text-align: center;
+  }
+
+  header#head {
+    height: var(--hdr-spacer, 142px);
+  }
+
+  .header-wrapper {
+    position: fixed;
+    top: var(--admin-offset, 0px);
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 23030;
   }
 }
 
@@ -681,11 +652,7 @@ body.dark-theme
     padding: 10px 12px;
   }
 
-  #touch-menu {
-    grid-area: touch;
-  }
-
-  .header__top > .color-mode {
+.header__top > .color-mode {
     grid-area: toggle;
     justify-self: start;
   }
@@ -698,13 +665,6 @@ body.dark-theme
     justify-self: end;
   }
 
-  .header__top > .top-header {
-    grid-area: crumb;
-  }
-
-  #breadcrumb {
-    text-align: left;
-  }
 }
 
 /* =========================================================
@@ -735,11 +695,7 @@ body.dark-theme
     padding: 10px 12px;
   }
 
-  #touch-menu {
-    grid-area: touch;
-  }
-
-  .logo-container {
+.logo-container {
     grid-area: logo;
     width: 120px;
     margin: 0;
@@ -761,11 +717,6 @@ body.dark-theme
     height: auto;
   }
 
-  .header__top > .color-mode {
-    grid-area: toggle;
-    justify-self: center;
-    z-index: 10;
-  }
 
   .header__top > .search-form-container {
     grid-area: search;
@@ -776,40 +727,8 @@ body.dark-theme
     z-index: 10;
   }
 
-  .header__top > .top-header {
-    grid-area: crumb;
-  }
-
-  #breadcrumb {
-    text-align: left;
-  }
-
-  .sidebar-navigation {
+.sidebar-navigation {
     z-index: 22999;
-  }
-}
-
-.header-wrapper {
-  position: relative;
-  width: 100%;
-}
-
-/* =========================================================
-   MOBILE ONLY : header fixed（席を確保）
-   ========================================================= */
-@media (max-width: 767.98px) {
-  /* header-wrapper が fixed で消える分、header 自体に高さを持たせる */
-  header#head {
-    height: var(--hdr-spacer, 142px);
-  }
-
-  .header-wrapper {
-    position: fixed;
-    top: var(--admin-offset, 0px);
-    left: 0;
-    right: 0;
-    width: 100%;
-    z-index: 23030;
   }
 }
 
@@ -819,19 +738,6 @@ body.dark-theme
 .clearfix {
   display: block;
   clear: both; /*footer*/
-}
-
-/*HEADER #menu-additional-menu 利用未定*/
-
-#menu-additional-menu .dropdown-menu {
-  position: absolute;
-  z-index: 1150;
-  width: 180px;
-  text-align: left;
-  border-style: solid;
-  padding: 0px;
-  margin-top: -1px;
-  /*transform: translate3d(14px, 46px, 0px) !important;*/
 }
 
 /* =========================================
@@ -1023,7 +929,6 @@ body.dark-theme
 }
 
 .home-slide-overlay__title a {
-  display: -webkit-box;
   overflow: hidden;
   color: #fff;
   text-align: left;
@@ -1036,7 +941,6 @@ body.dark-theme
 }
 
 .home-slide-overlay__text {
-  display: -webkit-box;
   overflow: hidden;
   color: rgba(255, 255, 255, 0.94);
   text-align: left;
@@ -1079,7 +983,32 @@ body.dark-theme
   width: 16px;
   height: 16px;
   line-height: 0;
-  color: #9edcff;
+  color: #4aa3ff;
+}
+
+.property-info-table .property-row:nth-of-type(1) .property-label-icon {
+  color: #2f80ed;
+}
+.property-info-table .property-row:nth-of-type(2) .property-label-icon {
+  color: #16a085;
+}
+.property-info-table .property-row:nth-of-type(3) .property-label-icon {
+  color: #f59e0b;
+}
+.property-info-table .property-row:nth-of-type(4) .property-label-icon {
+  color: #e85d75;
+}
+.property-info-table .property-row:nth-of-type(5) .property-label-icon {
+  color: #8e44ad;
+}
+.property-info-table .property-row:nth-of-type(6) .property-label-icon {
+  color: #27ae60;
+}
+.property-info-table .property-row:nth-of-type(7) .property-label-icon {
+  color: #00a8cc;
+}
+.property-info-table .property-row:nth-of-type(8) .property-label-icon {
+  color: #34495e;
 }
 
 .property-label-icon .property-icon-svg,
@@ -1326,6 +1255,7 @@ body.dark-theme
   left: 0;
   right: 0;
   width: 100%;
+  z-index: 15;
   box-sizing: border-box;
 }
 /* =========================================
@@ -1337,7 +1267,6 @@ body.dark-theme
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 14px 16px;
-  margin-top: 14px;
 }
 
 .content-box .property-row {
@@ -1409,28 +1338,7 @@ body.dark-theme
   }
 }
 
-/* =========================================
-   HOME SWIPER UI FIX
-========================================= */
-#home-swiper {
-  position: relative;
-}
-
-#home-swiper .swiper-button-prev,
-#home-swiper .swiper-button-next {
-  z-index: 20;
-}
-
-#home-swiper .swiper-pagination {
-  z-index: 15;
-}
-
 @media (max-width: 1199.98px) {
-  #home-swiper .swiper-button-prev,
-  #home-swiper .swiper-button-next {
-    margin-top: 0;
-  }
-
   #home-swiper .swiper-pagination {
     text-align: center;
   }
@@ -1510,7 +1418,6 @@ body.dark-theme
 }
 
 .home-box {
-  /*background: #f9f9f9 none repeat scroll 0 0;*/
   padding: 35px 0 45px;
 }
 
@@ -1540,8 +1447,6 @@ body.dark-theme
   background-color: #222;
   color: var(--link-color-white);
   text-decoration: none;
-  -webkit-transition: all 0.3s ease;
-  -o-transition: all 0.3s ease;
   transition: all 0.3s ease; /* すべてのプロパティを0.3秒かけてスムーズに変更 */
 }
 
@@ -1549,15 +1454,11 @@ body.dark-theme
 .home-cats-selection ul li a:hover {
   background-color: #444; /* 背景色を少し明るくする */
   color: #fff; /* テキスト色を変える */
-  -webkit-transform: scale(1.05);
-  -ms-transform: scale(1.05);
   transform: scale(1.05); /* 少し拡大 */
-  -webkit-box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* 影を追加 */
 }
 
 body.light-theme .home-cats-selection ul li a {
-  /*color: #eee;*/
   display: inline-block;
   font-size: 14px;
   line-height: 1;
@@ -1602,6 +1503,11 @@ body.light-theme .home-cats-selection ul li a {
   .archive-post-box {
     width: calc(33.333% - 16px);
   }
+
+  .archive-post-box:nth-child(4n + 1) {
+    clear: none;
+  }
+
   .archive-post-box:nth-child(3n + 1) {
     clear: left;
   }
@@ -1612,6 +1518,11 @@ body.light-theme .home-cats-selection ul li a {
   .archive-post-box {
     width: calc(50% - 16px);
   }
+
+  .archive-post-box:nth-child(3n + 1) {
+    clear: none;
+  }
+
   .archive-post-box:nth-child(2n + 1) {
     clear: left;
   }
@@ -1706,50 +1617,14 @@ body.dark-theme .gallery-slider h2 {
   color: var(--link-color-blue);
 }
 
-.archive-post-info > h3 a:hover {
-  text-decoration: underline;
-}
-
-.archive-post-info .the-categories a {
-  color: #777;
-  font-size: 12px;
-  text-transform: uppercase;
-}
-
 .archive-post-image {
   height: 100%;
   overflow: hidden;
   position: relative;
 }
 
-.archive-post-box .archive-post-image h3 {
-  margin: 0;
-  font-size: 16px;
-  color: #fff;
-  font-weight: 900;
-  text-transform: uppercase;
-  font-family: 'Arial', sans-serif;
-  transition: color 0.3s ease-in-out;
-}
-
-.archive-post-box:hover .archive-post-image h3 {
-  color: #fff;
-}
-
-.archive-post-box .archive-post-image {
-  position: relative;
-}
-
 .archive-post-box .archive-post-image .thumbnail-overlay {
-  position: absolute;
   background-color: rgba(0, 0, 0, 0.6);
-  padding: 10px;
-  opacity: 0;
-  transition: opacity 0.3s ease-in-out;
-}
-
-.archive-post-box:hover .archive-post-image .thumbnail-overlay {
-  opacity: 1;
 }
 
 .archive-post-feature iframe {
@@ -1800,12 +1675,19 @@ body.dark-theme .gallery-slider h2 {
    ダーク/ライトのベース色は今後ここで管理
    ========================================================= */
 :root {
-  --color-bg: #ffffff;
+  --color-bg: #f6f2ea;
   --color-surface: #ffffff;
-  --color-text: #111827;
-  --color-heading: #111827;
-  --color-muted: #6b7280;
-  --color-border: #d1d5db;
+  --color-surface-soft: #fbf8f2;
+  --color-panel: #ffffff;
+  --color-card: #ffffff;
+  --color-card-soft: #f8fbfd;
+  --color-action: #1e5f9d;
+  --color-action-strong: #0057bf;
+  --color-focus-ring: rgba(0, 87, 191, 0.22);
+  --color-text: #24313f;
+  --color-heading: #102236;
+  --color-muted: #657584;
+  --color-border: rgba(16, 34, 54, 0.13);
   --color-link: #0ea5e9;
   --color-link-inverse: #ffffff;
   --color-accent-red: #e11d48;
@@ -1827,12 +1709,19 @@ body.dark-theme .gallery-slider h2 {
 }
 
 body.dark-theme {
-  --color-bg: #1d1d1d;
-  --color-surface: #1c1c1c;
-  --color-text: #dddddd;
-  --color-heading: #f3f4f6;
-  --color-muted: #9ca3af;
-  --color-border: #333333;
+  --color-bg: #101820;
+  --color-surface: #151f2a;
+  --color-surface-soft: #17212b;
+  --color-panel: #151f2a;
+  --color-card: #17212b;
+  --color-card-soft: #1d2a36;
+  --color-action: #a7d7ff;
+  --color-action-strong: #78b7ee;
+  --color-focus-ring: rgba(120, 183, 238, 0.28);
+  --color-text: #eaf0f4;
+  --color-heading: #f7fafc;
+  --color-muted: #aebdca;
+  --color-border: rgba(235, 245, 255, 0.13);
   --color-link: #00bbdd;
   --color-link-inverse: #ffffff;
   --color-accent-red: #ff0099;
@@ -1888,39 +1777,17 @@ a {
   --drawer-width: 330px;
   --site-max-width: 1200px;
   --site-pad: 12px;
-  --toggle-w: 40px;
-  --toggle-h: 36px;
-}
-
-/* 開くトグル用アンカー（header外だが内側基準を作る） */
-.drawer-toggle-anchor {
-  position: fixed;
-  top: 12px;
-  left: 0;
-  right: 0;
-  z-index: 23000;
-  pointer-events: none;
-}
-
-body.admin-bar .drawer-toggle-anchor {
-  top: 44px;
-}
-
-.drawer-toggle-inner {
-  max-width: var(--site-max-width);
-  margin: 0 auto;
-  padding: 0 var(--site-pad);
-  box-sizing: border-box;
-  pointer-events: none;
+  --drawer-toggle-w: 40px;
+  --drawer-toggle-h: 36px;
 }
 
 /* 開く */
 #touch-menu {
   position: relative;
-  width: var(--toggle-w);
-  height: var(--toggle-h);
-  min-width: var(--toggle-w);
-  min-height: var(--toggle-h);
+  width: var(--drawer-toggle-w);
+  height: var(--drawer-toggle-h);
+  min-width: var(--drawer-toggle-w);
+  min-height: var(--drawer-toggle-h);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1931,19 +1798,6 @@ body.admin-bar .drawer-toggle-anchor {
   user-select: none;
   -webkit-tap-highlight-color: transparent;
   pointer-events: auto;
-}
-
-.dark-theme #touch-menu,
-.dark-theme .sidebar-navigation .drawer-close {
-  color: #fff;
-}
-
-body.menu-open #touch-menu,
-#touch-menu.is-open,
-#touch-menu[aria-expanded='true'] {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
 }
 
 #touch-menu:focus-visible,
@@ -1983,20 +1837,45 @@ body.menu-open #touch-menu,
 /* =========================================================
    DRAWER / SIDEBAR : SINGLE SOURCE OF TRUTH
    ========================================================= */
+/* Drawer toggle z-index fix */
+#head,
+.l-header {
+  position: relative;
+  z-index: 10010;
+}
+
+/*
+ * Drawer本体
+ * 左側から開き、JSは .visible の付け外しだけを行う。
+ * レイアウトとlight/darkの背景色はここで管理する。
+ */
 .sidebar-navigation {
+  --drawer-bg: #f6efe6;
+  --drawer-card: #fffaf2;
+  --drawer-text: #1f2933;
+  --drawer-border: rgba(31, 41, 51, 0.12);
+
   position: fixed;
   top: 0;
-  left: calc(-1 * var(--drawer-width));
-  width: var(--drawer-width);
+  left: 0;
+  right: auto;
+  bottom: 0;
+  width: min(88vw, 380px);
+  max-width: 380px;
   height: 100vh;
-  overflow-y: auto;
-  background: var(--main-bg, #111827);
-  color: var(--main-text, #ffffff);
-  z-index: 24000;
+  height: 100dvh;
   box-sizing: border-box;
-  padding-top: 0;
-  text-align: left;
-  transition: left 0.3s ease;
+  background: var(--drawer-bg);
+  color: var(--drawer-text);
+  z-index: 9990;
+  overflow: hidden;
+  transform: translate3d(-100%, 0, 0);
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    transform 0.25s ease,
+    visibility 0.25s ease;
+  box-shadow: 24px 0 60px rgba(15, 23, 42, 0.24);
 }
 
 body.admin-bar .sidebar-navigation {
@@ -2005,7 +1884,9 @@ body.admin-bar .sidebar-navigation {
 }
 
 .sidebar-navigation.visible {
-  left: 0;
+  transform: translate3d(0, 0, 0);
+  visibility: visible;
+  pointer-events: auto;
 }
 
 .sidebar-navigation .drawer-head {
@@ -2013,7 +1894,6 @@ body.admin-bar .sidebar-navigation {
   top: 0;
   z-index: 24010;
   min-height: 60px;
-  background: var(--main-bg, #111827);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   box-sizing: border-box;
 }
@@ -2022,8 +1902,8 @@ body.admin-bar .sidebar-navigation {
   position: absolute;
   top: 12px;
   right: 12px;
-  width: var(--toggle-w);
-  height: var(--toggle-h);
+  width: var(--drawer-toggle-w);
+  height: var(--drawer-toggle-h);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -2056,10 +1936,13 @@ body.admin-bar .sidebar-navigation .drawer-close {
 }
 
 .sidebar-navigation .drawer-body {
-  position: relative;
-  z-index: 1;
-  padding: 12px 16px 24px;
+  min-height: 100%;
+  height: 100%;
+  max-height: 100vh;
+  max-height: 100dvh;
   box-sizing: border-box;
+  overflow-y: auto;
+  padding: 22px 22px 44px;
 }
 
 .sidebar-navigation .color-mode,
@@ -2094,8 +1977,13 @@ body.admin-bar .sidebar-navigation .drawer-close {
 }
 
 .dark-theme .sidebar-navigation {
-  background: var(--main-bg, #111827);
-  color: var(--link-color-white, #ffffff);
+  --drawer-bg: #101a24;
+  --drawer-card: #121f2b;
+  --drawer-text: #eaf0f4;
+  --drawer-border: #2b3541;
+
+  background: var(--drawer-bg);
+  color: var(--drawer-text);
 }
 
 .dark-theme .sidebar-navigation a {
@@ -2164,18 +2052,14 @@ input.firefox-validation:invalid {
   background-color: #f0f0f0; /* ホバー時の背景色 */
 }
 
-/*.icon {
-    margin-right: 8px; /* アイコンとテキストの間にスペースを作る */
-/*}
-
-/* タブのコンテンツを非表示にする */
-.tab-pane {
-  display: none; /* 初期状態では全て非表示 */
+.tab-pane,
+.custom-tab-pane {
+  display: none;
 }
 
-/* activeクラスが付いたタブコンテンツを表示 */
-.tab-pane.active {
-  display: block; /* activeなタブだけを表示 */
+.tab-pane.active,
+.custom-tab-pane.active {
+  display: block;
 }
 
 .tab-links {
@@ -2233,41 +2117,8 @@ input.firefox-validation:invalid {
   margin-top: 20px;
 }
 
-/* タブのコンテンツを非表示にする */
-.custom-tab-pane {
-  display: none; /* 初期状態では全て非表示 */
-}
-
-/* activeクラスが付いたタブコンテンツを表示 */
-.custom-tab-pane.active {
-  display: block; /* activeなタブだけを表示 */
-}
-
-.panorama-container {
-  width: 100%;
-  height: 400px; /* 高さを調整 */
-  background-color: #ccc;
-}
-
 .no-margin {
   margin: 0;
-}
-
-/* 360度回転プレビュースタイルはここに追加 */
-.responsive-iframe-container {
-  position: relative;
-  width: 100%;
-  height: 0;
-  padding-bottom: 66.66%; /* 高さは幅の3:2の比率 */
-  overflow: hidden;
-}
-
-.responsive-iframe-container iframe {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
 }
 
 /* 物件情報のレイアウト */
@@ -2289,42 +2140,18 @@ input.firefox-validation:invalid {
   flex: 0 0 30%; /* ラベルの幅 */
 }
 
-/* レスポンシブ対応（最大768px以下） */
-@media (max-width: 768px) {
-  .property-info-table {
-    gap: 10px; /* モバイル時にgapを10pxに変更 */
-  }
-
-  .property-row {
-    flex: 1 0 20%; /* 4カラムにする */
-    flex-direction: column; /* ラベルと値を縦並びにする */
-    gap: 10px; /* 間隔を調整 */
-  }
-}
-
-/* タブレット（最大1024px以下）でも同じデザインに対応 */
 @media (max-width: 1024px) {
-  .property-info-table {
-    gap: 10px; /* タブレットでもgapを10pxに変更 */
-  }
-
   .property-row {
-    flex: 1 0 20%; /* 4カラムのレイアウトを保持 */
-    flex-direction: column; /* ラベルと値を縦並びにする */
-    gap: 10px; /* 間隔を調整 */
+    flex: 1 0 20%;
+    flex-direction: column;
   }
 }
 
-/* パソコンでもタブレットと同じデザインに対応 */
 @media (min-width: 1025px) {
-  .property-info-table {
-    gap: 10px; /* パソコンでもgapを10pxに変更 */
-  }
-
   .property-row {
-    flex: 1 0 19%; /* 2カラムのレイアウトを保持 */
-    flex-direction: column; /* ラベルと値を縦並びにする */
-    gap: 0px; /* 間隔を調整 */
+    flex: 1 0 19%;
+    flex-direction: column;
+    gap: 0;
   }
 }
 
@@ -2344,124 +2171,58 @@ input.firefox-validation:invalid {
   clear: both; /* フッターが浮いてしまうのを防ぐ */
 }
 
-/* footer-fixed の基本スタイル */
+/* footer-fixed */
 .footer-fixed {
-  position: fixed; /* スクロール時にフッターを固定 */
-  bottom: -50px; /* 初期状態では画面外に配置 */
+  position: fixed;
+  bottom: -50px;
   left: 0;
   width: 100%;
   padding: 8px 10px;
-  background-color: rgba(51, 51, 51, 0.8);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 10; /* その他の要素より前に表示 */
+  gap: 15px;
   box-sizing: border-box;
   list-style: none;
-  opacity: 0; /* 初期状態では透明 */
+  background-color: rgba(51, 51, 51, 0.8);
+  z-index: 10;
+  opacity: 0;
   transition:
     bottom 0.5s ease,
-    opacity 0.5s ease; /* スクロール時のアニメーション */
-  gap: 15px; /* リンク間のスペース */
+    opacity 0.5s ease;
 }
 
-/* モバイル・タブレット (最大1024px) でのフッタースタイル */
-@media (max-width: 1024px) {
-  .footer-fixed.show {
-    bottom: 0; /* スクロール後に表示 */
-    opacity: 1; /* 完全に表示 */
-  }
-
-  .footer-fixed__link a {
-    background-color: #0d0b47;
-    color: #fff;
-    padding: 12px 20px;
-    border-radius: 5px;
-    text-decoration: none;
-    transition:
-      background-color 0.3s ease,
-      transform 0.3s ease;
-    display: block;
-    text-align: center;
-    line-height: 1.8;
-  }
-
-  .footer-fixed__link a:hover {
-    background-color: #1a1a8c;
-    transform: translateY(-2px);
-  }
-}
-
-/* デスクトップサイズ (1025px以上) でのフッタースタイル */
-@media (min-width: 1025px) {
-  .footer-fixed {
-    bottom: 0; /* 常に表示 */
-    opacity: 1; /* 常に表示 */
-    padding: 0px 20px;
-  }
-
-  .footer-fixed__link a {
-    background-color: #0d0b47;
-    color: #fff;
-    padding: 12px 20px;
-    border-radius: 5px;
-    text-decoration: none;
-    transition:
-      background-color 0.3s ease,
-      transform 0.3s ease;
-    display: block;
-    text-align: center;
-    line-height: 1.8;
-  }
-
-  .footer-fixed__link a:hover {
-    background-color: #1a1a8c;
-    transform: translateY(-2px);
-  }
-}
-
-/* メニューアイテムのピンク色のリンク */
-.pink-link a {
-  background-color: #ff69b4; /* ピンク色 */
-  color: #fff; /* 文字色 */
-  padding: 10px 15px; /* 内側の余白 */
-  border-radius: 5px; /* 角を丸くする */
-  text-decoration: none; /* 下線を無効にする */
-  display: inline-block; /* インラインブロック要素にする */
+.footer-fixed__link a {
+  display: block;
+  padding: 12px 20px;
+  border-radius: 5px;
+  background-color: #0d0b47;
+  color: #fff;
+  text-align: center;
+  line-height: 1.8;
+  text-decoration: none;
   transition:
     background-color 0.3s ease,
-    transform 0.3s ease; /* トランジション */
+    transform 0.3s ease;
 }
 
-/* ホバー時のエフェクト */
-.pink-link a:hover {
-  background-color: #ff1493; /* ホバー時の濃いピンク */
-  transform: translateY(-2px); /* ボタンが少し上に動く */
+.footer-fixed__link a:hover {
+  background-color: #1a1a8c;
+  transform: translateY(-2px);
 }
 
-/* モバイル・タブレット表示 (768px以上1024px以下) */
 @media (max-width: 1024px) {
-  .pink-link a {
-    padding: 12px 20px; /* ボタンの高さと幅を調整 */
-    font-size: 1em; /* フォントサイズ調整 */
-  }
-
-  /* ホバー時のスタイル */
-  .pink-link a:hover {
-    background-color: #ff1493; /* ホバー時の濃いピンク */
+  .footer-fixed.show {
+    bottom: 0;
+    opacity: 1;
   }
 }
 
-/* PC表示 (1025px以上) */
 @media (min-width: 1025px) {
-  .pink-link a {
-    padding: 12px 20px; /* ボタンの高さと幅を調整 */
-    font-size: 1em; /* フォントサイズ調整 */
-  }
-
-  /* ホバー時のスタイル */
-  .pink-link a:hover {
-    background-color: #ff1493; /* ホバー時の濃いピンク */
+  .footer-fixed {
+    bottom: 0;
+    padding: 0 20px;
+    opacity: 1;
   }
 }
 
@@ -2474,7 +2235,6 @@ input.firefox-validation:invalid {
   border-radius: 8px; /* 角を丸める */
   background-color: var(--main-bg); /* 背景色 */
   color: var(--main-text); /* テキスト色 */
-  -webkit-box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* ボックスシャドウを追加 */
 }
 
@@ -2491,12 +2251,14 @@ input.firefox-validation:invalid {
   font-weight: bold;
 }
 
-.customer-info-form input[type='text'],
-.customer-info-form input[type='email'],
-.customer-info-form input[type='tel'],
-.customer-info-form input[type='number'],
-.customer-info-form select,
-.customer-info-form textarea {
+.customer-info-form :is(
+  input[type='text'],
+  input[type='email'],
+  input[type='tel'],
+  input[type='number'],
+  select,
+  textarea
+) {
   width: 100%; /* 幅を100%に設定 */
   padding: 12px; /* 内側の余白を増やす */
   margin-bottom: 20px; /* 下部の余白を増やす */
@@ -2504,37 +2266,29 @@ input.firefox-validation:invalid {
   border-radius: 4px; /* 角を丸める */
   background-color: var(--sub-grey); /* 背景色 */
   color: var(--main-text); /* テキスト色 */
-  -webkit-transition: border 0.3s;
-  -o-transition: border 0.3s;
   transition: border 0.3s; /* ボーダーに遷移効果を追加 */
 }
 
-.customer-info-form input[type='text']:focus,
-.customer-info-form input[type='email']:focus,
-.customer-info-form input[type='tel']:focus,
-.customer-info-form input[type='number']:focus,
-.customer-info-form select:focus,
-.customer-info-form textarea:focus {
-  /*border-color: #4CAF50; /* フォーカス時のボーダー色 */
+.customer-info-form :is(
+  input[type='text'],
+  input[type='email'],
+  input[type='tel'],
+  input[type='number'],
+  select,
+  textarea
+):focus {
   outline: none; /* フォーカス時のアウトラインを消す */
 }
 
 /* 性別選択 */
 .gender-selection {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex; /* Flexboxを使用 */
-  -ms-flex-pack: distribute;
   justify-content: space-around; /* 要素間に均等なスペースを追加 */
   margin-bottom: 20px; /* 下部の余白を増やす */
 }
 
 .gender-selection label {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex; /* ラベル内の要素をFlexboxで配置 */
-  -webkit-box-align: center;
-  -ms-flex-align: center;
   align-items: center; /* 垂直方向に中央揃え */
   font-size: 16px; /* フォントサイズ */
   color: var(--main-text); /* ラベルの色 */
@@ -2552,14 +2306,11 @@ input.firefox-validation:invalid {
 /* 送信ボタン */
 .submit {
   background-color: #4caf50; /* ボタンの背景色 */
-  color: var(--main-bg); /* ボタンのテキスト色 */
   border: none; /* ボーダーなし */
   padding: 12px 24px; /* 内側の余白を増やす */
   font-size: 18px; /* フォントサイズを調整 */
   border-radius: 4px; /* 角を丸める */
   cursor: pointer; /* カーソルをポインタに */
-  -webkit-transition: background-color 0.3s;
-  -o-transition: background-color 0.3s;
   transition: background-color 0.3s; /* 背景色に遷移効果を追加 */
   color: #ffff;
 }
@@ -2586,12 +2337,14 @@ body.dark-theme .customer-info-form .attention {
   color: var(--main-text); /* ダークモードでのテキスト色 */
 }
 
-body.dark-theme .customer-info-form input[type='text'],
-body.dark-theme .customer-info-form input[type='email'],
-body.dark-theme .customer-info-form input[type='tel'],
-body.dark-theme .customer-info-form input[type='number'],
-body.dark-theme .customer-info-form select,
-body.dark-theme .customer-info-form textarea {
+body.dark-theme .customer-info-form :is(
+  input[type='text'],
+  input[type='email'],
+  input[type='tel'],
+  input[type='number'],
+  select,
+  textarea
+) {
   background-color: var(--grey); /* ダークモードの入力フィールド背景色 */
   color: var(--main-text); /* ダークモードの入力フィールドテキスト色 */
   border: 1px solid var(--sub-grey); /* ダークモードの入力フィールドボーダー色 */
@@ -2599,7 +2352,6 @@ body.dark-theme .customer-info-form textarea {
 
 body.dark-theme .submit {
   background-color: #4caf50; /* ダークモードボタン背景色 */
-  /*color: var(--main-bg); /* ダークモードボタンテキスト色 */
 }
 
 body.dark-theme .submit:hover {
@@ -2637,35 +2389,10 @@ body.dark-theme .submit:hover {
 }
 
 @media (min-width: 1025px) {
-  .customer-info-form {
-    padding: 30px; /* PCでの余白を調整 */
-  }
-
   .customer-info-form h2 {
     font-size: 2.2em; /* PCでの見出しサイズを調整 */
   }
 
-  .submit {
-    font-size: 18px; /* PCでのボタンサイズを調整 */
-  }
-}
-
-/*Google Map 埋め込みデザイン*/
-.map-container {
-  position: relative;
-  padding-bottom: 56.25%; /* アスペクト比（16:9）に合わせる */
-  height: 0;
-  overflow: hidden;
-  max-width: 100%;
-}
-
-.map-container iframe {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border: 0;
 }
 
 /*モーダルウィンドー*/
@@ -2856,6 +2583,7 @@ body.dark-theme #breadcrumb li + li::before {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    justify-self: center;
     gap: 10px;
     white-space: nowrap;
   }
@@ -3062,7 +2790,6 @@ body.dark-theme #breadcrumb li + li::before {
     width: 100%;
     aspect-ratio: 16 / 9;
     /* ←比率固定。高さ固定にしたいなら `height: 180px;` に変更 */
-    /* height: 180px; */
     /* ←こちらを使う場合は aspect-ratio は消す */
     overflow: hidden;
     background: #000;
@@ -3103,23 +2830,6 @@ body.dark-theme #breadcrumb li + li::before {
 
 /* PC: hover で表示 */
 @media (min-width: 1200px) {
-  .header-menu-mobile {
-    display: none !important;
-  }
-
-  .header-menu-pc {
-    display: flex !important;
-    width: 1200px;
-    margin: 0 auto;
-  }
-
-  /* 通常ドロップダウン */
-  .navg__list > .menu-item-has-children:hover > ul:not(.mega-sub-menu) {
-    display: block !important;
-    position: absolute;
-    top: 100%;
-    left: 0;
-  }
 
   /* メガメニュー */
   .mega-menu-item:hover > .mega-sub-menu,
@@ -3208,14 +2918,8 @@ body.dark-theme #breadcrumb li + li::before {
   text-align: center;
   font-size: 18px;
   width: 100%;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: center;
-  -ms-flex-pack: center;
   justify-content: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
   align-items: center;
 }
 
@@ -3257,66 +2961,23 @@ body.dark-theme #breadcrumb li + li::before {
     margin-right: 10px; 
 }*/
 
-.swiper {
-  max-width: 1280px;
-  margin: 0 auto;
-  height: 100%;
-}
-
-/* SNS footer header */
-.foot-socials ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: -webkit-box;
-  display: -ms-flexbox;
+/* Common footer copy + SNS */
+#footer .footer-wrapper {
   display: flex;
-  -webkit-box-pack: center;
-  -ms-flex-pack: center;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+#footer .footer-copy {
+  margin: 0;
+  text-align: center;
+}
+
+#footer .footer-wrapper > .social-nav {
   justify-content: center;
-}
-
-.foot-socials li {
-  margin-right: 10px;
-}
-
-.foot-socials a {
-  text-decoration: none;
-  color: #333;
-}
-
-.dark-theme .foot-socials a {
-  color: var(--link-color-blue);
-  text-decoration: none;
-}
-
-.icon {
-  width: 24px;
-  height: 24px;
-  fill: #007bff;
-}
-
-/* PCの場合のスタイル */
-@media (min-width: 768px) {
-  .foot-socials ul {
-    -webkit-box-pack: start !important;
-    -ms-flex-pack: start !important;
-    justify-content: flex-start !important;
-  }
-}
-
-/* モバイル、タブレット */
-@media (max-width: 991px) {
-  .foot-socials ul {
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-  }
-
-  .foot-socials li {
-    margin-right: 0;
-    margin-bottom: 10px;
-  }
+  margin: 0;
+  padding: 0;
 }
 
 /* bodyの基本スタイル */
@@ -3345,14 +3006,6 @@ body {
   }
 }
 
-/* 576px以下の画面サイズに対するスタイル */
-@media (max-width: 576px) {
-  body {
-    /*font-size: 0.75rem; /* 12px */
-    font-size: 0.875rem; /* 14px相当 */
-  }
-}
-
 /* #main 内の h1, h2 タイトルスタイル */
 #main h1,
 #main h2 {
@@ -3361,11 +3014,7 @@ body {
   padding: 3px; /* 内側の余白 */
   margin: 0px; /* 下の余白を少し加える */
   color: var(--main-text); /* メインテキストカラー */
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: justify;
-  -ms-flex-pack: justify;
   justify-content: space-between; /* タイトルとリンクにスペースを作る */
   white-space: normal; /* テキストの折り返しを許可 */
   transition:
@@ -3398,7 +3047,6 @@ body {
   position: relative;
   max-width: 600px;
   width: 90%;
-  -webkit-box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
   z-index: 1;
 }
@@ -3425,7 +3073,6 @@ body {
   width: 225px;
   padding: 5px 0;
   background-color: #3498db;
-  -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
   color: #fff;
   font:
@@ -3460,8 +3107,6 @@ body {
 .ribbon-top-left span {
   right: 5px;
   top: 18px;
-  -webkit-transform: rotate(-45deg);
-  -ms-transform: rotate(-45deg);
   transform: rotate(-45deg);
 }
 
@@ -3529,15 +3174,50 @@ body {
 }
 
 /* sidebar-recent-posts に対してリセットを適用 */
-#sidebar-recent-posts {
+.sidebar-recent-posts {
   list-style: none;
   margin: 0;
   padding: 0;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+}
+
+.sidebar-recent-posts > li.custom-post {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  background: var(--color-surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  overflow: hidden;
+  margin: 0 0 22px;
+  padding: 0;
+}
+
+.sidebar-recent-posts > li.custom-post.first-post {
+  margin-bottom: 24px;
+}
+
+.sidebar-recent-posts > li.custom-post:not(.first-post) {
+  margin-bottom: 22px;
+}
+
+.sidebar-recent-posts > li.custom-post:last-child {
+  margin-bottom: 0;
+}
+
+body.dark-theme .sidebar-recent-posts > li.custom-post {
+  background: #121f2b;
+  border-color: #2b3947;
+}
+
+body.dark-theme .sidebar-recent-posts > li.custom-post a {
+  color: #eaf0f4;
 }
 
 @media (min-width: 991px) {
   .dropdown-menu li.menu-item-has-children > a:after {
-    /*margin-left: 6.255em;*/
     /*margin-left: 10px;
         vertical-align: 0.01em;
         border-top: .6em solid transparent;  /* ボーダーの太さを大きくする */
@@ -3555,7 +3235,6 @@ body {
 .nav-item-thumbnail {
   width: 100px;
   height: 80px;
-  /*margin-left:15px;*/
 }
 
 /* category.php
@@ -3563,10 +3242,7 @@ index.php for アイキャッチ背景画像*/
 
 /* Blog Thumbnail Box & Blog Thumbnail Box1*/
 .blog-thumbnail-box {
-  background: #333 none repeat scroll 0 0;
   float: left;
-  /*height: 170px;*/
-  /*margin: 5px;*/
   overflow: hidden;
   width: 29%;
   position: relative;
@@ -3577,8 +3253,6 @@ index.php for アイキャッチ背景画像*/
 .blog-thumbnail-box1 {
   background: #333 none repeat scroll 0 0;
   float: left;
-  /*height: 170px;*/
-  /*margin: 5px;*/
   overflow: hidden;
   width: 34%;
   position: relative;
@@ -3610,7 +3284,6 @@ index.php for アイキャッチ背景画像*/
     margin: 0px;
     overflow: hidden;
     width: 100%;
-    /*height: 200px;*/
     /*clear: both;*/
   }
 }
@@ -3630,6 +3303,7 @@ index.php for アイキャッチ背景画像*/
 
 /* Thumbnail Overlay (Title) */
 .thumbnail-overlay {
+  pointer-events: none;
   position: absolute;
   top: 0;
   left: 0;
@@ -3646,30 +3320,32 @@ index.php for アイキャッチ背景画像*/
 }
 
 /* ✅ Blog Post Title（全てに適用） */
+.thumbnail-overlay .thumbnail-title,
+.archive-post-box .thumbnail-overlay h3,
+.archive-post-box .thumbnail-overlay h3 a,
+.sidebar-recent-posts .custom-post .title-text,
+.sidebar-recent-posts .custom-post .title-text a,
 .blog-post-image h3,
+.blog-post-image h3 a,
 .blog-post-media h3,
-.mason-box .thumbnail-overlay h3 {
+.blog-post-media h3 a,
+.mason-box .thumbnail-overlay h3,
+.mason-box .thumbnail-overlay h3 a {
   /* 🔥 `mason-box` の `overlay` も適用 */
   margin: 0;
+  font-family: inherit;
   font-size: 16px;
+  font-weight: 700;
+  line-height: 1.4;
+  text-transform: none;
   color: #fff;
-  font-weight: 900;
-  text-transform: uppercase;
-  font-family: 'Arial', sans-serif; /* フォントファミリーを指定 */
-  transition: color 0.3s ease-in-out; /* 色の変更にスムーズなアニメーションを追加 */
+  transition: color 0.3s ease-in-out;
 }
 
-/* ホバー時にタイトルを表示 */
-.blog-post-image:hover .thumbnail-overlay {
-  opacity: 1;
-}
-
-/* ✅ ホバー時にオーバーレイを表示 header */
-.blog-post-media:hover .thumbnail-overlay {
-  opacity: 1;
-}
-
-/* ✅ `hover` したとき `overlay` を表示 page-gallart-room */
+/* 共通：ホバー時にオーバーレイを表示 */
+.archive-post-box:hover .thumbnail-overlay,
+.blog-post-image:hover .thumbnail-overlay,
+.blog-post-media:hover .thumbnail-overlay,
 .mason-box:hover .thumbnail-overlay {
   opacity: 1;
 }
@@ -3698,16 +3374,6 @@ for*/
 
 /* materia1-post.php Recently updated content box links */
 
-/* サイドバーのレイアウト（Flexboxで横並び） */
-#sidebar-recent-posts {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px; /* アイテム間のスペース */
-  margin: 0; /* サイドバー内の余白を調整 */
-  border: 2px solid #f5f2eb;
-  border-radius: 8px;
-}
-
 /* 記事全体のスタイル */
 .custom-post {
   width: 100%; /* デフォルトは1行に1件表示 */
@@ -3722,15 +3388,19 @@ for*/
 }
 
 /* サムネイル画像の基本スタイル */
-.recent-thumbnail-box-big-box {
+.recent-thumbnail-box-big-box,
+.recent-thumbnail-small-box {
   position: relative;
-  width: 100%; /* 横並びと大きなサムネイル画像に同じ幅 */
-  height: 150px; /* デフォルトの高さ */
-  background-size: cover; /* 背景画像が要素を覆うように */
-  background-position: center; /* 画像の中心を基準に表示 */
+  height: 150px;
+  background-size: cover;
+  background-position: center;
   transition:
     transform 0.3s ease-in-out,
-    opacity 0.3s ease-in-out; /* ズームインとフェードインのトランジション */
+    opacity 0.3s ease-in-out;
+}
+
+.recent-thumbnail-box-big-box {
+  width: 100%;
 }
 
 /* 1024px以下のタブレット画面に対応（高さを400pxに変更） */
@@ -3749,29 +3419,20 @@ for*/
 
 /* サムネイル画像の基本スタイル */
 .recent-thumbnail-small-box {
-  position: relative;
-  width: 50%; /* 画面幅の50% */
-  height: 150px; /* デフォルトの高さ */
-  background-size: cover; /* 背景画像が要素を覆うように */
-  background-position: center; /* 画像の中心を基準に表示 */
-  transition:
-    transform 0.3s ease-in-out,
-    opacity 0.3s ease-in-out; /* ズームインとフェードインのトランジション */
+  width: 50%;
 }
 
 /* 1024px以下のタブレット画面に対応（幅を100%に変更し、高さを250pxに変更） */
 @media (max-width: 1024px) {
   .recent-thumbnail-small-box {
-    width: 50%; /* 横幅を100%に変更 */
-    height: 250px; /* 高さを変更 */
+    height: 250px;
   }
 }
 
 /* 768px以下のモバイル画面に対応（幅を100%に変更し、高さを200pxに変更） */
 @media (max-width: 768px) {
   .recent-thumbnail-small-box {
-    width: 50%; /* 横幅を100%に変更 */
-    height: 200px; /* 高さを変更 */
+    height: 200px;
   }
 }
 
@@ -3871,16 +3532,16 @@ for*/
 /*img タグ material-post.php*/
 
 /* サムネイルのボックス */
-#sidebar-recent-posts .custom-post .recent-thumbnail-box-small,
-#sidebar-recent-posts .custom-post .recent-thumbnail-box-big {
+.sidebar-recent-posts .custom-post .recent-thumbnail-box-small,
+.sidebar-recent-posts .custom-post .recent-thumbnail-box-big {
   position: relative;
   overflow: hidden;
   height: 250px;
 }
 
 /* 画像のアニメーション指定 */
-#sidebar-recent-posts .custom-post .recent-thumbnail-box-small img,
-#sidebar-recent-posts .custom-post .recent-thumbnail-box-big img {
+.sidebar-recent-posts .custom-post .recent-thumbnail-box-small img,
+.sidebar-recent-posts .custom-post .recent-thumbnail-box-big img {
   transition: transform 0.3s ease;
   display: block;
   width: 100%;
@@ -3889,13 +3550,13 @@ for*/
 }
 
 /* ホバー時、画像をやや拡大 */
-#sidebar-recent-posts .custom-post .recent-thumbnail-box-small:hover img,
-#sidebar-recent-posts .custom-post .recent-thumbnail-box-big:hover img {
+.sidebar-recent-posts .custom-post .recent-thumbnail-box-small:hover img,
+.sidebar-recent-posts .custom-post .recent-thumbnail-box-big:hover img {
   transform: scale(1.05); /* 控えめな拡大 */
 }
 
 /* オーバーレイのデザイン */
-#sidebar-recent-posts .custom-post .title-overlay {
+.sidebar-recent-posts .custom-post .title-overlay {
   position: absolute;
   top: 0;
   left: 0;
@@ -3912,28 +3573,9 @@ for*/
 }
 
 /* 画像をホバーしたときにオーバーレイとタイトルを表示 */
-#sidebar-recent-posts .custom-post .recent-thumbnail-box-small:hover .title-overlay,
-#sidebar-recent-posts .custom-post .recent-thumbnail-box-big:hover .title-overlay {
+.sidebar-recent-posts .custom-post .recent-thumbnail-box-small:hover .title-overlay,
+.sidebar-recent-posts .custom-post .recent-thumbnail-box-big:hover .title-overlay {
   opacity: 1; /* ホバー時にオーバーレイとタイトルを表示 */
-}
-
-/* タイトルのスタイル */
-#sidebar-recent-posts .custom-post .title-text {
-  font-family: 'Arial', sans-serif; /* 通常のフォント */
-  font-size: 16px; /* フォントサイズ（必要に応じて調整） */
-  font-weight: bold; /* フォントの太さ */
-  color: #fff; /* 白色の文字 */
-  text-transform: uppercase; /* 大文字に変換 */
-  letter-spacing: 1px; /* 文字間隔 */
-  transition: all 0.3s ease; /* ホバー時の遷移効果 */
-  word-wrap: break-word; /* 長い単語が折り返しで表示されるように設定 */
-  overflow: hidden; /* 文字が親要素からはみ出さないように設定 */
-  text-align: center; /* テキストを中央揃え */
-}
-
-/* ホバー時のタイトルデザイン変更なし */
-#sidebar-recent-posts .custom-post .title-text:hover {
-  color: #fff; /* 白色のまま */
 }
 
 /* タイトルのスタイル */
@@ -3972,25 +3614,11 @@ for*/
   /* text-decoration: underline;  /* ホバー時に下線を追加 (コメントアウト) */
 }
 
-/* 詳細リンクのスタイル */
-.more-link2 {
-  font-size: 14px; /* 詳細リンクのフォントサイズ */
-  color: #3498db; /* 詳細リンクの文字色 */
-  text-decoration: none; /* 下線なし */
-}
-
-/* 詳細リンクのホバー時のデザイン */
-.more-link2:hover {
-  color: #e67e22; /* ホバー時のリンク色 */
-  /*text-decoration: underline;  /* ホバー時に下線を追加 */
-}
-
 .post-meta a {
   text-decoration: none;
 }
 
 .post-meta {
-  /* background-color: #fff; */
   /*border: 1px solid #ddd;*/
   margin-bottom: 0px;
   overflow: hidden;
@@ -4060,19 +3688,21 @@ color:#cb7777;
 
 .icon-arrow-right2 {
   width: 30px;
-  /*height: 30px;*/
   margin: 0px 5px;
 }
 
 /*CSVデザインの見出し*/
 .side-title {
-  font-family: 'Work Sans', sans-serif;
-  font-size: 1.2em;
-  font-style: italic;
+  font-family: inherit;
+  font-size: 1.15rem;
+  font-style: normal;
+  font-weight: 700;
   line-height: 1.4;
-  padding: 0px 0px;
-  clear: both;
-  margin-bottom: 10px;
+  margin: 18px 0 12px;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  color: var(--color-text);
 }
 
 @media only screen and (max-width: 651px) {
@@ -4118,70 +3748,69 @@ blockquote {
 /* モバイルとタブレットで非表示にする */
 @media (max-width: 768px) {
   #price-range-sidebar {
-    display: none;
+    width: 100%;
+    max-width: none;
+    box-sizing: border-box;
+    margin: 0 0 18px;
+    padding: 18px 20px;
+    background: var(--color-surface);
+    color: var(--color-text);
+    border: 0;
+    border-radius: 24px;
+  }
+
+  #price-range-sidebar .widget {
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    border: 0;
+  }
+
+  #price-range-sidebar legend {
+    display: block;
+    margin: 0 0 10px;
+    padding: 0;
+    color: var(--color-text);
+    font-weight: 700;
+  }
+
+  #price-range-sidebar label {
+    display: block;
+    margin: 0 0 12px;
+    color: var(--color-text);
+    line-height: 1.6;
+  }
+
+  #price-range-sidebar input[type='range'],
+  #price-range-sidebar .price-filter-range {
+    display: block;
+    width: 100%;
+    max-width: none;
+  }
+
+  #price-range-sidebar button {
+    margin-top: 10px;
   }
 }
-
-/*SNS footer header*/
-/*.foot-socials {
-  margin-top: 20px;
-}*/
-
-.foot-socials ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-  -ms-flex-pack: center;
-  justify-content: center; /* 中央配置 */
-}
-
-.foot-socials li {
-  margin-right: 10px;
-}
-
-/*.icon {
-  width: 24px;
-  height: 24px;
-  fill: #007bff;
-}*/
 
 .form-submit {
   text-align: center;
   padding-top: 0px;
   overflow: hidden;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: center;
-  -ms-flex-pack: center;
   justify-content: center;
 }
 
-/* PCの場合のスタイル */
-@media (min-width: 768px) {
-  .foot-socials ul {
-    -webkit-box-pack: end;
-    -ms-flex-pack: end;
-    justify-content: flex-end; /* SNSアイコンは右端に配置 */
-  }
-}
 
-/*モバイル タブレット*/
-@media (max-width: 991px) {
-  .foot-socials ul {
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center; /* 中央配置 */
-  }
-
-  .foot-socials li {
-    margin-right: 0;
-    margin-bottom: 10px;
-  }
+/* SVG icon base */
+.icon {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  flex: 0 0 24px;
+  fill: currentColor;
+  stroke: currentColor;
+  vertical-align: middle;
 }
 
 /*SNSアイコン サイドバー*/
@@ -4195,20 +3824,21 @@ blockquote {
 }
 
 .social-nav {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  /*margin-top: 360px;*/
   margin-bottom: 10px;
 }
 
-.sns_button {
-  display: -webkit-box;
-  display: -ms-flexbox;
+.social-nav.sns_button,
+.social-nav.sns_button.mhl.ptl {
   display: flex;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
   align-items: center;
+  gap: 8px;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0 0 12px;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 16px;
 }
 
 .icon-container {
@@ -4231,7 +3861,6 @@ blockquote {
 
 /*Instagram*/
 .social-nav .icon-instagram-fill:hover {
-  /*color: #e4405f;/* Instagram color */
   background: -o-radial-gradient(
     30% 107%,
     circle,
@@ -4249,7 +3878,6 @@ blockquote {
     #c13584 60%,
     #5851db 90%
   );
-  -webkit-box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.25);
   box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.25);
 }
 
@@ -4262,76 +3890,52 @@ blockquote {
 
 .social-nav a {
   display: block;
-  /*background: #ffff;*/
 }
 
 /*コンタクトボタン*/
-.form__buttonBox {
-  text-align: center;
-}
-/*** Main Layout Index.php ***/
+/*** Main / Sidebar Layout ***/
 
-/* 1080px以上のデスクトップサイズの場合のスタイル */
-@media only screen and (min-width: 1080px) {
-  #main {
-    float: left; /* 左寄せに設定 */
-  }
-}
-
-/* 1080px以上1200px以下のデスクトップサイズの場合のスタイル */
-@media only screen and (min-width: 1080px) and (max-width: 1200px) {
-  #main {
-    width: calc(100% - 330px); /* サイドバー幅を引く */
-  }
-}
-
-/* 1200px以上のデスクトップサイズの場合のスタイル */
-@media only screen and (min-width: 1200px) {
-  #main {
-    width: 830px; /* 固定幅830px */
-    margin: 5px auto; /* 左右中央寄せ */
-    overflow: hidden; /* swiper スライドなどでのオーバーフロー処理 */
-  }
-}
-
-/* 主要なサイドバー全体のレイアウト（レスポンシブ対応） */
 #single {
-  display: flex; /* フレックスボックスを使用 */
-  flex-wrap: wrap; /* 子要素が折り返すように設定 */
   margin: 5px;
-  max-width: 1200px;
   overflow: hidden;
 }
 
-/* メインコンテンツのスタイル */
 #main {
-  flex: 1; /* メインコンテンツは残りの幅を占める */
-  margin-right: 10px; /* サイドバーとの隙間 */
   padding: 0;
 }
 
-/* サイドバーのスタイル */
 #sidebar {
-  width: 330px; /* 固定幅 */
-  flex: 0 0 330px; /* 固定幅に設定 */
+  width: 330px;
 }
 
-/* 1080px以上1200px以下のデスクトップサイズの場合 */
-@media only screen and (min-width: 1080px) and (max-width: 1200px) {
-  #single {
-    display: flex; /* フレックスボックス */
-    justify-content: space-between; /* メインコンテンツとサイドバーの間隔を調整 */
-  }
-
+/*
+ * 1081px〜1199px:
+ * main左右margin 10px + single左右margin 10px +
+ * sidebar 330px を確保するため、mainから350px分を引く。
+ */
+@media only screen and (min-width: 1081px) and (max-width: 1199px) {
   #main {
-    width: calc(100% - 330px); /* サイドバー幅を引く */
-    margin: 5px; /* 上下左右にマージン */
-    padding: 0;
+    float: left;
+    width: calc(100% - 350px);
+    margin: 5px;
   }
 
   #sidebar {
-    width: 330px; /* サイドバーの幅を調整 */
-    margin-top: 40px; /* 上部の余白 */
+    margin-top: 40px;
+  }
+}
+
+/*
+ * 1200px以上:
+ * 既存の830pxメイン幅を維持する。
+ * float要素ではauto marginを使わず、実際の余白を明示する。
+ */
+@media only screen and (min-width: 1200px) {
+  #main {
+    float: left;
+    width: 830px;
+    margin: 5px 10px 5px 0;
+    overflow: hidden;
   }
 }
 
@@ -4341,10 +3945,6 @@ blockquote {
 
 /* 1080px未満のサイズ（モバイル）ではサイドバーを下に表示 */
 @media only screen and (max-width: 1080px) {
-  #single {
-    display: block; /* サイドバーとメインコンテンツをブロック表示 */
-  }
-
   #main {
     width: 100%; /* 幅100%で表示 */
     margin: 5px auto;
@@ -4391,13 +3991,7 @@ blockquote {
 }
 
 .popular-post-slider .slick-track {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-transition: -webkit-transform 0.3s ease-in-out;
-  transition: -webkit-transform 0.3s ease-in-out;
-  -o-transition: transform 0.3s ease-in-out;
-  transition: transform 0.3s ease-in-out;
   transition:
     transform 0.3s ease-in-out,
     -webkit-transform 0.3s ease-in-out;
@@ -4406,21 +4000,17 @@ blockquote {
 .popular-post-slider .slick-slide {
   display: inline-block;
   width: 100%;
-  -webkit-box-sizing: border-box;
   box-sizing: border-box;
+  background: var(--color-surface);
+  border: 0;
+  border-radius: 16px;
+  overflow: hidden;
+  padding: 10px;
+  margin: 0 0 12px;
 }
 
 #popular-post-slider {
   position: relative;
-}
-
-/* 左右ボタンの配置 */
-.popular-post-slider {
-  position: relative; /* スライダー全体に相対位置を設定 */
-}
-
-.sidebar-thumbnail-box {
-  position: relative; /* 画像の親要素に相対位置を設定 */
 }
 
 .slider-buttons {
@@ -4454,33 +4044,6 @@ blockquote {
   position: relative; /* 親要素にrelativeを設定して、矢印ボタンを絶対位置で配置 */
 }
 
-/* 左右の矢印ボタン */
-.slider-prev-btn,
-.slider-next-btn {
-  position: absolute;
-  top: 50%;
-  -webkit-transform: translateY(-50%);
-  -ms-transform: translateY(-50%);
-  transform: translateY(-50%);
-  background-color: rgba(0, 0, 0, 0.6); /* 半透明の背景 */
-  color: white;
-  font-size: 20px;
-  border: none;
-  padding: 10px;
-  cursor: pointer;
-  z-index: 10;
-}
-
-/* 左矢印の配置 */
-.slider-prev-btn {
-  left: 0px; /* 左端に配置 */
-}
-
-/* 右矢印の配置 */
-.slider-next-btn {
-  right: 0px; /* 右端に配置 */
-}
-
 /* スライダーの画像調整 */
 .popular-post .slick-slide img {
   width: 100%;
@@ -4511,16 +4074,10 @@ blockquote {
   .page-wrapper {
     max-width: 100%; /* スマホでは全幅 */
     padding: 0px 0px; /* 余白を少し小さく */
-    /*margin-top: 45px;*/
   }
 }
 
-.mene > li > a:hover {
-  color: #fe56aa;
-}
-
 .page_item > a {
-  /*float: left;*/
   position: relative;
 }
 
@@ -4541,14 +4098,11 @@ blockquote {
   white-space: normal;
   text-align: left;
   word-wrap: break-word;
-  /*color: var(--link-color-dark-type2);*/
 }
 
 .content-box {
   width: 100%; /*1カラム*/
   /*width: 50%;/*2カラム*/
-  /*float: right;*/
-  /*margin-left: -15px;*/
   margin-bottom: 20px;
   /*clear: both;*/
 }
@@ -4579,45 +4133,30 @@ blockquote {
 
 /* PC用スタイル */
 .more-link-wrapper {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: start;
-  -ms-flex-pack: start;
   justify-content: flex-start;
   width: 100%;
   padding: 10px 4px;
   font-size: 1rem;
 }
 
-.more-link {
-  /*display: inline-block; /* PCでは元のデザイン */
+.more-link,
+.store-reserve-link {
   padding: 10px 20px;
-  background-color: #ff9933; /* オレンジ色に変更 */
   color: #fff;
   border-radius: 50px;
   text-decoration: none;
-  margin-right: 10px; /* 横並びにするためのスペース */
+}
+
+.more-link {
+  background-color: #ff9933;
+  margin-right: 10px;
 }
 
 /* 予約リンク（そのまま） */
 .store-reserve-link {
-  /*display: inline-block;*/
-  padding: 10px 20px;
-  background-color: #007bff; /* 青色 */
-  color: #fff;
-  text-decoration: none;
-  border: 2px solid #007bff; /* 青色 */
-  border-radius: 50px;
-  /*font-size: 1.125rem;*/
-  -webkit-transition:
-    background-color 0.3s ease,
-    color 0.3s ease,
-    border-color 0.3s ease;
-  -o-transition:
-    background-color 0.3s ease,
-    color 0.3s ease,
-    border-color 0.3s ease;
+  background-color: #007bff;
+  border: 2px solid #007bff;
   transition:
     background-color 0.3s ease,
     color 0.3s ease,
@@ -4695,7 +4234,7 @@ blockquote {
 
 /* モーダルの背景（画面全体を覆う） */
 .store-reservation-modal {
-  display: flex; /* display: none; を削除 */
+  display: flex;
   visibility: hidden; /* 初期状態で非表示 */
   opacity: 0; /* 初期状態で透明 */
   position: fixed;
@@ -4704,19 +4243,10 @@ blockquote {
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 10000; /* 他の要素より上に表示 */
   justify-content: center;
-  /*align-items: center;
-      /* 🔽 修正点ここから */
-  align-items: flex-start; /* 上寄せ */
-  overflow-y: auto; /* 縦スクロールを有効化 */
+  align-items: flex-start;
+  overflow-y: auto;
   padding: 40px 10px;
-  -webkit-transition:
-    visibility 0.3s ease,
-    opacity 0.3s ease;
-  -o-transition:
-    visibility 0.3s ease,
-    opacity 0.3s ease;
   transition:
     visibility 0.3s ease,
     opacity 0.3s ease;
@@ -4731,41 +4261,24 @@ blockquote {
 
 /* モーダル内部の内容 */
 .store-reservation-modal .modal-content {
-  background-color: white; /* モーダルの内容の背景 */
+  background-color: var(--color-panel); /* テーマ背景に合わせる */
   padding: 20px; /* モーダル内の余白 */
   border-radius: 8px; /* 角を丸くする */
 }
 
 /* モーダルのコンテンツ */
 .store-reservation-modal-content {
-  background-color: #fff;
   padding: 20px;
-  border-radius: 10px;
   width: 100%;
   max-width: 600px;
-  -webkit-box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   position: relative;
-  -webkit-transition:
-    opacity 0.3s ease,
-    -webkit-transform 0.3s ease;
-  transition:
-    opacity 0.3s ease,
-    -webkit-transform 0.3s ease;
-  -o-transition:
-    transform 0.3s ease,
-    opacity 0.3s ease;
   transition:
     transform 0.3s ease,
     opacity 0.3s ease;
-  transition:
-    transform 0.3s ease,
-    opacity 0.3s ease,
-    -webkit-transform 0.3s ease;
   /*overflow-y: auto; /* 縦スクロールを可能に */
   /*max-height: 90vh; /* 画面の90%に高さを制限 */
 }
-
 /* モバイル横向き */
 @media (max-width: 768px) and (orientation: landscape) {
   .store-reservation-modal-content {
@@ -4778,26 +4291,18 @@ blockquote {
 }
 
 .store-reservation-modal-content.active {
-  -webkit-transform: scale(1.05);
-  -ms-transform: scale(1.05);
   transform: scale(1.05); /* アクティブ状態で少し拡大 */
   opacity: 1;
 }
 
 .store-reservation-modal-content.inactive {
-  -webkit-transform: scale(0.9);
-  -ms-transform: scale(0.9);
   transform: scale(0.9);
   opacity: 0.5;
 }
 
 /* サムネイル画像とタイトルを横並びにするためのコンテナ */
 .store-reservation-modal-content .property-info {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
   align-items: center; /* 垂直方向で中央揃え */
   gap: 20px; /* 画像とタイトルの間にスペースを追加 */
   width: 100%;
@@ -4805,104 +4310,50 @@ blockquote {
 
 /* タイトル（h3）のスタイル */
 .store-reservation-modal-content h3 {
-  color: #333; /* 黒色 */
+  color: var(--color-heading); /* 黒色 */
   font-size: 20px; /* デフォルトのフォントサイズ（小さめ） */
   margin: 0; /* 上下の余白を削除 */
 }
 
-@media (max-width: 1024px) {
-  .store-reservation-modal-content h3 {
-    font-size: 18px; /* タブレットサイズ（1024px以下）の場合 */
-  }
-}
-
-@media (max-width: 768px) {
-  .store-reservation-modal-content h3 {
-    font-size: 16px; /* スマホサイズ（768px以下）の場合 */
-  }
-}
-
-@media (max-width: 480px) {
-  .store-reservation-modal-content h3 {
-    font-size: 14px; /* 非常に小さい画面（スマホ縦向きなど）の場合 */
-  }
-}
-
-/* サムネイル画像の表示設定 */
-.store-reservation-modal-content .property-thumbnail img {
-  max-width: 100px; /* 画像の最大幅を100pxに設定 */
-  height: auto; /* 高さを自動調整 */
-  border-radius: 5px; /* 角を丸くする */
-  margin: 0; /* サムネイル画像の余白を削除 */
-}
-
-/* サムネイル画像がない場合に表示するデフォルト画像の設定 */
-.store-reservation-modal-content .property-thumbnail img[alt='No Image'] {
-  width: 100px; /* デフォルト画像の幅を100pxに設定 */
-  height: auto; /* 高さを自動調整 */
-  background-color: #f0f0f0; /* 背景色を追加して見やすくする */
-  text-align: center; /* 画像がない場合の代替テキストを中央揃えにする */
-}
-
 /* 共通モーダルを閉じるボタン */
-.close-btn {
+.close-btn,
+.google-map-modal-close {
   position: absolute;
   top: 10px;
   right: 10px;
-  width: 40px; /* ボタンの直径 */
-  height: 40px; /* ボタンの直径 */
-  background-color: #ff4c4c; /* ボタンの色 */
+  width: 40px;
+  height: 40px;
+  background-color: #ff4c4c;
   color: white;
-  border-radius: 50%; /* 丸くする */
-  font-size: 30px; /* 「×」のサイズ */
-  display: -webkit-box;
-  display: -ms-flexbox;
+  border-radius: 50%;
+  font-size: 30px;
   display: flex;
-  -webkit-box-pack: center;
-  -ms-flex-pack: center;
   justify-content: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
   align-items: center;
   cursor: pointer;
-  border: none; /* ボーダーをなくす */
-  -webkit-box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
-  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2); /* 影を追加 */
-  -webkit-transition:
-    background-color 0.3s ease,
-    -webkit-transform 0.2s ease;
-  transition:
-    background-color 0.3s ease,
-    -webkit-transform 0.2s ease;
-  -o-transition:
-    background-color 0.3s ease,
-    transform 0.2s ease;
+  border: none;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
   transition:
     background-color 0.3s ease,
     transform 0.2s ease;
-  transition:
-    background-color 0.3s ease,
-    transform 0.2s ease,
-    -webkit-transform 0.2s ease; /* アニメーション */
 }
 
 /* ホバー時とフォーカス時 */
 .close-btn:hover,
-.close-btn:focus {
-  background-color: #ff1f1f; /* ホバー時の色 */
-  -webkit-transform: scale(1.1);
-  -ms-transform: scale(1.1);
-  transform: scale(1.1); /* ホバー時に少し拡大 */
+.close-btn:focus,
+.google-map-modal-close:hover,
+.google-map-modal-close:focus {
+  background-color: #ff1f1f;
+  transform: scale(1.1);
 }
 
 /* モーダルの入力フォーム */
 #store-reservation-form {
   padding: 8px;
   margin-top: 20px;
-  background-color: white;
+  background-color: transparent;
   border-radius: 8px;
-  -webkit-box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
-  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: none;
 }
 
 /* モバイルサイズ */
@@ -4910,7 +4361,6 @@ blockquote {
   #store-reservation-form {
     padding: 10px; /* モバイルでは少しパディングを広げる */
     border-radius: 6px; /* ボーダーを少し小さくして調整 */
-    -webkit-box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* シャドウを少し強調 */
   }
 }
@@ -4923,11 +4373,6 @@ blockquote {
 
 /* モバイルおよびタブレットデバイス用のスタイル（最大幅768px） */
 @media only screen and (max-width: 768px) {
-  #store-reservation-form-container {
-    padding: 20px; /* モバイルではpaddingを無効化 */
-    width: 100%; /* モバイルでは幅100% */
-  }
-
   #store-reservation-form-container h3 {
     font-size: 16px;
     line-height: 1.4;
@@ -4937,10 +4382,6 @@ blockquote {
   #store-reservation-form-container .property-info h3 {
     font-size: 12px; /* モバイルではさらに小さいフォント */
     margin-bottom: 6px; /* 下の余白を小さく */
-  }
-
-  #store-reservation-form-container .reservation-form h3 {
-    font-size: 14px; /* 予約フォーム内のh3を少し小さく */
   }
 }
 
@@ -4959,53 +4400,54 @@ blockquote {
 
 /* 来店予約の場合（.available） */
 #store-reservation-form-container h3.store-title.available {
-  color: #333333;
+  color: var(--color-heading);
   font-weight: normal;
 }
 
-/* 1024px以下のタブレット画面に対応（フォントサイズを16pxに変更） */
 @media (max-width: 1024px) {
+  .store-reservation-modal-content h3 {
+    font-size: 18px;
+  }
+
   #store-reservation-form-container h3.store-title {
     font-size: 16px;
-    margin-bottom: 8px; /* 余白を調整 */
+    margin-bottom: 8px;
   }
 }
 
-/* 768px以下のモバイル画面に対応（フォントサイズを14pxに変更） */
 @media (max-width: 768px) {
+  .store-reservation-modal-content h3 {
+    font-size: 16px;
+  }
+
   #store-reservation-form-container h3.store-title {
     font-size: 14px;
-    margin-bottom: 6px; /* 余白を調整 */
+    margin-bottom: 6px;
   }
 }
 
-/* 480px以下の超小型モバイル画面に対応（フォントサイズを12pxに変更） */
 @media (max-width: 480px) {
+  .store-reservation-modal-content h3 {
+    font-size: 14px;
+  }
+
   #store-reservation-form-container h3.store-title {
     font-size: 12px;
-    margin-bottom: 5px; /* 余白を調整 */
+    margin-bottom: 5px;
   }
 }
 
 /* .property-info 内の h3に適用 */
 #store-reservation-form-container .property-info h3 {
   font-family: 'Verdana', sans-serif; /* 別のフォントファミリー */
-  /*font-size: 20px;                    /* 少し小さなサイズ */
   font-weight: normal; /* フォントの太さは通常 */
-  color: #555555; /* 少し薄い色 */
+  color: var(--color-heading); /* 少し薄い色 */
 }
 
-/* 予約フォーム内の h3のフォントスタイル */
-#store-reservation-form-container .reservation-form h3 {
-  font-family: 'Roboto', sans-serif;
-  font-size: 22px;
-  color: #2c3e50; /* ダークグレー */
-}
-
-/* 固定ページ用のフォーム */
+/* 固定ページ/詳細投稿共通フォーム
+   ページ単位ではなく .store-reservation-page-content クラスで管理する。 */
 .store-reservation-page-content {
   padding: 20px;
-  border-radius: 10px;
   width: 100%;
   max-width: 100%;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -5013,44 +4455,17 @@ blockquote {
   transition:
     opacity 0.3s ease,
     transform 0.3s ease;
-  background: #fff;
-  color: #374151;
 }
 
-body.dark-theme .store-reservation-page-content {
-  --color-heading: #111827;
-  --color-text: #374151;
-  --color-muted: #6b7280;
-  --color-border: #d1d5db;
-  --color-link: #1d4f91;
-  background: #ffffff;
-  color: var(--color-text);
-}
-
-body.dark-theme .store-reservation-page-content h2,
-body.dark-theme .store-reservation-page-content h3,
-body.dark-theme .store-reservation-page-content h4,
-body.dark-theme .store-reservation-page-content h5,
-body.dark-theme .store-reservation-page-content h6 {
+.store-reservation-page-content :is(h2, h3, h4, h5, h6) {
   color: var(--color-heading);
 }
 
-body.dark-theme .store-reservation-page-content p,
-body.dark-theme .store-reservation-page-content label,
-/*body.dark-theme .store-reservation-page-content span,*/
-body.dark-theme .store-reservation-page-content li {
+.store-reservation-page-content :is(p, label, li) {
   color: var(--color-text);
 }
 
-body.dark-theme .store-reservation-page-content input,
-body.dark-theme .store-reservation-page-content select,
-body.dark-theme .store-reservation-page-content textarea {
-  background: #fff;
-  color: #111827;
-  border: 1px solid var(--color-border);
-}
-
-body.dark-theme .store-reservation-page-content a {
+.store-reservation-page-content a {
   color: var(--color-link);
 }
 
@@ -5061,129 +4476,144 @@ body.dark-theme .store-reservation-page-content a {
   }
 }
 
-/* 物件詳細のフォント設定 */
+/* 物件詳細の見出し */
+.property-info-left h3,
+.property-info-row h3 {
+  font-family: 'Arial', sans-serif;
+  font-size: 14px;
+  color: var(--color-heading);
+  margin: 5px 0;
+}
+
 .property-info-left h3 {
-  font-family: 'Arial', sans-serif; /* フォントファミリーを指定 */
-  font-size: 14px; /* 基本のフォントサイズ */
-  font-weight: bold; /* フォントの太さを指定 */
-  color: #333; /* 文字色を指定 */
-  margin: 5px 0; /* 上下の余白を指定 */
+  font-weight: bold;
 }
 
 .property-info-row h3 {
-  font-family: 'Arial', sans-serif; /* フォントファミリーを指定 */
-  font-size: 14px; /* 基本のフォントサイズ */
-  font-weight: normal; /* 通常のフォントの太さ */
-  color: #555; /* 文字色を指定 */
-  margin: 5px 0; /* 上下の余白を指定 */
+  font-weight: normal;
 }
 
-/* レスポンシブ対応: タブレット以上（768px以上） */
+.store-reservation-modal-content .property-info-row h3,
+.store-reservation-modal-content .property-details-modal h3 {
+  color: var(--color-heading);
+}
+
 @media (min-width: 768px) {
-  .property-info-left h3 {
-    font-size: 16px; /* タブレット以上でのフォントサイズ */
-  }
-
+  .property-info-left h3,
   .property-info-row h3 {
-    font-size: 16px; /* タブレット以上でのフォントサイズ */
+    font-size: 16px;
   }
 }
 
-/* レスポンシブ対応: デスクトップ（1024px以上） */
 @media (min-width: 1024px) {
-  .property-info-left h3 {
-    font-size: 18px; /* デスクトップでのフォントサイズ */
-  }
-
+  .property-info-left h3,
   .property-info-row h3 {
-    font-size: 18px; /* デスクトップでのフォントサイズ */
+    font-size: 18px;
   }
 }
 
-/* レスポンシブ対応: モバイル（480px以下） */
 @media (max-width: 480px) {
-  .property-info-left h3 {
-    font-size: 12px; /* モバイルでのフォントサイズ */
-  }
-
+  .property-info-left h3,
   .property-info-row h3 {
-    font-size: 12px; /* モバイルでのフォントサイズ */
+    font-size: 12px;
   }
 }
 
 /* 共通の入力フィールドスタイル */
-#store-reservation-form input[type='text'],
-#store-reservation-form input[type='password'],
-#store-reservation-form input[type='email'],
-#store-reservation-form input[type='date'],
-#store-reservation-form input[type='search'],
-#store-reservation-form select,
-#store-reservation-form textarea,
-.input-field {
-  margin: 0px 0;
+#store-reservation-form :is(input[type='text'], input[type='password'], input[type='email'], input[type='date'], input[type='search']),
+#store-reservation-form :is(select, textarea),
+#store-reservation-form .input-field,
+.store-reservation-page-content .input-field {
+  margin: 0;
   padding: 10px;
   border-radius: 5px;
-  border: 1px solid #bbb;
-  background-color: #f2faff; /* 薄いブルー */
-  color: #333;
   font-size: 14px;
   width: 100%;
-  -webkit-box-sizing: border-box;
   box-sizing: border-box;
+}
+
+/* 来店予約フォーム input/select/textarea：ダークモード */
+body.dark-theme #store-reservation-form :is(input[type='text'], input[type='password'], input[type='email'], input[type='date'], input[type='search']),
+body.dark-theme #store-reservation-form :is(select, textarea),
+body.dark-theme #store-reservation-form .input-field {
+  box-shadow: none;
+}
+
+body.dark-theme #store-reservation-form input[type='date']::-webkit-calendar-picker-indicator,
+body.dark-theme .store-reservation-page-content input[type='date']::-webkit-calendar-picker-indicator {
+  filter: invert(1) brightness(1.4);
+  opacity: 0.9;
+  cursor: pointer;
+}
+
+/* Chrome autofill 対策：入力後に白くなる原因 */
+body.dark-theme #store-reservation-form :is(input, textarea, select):-webkit-autofill,
+body.dark-theme #store-reservation-form :is(input, textarea, select):-webkit-autofill:hover,
+body.dark-theme #store-reservation-form :is(input, textarea, select):-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--color-text);
+  box-shadow: 0 0 0 1000px var(--color-card-soft) inset;
+  caret-color: var(--color-text);
+  border-color: var(--color-border);
+}
+
+#store-reservation-form input::placeholder,
+#store-reservation-form textarea::placeholder,
+#store-reservation-form .input-field::placeholder,
+.store-reservation-page-content .input-field::placeholder {
+  color: var(--color-muted);
+  opacity: 1;
+}
+
+#store-reservation-form :is(input, select, textarea, .input-field):focus,
+.store-reservation-page-content :is(input, select, textarea, .input-field):focus {
+  background: var(--color-card-soft);
+  color: var(--color-text);
+  border-color: var(--color-action-strong);
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-focus-ring);
 }
 
 /* モバイルサイズのスタイル */
 @media (max-width: 768px) {
-  #store-reservation-form input[type='text'],
-  #store-reservation-form input[type='password'],
-  #store-reservation-form input[type='email'],
-  #store-reservation-form input[type='date'],
-  #store-reservation-form input[type='search'],
-  #store-reservation-form select,
-  #store-reservation-form textarea,
-  .input-field {
+  #store-reservation-form :is(input[type='text'], input[type='password'], input[type='email'], input[type='date'], input[type='search']),
+  #store-reservation-form :is(select, textarea),
+  #store-reservation-form .input-field,
+  .store-reservation-page-content .input-field {
     margin: 0; /* モバイルでマージン0 */
     padding: 3px; /* パディング小さめ */
     font-size: 12px; /* フォントサイズ調整 */
   }
 }
 
-/* フォームの入力項目にフォーカス時 */
-#store-reservation-form input[type='text']:focus,
-#store-reservation-form input[type='password']:focus,
-#store-reservation-form input[type='email']:focus,
-#store-reservation-form input[type='date']:focus,
-#store-reservation-form input[type='search']:focus,
-#store-reservation-form select:focus,
-#store-reservation-form textarea:focus,
-.input-field:focus {
-  border-color: #4a90e2; /* 薄い青色に変更 */
-  background-color: #e6f2ff; /* 少し明るくする */
-  outline: none; /* フォーカス時のアウトラインを除去 */
-}
-
+/* フォームの入力項目にフォーカス時
+   ライト/ダークとも変数で統一する。 */
 /* ボタン */
-.form-button {
-  padding: 10px 20px;
-  background-color: #4a90e2; /* 青色 */
-  color: white;
+.form-button,
+#store-reservation-form button {
+  padding: 10px 15px;
+  background-color: var(--color-action-strong);
+  color: var(--color-link-inverse);
   font-size: 14px;
-  border-radius: 5px;
   border: none;
+  border-radius: 5px;
   cursor: pointer;
   width: 100%;
-  -webkit-box-sizing: border-box;
+  transition: background-color 0.3s ease;
+}
+
+.form-button {
   box-sizing: border-box;
 }
 
-.form-button:hover {
-  background-color: #357ab7; /* ホバー時に少し暗く */
+.form-button:hover,
+#store-reservation-form button:hover {
+  background-color: var(--color-action);
 }
 
 /* モーダル内のボタン（確認、戻る） */
 #step-confirm button {
   padding: 10px 20px;
-  background-color: #4a90e2;
+  background-color: var(--color-action-strong);
   color: white;
   border: none;
   border-radius: 5px;
@@ -5193,127 +4623,22 @@ body.dark-theme .store-reservation-page-content a {
 }
 
 #step-confirm button:hover {
-  background-color: #357ab7;
+  background-color: var(--color-action);
 }
 
 /* ボタンスタイル */
-.form-button {
-  background-color: #4a90e2;
-  color: white;
-  padding: 10px 15px;
-  border: none;
-  border-radius: 5px;
-  font-size: 14px;
-  cursor: pointer;
-  -webkit-transition: background-color 0.3s ease;
-  -o-transition: background-color 0.3s ease;
-  transition: background-color 0.3s ease;
-}
-
-.form-button:hover {
-  background-color: #357ab7; /* ホバー時に濃い色 */
-}
 
 /* フォームのボタン */
 #store-reservation-form button {
-  background-color: #4a90e2; /* ボタンの青色 */
-  color: white;
-  padding: 10px 15px;
-  border-radius: 5px;
-  border: none;
-  cursor: pointer;
-  font-size: 14px;
-  width: 100%;
   margin-top: 10px;
-  -webkit-transition: background-color 0.3s ease;
-  -o-transition: background-color 0.3s ease;
-  transition: background-color 0.3s ease;
-}
-
-/* ボタンのホバー時 */
-#store-reservation-form button:hover {
-  background-color: #357ab7; /* 少し濃い青に変化 */
-}
-
-/* 確認画面のUI */
-.confirmation-screen {
-  display: none; /* 初期状態では非表示 */
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  -webkit-box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
-  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
-  text-align: center;
-}
-
-.confirmation-screen h3 {
-  font-size: 22px;
-  margin-bottom: 20px;
-  color: #333;
-}
-
-/* 確認項目のリスト */
-.confirmation-screen .confirmation-item {
-  font-size: 16px;
-  margin-bottom: 10px;
-  color: #555;
-}
-
-/* 完了画面のUI */
-.completed-screen {
-  display: none; /* 初期状態では非表示 */
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  -webkit-box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
-  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
-  text-align: center;
-}
-
-.completed-screen h3 {
-  font-size: 24px;
-  color: #4caf50; /* 完了画面の緑色 */
-  margin-bottom: 20px;
-}
-
-.completed-screen p {
-  font-size: 18px;
-  color: #333;
-}
-
-/* 完了ボタンのスタイル */
-.completed-screen button {
-  background-color: #4caf50; /* 緑色 */
-  color: white;
-  padding: 10px 20px;
-  border-radius: 5px;
-  border: none;
-  cursor: pointer;
-  font-size: 16px;
-  margin-top: 15px;
-  -webkit-transition: background-color 0.3s ease;
-  -o-transition: background-color 0.3s ease;
-  transition: background-color 0.3s ease;
-}
-
-/* 完了ボタンのホバー時 */
-.completed-screen button:hover {
-  background-color: #45a049; /* ホバー時に少し濃い緑色 */
 }
 
 /* エラーメッセージ */
-.error-message {
-  color: red;
-  font-size: 14px;
-  margin-top: 10px;
-  text-align: center;
-}
-
 /* 入力フォームの無効化状態 */
 #store-reservation-form input:disabled,
 #store-reservation-form select:disabled,
 #store-reservation-form button:disabled {
-  background-color: #dcdcdc; /* グレーに変える */
+  background-color: var(--color-card-soft); /* グレーに変える */
   cursor: not-allowed; /* カーソルを禁止にする */
 }
 
@@ -5433,7 +4758,7 @@ body.dark-theme .store-reservation-page-content a {
 
 .form-row label {
   display: block;
-  color: #000000;
+  color: var(--main-text);
   padding: 3px;
 }
 
@@ -5451,14 +4776,6 @@ body.dark-theme .store-reservation-page-content a {
     flex: 1 1 calc(50% - 10px); /* 横向きでは2列表示に戻す */
   }
 }
-
-.blog-thumbnail-box {
-  position: relative;
-}
-.thumbnail-overlay {
-  pointer-events: none;
-}
-
 /* ===== Heart icon fix ===== */
 .heart-icon {
   position: absolute;
@@ -5483,60 +4800,15 @@ body.dark-theme .store-reservation-page-content a {
   fill: red;
 }
 
-/* more-link1のスタイル */
-.more-link1 a {
-  font-size: 12px; /* 文字サイズを小さく設定 */
-  color: #fff; /* デフォルトの文字色は白 */
-  text-decoration: none; /* 下線なし */
-  display: inline-block;
-  padding: 4px 8px; /* ボタン風の間隔を小さく */
-  border: 1px solid #007bff; /* 枠線を青に設定 */
-  border-radius: 4px; /* 角丸 */
-  background-color: #007bff; /* 背景色を青に設定 */
-  -webkit-transition:
-    background-color 0.3s ease,
-    color 0.3s ease,
-    border-color 0.3s ease;
-  -o-transition:
-    background-color 0.3s ease,
-    color 0.3s ease,
-    border-color 0.3s ease;
-  transition:
-    background-color 0.3s ease,
-    color 0.3s ease,
-    border-color 0.3s ease; /* トランジション効果 */
-  width: 100%;
-  text-align: center;
-}
-
-.more-link1 a:hover {
-  background-color: #ff7f00; /* ホバー時の背景色をオレンジに設定 */
-  color: #fff; /* ホバー時の文字色を白に設定 */
-  border-color: #ff7f00; /* ホバー時の枠線色をオレンジに設定 */
-}
-
-.more-link1 a:focus {
-  outline: none; /* フォーカス時のアウトラインを消す */
-}
-
 /* more-link2のスタイル */
 .more-link2 {
   font-size: 12px; /* 文字サイズを小さく設定 */
   color: #fff; /* デフォルトの文字色は白 */
   text-decoration: none; /* 下線なし */
-  display: inline-block;
   padding: 4px 8px; /* ボタン風の間隔を小さく */
   border: 1px solid #007bff; /* 枠線を青に設定 */
   border-radius: 4px; /* 角丸 */
   background-color: #007bff; /* 背景色を青に設定 */
-  -webkit-transition:
-    background-color 0.3s ease,
-    color 0.3s ease,
-    border-color 0.3s ease;
-  -o-transition:
-    background-color 0.3s ease,
-    color 0.3s ease,
-    border-color 0.3s ease;
   transition:
     background-color 0.3s ease,
     color 0.3s ease,
@@ -5553,33 +4825,6 @@ body.dark-theme .store-reservation-page-content a {
 
 .more-link2:focus {
   outline: none; /* フォーカス時のアウトラインを消す */
-}
-
-/* Popular PostセクションのReadボタンに異なるスタイルを適用 */
-.popular-post .more-link-wrapper.popular-post-more-link a {
-  background-color: #2196f3; /* ボタン色を変更 */
-  color: #fff !important; /* 文字色を白に */
-  border: 2px solid #2196f3; /* ボーダーカラーを変更 */
-  border-radius: 25px; /* 角を少し丸くする */
-}
-
-/* ボタンにホバー時のエフェクト */
-.popular-post .more-link-wrapper.popular-post-more-link a:hover {
-  background-color: #1976d2;
-  border-color: #1976d2;
-}
-
-/* モバイル用スタイル（768px以下） */
-@media (max-width: 768px) {
-  .popular-post .more-link-wrapper.popular-post-more-link {
-    width: 100%;
-    text-align: center;
-  }
-
-  .popular-post .more-link-wrapper.popular-post-more-link a {
-    background-color: #ffc107; /* モバイル時の色 */
-    border: 2px solid #ffc107;
-  }
 }
 
 .navigation {
@@ -5676,7 +4921,6 @@ body.dark-theme .store-reservation-page-content a {
 /* 情報テーブルのスタイル */
 .content-box .property-info-table,
 .content-box1 .property-info-table,
-.content-box-1 .property-info-table,
 .recent-content-box .property-info-table {
   margin-top: 0px; /* 情報とリンクの間に余白を設ける */
   margin-bottom: 10px; /* 情報とリンクの間に余白を設ける */
@@ -5686,15 +4930,12 @@ body.dark-theme .store-reservation-page-content a {
 .youtube {
   position: relative;
   width: 100%;
-  /*padding-top: 56.25%;*/
 }
 .youtube iframe {
   /*position: absolute;*/
   top: 0;
   right: 0;
   width: 100% !important;
-  /*height: 300px !important;*/
-  /*height: 100% !important;*/
 }
 
 /****************************************
@@ -5706,28 +4947,28 @@ Related Posts: title link style (FINAL)
   padding: 0px;
 }
 
-#related-posts h3.related-post-title {
+#related-posts .related-post-title {
   margin: 0; /* 必要なら */
   font-size: 1.05rem; /* ここでサイズ調整 */
   line-height: 1.45;
   font-weight: 700;
 }
 
-#related-posts h3.related-post-title > a {
+#related-posts .related-post-title > a {
   color: var(--main-text, #111);
   text-decoration: none !important; /* Bootstrapの underline を確実に潰す */
   opacity: 0.92;
   display: inline;
 }
 
-#related-posts h3.related-post-title > a:hover {
+#related-posts .related-post-title > a:hover {
   opacity: 1;
   text-decoration: underline !important;
 }
 
 /* モバイルだけ小さくしたい時 */
 @media (max-width: 767px) {
-  #related-posts h3.related-post-title {
+  #related-posts .related-post-title {
     font-size: 0.98rem;
   }
 }
@@ -5736,6 +4977,9 @@ Related Posts: title link style (FINAL)
 #comment-area {
   width: 100%;
   clear: both;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
 }
 
 #comment-area h3 {
@@ -5795,11 +5039,6 @@ span.small {
 }
 
 /* コメントフォームの全体スタイル */
-#comment-area {
-  padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-}
 
 /* コメントフォームの入力フィールドのスタイル */
 #comment-area input[type='text'],
@@ -5837,10 +5076,7 @@ span.small {
 @media screen and (max-width: 768px) {
   #comment-area input[type='text'],
   #comment-area input[type='email'],
-  #comment-area textarea {
-    font-size: 14px;
-  }
-
+  #comment-area textarea,
   #comment-area input[type='submit'] {
     font-size: 14px;
   }
@@ -5855,12 +5091,7 @@ span.small {
   #comment-area input[type='email'],
   #comment-area textarea,
   #comment-area input[type='submit'] {
-    font-size: 14px;
     padding: 8px;
-  }
-
-  #comment-area input[type='submit'] {
-    width: 100%;
   }
 }
 
@@ -6016,7 +5247,6 @@ button:hover,
 input[type='submit']:hover,
 input[type='reset']:hover,
 input[type='button']:hover {
-  /*background: #0056b3;*/
   text-shadow: 0 -1px rgba(0, 0, 0, 0.4);
 }
 
@@ -6076,18 +5306,9 @@ img.alignleft {
   margin: 0 1.5em 1em 0;
 }
 
-.alignright {
-  float: right;
-}
-
-.alignleft {
-  float: left;
-}
-
 /**CONTENT**/
 
 .content {
-  /*background: #eaeaea none repeat scroll 0 0;*/
   padding: 15px 0 50px;
 }
 
@@ -6095,137 +5316,27 @@ img.alignleft {
   color: #333333;
 }
 
-.post_content .post-box {
-  margin-bottom: 50px;
-  overflow: hidden;
-}
-
-.post_content .post-box a {
-  color: #000;
-}
-
-.post_content .post-box .read-more {
-  color: #fff;
-}
-
 .post-title {
-  /*height: 100px;*/
   color: white;
   font-weight: bold;
-}
-
-.post_content .post-box h1.post-title {
-  font-size: 25px;
-  max-width: 80%;
-  float: left;
-}
-
-.post_content .post-box h1 {
-  line-height: 1;
-  font-size: 30px;
-  margin: 5px 0 25px;
-  max-width: 720px;
-}
-
-.post_content .post-box h2 {
-  line-height: 1;
-  font-size: 26px;
-  margin: 0 0 25px;
-}
-
-.post_content .post-box h3 {
-  line-height: 1;
-  font-size: 25px;
-  font-family: 'Lato', sans-serif;
-  font-weight: 700;
-  line-height: 140%;
-  letter-spacing: 1.5px;
-  margin: 0 0 25px;
-}
-
-.post_content .post-box h4,
-.post_content .post-box h5,
-.post_content .post-box h6 {
-  line-height: 1;
-  font-size: 18px;
-  font-weight: bold;
-  margin: 0 0 10px;
-}
-
-.post_content .post-box img {
-  max-width: 100%;
-}
-
-.post_content .post-box input[type='text'],
-.post_content .post-box input[type='email'],
-.post_content .post-box input[type='password'],
-.post_content .post-box input[type='search'],
-.post_content .post-box input[type='phone'] {
-  width: 300px;
-  height: 40px;
-  border: 1px solid #ddd;
-  background: #f5f5f5;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  padding: 5px 10px;
-  margin: 0 0 5px;
-}
-
-.post_content .post-box textarea {
-  background: #f5f5f5;
-  border: 2px solid #ddd;
-}
-
-.post-nav {
-  float: right;
-  font-size: 0;
-  text-align: right;
-  width: 10%;
-}
-
-.post_content .post-nav span {
-  background: #333 none repeat scroll 0 0;
-  border-radius: 5px;
-  color: #fff;
-  display: inline-block;
-  font-size: 25px;
-  height: 30px;
-  line-height: 25px;
-  text-align: center;
-  width: 30px;
-}
-
-.post_content .post-nav span a {
-  color: #fff;
-  display: block;
-  line-height: 1;
-}
-
-.post_content .post-nav span.post-next {
-  margin-left: 10px;
 }
 
 .single .content {
   padding: 45px 0;
 }
 
-.rp-title {
-  font-size: 15px;
-  margin: 0 0 25px;
-  text-transform: uppercase;
-  font-weight: 900;
-}
-
 .tagcloud {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex; /* 横並びに配置 */
-  -ms-flex-wrap: wrap;
-  flex-wrap: wrap; /* 横幅を超えた場合に改行 */
-  gap: 10px; /* 各要素間の隙間 */
-  list-style: none; /* リストマーカーを非表示 */
-  padding: 0;
-  margin-bottom: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  list-style: none;
+  margin: 0 0 20px;
+  padding: 18px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: 20px;
+  box-sizing: border-box;
 }
 
 .tagcloud li {
@@ -6233,22 +5344,29 @@ img.alignleft {
 }
 
 .tagcloud a {
-  text-decoration: none; /* 下線を削除 */
-  color: #007bff; /* リンクの色 */
-  padding: 5px 10px;
-  border: 1px solid #ddd; /* 枠線 */
-  border-radius: 5px; /* 角丸 */
-  -webkit-transition: background-color 0.3s ease;
-  -o-transition: background-color 0.3s ease;
-  transition: background-color 0.3s ease; /* ホバー時のスムーズな変化 */
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  background: var(--color-surface-soft);
+  color: var(--color-link);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  text-decoration: none;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease;
 }
 
 .tagcloud a:hover {
-  background-color: #f0f0f0; /* ホバー時の背景色 */
+  background: var(--color-bg);
+  color: var(--color-heading);
+  border-color: var(--color-link);
 }
 
 .tag-widget {
   width: 100%;
+  clear: both;
 }
 
 /**FOOTER**/
@@ -6343,9 +5461,6 @@ footer {
     padding: 5px;
   }
 
-  .foot-col:last-child {
-    padding: 5px;
-  }
 
   #foot .top-foot .foot-col .wp-block-image img {
     height: auto;
@@ -6355,14 +5470,8 @@ footer {
 /* 下部フッター領域のスタイル設定 */
 .bottom-foot {
   border-top: 1px solid #ddd;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: justify;
-  -ms-flex-pack: justify;
   justify-content: space-between;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
   align-items: center;
   margin: 0 auto;
   width: 100%;
@@ -6386,11 +5495,11 @@ footer {
 }
 
 /* ソーシャルメディアアイコンの配置設定 */
-.foot-socials {
-  -webkit-box-ordinal-group: 2;
-  -ms-flex-order: 1;
+.bottom-foot > .social-nav {
   order: 1;
-  margin-right: auto;
+  width: auto;
+  margin: 0 auto 0 0;
+  padding: 0;
 }
 
 /* モバイルビュー用のメディアクエリ */
@@ -6404,27 +5513,11 @@ footer {
   }
 
   .copyright,
-  .foot-socials {
-    -webkit-box-ordinal-group: unset;
-    -ms-flex-order: unset;
+  .bottom-foot > .social-nav {
     order: unset;
     margin: 0;
     padding: 3px;
   }
-}
-
-/* ソーシャルメディアリストのスタイル */
-.foot-socials > ul {
-  font-size: 0;
-  line-height: 1;
-  list-style: outside none none;
-  margin: 0;
-  padding: 0;
-}
-
-/* ソーシャルメディアアイコンの間隔調整 */
-.foot-socials ul li {
-  margin-right: 8px;
 }
 
 /* 990 サイズ Home Page */
@@ -6444,18 +5537,8 @@ footer {
     margin: 0;
   }
 
-  /* Slickメニューの表示とマージン調整 */
-  .slicknav_menu {
-    display: block;
-    margin-bottom: 10px;
-  }
-
   /* ヘッダー詳細情報の幅を50%に設定 */
-  .head-details {
-    width: 50%;
-  }
-
-  /* ホームスライド情報の右側パディング調整 */
+/* ホームスライド情報の右側パディング調整 */
   .home-slide-info {
     padding-right: 10px;
   }
@@ -6517,11 +5600,6 @@ footer {
     height: 178px;
   }
 
-  /* slicknav_menuのfloat解除 */
-  .slicknav_menu {
-    float: none;
-  }
-
   /* ロゴの配置調整 */
   .logo {
     float: none;
@@ -6534,11 +5612,6 @@ footer {
   .head-search {
     float: none;
     text-align: center;
-  }
-
-  /* フィックスドメニューのslicknav_menuのマージン調整 */
-  .fixed .slicknav_menu {
-    margin: 0;
   }
 
   /* フィックスドメニューのロゴと検索フォームの非表示 */
@@ -6605,24 +5678,7 @@ footer {
   }
 
   /* ホームスライドテキストの下マージン調整 */
-  .home-slide-text {
-    margin-bottom: 10px;
-  }
-
-  /* ギャラリーページのブログポストボックスのサイズ調整 */
-  .blog-post-box {
-    float: none !important;
-    height: 300px !important;
-    width: 100% !important;
-  }
-
-  /* レスポンシブル788pxのブログポストボックスの高さとマージン調整 */
-  .blog-post-box {
-    height: 241px;
-    margin-bottom: 12px;
-  }
-
-  /* ブログポストイメージ内の見出し位置とフォントサイズ調整 */
+/* ブログポストイメージ内の見出し位置とフォントサイズ調整 */
   .blog-post-image > h3 {
     bottom: 20px;
     font-size: 16px;
@@ -6631,45 +5687,32 @@ footer {
   }
 }
 
-/* ギャラリーページのカストマイザーテキスト */
-.feature-text-area h3 {
-  line-height: 1.2;
-}
-
 /*.foot-col {
     float: none;
     padding: 5px;
     width: auto;
   }*/
 
-/*.foot-socials, .copyright {
-    float: none;
-    text-align: center;
-  }*/
+.port-image {
+  overflow: hidden;
+  position: relative;
+  margin: 5px;
+}
 
-/* 1080px以下の場合のスタイル */
 @media only screen and (max-width: 1080px) {
   .port-image {
-    height: 200px; /* 1080px以下の場合の高さを設定 */
-    overflow: hidden;
-    position: relative;
-    margin: 5px;
+    height: 200px;
   }
 }
 
-/* デフォルトのスタイル（1080px以下の場合のデフォルトの高さ） */
 @media only screen and (min-width: 1080px) {
   .port-image {
-    height: 90px; /* デフォルトの高さを設定 */
-    overflow: hidden;
-    position: relative;
-    margin: 5px;
+    height: 90px;
   }
 }
 
 @media only screen and (max-width: 767px) {
   .port-image {
-    height: 200px;
     width: 100%;
   }
 }
@@ -6683,15 +5726,11 @@ footer {
   left: 0;
   position: absolute;
   top: 0;
-  -webkit-transition: all 0.3s ease-in-out 0s;
-  -o-transition: all 0.3s ease-in-out 0s;
   transition: all 0.3s ease-in-out 0s;
   width: 100%;
 }
 
 .port-image:hover a {
-  -webkit-transform: scale(1.05);
-  -ms-transform: scale(1.05);
   transform: scale(1.05);
 }
 
@@ -6728,78 +5767,9 @@ footer {
   color: #777;
   font-size: 14px;
 }
-
-.read-more {
-  color: #fff;
-  display: inline-block;
-  font-size: 12px;
-  font-weight: 400;
-  letter-spacing: 2px;
-  line-height: 1;
-  text-decoration: none;
-  background-color: #000;
-  padding: 10px;
-}
 .content .blog {
   margin: 0 0 80px;
 }
-.gallary-posts {
-  overflow: hidden;
-  display: contents; /*トップバックグランド画像の表示が必要*/
-}
-.blog-post-box {
-  background: #333 none repeat scroll 0 0;
-  float: left;
-  height: 380px;
-  margin: 0 1.7% 25px 0;
-  overflow: hidden;
-  width: 32.2%;
-}
-.search .blog-post-box:nth-child(3n + 3),
-.archive .blog-post-box:nth-child(3n + 3) {
-  margin-right: 0;
-}
-.blog-post-box.gallary-post-0 {
-  float: left;
-  height: 445px;
-  width: 49.15%;
-}
-.blog-post-box.gallary-post-1,
-.blog-post-box.gallary-post-2 {
-  float: left;
-  height: 210px;
-  margin-right: 0;
-  width: 23.7%;
-}
-.blog-post-box.gallary-post-1 {
-  margin-right: 1.7%;
-}
-.blog-post-box.gallary-post-3 {
-  /*float: left;*/
-  float: right; /*new pager for single.php */
-  height: 210px;
-  margin-right: 0;
-  width: 49.15%;
-}
-.blog-post-box:last-child {
-  margin-right: 0;
-}
-.blog-post-feature {
-  /* float: left; */
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-
-.blog-post-feature iframe {
-  display: block;
-  font-size: 0;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  width: 100%;
-}
-
 /* ページネーション全体を中央寄せ */
 /* ページャーのスタイルを独立させる */
 .blog-pagination {
@@ -6861,18 +5831,6 @@ footer {
 
   /* ページ番号（通常の状態） */
   .blog-pagination .page-numbers {
-    font-size: 14px; /* フォントサイズを少し大きく */
-    padding: 8px 12px; /* タッチ操作しやすいサイズに調整 */
-  }
-
-  /* 現在のページ */
-  .blog-pagination .page-numbers.current {
-    background: #0056b3; /* 濃いブルー */
-    color: #fff; /* 白文字 */
-  }
-
-  /* ページ番号（通常の状態） */
-  .blog-pagination .page-numbers {
     border: 1px solid #007bff; /* 明るいブルーのボーダー */
     color: #007bff; /* 明るいブルー文字 */
     font-size: 14px; /* 少し大きめに */
@@ -6889,30 +5847,17 @@ footer {
     border-color: #00bcd4; /* 境界線の色も変更 */
   }
 }
-
-/*homepage for blog post*/
-
-.feature-text-area {
-  padding: 25px 0;
-}
-.feature-text-area h3 {
-  font-size: 35px;
-  font-weight: 300;
-  line-height: 1.5;
-  margin: 0 auto;
-  text-align: center;
-  width: 75%;
-}
-.home-featured {
-  overflow: hidden;
-  padding: 25px 0 50px;
-  display: contents; /*トップバックグランド画像の表示が必要*/
-}
-
 /* 2カラム サイドバー */
 .featured-box1 {
   float: left;
-  width: 50%;
+  width: calc(50% - 8px);
+  box-sizing: border-box;
+  background: var(--color-surface);
+  border: 0;
+  border-radius: 16px;
+  overflow: hidden;
+  padding: 10px;
+  margin: 0 8px 14px 0;
 }
 
 /* iPad Miniに対するレスポンシブデザイン */
@@ -6953,26 +5898,18 @@ footer {
 /*mega menu*/
 
 #menu-global-navigation .mega-menu .dropdown-menu {
-  /*width: 73vw;*/
   width: 600px;
   left: 0px;
   /*display: table;
-    /*padding: 20px 0;*/
   cursor: default;
   margin-left: 0;
   max-width: 1170px;
-  -webkit-box-shadow: 0px 1px 6px 0px rgba(68, 68, 68, 0.1);
   box-shadow: 0px 1px 6px 0px rgba(68, 68, 68, 0.1);
-  -webkit-transform: translateX(-60%);
-  -ms-transform: translateX(-60%);
   transform: translateX(-60%);
 }
 
 .mega-menu > ul > li {
-  /*max-width: 20vw;*/
   width: 33%;
-  /*display: table-cell;*/
-  /*float: none;*/
   float: left;
   padding: 5px 3px;
   cursor: default;
@@ -6991,10 +5928,7 @@ footer {
   cursor: default;
   margin-left: 0;
   max-width: 1170px;
-  -webkit-box-shadow: 0px 1px 6px 0px rgba(68, 68, 68, 0.1);
   box-shadow: 0px 1px 6px 0px rgba(68, 68, 68, 0.1);
-  -webkit-transform: translateX(-77%);
-  -ms-transform: translateX(-77%);
   transform: translateX(-77%);
   padding: 0px 0px;
   height: 185px;
@@ -7005,7 +5939,6 @@ footer {
   float: left;
   padding: 10px 5px;
   cursor: default;
-  height: 100px;
   height: 210px;
 }
 
@@ -7021,7 +5954,6 @@ footer {
     cursor: default;
     margin-left: 0;
     max-width: 300px;
-    -webkit-box-shadow: 0px 1px 6px 0px rgba(68, 68, 68, 0.1);
     box-shadow: 0px 1px 6px 0px rgba(68, 68, 68, 0.1);
   }
 }
@@ -7034,10 +5966,7 @@ footer {
 
 @media only screen and (max-width: 991px) {
   .mega-thumbs > ul > li {
-    /* max-width: 20vw; */
     width: 50%;
-    /* display: table-cell; */
-    /* float: none; */
     float: left;
     padding: 0 1px;
     cursor: default;
@@ -7049,22 +5978,6 @@ footer {
 
 .mega-thumbs > ul > li a:hover {
   text-decoration: underline;
-}
-
-/*title-category を項目をメニューに連続して並べる*/
-.title-category {
-  text-transform: uppercase;
-  text-align: center;
-}
-
-.title-category > .dropdown-item:active {
-  pointer-events: none; /* アクティブなリンクを無効にする */
-  cursor: default; /* カーソルをデフォルトにする */
-  color: inherit; /* カラーを親要素から継承する */
-}
-
-.mega-menu > ul > li.title-category:hover .dropdown-item {
-  text-decoration: none;
 }
 
 @media (max-width: 450px) {
@@ -7089,11 +6002,8 @@ footer {
     display: block; /* ブロック要素として表示 */
     padding: 15px 0; /* 上下のパディングを調整 */
     max-width: none; /* 最大幅を解除 */
-    -webkit-box-shadow: none;
     box-shadow: none; /* ボックスシャドウを解除 */
     position: relative;
-    -webkit-transform: translateX(0%);
-    -ms-transform: translateX(0%);
     transform: translateX(0%);
   }
 }
@@ -7200,14 +6110,6 @@ body.dark-theme .recent-content-box h1 a {
   color: var(--link-color-blue);
 }
 
-/* メインの見出しリンク */
-/*.type-post a {
-    color: var(--link-color-black);
-}
-
-/* ダークモード時のメインの見出しリンク */
-/*.dark-theme .type-post a {
-    color: var(--link-color-blue);*/
 
 .wp-block-kadence-column a {
   color: var(--link-color-black) !important;
@@ -7242,34 +6144,24 @@ body.dark-theme .recent-content-box h1 a {
 }
 
 /* ナビゲーションリンク */
-navigation a {
+.navigation a {
   color: var(--link-color-black);
 }
 
 /* ダークモード時のナビゲーションリンク */
-.navigation a {
-  color: var(--link-color-blue);
-}
-
-/* タグクラウドリンク */
-.tagcloud a {
-  color: var(--link-color-black);
-}
-
-/* ダークモード時のタグクラウドリンク */
-.tagcloud a {
+.dark-theme .navigation a {
   color: var(--link-color-blue);
 }
 
 /* ポートボディリンク */
 .port-body a {
   color: var(--link-color-black);
+  text-decoration: none;
 }
 
 /* ダークモード時のポートボディリンク */
-.port-body a {
+.dark-theme .port-body a {
   color: var(--link-color-blue);
-  text-decoration: none;
 }
 
 /* 投稿日リンク */
@@ -7278,7 +6170,7 @@ navigation a {
 }
 
 /* ダークモード時の投稿日リンク */
-body .dark-theme .post-date a {
+body.dark-theme .post-date a {
   color: var(--link-color-blue);
 }
 
@@ -7288,7 +6180,7 @@ body .dark-theme .post-date a {
 }
 
 /* ダークモード時の投稿者リンク */
-body .post-author a {
+body.dark-theme .post-author a {
   color: var(--link-color-blue);
 }
 
@@ -7319,133 +6211,10 @@ li a {
 
 /*}
 
-/* :rootで定義された変数はCSSのグローバルな変数として扱われ、どのCSSファイルでも利用できる */
-:root {
-  /*--bs-body-bg: #202562;*/
-  --bs-table-bg: #202562;
 
-  --bs-dropdown-link-hover-bg: #f2c1be;
-  --main-text: #333; /* お好みの色に変更してください */
-}
 
 .custom-background {
-  background: #fff;
-}
-
-.background-color {
-  --bs-table-bg: var(--bs-body-bg);
-}
-
-.table.ReactTable .rt-tbody,
-.table .rt-tbody {
-  color: #bec1dd;
-  overflow: initial;
-  --bs-table-bg: var(--bs-body-bg);
-}
-
-.table,
-.table.ReactTable {
-  border: none;
-  border-radius: 4px;
-  overflow: auto;
-  margin: 20px auto;
-  font-size: 15px;
-  /*background-color: var(--bs-table-bg);*/
-  border-bottom: 1px solid #616eb9;
-}
-
-.rt-table .rt-thead .rt-tr {
-  /*background-color: var(--bs-body-bg);*/
-  background: #303b7a;
-  border-bottom: 1px solid #616eb9;
-}
-
-/*.custom-table-responsive {
-    display: block;
-    width: 100%;
-}*/
-
-@media (max-width: 991.98px) {
-  .custom-table-responsive {
-    display: block;
-    width: 100%;
-    overflow-x: auto;
-    /*-webkit-overflow-scrolling:touch;/* スムーズなスクロールを有効にする */
-  }
-}
-
-@media (max-width: 446px) {
-  #start_date,
-  #end_date,
-  #left_metric,
-  #right_metric,
-  .submit {
-    width: 100%;
-    margin: 10px 5px;
-  }
-}
-
-.date-label {
-  padding: 5px;
-}
-
-.metric-label {
-  padding: 5px;
-}
-
-/* オプション: テーブル全体のスタイル */
-/*#dataTable {
-    max-width: 100%;
-}*/
-
-/* ダークモード時の投稿メタ情報のカテゴリリンク */
-body.dark-theme #dataTable .table thead tr th td {
-  color: var(--link-color-blue);
-}
-
-/* 追加したスタイル */
-/*#dataTable.table {
-    border: none;
-    border-radius: 4px;
-    overflow: auto;
-    margin-bottom: 30px;
-    font-size: 15px;
-    border-bottom: 1px solid #616eb9;
-}*/
-
-#dataTable thead {
-  background-color: #2931aa;
-  /*color: #fff;*/
-}
-
-#dataTable th {
-  color: #fff;
-  text-align: center;
-  font-size: 14px;
-  width: 200px;
-}
-
-#dataTable tbody td {
-  color: #000; /* テーブルの文字色を黒に設定 */
-  color: var(--link-color-white);
-  text-align: center;
-  font-size: 14px;
-}
-
-/* ダークモード時の投稿メタ情報のカテゴリリンク */
-body.dark-theme #dataTable thead tr th {
-  color: #00f; /* テーブルヘッダーの文字色を青に設定 */
-  color: var(--link-color-blue);
-}
-
-.page-link {
-  /* ここに適用したくないスタイルを記述 */
-  background-color: transparent; /* 背景色を透明にする例 */
-  color: inherit; /* 色を親要素と同じにする例 */
-}
-
-.form-select {
-  background-color: #fff;
+  background: var(--color-surface);
 }
 
 /* === 投稿ページ: 物件情報とスライダーコンテナ === */
@@ -7465,6 +6234,8 @@ body.dark-theme #dataTable thead tr th {
 /* スライダーを先に表示 */
 .slider-container {
   order: 1;
+  position: relative;
+  max-width: 100%;
 }
 
 /* 物件情報を後に表示 */
@@ -7553,11 +6324,6 @@ body.dark-theme #dataTable thead tr th {
 }
 
 /* === 📌 スライダースタイル table1 === */
-.slider-container {
-  position: relative;
-  max-width: 100%;
-}
-
 /* スライダーのタイトル */
 .slider-title {
   font-size: 1.2em;
@@ -7627,7 +6393,7 @@ body.dark-theme #dataTable thead tr th {
   width: 100%;
   /*overflow: hidden;*/
   position: relative;
-  touch-action: none; /* **🔥 スワイプ動作の最適化** */
+  touch-action: pan-x; /* **🔥 スワイプ動作の最適化** */
 }
 
 /* 🔹 スライド可能なサムネイルスライダー */
@@ -7660,19 +6426,22 @@ body.dark-theme #dataTable thead tr th {
 }
 
 /* === 🔹 メイン画像スライダー テーブル1 === */
-.main-image-container {
+.main-image-container  {
   position: relative;
-  text-align: center;
+  display: inline-block;
+  width: 100%;
   max-width: 100%;
+  text-align: center;
 }
 
-.main-image-slider {
+.main-image-slider  {
   position: relative;
-  width: 100%;
-  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 100%;
+  height: auto;
+  overflow: hidden;
 }
 
 .main-image {
@@ -7683,39 +6452,12 @@ body.dark-theme #dataTable thead tr th {
   transition: transform 0.3s ease-in-out;
 }
 
-/* 🔹 画像タイトルとテキスト */
-.image-title,
-.image-text {
-  text-align: center;
-  font-size: 16px;
-  margin-top: 10px;
-  color: #333;
-}
-
 /* 🔹 画像インデックス */
 .image-index {
   text-align: center;
   font-size: 14px;
   margin-top: 5px;
   color: #666;
-}
-
-/* === 🔹 サムネイルスライダー === */
-.thumbnail-container {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  /*overflow: hidden;*/
-  position: relative;
-  touch-action: pan-x;
-}
-
-.thumbnail-slider {
-  display: flex;
-  gap: 8px;
-  transition: transform 0.3s ease-in-out;
-  will-change: transform;
-  white-space: nowrap;
 }
 
 .thumbnail-item {
@@ -7742,13 +6484,6 @@ body.dark-theme #dataTable thead tr th {
   transform: scale(1.1);
 }
 
-.thumbnail-title {
-  font-size: 12px;
-  text-align: center;
-  margin-top: 5px;
-  /*color: #666;*/
-}
-
 /* 物件詳細ページ　Swiper全体の設定 */
 .swiper-container.slider-wrapper-3 {
   width: 100%;
@@ -7765,20 +6500,13 @@ body.dark-theme #dataTable thead tr th {
   flex-shrink: 0;
   width: calc(830px / 3 - 10px); /* 3スライド分 */
   margin-right: 10px;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: center;
-  -ms-flex-pack: center;
   justify-content: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
   align-items: center;
 }
 
 .swiper-container.slider-wrapper-3 .slider-image {
   width: 100%;
-  height: auto;
   -o-object-fit: cover;
   object-fit: cover;
   height: 200px;
@@ -7793,14 +6521,8 @@ body.dark-theme #dataTable thead tr th {
 }
 
 .slider-wrapper-3 .swiper-slide {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: center;
-  -ms-flex-pack: center;
   justify-content: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
   align-items: center;
 }
 
@@ -7837,11 +6559,6 @@ body.dark-theme #dataTable thead tr th {
   }
 }
 
-/* pタグの余計なマージンをリセット */
-p {
-  margin: 0; /* 全てのマージンをゼロに設定 */
-}
-
 /* すべての要素にbox-sizingを設定して、ボックスモデルを一貫させる */
 *,
 ::before,
@@ -7874,8 +6591,6 @@ p {
   color: white; /* アイコンの色 */
   position: absolute;
   top: 50%;
-  -webkit-transform: translateY(-50%);
-  -ms-transform: translateY(-50%);
   transform: translateY(-50%);
   /*background-color: transparent; /* 背景色なし */
   border: none;
@@ -7894,18 +6609,106 @@ p {
 }
 
 /* スライダーのデザイン */
-.price-filter fieldset {
-  border: 1px solid #ccc;
-  padding: 15px;
-  margin-bottom: 20px;
-  border-radius: 5px;
+/*
+ * 価格帯サイドバーの見た目調整
+ *
+ * 出力HTML:
+ * Price_Range_Widget.php が
+ * <fieldset class="price-filter"> を出力する。
+ *
+ * 注意:
+ * legend は通常の見出しではなく、fieldset の枠に乗る特殊要素。
+ * そのままだとカード上部に文字が重なって見えるため、
+ * float:left と clear で通常のブロック見出しとして扱う。
+ */
+#sidebar #price-range-sidebar {
+  width: 100%;
+  max-width: none;
+  box-sizing: border-box;
+  margin: 0 0 18px;
+  padding: 0;
+  background: transparent;
+  border: 0;
+}
+
+#sidebar #price-range-sidebar .widget {
+  width: 100%;
+  max-width: none;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border: 0;
+}
+
+#sidebar #price-range-sidebar fieldset.price-filter {
+  display: block;
+  width: 100%;
+  max-width: none;
+  min-inline-size: 0;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 26px 28px 24px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  border: 0;
+  border-radius: 28px;
+}
+
+#sidebar #price-range-sidebar legend {
+  float: left;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0 0 18px;
+  padding: 0;
+  color: var(--color-text);
+  font-size: clamp(18px, 2.1vw, 24px);
+  font-weight: 800;
+  line-height: 1.35;
+  letter-spacing: 0.02em;
+}
+
+#sidebar #price-range-sidebar legend + div {
+  clear: both;
+}
+
+#sidebar #price-range-sidebar label {
+  display: block;
+  margin: 0 0 16px;
+  color: var(--color-text);
+  font-size: clamp(16px, 1.8vw, 21px);
+  font-weight: 600;
+  line-height: 1.55;
+  letter-spacing: 0.02em;
+}
+
+#sidebar #price-range-sidebar input[type='range'],
+#sidebar #price-range-sidebar .price-filter-range {
+  display: block;
+  width: 100%;
+  max-width: none;
+  margin: 0 0 18px;
+}
+
+#sidebar #price-range-sidebar button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 10px 18px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--color-accent-blue, #007bff);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.2;
 }
 
 .price-filter label {
   display: block;
   font-size: 16px;
   margin-bottom: 5px;
-  /*color: #333;*/
 }
 
 .price-filter input[type='range'] {
@@ -7944,6 +6747,102 @@ p {
   float: none;
 }
 
+/* === FUDO_10_CARD_REBUILD_START ===
+   ページ単位指定を廃止。
+   category / archive / 詳細投稿で同じHTMLクラスに同じCSSを当てる。
+   色は :root と body.dark-theme の変数だけで切り替える。
+=== FUDO_10_CARD_REBUILD_END === */
+
+body:not(.dark-theme):is(
+  .single-minpaku,
+  .minpaku-single,
+  .post-type-archive-minpaku,
+  .post-type-archive-minpaku_page,
+  .page-template-page-minpaku-b2c,
+  .page-template-page-minpaku-b2c-php,
+  .page-template-page-minpaku-support,
+  .page-template-page-minpaku-support-php
+) {
+  --page-shell-bg: #edf2f6;
+}
+
+#main .main-custom-post {
+  margin: 0 0 24px;
+  padding: 0;
+  overflow: hidden;
+  background: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  box-sizing: border-box;
+}
+
+#main .main-custom-post :is(.post-meta, .content-box, .content-box1) {
+  padding: 18px;
+  background: transparent;
+  color: var(--color-text);
+}
+
+#main .main-custom-post :is(.custom-excerpt, p) {
+  color: var(--color-muted);
+  line-height: 1.75;
+  margin: 0 0 16px;
+}
+
+#main .main-custom-post
+:is(h1, h2, h3, h4, .property-value, li)
+:not(.thumbnail-overlay *)
+:not(.title-overlay *) {
+  color: var(--color-text);
+}
+
+#main .main-custom-post .more-link-wrapper {
+  padding: 0 18px 18px;
+}
+
+:is(.widget, .custom-widget-item) {
+  padding: 5px;
+  margin-bottom: 18px;
+}
+
+:is(.widget, .custom-widget-item)
+:is(h1, h2, h3, h4, p, span, li, a, label)
+:not(.thumbnail-overlay *)
+:not(.title-overlay *) {
+  color: var(--color-text);
+}
+
+#related-posts > li,
+.related-posts #related-posts > li,
+#related-posts > li.clearfix {
+  display: block;
+  list-style: none;
+  margin: 0 0 18px;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+:is(.store-reservation-modal-content, .store-reservation-page-content) {
+  background: var(--color-panel);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: 20px;
+}
+
+body.dark-theme .store-reservation-modal {
+  background: rgba(0, 0, 0, 0.78);
+}
+
+#store-reservation-form :is(input, select, textarea, .input-field),
+.store-reservation-page-content :is(input, select, textarea) {
+  background: var(--color-card-soft);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+}
+
 /* ギャラリービューの際、blog-thumbnail-box1 の幅を100%に設定 */
 #main.gallery-view .blog-thumbnail-box1 {
   width: 100%; /* ギャラリービューでは100%幅 */
@@ -7958,7 +6857,6 @@ p {
     flex-direction: column;
     position: relative;
     overflow: hidden;
-    /* float: right; コメントアウト */
   }
 
   /* ギャラリービュー用 */
@@ -7966,12 +6864,10 @@ p {
     width: 100%; /* ギャラリービューでは100%幅 */
     display: flex;
     flex-direction: column;
-    /* float: right; コメントアウト */
   }
 
   /* ギャラリービューのレイアウト調整 */
   #main.gallery-view {
-    /* display: block; コメントアウト */
     display: flex; /* フレックスボックスを使用 */
     flex-wrap: wrap; /* 子要素を折り返し可能に */
     gap: 10px; /* 要素間の隙間を設定 */
@@ -7979,10 +6875,8 @@ p {
   }
 
   #main.gallery-view .main-custom-post {
-    /* width: 50%; コメントアウト */
     width: calc(50% - 10px); /* 隙間を考慮した幅 */
-    /* float: left; コメントアウト */
-    display: block; /* ここを display: block にして、2カラム表示を強制 */
+    display: block;
     margin: 0;
     padding: 5px;
   }
@@ -7991,24 +6885,14 @@ p {
     margin-bottom: 0px;
     overflow: hidden;
     width: 100%;
-    /* float: left; コメントアウト */
   }
 }
 
 /* ギャラリー用サムネイル設定 */
 #main.gallery-view .blog-thumbnail-box {
   width: 100%;
-  /*display: flex; 背景画像がdisplay blockに影響がでるから*/
   margin-bottom: 0px;
   /* float: left; コメントアウト */
-}
-
-/* リストビューに変更したときのスタイル */
-#main.list-view .custom-post {
-  width: 100%; /* リストビューでは100%幅を使う */
-  /*display: flex;
-    flex-direction: column;
-    /* float: none; コメントアウト */
 }
 
 @media (max-width: 768px) {
@@ -8023,8 +6907,6 @@ p {
   width: 20px; /* アイコンの幅 */
   height: 20px; /* アイコンの高さ */
   fill: red; /* SVGの色を指定 */
-  -webkit-transition: fill 0.3s ease;
-  -o-transition: fill 0.3s ease;
   transition: fill 0.3s ease; /* 色の変更にアニメーションを追加 */
   cursor: pointer; /* ポインターがアイコン上に来るとカーソルが手のひら型に */
   color: red;
@@ -8037,8 +6919,6 @@ p {
 
 /* アイコンをクリックしたときのアニメーション効果 */
 .icon-location:active {
-  -webkit-transform: scale(0.9);
-  -ms-transform: scale(0.9);
   transform: scale(0.9); /* クリック時にアイコンを少し縮小 */
   fill: #ff1f1f; /* クリック時の色（少し濃い赤） */
 }
@@ -8073,10 +6953,9 @@ p {
   position: absolute; /* 親要素に対して絶対位置 */
   top: 50%; /* 画面の垂直方向で50%位置 */
   left: 50%; /* 画面の水平方向で50%位置 */
-  -webkit-transform: translate(-50%, -50%);
-  -ms-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%); /* 自身の幅と高さを基準に中央配置 */
-  background-color: white;
+  background-color: var(--color-panel);
+  color: var(--color-text);
   padding: 20px;
   width: 90%; /* 幅を広げる */
   max-width: 800px; /* 最大幅を増加 */
@@ -8084,54 +6963,9 @@ p {
 }
 
 /* 共通モーダルを閉じるボタン */
-.google-map-modal-close {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  width: 40px; /* ボタンの直径 */
-  height: 40px; /* ボタンの直径 */
-  background-color: #ff4c4c; /* ボタンの色 */
-  color: white;
-  border-radius: 50%; /* 丸くする */
-  font-size: 30px; /* 「×」のサイズ */
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-  cursor: pointer;
-  border: none; /* ボーダーをなくす */
-  -webkit-box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
-  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2); /* 影を追加 */
-  -webkit-transition:
-    background-color 0.3s ease,
-    -webkit-transform 0.2s ease;
-  transition:
-    background-color 0.3s ease,
-    -webkit-transform 0.2s ease;
-  -o-transition:
-    background-color 0.3s ease,
-    transform 0.2s ease;
-  transition:
-    background-color 0.3s ease,
-    transform 0.2s ease;
-  transition:
-    background-color 0.3s ease,
-    transform 0.2s ease,
-    -webkit-transform 0.2s ease; /* アニメーション */
-}
 
-.google-map-modal-close:hover,
-.google-map-modal-close:focus {
-  background-color: #ff1f1f; /* ホバー時の色 */
-  -webkit-transform: scale(1.1);
-  -ms-transform: scale(1.1);
-  transform: scale(1.1); /* ホバー時に少し拡大 */
-}
+
+
 
 /* iframeのスタイル調整 */
 .google-map-modal-content iframe {
@@ -8182,35 +7016,6 @@ p {
 .main-image-container img {
   position: relative;
   z-index: 2;
-}
-
-/* メイン画像コンテナ */
-.main-image-container {
-  position: relative;
-  display: inline-block;
-  width: 100%;
-}
-
-.play-btn,
-.stop-btn {
-  position: absolute;
-  bottom: 10px;
-  left: 10px;
-  background: rgba(0, 0, 0, 0.6);
-  color: white;
-  border: none;
-  padding: 8px 12px;
-  cursor: pointer;
-  border-radius: 5px;
-  font-size: 14px;
-}
-
-.stop-btn {
-  left: 80px;
-}
-
-.main-image-slider {
-  position: relative;
 }
 
 .main-image-slider .slider-btn,
@@ -8276,14 +7081,6 @@ p {
   right: 10px;
 }
 
-/* スライダー全体の設定 */
-.main-image-slider {
-  position: relative;
-  width: 100%;
-  height: auto; /* 高さを固定 */
-  overflow: hidden;
-}
-
 /* 画像の基本スタイル */
 #main-image {
   display: block;
@@ -8300,8 +7097,8 @@ p {
 */
 
 /* サムネイル画像のタイトル */
-.thumbnail-title,
-.sub-image-title {
+.thumbnail-item .thumbnail-title,
+.sub-image-item .sub-image-title {
   text-align: center;
   font-size: 14px;
   margin-top: 5px;
@@ -8322,13 +7119,6 @@ p {
   /*max-width: 100%; /* 幅を固定 */
   height: 100px; /* 高さを固定 */
   object-fit: cover; /* 縦横比を保ちながらクロップ */
-}
-
-/* 画像タイトル */
-.image-title {
-  text-align: center;
-  font-size: 16px;
-  margin-top: 10px;
 }
 
 /* サムネイル画像の青枠 */
@@ -8376,37 +7166,6 @@ p {
   min-width: 0;
   line-height: 1.35;
 }
-
-/*予約デザイン*/
-.naigai-fc-item {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  padding: 6px 0;
-}
-.naigai-fc-title {
-  font-weight: 700;
-  line-height: 1.6;
-}
-.naigai-fc-meta {
-  font-size: 13px;
-  color: #333;
-}
-.naigai-fc-period {
-  font-size: 13px;
-  color: #555;
-}
-.naigai-fc-cta {
-  width: fit-content;
-  padding: 8px 14px;
-  border: 0;
-  border-radius: 8px;
-  background: #0a7cff;
-  color: #fff;
-  cursor: pointer;
-  font-size: 13px;
-}
-
 /* =========================================
    Property List
 ========================================= */
@@ -8464,27 +7223,7 @@ p {
   margin-bottom: 8px;
 }
 
-.naigai-property-row__chip {
-  display: inline-flex;
-  align-items: center;
-  padding: 4px 10px;
-  border-radius: 999px;
-  font-size: 12px;
-  line-height: 1.2;
-}
-
-.naigai-property-row__chip--type {
-  background: #e7f3ff;
-  color: #0a4b78;
-}
-
-.naigai-property-row__chip--area {
-  background: #fff7e6;
-  color: #7a4b00;
-}
-
 .naigai-property-row__price,
-.naigai-property-row__period,
 .naigai-property-row__time,
 .naigai-property-row__options {
   font-size: 14px;
@@ -8553,151 +7292,110 @@ body.dark-theme .naigai-property-row__title a {
 }
 
 body.dark-theme .naigai-property-row__price,
-body.dark-theme .naigai-property-row__period,
 body.dark-theme .naigai-property-row__time,
 body.dark-theme .naigai-property-row__options {
   color: rgba(255, 255, 255, 0.78);
 }
-/* =========================
-   表示切替（FullCalendar <-> 独自一覧）
-========================= */
-#naigai-property-list {
-  display: none;
-}
-#calendar.naigai-mode-list + #naigai-property-list {
-  display: block;
-}
-#calendar.naigai-mode-list .fc-view-harness {
-  display: none;
-}
-
-/* ===== FullCalendar 月表示 折り返し ===== */
-#calendar .fc-daygrid-event {
-  white-space: normal !important;
-}
-
-#calendar .fc-daygrid-event .fc-event-main,
-#calendar .fc-daygrid-event .fc-event-main-frame {
-  white-space: normal !important;
-  display: block !important;
-}
-
-#calendar .naigai-fc-event {
-  white-space: normal !important;
-  line-height: 1.25;
-  word-break: break-word;
-}
-
-#calendar .naigai-fc-event__title,
-#calendar .naigai-fc-event__staff,
-#calendar .naigai-fc-event__time {
-  white-space: normal !important;
-  display: block;
-  word-break: break-word;
-}
-
-#calendar .fc-daygrid-event .naigai-fc-event__title {
-  font-size: 13px;
-  font-weight: 700;
-}
-
-#calendar .fc-daygrid-event .naigai-fc-event__staff,
-#calendar .fc-daygrid-event .naigai-fc-event__time {
-  font-size: 11px;
-  opacity: 0.95;
-}
-
-/* ===== FullCalendar 月表示 折り返し ===== */
-#calendar .fc-daygrid-event {
-  white-space: normal !important;
-}
-
-#calendar .fc-daygrid-event .fc-event-main,
-#calendar .fc-daygrid-event .fc-event-main-frame {
-  white-space: normal !important;
-  display: block !important;
-}
-
-#calendar .naigai-fc-event {
-  white-space: normal !important;
-  line-height: 1.25;
-  word-break: break-word;
-}
-
-#calendar .naigai-fc-event__title,
-#calendar .naigai-fc-event__staff,
-#calendar .naigai-fc-event__time {
-  white-space: normal !important;
-  display: block;
-  word-break: break-word;
-}
-
-#calendar .fc-daygrid-event .naigai-fc-event__title {
-  font-size: 13px;
-  font-weight: 700;
-}
-
-#calendar .fc-daygrid-event .naigai-fc-event__staff,
-#calendar .fc-daygrid-event .naigai-fc-event__time {
-  font-size: 11px;
-  opacity: 0.95;
-}
-
-/* ===== FullCalendar 種類別カラー ===== */
-#calendar .fc-event.naigai-type-land,
-#calendar .fc-h-event.naigai-type-land {
-  background: #2e8b57 !important;
-  border-color: #2e8b57 !important;
-  color: #fff !important;
-}
-
-#calendar .fc-event.naigai-type-used_house,
-#calendar .fc-h-event.naigai-type-used_house {
-  background: #2f6db3 !important;
-  border-color: #2f6db3 !important;
-  color: #fff !important;
-}
-
-#calendar .fc-event.naigai-type-new_house,
-#calendar .fc-h-event.naigai-type-new_house {
-  background: #2aa7c8 !important;
-  border-color: #2aa7c8 !important;
-  color: #fff !important;
-}
-
-#calendar .fc-event.naigai-type-rental,
-#calendar .fc-h-event.naigai-type-rental {
-  background: #7a4fc2 !important;
-  border-color: #7a4fc2 !important;
-  color: #fff !important;
-}
-
-#calendar .fc-event.naigai-type-commercial,
-#calendar .fc-h-event.naigai-type-commercial {
-  background: #d67a1f !important;
-  border-color: #d67a1f !important;
-  color: #fff !important;
-}
-
-#calendar .fc-event.naigai-type-renovation,
-#calendar .fc-h-event.naigai-type-renovation {
-  background: #b84d65 !important;
-  border-color: #b84d65 !important;
-  color: #fff !important;
-}
-
-#chatgpt-modal,
-#chatgpt-modal * {
-  box-sizing: border-box;
-}
 
 /* =========================================================
-   chat modal
-   - JSは触らない
-   - 余白の原因だった固定heightをやめる
-   - 中身が少ない時は縮む
-   - 多い時だけ全体スクロール
+   DRAWER CONTENT
    ========================================================= */
+.sidebar-navigation .drawer-head,
+.sidebar-navigation .drawer-body,
+.sidebar-navigation .mobile-search,
+.sidebar-navigation .search-form-container,
+.sidebar-navigation .widget_latest_posts_widget,
+.sidebar-navigation .mobile-menu {
+  background: transparent;
+  color: var(--drawer-text);
+}
+
+.sidebar-navigation .widget_latest_posts_widget {
+  margin: 24px 0;
+  padding: 0;
+  border: 0;
+}
+
+.sidebar-navigation .widgettitle,
+.sidebar-navigation .custom-widget-title.side-title {
+  margin: 0 0 16px;
+  padding: 0;
+  color: var(--drawer-text);
+  font-family: 'Noto Sans JP', 'Hiragino Sans', 'Yu Gothic', sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1.4;
+}
+
+.sidebar-navigation
+  .widget_latest_posts_widget
+  .custom-widget-title.side-title {
+  margin-bottom: 14px;
+}
+
+.sidebar-navigation .custom-widget-container {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  background: var(--drawer-bg);
+  border: 0;
+}
+
+.sidebar-navigation .custom-widget-item {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  background: var(--drawer-card);
+  border: 1px solid var(--drawer-border);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.08);
+}
+
+.sidebar-navigation .custom-widget-item img {
+  display: block;
+  width: 100%;
+  height: 92px;
+  object-fit: cover;
+  margin: 0 0 8px;
+  border-radius: 12px;
+}
+
+.sidebar-navigation .custom-widget-item a {
+  display: block;
+  color: var(--drawer-text);
+  font-family: 'Noto Sans JP', 'Hiragino Sans', 'Yu Gothic', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.55;
+  text-decoration: none;
+}
+
+body.dark-theme .mobile-menu {
+  background: #101a24;
+  color: #eaf0f4;
+}
+
+.mobile-menu .custom-widget-item {
+  margin: 0;
+  padding: 0;
+}
+
+@media (max-width: 520px) {
+  .sidebar-navigation {
+    width: 100vw;
+    max-width: none;
+  }
+
+  .sidebar-navigation .drawer-body {
+    padding: 18px 16px 40px;
+  }
+}
+
+/* === CHATGPT_CSS_RESTORE_START === */
 
 #chatgpt-modal,
 #chatgpt-modal * {
@@ -8706,73 +7404,72 @@ body.dark-theme .naigai-property-row__options {
 
 #chatgpt-modal {
   position: fixed;
-  right: 16px;
-  bottom: 96px;
+  right: 20px;
+  bottom: 92px;
+  z-index: 26000;
+  width: min(420px, calc(100vw - 40px));
   display: none;
-  width: min(420px, calc(100vw - 24px));
-  z-index: 24120;
+  color: #111;
   font-family: inherit;
 }
 
-#chatgpt-modal.is-open {
+#chatgpt-modal.active,
+#chatgpt-modal.is-active,
+#chatgpt-modal.is-open,
+#chatgpt-modal[aria-hidden='false'] {
   display: block;
 }
 
-/* 閉じるボタンは外 */
+#chatgpt-modal .chatgpt-modal-content {
+  position: relative;
+  overflow: hidden;
+  max-height: min(78dvh, 760px);
+  display: flex;
+  flex-direction: column;
+  border-radius: 16px;
+  background: #fff;
+  color: #111;
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.28);
+}
+
 #chatgpt-modal .chatgpt-close-btn {
   position: absolute;
-  top: -12px;
-  right: -12px;
+  top: -18px;
+  right: -18px;
+  z-index: 2;
   width: 40px;
   height: 40px;
   border: 0;
   border-radius: 999px;
-  background: #efefef;
+  background: #f3f4f6;
   color: #111;
   font-size: 28px;
-  font-weight: 700;
   line-height: 1;
   cursor: pointer;
-  z-index: 10;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
-}
-
-/* ここだけがスクロール担当 */
-#chatgpt-modal .chatgpt-modal-content {
-  background: #fff;
-  color: #111;
-  border-radius: 18px;
-  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.24);
-  max-height: min(76dvh, 720px);
-  overflow-y: auto;
-  overflow-x: hidden;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior: contain;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
 }
 
 #chatgpt-modal .chatgpt-modal-header {
   background: #fff;
-  border-bottom: 1px solid #e8e8e8;
+  border-bottom: 1px solid #e5e7eb;
+  text-align: center;
 }
 
 #chatgpt-modal #chatgpt-modal-title {
   margin: 0;
-  padding: 14px 16px;
-  text-align: center;
-  font-size: 18px;
-  font-weight: 700;
-  line-height: 1.3;
-  color: inherit;
-}
-
-#chatgpt-modal .chatgpt-modal-body {
+  padding: 22px 64px;
   background: #fff;
+  color: #111;
+  text-align: center;
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 1.3;
 }
 
 #chatgpt-modal .chatgpt-company-box {
   padding: 10px 12px;
-  border-bottom: 1px solid #ececec;
-  background: #fafafa;
+  border-bottom: 1px solid #e5e7eb;
+  background: #f8fafc;
 }
 
 #chatgpt-modal .chatgpt-company-grid {
@@ -8902,6 +7599,7 @@ body.dark-theme .naigai-property-row__options {
 #chatgpt-modal .chatgpt-messages {
   padding: 8px 12px 6px;
   background: #fff;
+  overflow-y: auto;
 }
 
 #chatgpt-modal .gpt-response,
@@ -8942,7 +7640,6 @@ body.dark-theme .naigai-property-row__options {
   line-height: 1.5;
 }
 
-/* 四角い帯を消す */
 #chatgpt-modal .chatgpt-form {
   padding: 0 12px 12px;
   background: transparent;
@@ -8993,21 +7690,21 @@ body.dark-theme .naigai-property-row__options {
 
 #chatgpt-launcher {
   position: fixed;
-  right: 16px;
+  right: 20px;
   bottom: 24px;
-  z-index: 24110;
-  min-width: 132px;
-  height: 46px;
-  padding: 0 14px;
+  z-index: 25990;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
+  min-width: 136px;
+  height: 46px;
+  padding: 0 14px;
   border: 0;
   border-radius: 999px;
   background: #0a47b8;
   color: #fff;
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.24);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.24);
   cursor: pointer;
 }
 
@@ -9029,10 +7726,6 @@ body.dark-theme .naigai-property-row__options {
     right: 12px;
     bottom: 88px;
     width: min(420px, calc(100vw - 24px));
-  }
-
-  #chatgpt-modal .chatgpt-modal-content {
-    max-height: min(78dvh, 760px);
   }
 
   #chatgpt-modal .chatgpt-form {
@@ -9059,7 +7752,6 @@ body.dark-theme .naigai-property-row__options {
 @media (max-width: 767px) {
   #chatgpt-modal {
     left: 12px;
-    right: 12px;
     bottom: 84px;
     width: auto;
   }
@@ -9095,10 +7787,6 @@ body.dark-theme .naigai-property-row__options {
     font-size: 10px;
   }
 
-  #chatgpt-modal .chatgpt-company-row dd {
-    font-size: 12px;
-  }
-
   #chatgpt-modal .chatgpt-option-grid {
     grid-template-columns: 1fr;
   }
@@ -9111,15 +7799,7 @@ body.dark-theme .naigai-property-row__options {
     padding: 8px 10px 6px;
   }
 
-  #chatgpt-modal .gpt-response,
-  #chatgpt-modal .gpt-user-message,
-  #chatgpt-modal .gpt-loading {
-    padding: 9px 10px;
-    font-size: 13px;
-  }
-
   #chatgpt-launcher {
-    right: 12px;
     bottom: 12px;
   }
 
@@ -9127,3 +7807,5 @@ body.dark-theme .naigai-property-row__options {
     font-size: 12px;
   }
 }
+
+/* === CHATGPT_CSS_RESTORE_END === */

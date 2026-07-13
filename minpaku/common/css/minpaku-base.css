@@ -19,6 +19,8 @@
  * --------------------------------------------------------- */
 
 :root {
+  color-scheme: light;
+
   --mnpk-bg: #f6fbfd;
   --mnpk-page-bg: #f6fbfd;
 
@@ -27,14 +29,13 @@
   --mnpk-surface-soft: #e8f4f8;
 
   --mnpk-card-bg: #ffffff;
-  --mnpk-card-bg-soft: #ffffff;
+  --mnpk-card-bg-soft: #f7fcfe;
 
   --mnpk-heading: #102235;
   --mnpk-text: #24384a;
   --mnpk-muted: #637887;
   --mnpk-text-soft: #637887;
 
-  /* archive / page text colors */
   --mnpk-page-text: var(--mnpk-text);
   --mnpk-page-muted: var(--mnpk-muted);
 
@@ -46,7 +47,6 @@
   --mnpk-accent-soft: #e4f2f7;
   --mnpk-accent-2: #3a93b5;
 
-  /* button colors */
   --mnpk-button-primary-bg: var(--mnpk-accent);
   --mnpk-button-primary-bg-2: var(--mnpk-accent-2);
   --mnpk-button-primary-text: #ffffff;
@@ -77,29 +77,46 @@
   --mnpk-shell: 1240px;
   --mnpk-shell-narrow: 1120px;
 
-  /* booking colors */
+  --mnpk-modal-bg: #ffffff;
+  --mnpk-modal-surface: #ffffff;
+  --mnpk-modal-soft-bg: #f2f8fb;
+  --mnpk-modal-head: #eef7fb;
+  --mnpk-modal-cell: #ffffff;
+  --mnpk-modal-disabled-bg: #edf4f7;
+  --mnpk-modal-today-bg: #e5f5fb;
+
+  --mnpk-modal-heading: var(--mnpk-heading);
+  --mnpk-modal-text: var(--mnpk-text);
+  --mnpk-modal-muted: #526b7d;
+
+  --mnpk-modal-border: #bddce8;
+  --mnpk-modal-border-strong: #94c4d8;
+
+  --mnpk-modal-accent: var(--mnpk-accent);
+  --mnpk-modal-accent-hover: var(--mnpk-accent-hover);
+  --mnpk-modal-accent-soft: #dff1f7;
+
+  --mnpk-modal-disabled-text: #849aaa;
+
+  --mnpk-modal-close-bg: var(--mnpk-modal-accent);
+  --mnpk-modal-close-bg-hover: var(--mnpk-modal-accent-hover);
+  --mnpk-modal-close-text: #ffffff;
+  --mnpk-modal-close-border: transparent;
+
   --mnpk-booking-overlay-bg: rgba(15, 23, 42, 0.42);
   --mnpk-booking-frame-bg: var(--mnpk-modal-bg);
   --mnpk-booking-item-bg: var(--mnpk-modal-surface);
   --mnpk-booking-control-bg: var(--mnpk-modal-surface);
-  --mnpk-booking-selected-bg: var(--mnpk-accent);
+  --mnpk-booking-selected-bg: var(--mnpk-modal-accent);
   --mnpk-booking-selected-text: #ffffff;
   --mnpk-booking-disabled-bg: var(--mnpk-modal-disabled-bg);
   --mnpk-booking-shadow: 0 20px 54px rgba(16, 34, 53, 0.14);
-  --mnpk-modal-bg: #eef7fb;
-  --mnpk-modal-surface: #ffffff;
-  --mnpk-modal-soft-bg: #f7fcfe;
-  --mnpk-modal-disabled-bg: #f3f8fb;
-  --mnpk-modal-today-bg: #e8f6fb;
-  --mnpk-modal-heading: var(--mnpk-heading);
-  --mnpk-modal-text: var(--mnpk-text);
-  --mnpk-modal-muted: #526b7d;
-  --mnpk-modal-border: #bddce8;
-  --mnpk-modal-border-strong: #94c4d8;
-  --mnpk-modal-disabled-text: #849aaa;
 }
 
-/* dark-mode は黒くしない。薄いグレー系に寄せる */
+/* ---------------------------------------------------------
+ * 01-2. dark mode
+ * --------------------------------------------------------- */
+
 :is(body.dark-mode, body.is-dark, body.dark-theme, body.dark):is(
   .single-minpaku,
   .minpaku-single,
@@ -110,43 +127,85 @@
   .page-template-page-minpaku-support,
   .page-template-page-minpaku-support-php
 ) {
-  --mnpk-bg: #e9eef2;
-  --mnpk-page-bg: #e9eef2;
+  color-scheme: dark;
 
-  --mnpk-surface: #f7fafc;
-  --mnpk-surface-2: #edf3f6;
-  --mnpk-surface-soft: #e4edf2;
+  --mnpk-bg: #07111c;
+  --mnpk-page-bg: #07111c;
 
-  --mnpk-card-bg: #f7fafc;
-  --mnpk-card-bg-soft: #edf3f6;
+  --mnpk-surface: #0f1c2a;
+  --mnpk-surface-2: #142538;
+  --mnpk-surface-soft: #193047;
 
-  --mnpk-heading: #102235;
-  --mnpk-text: #172536;
-  --mnpk-muted: #5f7180;
-  --mnpk-text-soft: #5f7180;
+  --mnpk-card-bg: #0f1c2a;
+  --mnpk-card-bg-soft: #142538;
 
-  /* archive / page text colors */
+  --mnpk-heading: #f4f8fb;
+  --mnpk-text: #d9e5ee;
+  --mnpk-muted: #9fb2c3;
+  --mnpk-text-soft: #9fb2c3;
+
   --mnpk-page-text: var(--mnpk-text);
   --mnpk-page-muted: var(--mnpk-muted);
 
-  --mnpk-border: #cbdde6;
-  --mnpk-border-strong: #a9c5d2;
+  --mnpk-border: #29435a;
+  --mnpk-border-strong: #3d6682;
 
-  --mnpk-accent: #2f7fa2;
-  --mnpk-accent-hover: #256b8b;
-  --mnpk-accent-soft: #dcecf2;
-  --mnpk-accent-2: #3a93b5;
+  --mnpk-accent: #62c7ee;
+  --mnpk-accent-hover: #8bdcff;
+  --mnpk-accent-soft: rgba(98, 199, 238, 0.14);
+  --mnpk-accent-2: #3aa9d4;
 
-  --mnpk-shadow: 0 12px 28px rgba(16, 34, 53, 0.10);
-  --mnpk-shadow-soft: 0 8px 20px rgba(16, 34, 53, 0.08);
+  --mnpk-button-primary-bg: var(--mnpk-accent);
+  --mnpk-button-primary-bg-2: var(--mnpk-accent-2);
+  --mnpk-button-primary-text: #06111a;
+  --mnpk-button-primary-border: var(--mnpk-accent);
 
-  --mnpk-booking-overlay-bg: rgba(15, 23, 42, 0.34);
-  --mnpk-booking-frame-bg: #ffffff;
-  --mnpk-booking-item-bg: #ffffff;
-  --mnpk-booking-control-bg: #ffffff;
-  --mnpk-booking-selected-bg: var(--mnpk-accent);
-  --mnpk-booking-selected-text: #fff;
-  --mnpk-booking-disabled-bg: #ffffff;
+  --mnpk-button-secondary-bg: #0f1c2a;
+  --mnpk-button-secondary-text: #d9f3ff;
+  --mnpk-button-secondary-border: var(--mnpk-border-strong);
+
+  --mnpk-hero-noimage-button-secondary-bg: #0f1c2a;
+  --mnpk-hero-noimage-button-secondary-text: #d9f3ff;
+  --mnpk-hero-noimage-button-secondary-border: var(--mnpk-border-strong);
+
+  --mnpk-danger: #ff8a8a;
+
+  --mnpk-shadow: none;
+  --mnpk-shadow-soft: none;
+
+  --mnpk-modal-bg: #0b1724;
+  --mnpk-modal-surface: #0f1c2a;
+  --mnpk-modal-soft-bg: #142538;
+  --mnpk-modal-head: #101f30;
+  --mnpk-modal-cell: #0f1c2a;
+  --mnpk-modal-disabled-bg: #111c27;
+  --mnpk-modal-today-bg: #193047;
+
+  --mnpk-modal-heading: var(--mnpk-heading);
+  --mnpk-modal-text: var(--mnpk-text);
+  --mnpk-modal-muted: var(--mnpk-muted);
+
+  --mnpk-modal-border: var(--mnpk-border);
+  --mnpk-modal-border-strong: var(--mnpk-border-strong);
+
+  --mnpk-modal-accent: var(--mnpk-accent);
+  --mnpk-modal-accent-hover: var(--mnpk-accent-hover);
+  --mnpk-modal-accent-soft: var(--mnpk-accent-soft);
+
+  --mnpk-modal-disabled-text: #6f8191;
+
+  --mnpk-modal-close-bg: var(--mnpk-modal-accent);
+  --mnpk-modal-close-bg-hover: var(--mnpk-modal-accent-hover);
+  --mnpk-modal-close-text: #06111a;
+  --mnpk-modal-close-border: transparent;
+
+  --mnpk-booking-overlay-bg: rgba(0, 0, 0, 0.68);
+  --mnpk-booking-frame-bg: var(--mnpk-modal-bg);
+  --mnpk-booking-item-bg: var(--mnpk-modal-surface);
+  --mnpk-booking-control-bg: var(--mnpk-modal-surface);
+  --mnpk-booking-selected-bg: var(--mnpk-modal-accent);
+  --mnpk-booking-selected-text: #06111a;
+  --mnpk-booking-disabled-bg: var(--mnpk-modal-disabled-bg);
   --mnpk-booking-shadow: none;
 }
 
@@ -180,6 +239,7 @@ body.page-template-page-minpaku-support-php {
 body.single-minpaku #page,
 body.minpaku-single #page,
 body.post-type-archive-minpaku #page,
+body.post-type-archive-minpaku_page #page,
 body.page-template-page-minpaku-b2c #page,
 body.page-template-page-minpaku-b2c-php #page,
 body.page-template-page-minpaku-support #page,
@@ -187,6 +247,7 @@ body.page-template-page-minpaku-support-php #page,
 body.single-minpaku #wrapper,
 body.minpaku-single #wrapper,
 body.post-type-archive-minpaku #wrapper,
+body.post-type-archive-minpaku_page #wrapper,
 body.page-template-page-minpaku-b2c #wrapper,
 body.page-template-page-minpaku-b2c-php #wrapper,
 body.page-template-page-minpaku-support #wrapper,
@@ -194,6 +255,7 @@ body.page-template-page-minpaku-support-php #wrapper,
 body.single-minpaku .site,
 body.minpaku-single .site,
 body.post-type-archive-minpaku .site,
+body.post-type-archive-minpaku_page .site,
 body.page-template-page-minpaku-b2c .site,
 body.page-template-page-minpaku-b2c-php .site,
 body.page-template-page-minpaku-support .site,
@@ -286,9 +348,9 @@ body.page-template-page-minpaku-support-php .site {
 .mnpk-accepted-methods {
   border: 1px solid var(--mnpk-border);
   border-radius: var(--mnpk-radius-lg);
-  background: transparent;
+  background: var(--mnpk-card-bg);
   color: var(--mnpk-text);
-  box-shadow: none;
+  box-shadow: var(--mnpk-shadow-soft);
 }
 
 .mnpk-card {
@@ -340,10 +402,10 @@ body.page-template-page-minpaku-support-php .site {
   gap: 8px;
   min-height: 48px;
   padding: 12px 18px;
-  border: 0;
+  border: 1px solid var(--mnpk-button-primary-border);
   border-radius: 14px;
-  background: var(--mnpk-accent);
-  color: #fff;
+  background: var(--mnpk-button-primary-bg);
+  color: var(--mnpk-button-primary-text);
   text-decoration: none;
   font-size: 14px;
   font-weight: 800;
@@ -357,6 +419,7 @@ body.page-template-page-minpaku-support-php .site {
 .mnpk-stay-card__button--reserve:hover,
 .mnpk-booking-submit:hover {
   background: var(--mnpk-accent-hover);
+  color: var(--mnpk-button-primary-text);
 }
 
 .mnpk-button--ghost,
@@ -369,10 +432,10 @@ body.page-template-page-minpaku-support-php .site {
   gap: 8px;
   min-height: 42px;
   padding: 9px 14px;
-  border: 1px solid var(--mnpk-border);
+  border: 1px solid var(--mnpk-button-secondary-border);
   border-radius: 999px;
-  background: var(--mnpk-surface);
-  color: var(--mnpk-text);
+  background: var(--mnpk-button-secondary-bg);
+  color: var(--mnpk-button-secondary-text);
   text-decoration: none;
   font-size: 13px;
   font-weight: 800;
@@ -385,6 +448,7 @@ body.page-template-page-minpaku-support-php .site {
 .mnpk-link-button:hover,
 .mnpk-back-link:hover {
   background: var(--mnpk-surface-2);
+  color: var(--mnpk-button-secondary-text);
 }
 
 /* ---------------------------------------------------------
@@ -424,6 +488,13 @@ body.page-template-page-minpaku-support-php .site {
   color: var(--mnpk-text);
   font: inherit;
   box-sizing: border-box;
+}
+
+.mnpk-form-field input::placeholder,
+.mnpk-form-field textarea::placeholder,
+.mnpk-payment-form input::placeholder,
+.mnpk-payment-form textarea::placeholder {
+  color: var(--mnpk-muted);
 }
 
 .mnpk-form-field input:focus,
@@ -485,7 +556,7 @@ body.page-template-page-minpaku-support-php .site {
   display: none;
   overflow: auto;
   padding: 20px;
-  background: rgba(15, 23, 42, 0.45);
+  background: var(--mnpk-booking-overlay-bg);
 }
 
 .mnpk-modal.is-open {
@@ -505,10 +576,11 @@ body.mnpk-modal-open {
   position: relative;
   width: min(920px, 100%);
   margin: 20px auto;
+  border: 1px solid var(--mnpk-modal-border);
   border-radius: var(--mnpk-radius-lg);
-  background: var(--mnpk-surface);
-  color: var(--mnpk-text);
-  box-shadow: var(--mnpk-shadow);
+  background: var(--mnpk-modal-bg);
+  color: var(--mnpk-modal-text);
+  box-shadow: var(--mnpk-booking-shadow);
   overflow: hidden;
 }
 
@@ -522,20 +594,23 @@ body.mnpk-modal-open {
   justify-content: space-between;
   gap: 16px;
   padding: 18px 20px;
-  border-bottom: 1px solid var(--mnpk-border);
+  border-bottom: 1px solid var(--mnpk-modal-border);
+  background: var(--mnpk-modal-head);
+  color: var(--mnpk-modal-text);
 }
 
 .mnpk-modal__header h2,
 .mnpk-modal__header h3 {
   margin: 0;
-  color: var(--mnpk-heading);
+  color: var(--mnpk-modal-heading);
   font-size: 22px;
   line-height: 1.3;
 }
 
-
 .mnpk-modal__body {
   padding: 20px;
+  background: var(--mnpk-modal-bg);
+  color: var(--mnpk-modal-text);
 }
 
 .mnpk-modal__actions {
@@ -543,7 +618,9 @@ body.mnpk-modal-open {
   justify-content: flex-end;
   flex-wrap: wrap;
   gap: 12px;
-  padding: 0 20px 20px;
+  padding: 20px;
+  border-top: 1px solid var(--mnpk-modal-border);
+  background: var(--mnpk-modal-head);
 }
 
 /* ---------------------------------------------------------
@@ -556,9 +633,9 @@ body.mnpk-modal-open {
 [data-payment-error] {
   margin-top: 14px;
   padding: 12px 14px;
-  border: 1px solid rgba(185, 28, 28, 0.2);
+  border: 1px solid color-mix(in srgb, var(--mnpk-danger) 32%, transparent);
   border-radius: 14px;
-  background: rgba(185, 28, 28, 0.06);
+  background: color-mix(in srgb, var(--mnpk-danger) 10%, transparent);
   color: var(--mnpk-danger);
   font-size: 14px;
   line-height: 1.7;
@@ -631,138 +708,9 @@ body.mnpk-modal-open {
   }
 }
 
-/* =========================================================
- * MINPAKU MODAL CONTRAST BASE FIX START
- * 役割:
- * - モーダル色はここで一元管理
- * - 白ベース + 薄い青 + 濃い青アクセント
- * - 黒いダークモードにしない
- * MINPAKU MODAL CONTRAST BASE FIX END
- * ========================================================= */
-
-:root {
-  --mnpk-modal-bg: #ffffff;
-  --mnpk-modal-surface: #ffffff;
-  --mnpk-modal-soft-bg: #f2f8fb;
-  --mnpk-modal-head: #eef7fb;
-  --mnpk-modal-cell: #ffffff;
-
-  --mnpk-modal-heading: #102235;
-  --mnpk-modal-text: #20364a;
-  --mnpk-modal-muted: #3f586b;
-
-  --mnpk-modal-border: #b8d8e5;
-  --mnpk-modal-border-strong: #7fb6cd;
-
-  --mnpk-modal-accent: #2f7fa2;
-  --mnpk-modal-accent-hover: #256b8b;
-  --mnpk-modal-accent-soft: #dff1f7;
-
-  --mnpk-modal-disabled-bg: #edf4f7;
-  --mnpk-modal-disabled-text: #6f8798;
-  --mnpk-modal-today-bg: #e5f5fb;
-
-  --mnpk-modal-close-bg: var(--mnpk-modal-accent);
-  --mnpk-modal-close-bg-hover: var(--mnpk-modal-accent-hover);
-  --mnpk-modal-close-text: #ffffff;
-  --mnpk-modal-close-border: transparent;
-
-  --mnpk-booking-overlay-bg: rgba(15, 35, 52, 0.42);
-  --mnpk-booking-frame-bg: var(--mnpk-modal-bg);
-  --mnpk-booking-item-bg: var(--mnpk-modal-surface);
-  --mnpk-booking-control-bg: var(--mnpk-modal-surface);
-  --mnpk-booking-selected-bg: var(--mnpk-modal-accent);
-  --mnpk-booking-selected-text: #ffffff;
-  --mnpk-booking-disabled-bg: var(--mnpk-modal-disabled-bg);
-}
-
-:is(body.dark-mode, body.is-dark, body.dark-theme, body.dark):is(
-  .single-minpaku,
-  .minpaku-single,
-  .post-type-archive-minpaku,
-  .page-template-page-minpaku-b2c,
-  .page-template-page-minpaku-b2c-php,
-  .page-template-page-minpaku-support,
-  .page-template-page-minpaku-support-php
-) {
-  --mnpk-modal-bg: #ffffff;
-  --mnpk-modal-surface: #ffffff;
-  --mnpk-modal-soft-bg: #f2f8fb;
-  --mnpk-modal-head: #eef7fb;
-  --mnpk-modal-cell: #ffffff;
-
-  --mnpk-modal-heading: #102235;
-  --mnpk-modal-text: #20364a;
-  --mnpk-modal-muted: #3f586b;
-
-  --mnpk-modal-border: #b8d8e5;
-  --mnpk-modal-border-strong: #7fb6cd;
-
-  --mnpk-modal-accent: #2f7fa2;
-  --mnpk-modal-accent-hover: #256b8b;
-  --mnpk-modal-accent-soft: #dff1f7;
-
-  --mnpk-modal-disabled-bg: #edf4f7;
-  --mnpk-modal-disabled-text: #6f8798;
-  --mnpk-modal-today-bg: #e5f5fb;
-
-  --mnpk-modal-close-bg: var(--mnpk-modal-accent);
-  --mnpk-modal-close-bg-hover: var(--mnpk-modal-accent-hover);
-  --mnpk-modal-close-text: #ffffff;
-  --mnpk-modal-close-border: transparent;
-
-  --mnpk-booking-overlay-bg: rgba(15, 35, 52, 0.36);
-}
-
-.mnpk-modal {
-  background: var(--mnpk-booking-overlay-bg);
-}
-
-.mnpk-modal__dialog {
-  border: 1px solid var(--mnpk-modal-border);
-  background: var(--mnpk-modal-bg);
-  color: var(--mnpk-modal-text);
-}
-
-.mnpk-modal__header {
-  background: var(--mnpk-modal-head);
-  border-bottom: 1px solid var(--mnpk-modal-border);
-  color: var(--mnpk-modal-text);
-}
-
-.mnpk-modal__header h2,
-.mnpk-modal__header h3 {
-  color: var(--mnpk-modal-heading);
-}
-
-.mnpk-modal__body {
-  background: var(--mnpk-modal-bg);
-  color: var(--mnpk-modal-text);
-}
-
-.mnpk-modal__actions {
-  background: var(--mnpk-modal-head);
-  border-top: 1px solid var(--mnpk-modal-border);
-}
-
-
-
-
-
-/* =========================================================
- * MNPK FLOW MOBILE ARROW FIX START
- * ---------------------------------------------------------
- * 対象:
- * - B2C固定ページのFlow / STEP表示
- *
- * 役割:
- * - PCでは横方向の流れを維持
- * - モバイルでは縦並びに合わせて矢印を「↓」にする
- *
- * 注意:
- * - フロント用CSS
- * - 管理画面CSSではない
- * ========================================================= */
+/* ---------------------------------------------------------
+ * 11. mobile flow arrow
+ * --------------------------------------------------------- */
 
 @media (max-width: 760px) {
   .mnpk-page-flow .mnpk-flow-track {
@@ -775,7 +723,7 @@ body.mnpk-modal-open {
   }
 
   .mnpk-page-flow .mnpk-flow-step:not(:last-child)::after {
-    content: "↓" !important;
+    content: '↓' !important;
     position: absolute !important;
     left: 50% !important;
     right: auto !important;
@@ -790,14 +738,12 @@ body.mnpk-modal-open {
     height: 24px !important;
     border-radius: 999px !important;
 
-    background: var(--mnpk-accent-soft, #e5f3f6) !important;
-    color: var(--mnpk-accent-hover, #216b7b) !important;
-    border: 1px solid var(--mnpk-border, rgba(40, 127, 146, .18)) !important;
+    background: var(--mnpk-accent-soft) !important;
+    color: var(--mnpk-accent-hover) !important;
+    border: 1px solid var(--mnpk-border) !important;
 
     font-size: 16px !important;
     font-weight: 900 !important;
     line-height: 1 !important;
   }
 }
-
-/* MNPK FLOW MOBILE ARROW FIX END */

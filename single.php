@@ -232,12 +232,12 @@ get_header('77');
                                 <div class="main-custom-post">
 
                                     <div id="post-<?php the_ID(); ?>" <?php post_class('custom-post'); ?>>
-                                        <h2 class="related-post-title">
-                                            <a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
-                                        </h2>
-
                                         <div class="post-meta">
-                                            <p>
+                                            <h2 class="related-post-title">
+                                                <a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
+                                            </h2>
+
+                                            <p class="post-meta-row">
                                                 <svg class="icon icon-price-tags">
                                                     <use xlink:href="#icon-price-tags"></use>
                                                     <span class="category"><?php the_category(', '); ?></span>
@@ -343,17 +343,39 @@ $post_id = get_queried_object_id();
 
 <!--sidebar-->
 <div id="single">
-    <div id="sidebar" class="clearfix">
-        <?php if (in_category('naigai-tochi')) : ?>
-            <?php get_template_part('sidebar-land'); ?>
-        <?php elseif (in_category('naigai-construction')) : ?>
-            <?php get_template_part('sidebar-house'); ?>
-        <?php elseif (in_category('recommended-land-and-house')) : ?>
-            <?php get_template_part('sidebar-recommended'); ?>
-        <?php else : ?>
-            <?php get_template_part('sidebar'); ?>
-        <?php endif; ?>
-    </div>
+    <?php if (in_category('naigai-tochi')) : ?>
+
+        <?php
+        // sidebar-land.php 自身が #sidebar を出力する。
+        get_template_part('sidebar-land');
+        ?>
+
+    <?php elseif (in_category('naigai-construction')) : ?>
+
+        <?php
+        // sidebar-house.php 自身が #sidebar を出力する。
+        get_template_part('sidebar-house');
+        ?>
+
+    <?php elseif (in_category('recommended-land-and-house')) : ?>
+
+        <?php
+        // 推奨土地・住宅カテゴリーページと同じ sidebar-land.php を使用する。
+        // sidebar-land.php 自身が #sidebar を出力する。
+        get_template_part('sidebar-land');
+        ?>
+
+    <?php else : ?>
+
+        <div id="sidebar" class="clearfix">
+            <?php
+            // sidebar.php は #sidebar を持たないため、
+            // この分岐だけここで #sidebar を付ける。
+            get_template_part('sidebar');
+            ?>
+        </div>
+
+    <?php endif; ?>
 </div>
 <!--/sidebar-->
 

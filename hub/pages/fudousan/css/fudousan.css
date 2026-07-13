@@ -1017,14 +1017,6 @@ body.page-template-template-realestate-hub-php
  * /fudousan.css では #store-reservation-modal を触らない。
  */
 
-body.hub-context-realestate .google-map-modal-header {
-  display: none !important;
-}
-
-body.hub-context-realestate .google-map-modal-content {
-  padding-top: 22px !important;
-}
-
 /* =========================================================
  * 16. header top / lower navigation
  * ========================================================= */
@@ -1057,6 +1049,9 @@ body.hub-page.hub-context-realestate
   color: #102236 !important;
   border-color: rgba(16, 34, 54, 0.16) !important;
 }
+
+
+
 
 /* header top: dark */
 :is(
@@ -1377,33 +1372,3 @@ body.hub-page.hub-context-realestate .navg_under,
   }
 }
 /* === FUDOUSAN HERO MEDIA FINAL END === */
-
-/* =========================================================
- * Google Map modal
- * ---------------------------------------------------------
- * 対象:
- * - /fudousan/ の地図モーダル
- * - js/front-map-modal.js が生成・操作する .google-map-modal
- *
- * 役割:
- * - モーダル内の見出しが dark mode の共通 heading 色に引っ張られて
- *   薄くなるのを防ぐ。
- *
- * 注意:
- * - モーダル本体は .fudousan-page の外側に出ることがあるため、
- *   .fudousan-page .google-map-modal-title ではなく
- *   .google-map-modal .google-map-modal-title で指定する。
- * ========================================================= */
-
-.google-map-modal .google-map-modal-title {
-  color: #111827;
-}
-
-.google-map-modal .google-map-modal-header {
-  color: #111827;
-}
-
-.google-map-modal .google-map-modal-content {
-  color: #1f2937;
-  background: #fff;
-}

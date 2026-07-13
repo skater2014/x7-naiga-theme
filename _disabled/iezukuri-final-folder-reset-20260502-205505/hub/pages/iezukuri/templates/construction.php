@@ -504,3 +504,6 @@ get_header('customhome');
     </section>
 
 </main>
+
+<?php
+get_footer('iezukuri');

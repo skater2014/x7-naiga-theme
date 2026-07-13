@@ -314,8 +314,7 @@ if ($is_blog && taxonomy_exists('blog_genre')) {
                 <button
                     type="button"
                     class="google-location-trigger"
-                    data-map-html="<?php echo esc_attr($google_iframe_payload); ?>"
-                    data-map-title="<?php echo esc_attr($post_title); ?>">
+                    data-map-html="<?php echo esc_attr($google_iframe_payload); ?>">
                     <svg class="icon-location" aria-hidden="true" focusable="false" width="20" height="20">
                         <use xlink:href="#icon-location"></use>
                     </svg>

@@ -121,5 +121,4 @@ $has_pdf_download = ($pdf_download_url !== '');
     ?>
 </main>
 
-<?php
-get_footer();
+<?php get_footer('iezukuri'); ?>

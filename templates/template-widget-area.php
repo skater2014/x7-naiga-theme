@@ -20,7 +20,7 @@
 
       if ( $my_query->have_posts() ) : /** サブループ */ ?>
 
-        <ul id="sidebar-recent-posts" class="sidebar-posts">
+        <ul class="sidebar-posts sidebar-recent-posts">
 
           <?php while ( $my_query->have_posts() ) : $my_query->the_post(); $counter++; ?>
 

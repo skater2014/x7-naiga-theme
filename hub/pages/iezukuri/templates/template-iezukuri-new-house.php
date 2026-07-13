@@ -311,8 +311,6 @@ get_header('customhome');
             </a>
         </div>
     </section>
-
 </main>
 
-<?php
-get_footer();
+<?php get_footer('iezukuri'); ?>

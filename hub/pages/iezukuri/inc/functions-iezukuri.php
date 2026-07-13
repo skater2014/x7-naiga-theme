@@ -772,8 +772,38 @@ add_filter('template_include', function ($template) {
 }, 999);
 /* === IEZUKURI TEMPLATE ROUTE SINGLE SOURCE END === */
 
+/* IEZUKURI COMMON FOOTER CSS ENQUEUE START */
 
+/*
+ * 家づくり共通footer CSS。
+ * top/sub/plan/chuko/nisetai 全部この1本だけ。
+ */
+add_action('wp_enqueue_scripts', function () {
+    $request_path = isset($_SERVER['REQUEST_URI'])
+        ? trim((string) parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/')
+        : '';
 
+    $is_iezukuri = (
+        $request_path === 'iezukuri'
+        || strpos($request_path, 'iezukuri/') === 0
+        || is_post_type_archive('iez_plan')
+        || is_singular('iez_plan')
+    );
 
+    if (!$is_iezukuri) {
+        return;
+    }
 
+    $rel = '/hub/pages/iezukuri/css/common/footer.css';
+    $abs = get_template_directory() . $rel;
+
+    wp_enqueue_style(
+        'iezukuri-common-footer',
+        get_template_directory_uri() . $rel,
+        array(),
+        file_exists($abs) ? filemtime($abs) : null
+    );
+}, 120);
+
+/* IEZUKURI COMMON FOOTER CSS ENQUEUE END */
 

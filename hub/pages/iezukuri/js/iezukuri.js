@@ -543,7 +543,9 @@ document.addEventListener('DOMContentLoaded', function () {
      * Swiper初期化
      */
     new Swiper(target, {
-      loop: false,
+      // cta-swiper-loop-fix
+      loop: true,
+      rewind: false,
       slidesPerView: 1,
       speed: 600,
       autoHeight: false,

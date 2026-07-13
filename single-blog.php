@@ -256,11 +256,12 @@ if (!empty($blog_genres) && !is_wp_error($blog_genres)) {
 
                             <div id="post-<?php the_ID(); ?>" <?php post_class('custom-post'); ?>>
 
-                                <h3 class="related-post-title">
+                                <div class="post-meta">
+                                    <h3 class="related-post-title">
                                     <a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
                                 </h3>
 
-                                <p class="post-meta">
+                                    <p class="post-meta-row">
                                     <svg class="icon icon-price-tags" aria-hidden="true" focusable="false">
                                         <use xlink:href="#icon-price-tags"></use>
                                     </svg>
@@ -289,6 +290,8 @@ if (!empty($blog_genres) && !is_wp_error($blog_genres)) {
                                         <?php comments_popup_link('<i class="far fa-comments"></i> : 0', '<i class="far fa-comments"></i> : 1', '<i class="far fa-comments"></i> : %'); ?>
                                     </span>
                                 </p>
+                                </div>
+
 
                                 <div class="blog-thumbnail-box">
                                     <a href="<?php the_permalink(); ?>" title="<?php echo esc_attr(get_the_title()); ?>">

@@ -302,46 +302,65 @@
   box-shadow: 0 18px 44px rgba(26, 60, 88, 0.1) !important;
 }
 
+/* =========================================================
+   Service card icon
+   役割:
+   - 不動産 / 家づくり / 民泊 / 法人向けカードの丸アイコンを整える
+   - SVGの線幅・サイズ・中央配置を統一する
+   - 丸背景は少し透けた色にして、暗色背景でも重くなりすぎないようにする
+   ========================================================= */
+
 .fp-service-card__icon {
-  display: grid !important;
-  place-items: center !important;
-  flex: 0 0 auto;
-  width: 96px;
-  height: 96px;
-  border-radius: 50%;
-  color: var(--fp-blue);
-  background: #eaf4fb;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: 0 0 auto !important;
+
+  width: 104px !important;
+  height: 104px !important;
+  min-width: 104px !important;
+
+  border-radius: 999px !important;
+  color: var(--fp-blue) !important;
+  background: rgba(125, 188, 240, 0.14) !important;
+
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06) !important;
 }
 
 .fp-service-card__icon svg {
   display: block !important;
-  width: 58px !important;
-  height: 58px !important;
-  stroke: currentColor !important;
+  width: 52px !important;
+  height: 52px !important;
+  overflow: visible !important;
   fill: none !important;
-  stroke-width: 2.8 !important;
+  stroke: currentColor !important;
+  stroke-width: 2.15 !important;
   stroke-linecap: round !important;
   stroke-linejoin: round !important;
 }
 
+/* 不動産の窓口 */
 .fp-service-card--realestate .fp-service-card__icon {
-  color: #1f73b7 !important;
-  background: #e8f3fb !important;
+  color: #2d8fe8 !important;
+  background: rgba(45, 143, 232, 0.13) !important;
 }
 
+/* 家づくりの窓口 */
 .fp-service-card--home .fp-service-card__icon {
-  color: #78a25d !important;
-  background: #edf6e8 !important;
+  color: #8fbd5c !important;
+  background: rgba(143, 189, 92, 0.14) !important;
 }
 
+/* 民泊・住宅宿泊 */
 .fp-service-card--stay .fp-service-card__icon {
-  color: #bd955b !important;
-  background: #f7efe4 !important;
+  color: #d2a35f !important;
+  background: rgba(210, 163, 95, 0.15) !important;
 }
 
+/* 法人向けのご相談 */
 .fp-service-card--business .fp-service-card__icon {
-  color: #2a86b8 !important;
-  background: #e8f4fb !important;
+  color: #2d9cf0 !important;
+  background: rgba(45, 156, 240, 0.13) !important;
 }
 
 .fp-service-card strong {
@@ -405,11 +424,12 @@
 
 .fp-business__icon svg {
   display: block !important;
-  width: 72px !important;
-  height: 72px !important;
+  width: 56px !important;
+  height: 56px !important;
+  overflow: visible !important;
   stroke: currentColor !important;
   fill: none !important;
-  stroke-width: 2.8 !important;
+  stroke-width: 2.15 !important;
   stroke-linecap: round !important;
   stroke-linejoin: round !important;
 }
@@ -541,7 +561,7 @@
  */
 .fp-pickup__grid {
   display: grid !important;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(280px, 1.12fr) !important;
+  grid-template-columns: minmax(0, 1.12fr) minmax(0, 1.12fr) minmax(240px, 0.76fr) !important;
   gap: clamp(22px, 2.8vw, 34px) !important;
   align-items: start !important;
 }
@@ -576,6 +596,16 @@
   margin: 0;
   color: var(--fp-navy);
   font-size: 20px;
+}
+
+.fp-notices .fp-block-head h3 {
+  font-size: 18px;
+  white-space: nowrap;
+}
+
+.fp-notices .fp-block-head a {
+  flex: 0 0 auto;
+  white-space: nowrap;
 }
 
 .fp-block-head a {
@@ -1166,13 +1196,14 @@
  * 画像サイズと位置をCSS変数で調整できるようにする。
  */
 .fp-cta--has-bg-image .fp-cta__inner {
-  --fp-cta-bg-size: cover;
-  --fp-cta-bg-position: center center;
+  --fp-cta-bg-size: auto 100%;
+  --fp-cta-bg-position: right center;
 
   position: relative !important;
   overflow: hidden !important;
   isolation: isolate !important;
-  background: linear-gradient(90deg, #eef7fc, #fff) !important;
+  min-height: 150px;
+  background: linear-gradient(90deg, #eef7fc 0%, #ffffff 100%) !important;
 }
 
 /*
@@ -1232,8 +1263,10 @@
  */
 @media (max-width: 900px) {
   .fp-cta--has-bg-image .fp-cta__inner {
-    --fp-cta-bg-position: center center;
-    padding: 28px 28px;
+    --fp-cta-bg-size: auto 100%;
+    --fp-cta-bg-position: right center;
+    min-height: 150px;
+    padding: 26px 24px;
   }
 }
 
@@ -1252,8 +1285,10 @@
   }
 
   .fp-cta--has-bg-image .fp-cta__inner {
-    --fp-cta-bg-position: center center;
-    padding: 24px 20px;
+    --fp-cta-bg-size: auto 100%;
+    --fp-cta-bg-position: right center;
+    min-height: 150px;
+    padding: 22px 18px;
   }
 
   .fp-cta--has-bg-image .fp-cta__inner::after {
@@ -2058,12 +2093,13 @@
     html.dark body,
     html.is-dark body,
     html.theme-dark body,
+    html.dark-theme body,
     html[data-theme='dark'] body
   )
   .fp-portal
   .fp-cta__inner {
-  border-color: rgba(226, 238, 248, 0.14) !important;
-  background: linear-gradient(90deg, #121c26, #101820) !important;
+  border-color: rgba(125, 188, 240, 0.24) !important;
+  background: #07111c !important;
 }
 
 :is(
@@ -2076,6 +2112,28 @@
     html.dark body,
     html.is-dark body,
     html.theme-dark body,
+    html.dark-theme body,
+    html[data-theme='dark'] body
+  )
+  .fp-portal
+  .fp-cta--has-bg-image
+  .fp-cta__inner {
+  --fp-cta-bg-size: auto 100%;
+  --fp-cta-bg-position: right center;
+  background: #07111c !important;
+}
+
+:is(
+    body.dark-mode,
+    body.is-dark,
+    body.theme-dark,
+    body.dark-theme,
+    body.dark,
+    body[data-theme='dark'],
+    html.dark body,
+    html.is-dark body,
+    html.theme-dark body,
+    html.dark-theme body,
     html[data-theme='dark'] body
   )
   .fp-portal
@@ -2083,17 +2141,79 @@
   .fp-cta__inner::after {
   background: linear-gradient(
     90deg,
-    rgba(15, 20, 25, 0.92) 0%,
-    rgba(15, 20, 25, 0.76) 44%,
-    rgba(15, 20, 25, 0.38) 72%,
-    rgba(15, 20, 25, 0.12) 100%
+    #07111c 0%,
+    #07111c 42%,
+    rgba(7, 17, 28, 0.86) 52%,
+    rgba(7, 17, 28, 0.42) 66%,
+    rgba(7, 17, 28, 0.08) 82%,
+    rgba(7, 17, 28, 0) 100%
   ) !important;
+}
+
+:is(
+    body.dark-mode,
+    body.is-dark,
+    body.theme-dark,
+    body.dark-theme,
+    body.dark,
+    body[data-theme='dark'],
+    html.dark body,
+    html.is-dark body,
+    html.theme-dark body,
+    html.dark-theme body,
+    html[data-theme='dark'] body
+  )
+  .fp-portal
+  .fp-cta--has-bg-image
+  .fp-cta__body {
+  background: transparent !important;
+  backdrop-filter: none !important;
+}
+
+:is(
+    body.dark-mode,
+    body.is-dark,
+    body.theme-dark,
+    body.dark-theme,
+    body.dark,
+    body[data-theme='dark'],
+    html.dark body,
+    html.is-dark body,
+    html.theme-dark body,
+    html.dark-theme body,
+    html[data-theme='dark'] body
+  )
+  .fp-portal
+  .fp-cta
+  h2 {
+  color: #f7fbff !important;
+  text-shadow: none !important;
+}
+
+:is(
+    body.dark-mode,
+    body.is-dark,
+    body.theme-dark,
+    body.dark-theme,
+    body.dark,
+    body[data-theme='dark'],
+    html.dark body,
+    html.is-dark body,
+    html.theme-dark body,
+    html.dark-theme body,
+    html[data-theme='dark'] body
+  )
+  .fp-portal
+  .fp-cta
+  .fp-btn--outline {
+  background: transparent !important;
+  color: #9ed8ff !important;
+  border-color: rgba(158, 216, 255, 0.42) !important;
 }
 
 /* =========================================================
  * 09. Frontpage dark mode end
  * ========================================================= */
-
 
 /* =========================================================
  * frontpage pickup width final fix
@@ -2295,7 +2415,6 @@
   }
 }
 
-
 /* === FRONTPAGE PORTAL BACKGROUND OFF START === */
 /*
  * frontpage.css では外側背景を塗らない。
@@ -2308,20 +2427,20 @@
 }
 
 :is(
-  body.dark-mode,
-  body.is-dark,
-  body.theme-dark,
-  body.dark-theme,
-  body.dark,
-  body[data-theme='dark'],
-  html.dark body,
-  html.is-dark body,
-  html.theme-dark body,
-  html.dark-theme body,
-  html[data-theme='dark'] body
-) .fp-portal {
+    body.dark-mode,
+    body.is-dark,
+    body.theme-dark,
+    body.dark-theme,
+    body.dark,
+    body[data-theme='dark'],
+    html.dark body,
+    html.is-dark body,
+    html.theme-dark body,
+    html.dark-theme body,
+    html[data-theme='dark'] body
+  )
+  .fp-portal {
   background: transparent !important;
 }
 
 /* === FRONTPAGE PORTAL BACKGROUND OFF END === */
-

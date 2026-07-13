@@ -30,18 +30,19 @@ class Price_Range_Widget extends WP_Widget
     /* ウィジェットの出力 */
     public function widget($args, $instance)
     {
-        // モバイルデバイスであればウィジェットを返さない
-        if ($this->is_mobile_device()) {
-            return; // モバイルデバイスではウィジェットを出力しない
-        }
-
-        echo $args['before_widget'];
+        // モバイルでも価格帯を出力する
+echo $args['before_widget'];
 
         // GETパラメータから価格範囲を取得
         $min_price = isset($_GET['min_price']) ? (int) $_GET['min_price'] : (isset($instance['min_price']) ? $instance['min_price'] : 300);
         $max_price = isset($_GET['max_price']) ? (int) $_GET['max_price'] : (isset($instance['max_price']) ? $instance['max_price'] : 4000);
 
-        // 価格範囲スライダーのHTML
+        /*
+         * 価格帯の中身HTML:
+         * sidebar-land.php の dynamic_sidebar('price-range') から呼ばれる。
+         * fieldset.price-filter がカード本体。
+         * input はスライダー本体なので、CSSでは fieldset と input を分けて扱う。
+         */
 ?>
         <fieldset class="price-filter">
             <legend>価格範囲で絞り込む</legend>
@@ -49,7 +50,7 @@ class Price_Range_Widget extends WP_Widget
                 <label for="price_range">価格範囲: ￥<span id="price_range_label_min"><?php echo number_format($min_price); ?>万円</span> 〜 ￥<span id="price_range_label_max"><?php echo number_format($max_price); ?>万円</span></label>
                 <input type="range"
                     id="price-range-slider"
-                    class="price-filter"
+                    class="price-filter-range"
                     min="0"
                     max="10000"
                     step="100"

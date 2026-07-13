@@ -1,4 +1,23 @@
 <?php
+/*
+ * 中間ナビ表示方式 / トップページ用
+ *
+ * このファイルは WordPress の nav location ではない。
+ * template-iezukuri.php から include される、トップページ用の中間ナビ。
+ *
+ * 役割:
+ * - ページ途中の回遊導線として表示する
+ * - footer メニューとは別役割
+ *
+ * 表示方式:
+ * - このテンプレート内の HTML / PHP でリンクを出す
+ * - WordPress管理画面 > 外観 > メニュー の location では管理していない
+ *
+ * CSS:
+ * - hub/pages/iezukuri/css/common/nav.css
+ * - 主な対象クラス: .ch-localnav
+ */
+
 /**
  * hub/pages/iezukuri/templates/top/section-localnav.php
  *

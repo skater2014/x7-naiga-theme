@@ -190,7 +190,7 @@
   font-size: clamp(30px, 4.2vw, 52px);
   line-height: 1.08;
   letter-spacing: -0.03em;
-  text-shadow: 0 4px 18px rgba(0, 0, 0, 0.30);
+  text-shadow: 0 4px 18px rgba(0, 0, 0, 0.3);
 }
 
 .mnpk-page-hero__lead {
@@ -361,12 +361,11 @@
 .mnpk-page-btn.is-primary,
 .ngw-btn.wakugui-btn.is-primary {
   color: var(--mnpk-button-primary-text, #ffffff);
-  background:
-    linear-gradient(
-      180deg,
-      var(--mnpk-button-primary-bg-2, var(--mnpk-accent-2, var(--mnpk-accent))) 0%,
-      var(--mnpk-button-primary-bg, var(--mnpk-accent)) 100%
-    );
+  background: linear-gradient(
+    180deg,
+    var(--mnpk-button-primary-bg-2, var(--mnpk-accent-2, var(--mnpk-accent))) 0%,
+    var(--mnpk-button-primary-bg, var(--mnpk-accent)) 100%
+  );
   border-color: var(--mnpk-button-primary-border, var(--mnpk-accent));
 }
 
@@ -388,12 +387,11 @@
 /* 画像なしheroでは白文字にしない。ここが文字が見えない原因 */
 .mnpk-page-hero.is-no-image .mnpk-page-btn.is-primary {
   color: var(--mnpk-button-primary-text, #ffffff);
-  background:
-    linear-gradient(
-      180deg,
-      var(--mnpk-button-primary-bg-2, var(--mnpk-accent-2, var(--mnpk-accent))) 0%,
-      var(--mnpk-button-primary-bg, var(--mnpk-accent)) 100%
-    );
+  background: linear-gradient(
+    180deg,
+    var(--mnpk-button-primary-bg-2, var(--mnpk-accent-2, var(--mnpk-accent))) 0%,
+    var(--mnpk-button-primary-bg, var(--mnpk-accent)) 100%
+  );
   border-color: var(--mnpk-button-primary-border, var(--mnpk-accent));
 }
 
@@ -437,7 +435,6 @@
   background: rgba(255, 255, 255, 0.22);
   border-color: rgba(255, 255, 255, 0.62);
 }
-
 
 /* =========================================================
  * 4. B2C intro / CTA split
@@ -881,7 +878,8 @@
 .minpaku-support-page .wakugui-hero {
   position: relative;
   isolation: isolate;
-  min-height: clamp(420px, 42vw, 620px);
+  height: clamp(360px, 34vw, 500px);
+  min-height: 0;
   overflow: hidden;
   border: 1px solid var(--mnpk-border);
   border-radius: 30px;
@@ -894,65 +892,91 @@
 .minpaku-support-page .wakugui-hero__media img {
   position: absolute;
   inset: 0;
+  display: block;
   width: 100%;
   height: 100%;
 }
 
+.minpaku-support-page .wakugui-hero__media {
+  background: #06111a;
+}
+
 .minpaku-support-page .wakugui-hero__media img {
-  display: block;
   object-fit: cover;
+  object-position: center center;
+  filter: brightness(0.82) contrast(1.06) saturate(1.02);
 }
 
 .minpaku-support-page .wakugui-hero__overlay {
   position: absolute;
   inset: 0;
   z-index: 1;
-  background: var(--mnpk-hero-overlay);
   pointer-events: none;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(3, 10, 18, 0.82) 0%,
+      rgba(3, 10, 18, 0.62) 42%,
+      rgba(3, 10, 18, 0.26) 72%,
+      rgba(3, 10, 18, 0.1) 100%
+    ),
+    linear-gradient(180deg, rgba(3, 10, 18, 0.16) 0%, rgba(3, 10, 18, 0.42) 100%);
 }
 
 .minpaku-support-page .wakugui-hero__content {
-  position: relative;
+  position: absolute;
+  left: clamp(28px, 5vw, 64px);
+  right: auto;
+  bottom: clamp(28px, 5vw, 64px);
   z-index: 2;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  min-height: inherit;
-  width: min(820px, 100%);
-  padding: clamp(28px, 5vw, 64px);
+  display: block;
+  width: min(620px, calc(100% - 56px));
+  min-height: 0;
+  height: auto;
+  margin: 0;
+  padding: 0;
+  color: #ffffff;
 }
 
 .minpaku-support-page .wakugui-eyebrow {
-  margin: 0 0 12px;
-  color: var(--mnpk-accent);
+  margin: 0 0 10px;
+  color: #d8f1ff;
   font-size: 12px;
   font-weight: 900;
+  line-height: 1.4;
   letter-spacing: 0.14em;
   text-transform: uppercase;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.72);
 }
 
 .minpaku-support-page .wakugui-hero .wakugui-eyebrow,
 .minpaku-support-page .wakugui-hero__title,
-.minpaku-support-page .wakugui-hero__text {
-  color: #fff;
+.minpaku-support-page .wakugui-hero__text,
+.minpaku-support-page .wakugui-hero__lead {
+  color: #ffffff;
 }
 
 .minpaku-support-page .wakugui-hero__title {
   margin: 0;
-  color: var(--mnpk-hero-title);
-  font-size: clamp(32px, 4.5vw, 56px);
-  line-height: 1.08;
+  color: #ffffff;
+  font-size: clamp(32px, 4vw, 52px);
+  line-height: 1.12;
   letter-spacing: -0.04em;
-  text-shadow: 0 4px 18px rgba(0, 0, 0, 0.30);
+  text-shadow:
+    0 4px 20px rgba(0, 0, 0, 0.72),
+    0 1px 2px rgba(0, 0, 0, 0.88);
 }
 
-.minpaku-support-page .wakugui-hero__text {
-  max-width: 760px;
-  margin: 16px 0 0;
-  color: var(--mnpk-hero-text);
-  font-size: 16px;
-  line-height: 1.9;
-  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.24);
+.minpaku-support-page .wakugui-hero__text,
+.minpaku-support-page .wakugui-hero__lead {
+  max-width: 620px;
+  margin: 14px 0 0;
+  color: #f7fbff;
+  font-size: 15px;
+  line-height: 1.8;
+  text-shadow:
+    0 3px 14px rgba(0, 0, 0, 0.7),
+    0 1px 2px rgba(0, 0, 0, 0.85);
 }
 
 .minpaku-support-page .wakugui-split {
@@ -1131,7 +1155,9 @@
   width: min(820px, 100%);
 }
 
-.minpaku-support-page .wakugui-contact--has-image :is(.wakugui-eyebrow, .wakugui-head__title, .wakugui-head__text) {
+.minpaku-support-page
+  .wakugui-contact--has-image
+  :is(.wakugui-eyebrow, .wakugui-head__title, .wakugui-head__text) {
   color: #fff;
 }
 
@@ -1403,15 +1429,31 @@
   }
 
   .minpaku-support-page .wakugui-hero {
-    min-height: 560px;
+    height: 390px;
+    min-height: 0;
+    border-radius: 22px;
   }
 
   .minpaku-support-page .wakugui-hero__content {
-    padding: 18px;
+    left: 18px;
+    right: 18px;
+    bottom: 18px;
+    width: auto;
+    min-height: 0;
+    height: auto;
+    padding: 0;
   }
 
   .minpaku-support-page .wakugui-hero__title {
-    font-size: clamp(26px, 8vw, 38px);
+    font-size: 27px;
+    line-height: 1.18;
+  }
+
+  .minpaku-support-page .wakugui-hero__text,
+  .minpaku-support-page .wakugui-hero__lead {
+    margin-top: 10px;
+    font-size: 12px;
+    line-height: 1.65;
   }
 
   .minpaku-support-page .wakugui-card--copy,
@@ -1433,7 +1475,6 @@
     transform: translateX(50%);
   }
 }
-
 
 /* === MPS WAKUGUI FLOW 5COL START === */
 /*
@@ -1590,7 +1631,6 @@
 
 /* === MPS WAKUGUI FLOW 5COL END === */
 
-
 /* === MPS CONTACT BUTTON CENTER START === */
 /*
  * ※ 民泊サポートLP Contact ボタン中央配置
@@ -1617,7 +1657,6 @@
 }
 
 /* === MPS CONTACT BUTTON CENTER END === */
-
 
 /* === MPS WAKUGUI FLOW TEXT CENTER START === */
 /*
@@ -1724,12 +1763,11 @@
 .mnpk-page-btn.is-primary,
 .ngw-btn.wakugui-btn.is-primary {
   color: var(--mnpk-button-primary-text, #fff);
-  background:
-    linear-gradient(
-      180deg,
-      var(--mnpk-button-primary-bg-2, var(--mnpk-accent-2, var(--mnpk-accent))) 0%,
-      var(--mnpk-button-primary-bg, var(--mnpk-accent)) 100%
-    );
+  background: linear-gradient(
+    180deg,
+    var(--mnpk-button-primary-bg-2, var(--mnpk-accent-2, var(--mnpk-accent))) 0%,
+    var(--mnpk-button-primary-bg, var(--mnpk-accent)) 100%
+  );
   border-color: var(--mnpk-button-primary-border, var(--mnpk-accent));
 }
 
@@ -1819,12 +1857,11 @@
 
   .mnpk-page-hero .mnpk-page-btn.is-primary {
     color: var(--mnpk-button-primary-text, #fff);
-    background:
-      linear-gradient(
-        180deg,
-        var(--mnpk-button-primary-bg-2, var(--mnpk-accent-2, var(--mnpk-accent))) 0%,
-        var(--mnpk-button-primary-bg, var(--mnpk-accent)) 100%
-      );
+    background: linear-gradient(
+      180deg,
+      var(--mnpk-button-primary-bg-2, var(--mnpk-accent-2, var(--mnpk-accent))) 0%,
+      var(--mnpk-button-primary-bg, var(--mnpk-accent)) 100%
+    );
     border-color: var(--mnpk-button-primary-border, var(--mnpk-accent));
   }
 
@@ -2094,7 +2131,7 @@
   border-radius: 22px;
   background: var(--mnpk-surface);
   color: var(--mnpk-text);
-  box-shadow: var(--mnpk-shadow-soft, 0 7px 18px rgba(15, 23, 42, .055));
+  box-shadow: var(--mnpk-shadow-soft, 0 7px 18px rgba(15, 23, 42, 0.055));
 }
 
 .mnpk-page .mnpk-flow-step__label {
@@ -2103,7 +2140,7 @@
   font-size: 12px;
   font-weight: 900;
   line-height: 1;
-  letter-spacing: .16em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
 }
 
@@ -2125,7 +2162,7 @@
 }
 
 .mnpk-page .mnpk-flow-step::after {
-  content: "→";
+  content: '→';
   position: absolute;
   top: 50%;
   right: -22px;
@@ -2142,7 +2179,7 @@
   font-weight: 900;
   line-height: 1;
   transform: translateY(-50%);
-  box-shadow: var(--mnpk-shadow-soft, 0 7px 18px rgba(15, 23, 42, .055));
+  box-shadow: var(--mnpk-shadow-soft, 0 7px 18px rgba(15, 23, 42, 0.055));
 }
 
 .mnpk-page .mnpk-flow-step:nth-child(3n)::after,
@@ -2156,7 +2193,7 @@
   }
 
   .mnpk-page .mnpk-flow-step:nth-child(3n)::after {
-    content: "→";
+    content: '→';
   }
 
   .mnpk-page .mnpk-flow-step:nth-child(2n)::after,
@@ -2181,7 +2218,6 @@
     content: none !important;
   }
 }
-
 
 /* =========================================================
  * MNPK B2C COMPARE MOBILE FIX START
@@ -2247,10 +2283,10 @@
     display: block !important;
     width: 100%;
     overflow: hidden;
-    border: 1px solid var(--mnpk-border, rgba(40, 127, 146, .18));
+    border: 1px solid var(--mnpk-border, rgba(40, 127, 146, 0.18));
     border-radius: 18px;
     background: var(--mnpk-surface, #fff);
-    box-shadow: var(--mnpk-shadow-soft, 0 7px 18px rgba(15, 23, 42, .055));
+    box-shadow: var(--mnpk-shadow-soft, 0 7px 18px rgba(15, 23, 42, 0.055));
   }
 
   .mnpk-compare-table__rowhead {
@@ -2258,7 +2294,7 @@
     width: 100% !important;
     padding: 14px 16px;
     border: 0 !important;
-    border-bottom: 1px solid var(--mnpk-border, rgba(40, 127, 146, .18)) !important;
+    border-bottom: 1px solid var(--mnpk-border, rgba(40, 127, 146, 0.18)) !important;
     background: var(--mnpk-accent-soft, #e5f3f6);
     color: var(--mnpk-page-text, var(--mnpk-text, #172033));
     font-size: 15px;
@@ -2275,7 +2311,7 @@
     width: 100% !important;
     padding: 12px 16px;
     border: 0 !important;
-    border-bottom: 1px solid var(--mnpk-border, rgba(40, 127, 146, .14)) !important;
+    border-bottom: 1px solid var(--mnpk-border, rgba(40, 127, 146, 0.14)) !important;
     background: var(--mnpk-surface, #fff);
     color: var(--mnpk-page-text, var(--mnpk-text, #172033));
     font-size: 14px;
@@ -2309,8 +2345,6 @@
 }
 
 /* MNPK B2C COMPARE MOBILE FIX END */
-
-
 
 /* =========================================================
  * MNPK B2C SECTION BUILDER VISUAL ORDER START
@@ -2347,7 +2381,6 @@
 
 /* MNPK B2C SECTION BUILDER VISUAL ORDER END */
 
-
 /* =========================================================
  * MNPK B2C CONTACT FORM CTA START
  * ---------------------------------------------------------
@@ -2362,7 +2395,7 @@
   width: 100%;
   margin-top: 18px;
   padding: clamp(16px, 3vw, 24px);
-  border: 1px solid var(--mnpk-border, rgba(40, 127, 146, .18));
+  border: 1px solid var(--mnpk-border, rgba(40, 127, 146, 0.18));
   border-radius: 22px;
   background: var(--mnpk-surface, #fff);
 }
@@ -2383,10 +2416,10 @@
   margin: 0;
 }
 
-.mnpk-page-contact-form__body input[type="text"],
-.mnpk-page-contact-form__body input[type="email"],
-.mnpk-page-contact-form__body input[type="tel"],
-.mnpk-page-contact-form__body input[type="url"],
+.mnpk-page-contact-form__body input[type='text'],
+.mnpk-page-contact-form__body input[type='email'],
+.mnpk-page-contact-form__body input[type='tel'],
+.mnpk-page-contact-form__body input[type='url'],
 .mnpk-page-contact-form__body textarea,
 .mnpk-page-contact-form__body select {
   width: 100%;
@@ -2399,7 +2432,6 @@
 }
 
 /* MNPK B2C CONTACT FORM CTA END */
-
 
 /* =========================================================
  * MNPK B2C CONTACT FORM CSS BRIDGE START
@@ -2424,10 +2456,10 @@
   box-sizing: border-box;
   margin-top: clamp(16px, 2.5vw, 24px);
   padding: clamp(16px, 3vw, 28px);
-  border: 1px solid var(--mnpk-border, rgba(40, 127, 146, .18));
+  border: 1px solid var(--mnpk-border, rgba(40, 127, 146, 0.18));
   border-radius: 24px;
   background: var(--mnpk-surface, #fff);
-  box-shadow: var(--mnpk-shadow-soft, 0 10px 26px rgba(15, 23, 42, .06));
+  box-shadow: var(--mnpk-shadow-soft, 0 10px 26px rgba(15, 23, 42, 0.06));
   color: var(--mnpk-page-text, var(--mnpk-text, #172033));
 }
 
@@ -2511,14 +2543,14 @@
   line-height: 1.6;
 }
 
-.mnpk-page-contact-form__body input[type="text"],
-.mnpk-page-contact-form__body input[type="email"],
-.mnpk-page-contact-form__body input[type="tel"],
-.mnpk-page-contact-form__body input[type="url"],
-.mnpk-page-contact-form__body input[type="number"],
-.mnpk-page-contact-form__body input[type="date"],
-.mnpk-page-contact-form__body input[type="time"],
-.mnpk-page-contact-form__body input[type="password"],
+.mnpk-page-contact-form__body input[type='text'],
+.mnpk-page-contact-form__body input[type='email'],
+.mnpk-page-contact-form__body input[type='tel'],
+.mnpk-page-contact-form__body input[type='url'],
+.mnpk-page-contact-form__body input[type='number'],
+.mnpk-page-contact-form__body input[type='date'],
+.mnpk-page-contact-form__body input[type='time'],
+.mnpk-page-contact-form__body input[type='password'],
 .mnpk-page-contact-form__body textarea,
 .mnpk-page-contact-form__body select {
   display: block;
@@ -2527,7 +2559,7 @@
   min-height: 46px;
   margin: 0 0 14px;
   padding: 11px 13px;
-  border: 1px solid var(--mnpk-border, rgba(40, 127, 146, .24));
+  border: 1px solid var(--mnpk-border, rgba(40, 127, 146, 0.24));
   border-radius: 14px;
   background: #fff;
   color: var(--mnpk-page-text, var(--mnpk-text, #172033));
@@ -2546,11 +2578,11 @@
 .mnpk-page-contact-form__body textarea:focus,
 .mnpk-page-contact-form__body select:focus {
   border-color: var(--mnpk-accent, #2b84a0);
-  box-shadow: 0 0 0 3px rgba(43, 132, 160, .16);
+  box-shadow: 0 0 0 3px rgba(43, 132, 160, 0.16);
 }
 
-.mnpk-page-contact-form__body input[type="checkbox"],
-.mnpk-page-contact-form__body input[type="radio"] {
+.mnpk-page-contact-form__body input[type='checkbox'],
+.mnpk-page-contact-form__body input[type='radio'] {
   width: auto;
   min-height: 0;
   margin: 0 8px 0 0;
@@ -2568,8 +2600,8 @@
 }
 
 .mnpk-page-contact-form__body button,
-.mnpk-page-contact-form__body input[type="submit"],
-.mnpk-page-contact-form__body input[type="button"] {
+.mnpk-page-contact-form__body input[type='submit'],
+.mnpk-page-contact-form__body input[type='button'] {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -2589,9 +2621,9 @@
 }
 
 .mnpk-page-contact-form__body button:hover,
-.mnpk-page-contact-form__body input[type="submit"]:hover,
-.mnpk-page-contact-form__body input[type="button"]:hover {
-  filter: brightness(.96);
+.mnpk-page-contact-form__body input[type='submit']:hover,
+.mnpk-page-contact-form__body input[type='button']:hover {
+  filter: brightness(0.96);
 }
 
 .mnpk-page-contact-form__body .required,
@@ -2624,7 +2656,7 @@
 .mnpk-page-contact-form__body .wpcf7-response-output {
   margin: 14px 0 0;
   padding: 12px 14px;
-  border: 1px solid var(--mnpk-border, rgba(40, 127, 146, .18));
+  border: 1px solid var(--mnpk-border, rgba(40, 127, 146, 0.18));
   border-radius: 14px;
   background: var(--mnpk-accent-soft, #e5f3f6);
   color: var(--mnpk-page-text, var(--mnpk-text, #172033));
@@ -2657,14 +2689,13 @@
   }
 
   .mnpk-page-contact-form__body button,
-  .mnpk-page-contact-form__body input[type="submit"],
-  .mnpk-page-contact-form__body input[type="button"] {
+  .mnpk-page-contact-form__body input[type='submit'],
+  .mnpk-page-contact-form__body input[type='button'] {
     width: 100%;
   }
 }
 
 /* MNPK B2C CONTACT FORM CSS BRIDGE END */
-
 
 /* =========================================================
  * MNPK B2C CTA CONTACT BG HARD START
@@ -2680,18 +2711,17 @@
 
 .mnpk-page-cta--hard.has-bg-image {
   background-image:
-    linear-gradient(90deg, rgba(11, 32, 45, .78), rgba(11, 32, 45, .42)),
-    var(--mnpk-cta-bg-image);
+    linear-gradient(90deg, rgba(11, 32, 45, 0.78), rgba(11, 32, 45, 0.42)), var(--mnpk-cta-bg-image);
   background-size: cover;
   background-position: center;
   color: #fff;
 }
 
 .mnpk-page-cta--hard.has-bg-image::before {
-  content: "";
+  content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 20% 20%, rgba(255,255,255,.16), transparent 36%);
+  background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.16), transparent 36%);
   pointer-events: none;
 }
 
@@ -2715,11 +2745,11 @@
   box-sizing: border-box;
   margin-top: clamp(16px, 2.5vw, 24px);
   padding: clamp(16px, 3vw, 28px);
-  border: 1px solid var(--mnpk-border, rgba(40, 127, 146, .18));
+  border: 1px solid var(--mnpk-border, rgba(40, 127, 146, 0.18));
   border-radius: 22px;
   background: var(--mnpk-surface, #fff);
   color: var(--mnpk-page-text, var(--mnpk-text, #172033));
-  box-shadow: var(--mnpk-shadow-soft, 0 10px 26px rgba(15, 23, 42, .08));
+  box-shadow: var(--mnpk-shadow-soft, 0 10px 26px rgba(15, 23, 42, 0.08));
 }
 
 .mnpk-page-contact-form:first-child {
@@ -2742,12 +2772,12 @@
   margin: 0;
 }
 
-.mnpk-page-contact-form__body input[type="text"],
-.mnpk-page-contact-form__body input[type="email"],
-.mnpk-page-contact-form__body input[type="tel"],
-.mnpk-page-contact-form__body input[type="url"],
-.mnpk-page-contact-form__body input[type="number"],
-.mnpk-page-contact-form__body input[type="date"],
+.mnpk-page-contact-form__body input[type='text'],
+.mnpk-page-contact-form__body input[type='email'],
+.mnpk-page-contact-form__body input[type='tel'],
+.mnpk-page-contact-form__body input[type='url'],
+.mnpk-page-contact-form__body input[type='number'],
+.mnpk-page-contact-form__body input[type='date'],
 .mnpk-page-contact-form__body textarea,
 .mnpk-page-contact-form__body select {
   display: block;
@@ -2756,7 +2786,7 @@
   min-height: 46px;
   margin: 0 0 14px;
   padding: 11px 13px;
-  border: 1px solid var(--mnpk-border, rgba(40, 127, 146, .24));
+  border: 1px solid var(--mnpk-border, rgba(40, 127, 146, 0.24));
   border-radius: 14px;
   background: #fff;
   color: var(--mnpk-page-text, var(--mnpk-text, #172033));
@@ -2769,8 +2799,8 @@
 }
 
 .mnpk-page-contact-form__body button,
-.mnpk-page-contact-form__body input[type="submit"],
-.mnpk-page-contact-form__body input[type="button"] {
+.mnpk-page-contact-form__body input[type='submit'],
+.mnpk-page-contact-form__body input[type='button'] {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -2787,14 +2817,13 @@
 
 @media (max-width: 760px) {
   .mnpk-page-contact-form__body button,
-  .mnpk-page-contact-form__body input[type="submit"],
-  .mnpk-page-contact-form__body input[type="button"] {
+  .mnpk-page-contact-form__body input[type='submit'],
+  .mnpk-page-contact-form__body input[type='button'] {
     width: 100%;
   }
 }
 
 /* MNPK B2C CTA CONTACT BG HARD END */
-
 
 /* =========================================================
  * B2C CTA media background layer
@@ -2819,13 +2848,17 @@
 }
 
 .mnpk-page-cta.is-image-and-body > .mnpk-panel__inner::before {
-  content: "";
+  content: '';
   position: absolute;
   inset: 0;
   z-index: 1;
   pointer-events: none;
-  background:
-    linear-gradient(90deg, rgba(8, 20, 28, 0.72), rgba(8, 20, 28, 0.42) 45%, rgba(8, 20, 28, 0.18));
+  background: linear-gradient(
+    90deg,
+    rgba(8, 20, 28, 0.72),
+    rgba(8, 20, 28, 0.42) 45%,
+    rgba(8, 20, 28, 0.18)
+  );
 }
 
 .mnpk-page-cta.is-image-and-body .mnpk-split {
@@ -2888,8 +2921,45 @@
 
 /* 背景CTA上のボタンは読みやすくする */
 .mnpk-page-cta.is-image-and-body .mnpk-page-btn.is-secondary {
-  background: rgba(255, 255, 255, 0.92);
   border-color: rgba(255, 255, 255, 0.92);
+}
+
+/* 背景CTA上のボタン表示調整 */
+.mnpk-page-cta.is-image-and-body .mnpk-page-btn {
+  opacity: 1;
+  filter: none;
+  text-decoration: none;
+}
+
+/* 左：primary */
+.mnpk-page-cta.is-image-and-body .mnpk-page-btn.is-primary {
+  color: #ffffff;
+  background: #2f8fb4;
+  border-color: #2f8fb4;
+}
+
+.mnpk-page-cta.is-image-and-body .mnpk-page-btn.is-primary:hover,
+.mnpk-page-cta.is-image-and-body .mnpk-page-btn.is-primary:focus-visible {
+  color: #ffffff;
+  background: #1f7392;
+  border-color: #1f7392;
+  filter: none;
+}
+
+/* 右：secondary。hoverでも青ベタにしない */
+.mnpk-page-cta.is-image-and-body .mnpk-page-btn.is-secondary {
+  color: #0f5f7f;
+  background: rgba(255, 255, 255, 0.94);
+  border-color: rgba(255, 255, 255, 0.92);
+}
+
+.mnpk-page-cta.is-image-and-body .mnpk-page-btn.is-secondary:hover,
+.mnpk-page-cta.is-image-and-body .mnpk-page-btn.is-secondary:focus-visible {
+  color: #0b5a78;
+  background: #ffffff;
+  border-color: #ffffff;
+  filter: none;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.28);
 }
 
 /* swiperのページャー・矢印を背景CTA内に乗せる */
@@ -2926,7 +2996,7 @@
   }
 
   .mnpk-page-cta.is-image-and-body > .mnpk-panel__inner::before {
-    background: linear-gradient(180deg, rgba(8, 20, 28, 0.72), rgba(8, 20, 28, 0.40));
+    background: linear-gradient(180deg, rgba(8, 20, 28, 0.72), rgba(8, 20, 28, 0.4));
   }
 
   .mnpk-page-cta.is-image-and-body .mnpk-split__body {
@@ -2981,7 +3051,6 @@ body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body .mnpk-p
   }
 }
 
-
 /* =========================================================
  * B2C CTA FINAL DISPLAY RULE
  * ---------------------------------------------------------
@@ -3005,9 +3074,15 @@ body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body > .mnpk
 }
 
 /* 単体画像 / mp4 は背景として枠いっぱいに表示 */
-body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body .mnpk-page-cta__media.is-image img,
+body.page-template-page-minpaku-b2c
+  .mnpk-page-cta.is-image-and-body
+  .mnpk-page-cta__media.is-image
+  img,
 body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body .mnpk-page-cta__video,
-body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body .mnpk-page-cta__media.is-image img,
+body.page-template-page-minpaku-b2c-php
+  .mnpk-page-cta.is-image-and-body
+  .mnpk-page-cta__media.is-image
+  img,
 body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body .mnpk-page-cta__video {
   object-fit: cover !important;
   object-position: center center !important;
@@ -3015,27 +3090,43 @@ body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body .mnpk-p
 
 /* swiperだけは背景化しない。左右2分割に戻す */
 @supports selector(:has(*)) {
-  body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper) > .mnpk-panel__inner,
-  body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper) > .mnpk-panel__inner {
+  body.page-template-page-minpaku-b2c
+    .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper)
+    > .mnpk-panel__inner,
+  body.page-template-page-minpaku-b2c-php
+    .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper)
+    > .mnpk-panel__inner {
     min-height: clamp(280px, 32vw, 420px) !important;
     padding: 0 !important;
     background: var(--mnpk-surface, #fff) !important;
   }
 
-  body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper) > .mnpk-panel__inner::before,
-  body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper) > .mnpk-panel__inner::before {
+  body.page-template-page-minpaku-b2c
+    .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper)
+    > .mnpk-panel__inner::before,
+  body.page-template-page-minpaku-b2c-php
+    .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper)
+    > .mnpk-panel__inner::before {
     display: none !important;
   }
 
-  body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper) .mnpk-split,
-  body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper) .mnpk-split {
+  body.page-template-page-minpaku-b2c
+    .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper)
+    .mnpk-split,
+  body.page-template-page-minpaku-b2c-php
+    .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper)
+    .mnpk-split {
     display: grid !important;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
     min-height: inherit !important;
   }
 
-  body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper) .mnpk-split__media--cta,
-  body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper) .mnpk-split__media--cta {
+  body.page-template-page-minpaku-b2c
+    .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper)
+    .mnpk-split__media--cta,
+  body.page-template-page-minpaku-b2c-php
+    .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper)
+    .mnpk-split__media--cta {
     position: relative !important;
     inset: auto !important;
     z-index: 1 !important;
@@ -3044,8 +3135,12 @@ body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body .mnpk-p
     min-height: inherit !important;
   }
 
-  body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper) .mnpk-split__body,
-  body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper) .mnpk-split__body {
+  body.page-template-page-minpaku-b2c
+    .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper)
+    .mnpk-split__body,
+  body.page-template-page-minpaku-b2c-php
+    .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper)
+    .mnpk-split__body {
     position: relative !important;
     z-index: 2 !important;
     width: 100% !important;
@@ -3057,25 +3152,59 @@ body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body .mnpk-p
     background: var(--mnpk-surface, #fff) !important;
   }
 
-  body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper) .mnpk-content-block h2,
-  body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper) .mnpk-content-block p,
-  body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper) .mnpk-content-block h2,
-  body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper) .mnpk-content-block p {
+  body.page-template-page-minpaku-b2c
+    .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper)
+    .mnpk-content-block
+    h2,
+  body.page-template-page-minpaku-b2c
+    .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper)
+    .mnpk-content-block
+    p,
+  body.page-template-page-minpaku-b2c-php
+    .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper)
+    .mnpk-content-block
+    h2,
+  body.page-template-page-minpaku-b2c-php
+    .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper)
+    .mnpk-content-block
+    p {
     color: var(--mnpk-text, #182733) !important;
   }
 
-  body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper) .mnpk-cta-swiper,
-  body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper) .mnpk-cta-swiper .swiper-wrapper,
-  body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper) .mnpk-cta-swiper .swiper-slide,
-  body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper) .mnpk-cta-swiper,
-  body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper) .mnpk-cta-swiper .swiper-wrapper,
-  body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper) .mnpk-cta-swiper .swiper-slide {
+  body.page-template-page-minpaku-b2c
+    .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper)
+    .mnpk-cta-swiper,
+  body.page-template-page-minpaku-b2c
+    .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper)
+    .mnpk-cta-swiper
+    .swiper-wrapper,
+  body.page-template-page-minpaku-b2c
+    .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper)
+    .mnpk-cta-swiper
+    .swiper-slide,
+  body.page-template-page-minpaku-b2c-php
+    .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper)
+    .mnpk-cta-swiper,
+  body.page-template-page-minpaku-b2c-php
+    .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper)
+    .mnpk-cta-swiper
+    .swiper-wrapper,
+  body.page-template-page-minpaku-b2c-php
+    .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper)
+    .mnpk-cta-swiper
+    .swiper-slide {
     height: 100% !important;
     min-height: inherit !important;
   }
 
-  body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper) .mnpk-cta-swiper img,
-  body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper) .mnpk-cta-swiper img {
+  body.page-template-page-minpaku-b2c
+    .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper)
+    .mnpk-cta-swiper
+    img,
+  body.page-template-page-minpaku-b2c-php
+    .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper)
+    .mnpk-cta-swiper
+    img {
     width: 100% !important;
     height: 100% !important;
     object-fit: cover !important;
@@ -3083,13 +3212,21 @@ body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body .mnpk-p
   }
 
   @media (max-width: 760px) {
-    body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper) .mnpk-split,
-    body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper) .mnpk-split {
+    body.page-template-page-minpaku-b2c
+      .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper)
+      .mnpk-split,
+    body.page-template-page-minpaku-b2c-php
+      .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper)
+      .mnpk-split {
       grid-template-columns: 1fr !important;
     }
 
-    body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper) .mnpk-split__media--cta,
-    body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper) .mnpk-split__media--cta {
+    body.page-template-page-minpaku-b2c
+      .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper)
+      .mnpk-split__media--cta,
+    body.page-template-page-minpaku-b2c-php
+      .mnpk-page-cta.is-image-and-body:has(.mnpk-page-cta__media.is-swiper)
+      .mnpk-split__media--cta {
       min-height: 220px !important;
     }
   }
@@ -3114,7 +3251,6 @@ body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-form-only .customer-in
   width: 100% !important;
   max-width: none !important;
 }
-
 
 /* =========================================================
  * B2C CTA CLASS DISPLAY FINAL
@@ -3142,26 +3278,47 @@ body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta
   isolation: isolate !important;
 }
 
-body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body.has-cta-image > .mnpk-panel__inner,
-body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body.has-cta-video > .mnpk-panel__inner,
-body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta-image > .mnpk-panel__inner,
-body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta-video > .mnpk-panel__inner {
+body.page-template-page-minpaku-b2c
+  .mnpk-page-cta.is-image-and-body.has-cta-image
+  > .mnpk-panel__inner,
+body.page-template-page-minpaku-b2c
+  .mnpk-page-cta.is-image-and-body.has-cta-video
+  > .mnpk-panel__inner,
+body.page-template-page-minpaku-b2c-php
+  .mnpk-page-cta.is-image-and-body.has-cta-image
+  > .mnpk-panel__inner,
+body.page-template-page-minpaku-b2c-php
+  .mnpk-page-cta.is-image-and-body.has-cta-video
+  > .mnpk-panel__inner {
   position: relative !important;
   min-height: clamp(220px, 24vw, 340px) !important;
   padding: 0 !important;
   overflow: hidden !important;
 }
 
-body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body.has-cta-image > .mnpk-panel__inner::before,
-body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body.has-cta-video > .mnpk-panel__inner::before,
-body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta-image > .mnpk-panel__inner::before,
-body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta-video > .mnpk-panel__inner::before {
-  content: "" !important;
+body.page-template-page-minpaku-b2c
+  .mnpk-page-cta.is-image-and-body.has-cta-image
+  > .mnpk-panel__inner::before,
+body.page-template-page-minpaku-b2c
+  .mnpk-page-cta.is-image-and-body.has-cta-video
+  > .mnpk-panel__inner::before,
+body.page-template-page-minpaku-b2c-php
+  .mnpk-page-cta.is-image-and-body.has-cta-image
+  > .mnpk-panel__inner::before,
+body.page-template-page-minpaku-b2c-php
+  .mnpk-page-cta.is-image-and-body.has-cta-video
+  > .mnpk-panel__inner::before {
+  content: '' !important;
   position: absolute !important;
   inset: 0 !important;
   z-index: 1 !important;
   pointer-events: none !important;
-  background: linear-gradient(90deg, rgba(7,18,28,.72), rgba(7,18,28,.42) 48%, rgba(7,18,28,.14)) !important;
+  background: linear-gradient(
+    90deg,
+    rgba(7, 18, 28, 0.72),
+    rgba(7, 18, 28, 0.42) 48%,
+    rgba(7, 18, 28, 0.14)
+  ) !important;
 }
 
 body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body.has-cta-image .mnpk-split,
@@ -3172,10 +3329,18 @@ body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta
   min-height: inherit !important;
 }
 
-body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body.has-cta-image .mnpk-split__media--cta,
-body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body.has-cta-video .mnpk-split__media--cta,
-body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta-image .mnpk-split__media--cta,
-body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta-video .mnpk-split__media--cta {
+body.page-template-page-minpaku-b2c
+  .mnpk-page-cta.is-image-and-body.has-cta-image
+  .mnpk-split__media--cta,
+body.page-template-page-minpaku-b2c
+  .mnpk-page-cta.is-image-and-body.has-cta-video
+  .mnpk-split__media--cta,
+body.page-template-page-minpaku-b2c-php
+  .mnpk-page-cta.is-image-and-body.has-cta-image
+  .mnpk-split__media--cta,
+body.page-template-page-minpaku-b2c-php
+  .mnpk-page-cta.is-image-and-body.has-cta-video
+  .mnpk-split__media--cta {
   position: absolute !important;
   inset: 0 !important;
   z-index: 0 !important;
@@ -3184,20 +3349,38 @@ body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta
   overflow: hidden !important;
 }
 
-body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body.has-cta-image .mnpk-page-cta__media,
-body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body.has-cta-video .mnpk-page-cta__media,
-body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta-image .mnpk-page-cta__media,
-body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta-video .mnpk-page-cta__media {
+body.page-template-page-minpaku-b2c
+  .mnpk-page-cta.is-image-and-body.has-cta-image
+  .mnpk-page-cta__media,
+body.page-template-page-minpaku-b2c
+  .mnpk-page-cta.is-image-and-body.has-cta-video
+  .mnpk-page-cta__media,
+body.page-template-page-minpaku-b2c-php
+  .mnpk-page-cta.is-image-and-body.has-cta-image
+  .mnpk-page-cta__media,
+body.page-template-page-minpaku-b2c-php
+  .mnpk-page-cta.is-image-and-body.has-cta-video
+  .mnpk-page-cta__media {
   width: 100% !important;
   height: 100% !important;
   min-height: 100% !important;
   margin: 0 !important;
 }
 
-body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body.has-cta-image .mnpk-page-cta__media img,
-body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body.has-cta-video .mnpk-page-cta__video,
-body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta-image .mnpk-page-cta__media img,
-body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta-video .mnpk-page-cta__video {
+body.page-template-page-minpaku-b2c
+  .mnpk-page-cta.is-image-and-body.has-cta-image
+  .mnpk-page-cta__media
+  img,
+body.page-template-page-minpaku-b2c
+  .mnpk-page-cta.is-image-and-body.has-cta-video
+  .mnpk-page-cta__video,
+body.page-template-page-minpaku-b2c-php
+  .mnpk-page-cta.is-image-and-body.has-cta-image
+  .mnpk-page-cta__media
+  img,
+body.page-template-page-minpaku-b2c-php
+  .mnpk-page-cta.is-image-and-body.has-cta-video
+  .mnpk-page-cta__video {
   display: block !important;
   width: 100% !important;
   height: 100% !important;
@@ -3206,10 +3389,18 @@ body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta
 }
 
 /* 背景CTAの本文 */
-body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body.has-cta-image .mnpk-split__body,
-body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body.has-cta-video .mnpk-split__body,
-body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta-image .mnpk-split__body,
-body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta-video .mnpk-split__body {
+body.page-template-page-minpaku-b2c
+  .mnpk-page-cta.is-image-and-body.has-cta-image
+  .mnpk-split__body,
+body.page-template-page-minpaku-b2c
+  .mnpk-page-cta.is-image-and-body.has-cta-video
+  .mnpk-split__body,
+body.page-template-page-minpaku-b2c-php
+  .mnpk-page-cta.is-image-and-body.has-cta-image
+  .mnpk-split__body,
+body.page-template-page-minpaku-b2c-php
+  .mnpk-page-cta.is-image-and-body.has-cta-video
+  .mnpk-split__body {
   position: relative !important;
   z-index: 2 !important;
   min-height: inherit !important;
@@ -3220,40 +3411,78 @@ body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta
   color: #fff !important;
 }
 
-body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body.has-cta-image .mnpk-content-block h2,
-body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body.has-cta-image .mnpk-content-block p,
-body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body.has-cta-video .mnpk-content-block h2,
-body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body.has-cta-video .mnpk-content-block p,
-body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta-image .mnpk-content-block h2,
-body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta-image .mnpk-content-block p,
-body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta-video .mnpk-content-block h2,
-body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta-video .mnpk-content-block p {
+body.page-template-page-minpaku-b2c
+  .mnpk-page-cta.is-image-and-body.has-cta-image
+  .mnpk-content-block
+  h2,
+body.page-template-page-minpaku-b2c
+  .mnpk-page-cta.is-image-and-body.has-cta-image
+  .mnpk-content-block
+  p,
+body.page-template-page-minpaku-b2c
+  .mnpk-page-cta.is-image-and-body.has-cta-video
+  .mnpk-content-block
+  h2,
+body.page-template-page-minpaku-b2c
+  .mnpk-page-cta.is-image-and-body.has-cta-video
+  .mnpk-content-block
+  p,
+body.page-template-page-minpaku-b2c-php
+  .mnpk-page-cta.is-image-and-body.has-cta-image
+  .mnpk-content-block
+  h2,
+body.page-template-page-minpaku-b2c-php
+  .mnpk-page-cta.is-image-and-body.has-cta-image
+  .mnpk-content-block
+  p,
+body.page-template-page-minpaku-b2c-php
+  .mnpk-page-cta.is-image-and-body.has-cta-video
+  .mnpk-content-block
+  h2,
+body.page-template-page-minpaku-b2c-php
+  .mnpk-page-cta.is-image-and-body.has-cta-video
+  .mnpk-content-block
+  p {
   color: #fff !important;
 }
 
 /* swiperは左右2分割 */
-body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body.has-cta-swiper > .mnpk-panel__inner,
-body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta-swiper > .mnpk-panel__inner {
+body.page-template-page-minpaku-b2c
+  .mnpk-page-cta.is-image-and-body.has-cta-swiper
+  > .mnpk-panel__inner,
+body.page-template-page-minpaku-b2c-php
+  .mnpk-page-cta.is-image-and-body.has-cta-swiper
+  > .mnpk-panel__inner {
   min-height: clamp(280px, 32vw, 420px) !important;
   padding: 0 !important;
   overflow: hidden !important;
   background: var(--mnpk-surface, #fff) !important;
 }
 
-body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body.has-cta-swiper > .mnpk-panel__inner::before,
-body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta-swiper > .mnpk-panel__inner::before {
+body.page-template-page-minpaku-b2c
+  .mnpk-page-cta.is-image-and-body.has-cta-swiper
+  > .mnpk-panel__inner::before,
+body.page-template-page-minpaku-b2c-php
+  .mnpk-page-cta.is-image-and-body.has-cta-swiper
+  > .mnpk-panel__inner::before {
   display: none !important;
 }
 
 body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body.has-cta-swiper .mnpk-split,
-body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta-swiper .mnpk-split {
+body.page-template-page-minpaku-b2c-php
+  .mnpk-page-cta.is-image-and-body.has-cta-swiper
+  .mnpk-split {
   display: grid !important;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
   min-height: inherit !important;
 }
 
-body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body.has-cta-swiper .mnpk-split__media--cta,
-body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta-swiper .mnpk-split__media--cta {
+body.page-template-page-minpaku-b2c
+  .mnpk-page-cta.is-image-and-body.has-cta-swiper
+  .mnpk-split__media--cta,
+body.page-template-page-minpaku-b2c-php
+  .mnpk-page-cta.is-image-and-body.has-cta-swiper
+  .mnpk-split__media--cta {
   position: relative !important;
   inset: auto !important;
   z-index: 1 !important;
@@ -3262,26 +3491,52 @@ body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta
   overflow: hidden !important;
 }
 
-body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body.has-cta-swiper .mnpk-cta-swiper,
-body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body.has-cta-swiper .mnpk-cta-swiper .swiper-wrapper,
-body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body.has-cta-swiper .mnpk-cta-swiper .swiper-slide,
-body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta-swiper .mnpk-cta-swiper,
-body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta-swiper .mnpk-cta-swiper .swiper-wrapper,
-body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta-swiper .mnpk-cta-swiper .swiper-slide {
+body.page-template-page-minpaku-b2c
+  .mnpk-page-cta.is-image-and-body.has-cta-swiper
+  .mnpk-cta-swiper,
+body.page-template-page-minpaku-b2c
+  .mnpk-page-cta.is-image-and-body.has-cta-swiper
+  .mnpk-cta-swiper
+  .swiper-wrapper,
+body.page-template-page-minpaku-b2c
+  .mnpk-page-cta.is-image-and-body.has-cta-swiper
+  .mnpk-cta-swiper
+  .swiper-slide,
+body.page-template-page-minpaku-b2c-php
+  .mnpk-page-cta.is-image-and-body.has-cta-swiper
+  .mnpk-cta-swiper,
+body.page-template-page-minpaku-b2c-php
+  .mnpk-page-cta.is-image-and-body.has-cta-swiper
+  .mnpk-cta-swiper
+  .swiper-wrapper,
+body.page-template-page-minpaku-b2c-php
+  .mnpk-page-cta.is-image-and-body.has-cta-swiper
+  .mnpk-cta-swiper
+  .swiper-slide {
   height: 100% !important;
   min-height: inherit !important;
 }
 
-body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body.has-cta-swiper .mnpk-cta-swiper img,
-body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta-swiper .mnpk-cta-swiper img {
+body.page-template-page-minpaku-b2c
+  .mnpk-page-cta.is-image-and-body.has-cta-swiper
+  .mnpk-cta-swiper
+  img,
+body.page-template-page-minpaku-b2c-php
+  .mnpk-page-cta.is-image-and-body.has-cta-swiper
+  .mnpk-cta-swiper
+  img {
   display: block !important;
   width: 100% !important;
   height: 100% !important;
   object-fit: cover !important;
 }
 
-body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body.has-cta-swiper .mnpk-split__body,
-body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta-swiper .mnpk-split__body {
+body.page-template-page-minpaku-b2c
+  .mnpk-page-cta.is-image-and-body.has-cta-swiper
+  .mnpk-split__body,
+body.page-template-page-minpaku-b2c-php
+  .mnpk-page-cta.is-image-and-body.has-cta-swiper
+  .mnpk-split__body {
   position: relative !important;
   z-index: 2 !important;
   width: 100% !important;
@@ -3293,10 +3548,22 @@ body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta
   background: var(--mnpk-surface, #fff) !important;
 }
 
-body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body.has-cta-swiper .mnpk-content-block h2,
-body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body.has-cta-swiper .mnpk-content-block p,
-body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta-swiper .mnpk-content-block h2,
-body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta-swiper .mnpk-content-block p {
+body.page-template-page-minpaku-b2c
+  .mnpk-page-cta.is-image-and-body.has-cta-swiper
+  .mnpk-content-block
+  h2,
+body.page-template-page-minpaku-b2c
+  .mnpk-page-cta.is-image-and-body.has-cta-swiper
+  .mnpk-content-block
+  p,
+body.page-template-page-minpaku-b2c-php
+  .mnpk-page-cta.is-image-and-body.has-cta-swiper
+  .mnpk-content-block
+  h2,
+body.page-template-page-minpaku-b2c-php
+  .mnpk-page-cta.is-image-and-body.has-cta-swiper
+  .mnpk-content-block
+  p {
   color: var(--mnpk-text, #182733) !important;
 }
 
@@ -3317,15 +3584,189 @@ body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-form-only .customer-in
 
 @media (max-width: 760px) {
   body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body.has-cta-swiper .mnpk-split,
-  body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta-swiper .mnpk-split {
+  body.page-template-page-minpaku-b2c-php
+    .mnpk-page-cta.is-image-and-body.has-cta-swiper
+    .mnpk-split {
     grid-template-columns: 1fr !important;
   }
 
-  body.page-template-page-minpaku-b2c .mnpk-page-cta.is-image-and-body.has-cta-swiper .mnpk-split__media--cta,
-  body.page-template-page-minpaku-b2c-php .mnpk-page-cta.is-image-and-body.has-cta-swiper .mnpk-split__media--cta {
+  body.page-template-page-minpaku-b2c
+    .mnpk-page-cta.is-image-and-body.has-cta-swiper
+    .mnpk-split__media--cta,
+  body.page-template-page-minpaku-b2c-php
+    .mnpk-page-cta.is-image-and-body.has-cta-swiper
+    .mnpk-split__media--cta {
     min-height: 220px !important;
   }
 }
 
 /* === END B2C CTA CLASS DISPLAY FINAL === */
 
+/* === MNPK B2C HERO BUTTON HOVER VISIBLE FINAL START === */
+/*
+ * 目的:
+ * - 小さいheroボタンのhoverを目で分かるようにする
+ * - primaryは濃い青へ
+ * - secondaryは薄い青背景＋濃い枠線へ
+ * - 白背景に白枠など、見えない指定を禁止
+ */
+
+body.page-template-page-minpaku-b2c .mnpk-page-hero .mnpk-page-actions .mnpk-page-btn,
+body.page-template-page-minpaku-b2c-php .mnpk-page-hero .mnpk-page-actions .mnpk-page-btn {
+  transition:
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.18s ease !important;
+}
+
+/* primary 通常 */
+body.page-template-page-minpaku-b2c
+  .mnpk-page-hero.is-no-image
+  .mnpk-page-actions
+  .mnpk-page-btn.is-primary,
+body.page-template-page-minpaku-b2c-php
+  .mnpk-page-hero.is-no-image
+  .mnpk-page-actions
+  .mnpk-page-btn.is-primary {
+  color: #ffffff !important;
+  background: #2f7fa2 !important;
+  border: 1px solid #2f7fa2 !important;
+  opacity: 1 !important;
+  filter: none !important;
+}
+
+/* primary hover：明確に濃くする */
+body.page-template-page-minpaku-b2c
+  .mnpk-page-hero.is-no-image
+  .mnpk-page-actions
+  .mnpk-page-btn.is-primary:hover,
+body.page-template-page-minpaku-b2c
+  .mnpk-page-hero.is-no-image
+  .mnpk-page-actions
+  .mnpk-page-btn.is-primary:focus-visible,
+body.page-template-page-minpaku-b2c-php
+  .mnpk-page-hero.is-no-image
+  .mnpk-page-actions
+  .mnpk-page-btn.is-primary:hover,
+body.page-template-page-minpaku-b2c-php
+  .mnpk-page-hero.is-no-image
+  .mnpk-page-actions
+  .mnpk-page-btn.is-primary:focus-visible {
+  color: #ffffff !important;
+  background: #145f7c !important;
+  border: 1px solid #145f7c !important;
+  box-shadow: 0 0 0 4px rgba(47, 127, 162, 0.28) !important;
+  transform: translateY(-1px) !important;
+  opacity: 1 !important;
+  filter: none !important;
+}
+
+/* secondary 通常：白背景＋青枠 */
+body.page-template-page-minpaku-b2c
+  .mnpk-page-hero.is-no-image
+  .mnpk-page-actions
+  .mnpk-page-btn.is-secondary,
+body.page-template-page-minpaku-b2c-php
+  .mnpk-page-hero.is-no-image
+  .mnpk-page-actions
+  .mnpk-page-btn.is-secondary {
+  color: #0f5f7f !important;
+  background: #ffffff !important;
+  border: 1px solid #2f7fa2 !important;
+  opacity: 1 !important;
+  filter: none !important;
+}
+
+/* secondary hover：白のままにしない。薄青にして枠も濃くする */
+body.page-template-page-minpaku-b2c
+  .mnpk-page-hero.is-no-image
+  .mnpk-page-actions
+  .mnpk-page-btn.is-secondary:hover,
+body.page-template-page-minpaku-b2c
+  .mnpk-page-hero.is-no-image
+  .mnpk-page-actions
+  .mnpk-page-btn.is-secondary:focus-visible,
+body.page-template-page-minpaku-b2c-php
+  .mnpk-page-hero.is-no-image
+  .mnpk-page-actions
+  .mnpk-page-btn.is-secondary:hover,
+body.page-template-page-minpaku-b2c-php
+  .mnpk-page-hero.is-no-image
+  .mnpk-page-actions
+  .mnpk-page-btn.is-secondary:focus-visible {
+  color: #063f55 !important;
+  background: #dff3fa !important;
+  border: 1px solid #063f55 !important;
+  box-shadow: 0 0 0 4px rgba(47, 127, 162, 0.24) !important;
+  transform: translateY(-1px) !important;
+  opacity: 1 !important;
+  filter: none !important;
+}
+
+/* active：クリック感 */
+body.page-template-page-minpaku-b2c
+  .mnpk-page-hero.is-no-image
+  .mnpk-page-actions
+  .mnpk-page-btn:active,
+body.page-template-page-minpaku-b2c-php
+  .mnpk-page-hero.is-no-image
+  .mnpk-page-actions
+  .mnpk-page-btn:active {
+  transform: translateY(0) !important;
+  box-shadow: none !important;
+}
+/* === MNPK B2C HERO BUTTON HOVER VISIBLE FINAL END === */
+
+/* === MINPAKU SUPPORT HERO OVERLAY FIX START === */
+/*
+ * page-minpaku-support hero 画像が暗すぎるため、
+ * 黒い overlay を薄くして画像を見せる。
+ */
+
+body.page-template-page-minpaku-support .wakugui-hero,
+body.page-template-page-minpaku-support-php .wakugui-hero,
+body.page-template-page-minpaku-support .wakugui-hero__media,
+body.page-template-page-minpaku-support-php .wakugui-hero__media {
+  position: relative;
+}
+
+body.page-template-page-minpaku-support .wakugui-hero__overlay,
+body.page-template-page-minpaku-support-php .wakugui-hero__overlay {
+  background: linear-gradient(
+    90deg,
+    rgba(3, 10, 18, 0.32) 0%,
+    rgba(3, 10, 18, 0.18) 48%,
+    rgba(3, 10, 18, 0.08) 100%
+  ) !important;
+}
+
+body.dark-theme.page-template-page-minpaku-support .wakugui-hero__overlay,
+body.dark-theme.page-template-page-minpaku-support-php .wakugui-hero__overlay,
+html.dark-theme body.page-template-page-minpaku-support .wakugui-hero__overlay,
+html.dark-theme body.page-template-page-minpaku-support-php .wakugui-hero__overlay {
+  background: linear-gradient(
+    90deg,
+    rgba(3, 10, 18, 0.38) 0%,
+    rgba(3, 10, 18, 0.22) 48%,
+    rgba(3, 10, 18, 0.1) 100%
+  ) !important;
+}
+
+body.page-template-page-minpaku-support .wakugui-hero__media img,
+body.page-template-page-minpaku-support-php .wakugui-hero__media img,
+body.page-template-page-minpaku-support .wakugui-hero__media picture img,
+body.page-template-page-minpaku-support-php .wakugui-hero__media picture img {
+  filter: brightness(1.12) contrast(1.02) saturate(1.03) !important;
+}
+
+/* もし疑似要素でも暗幕を作っていた場合に弱める */
+body.page-template-page-minpaku-support .wakugui-hero::before,
+body.page-template-page-minpaku-support .wakugui-hero::after,
+body.page-template-page-minpaku-support-php .wakugui-hero::before,
+body.page-template-page-minpaku-support-php .wakugui-hero::after {
+  background: transparent !important;
+  opacity: 0 !important;
+}
+/* === MINPAKU SUPPORT HERO OVERLAY FIX END === */

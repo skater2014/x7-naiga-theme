@@ -53,7 +53,12 @@
         !$hide_price_range
     ) :
     ?>
-        <!-- price-range サイドバー -->
+        <!--
+          価格帯の出力経路:
+          1) この #price-range-sidebar は価格帯ウィジェットの外箱。
+          2) dynamic_sidebar('price-range') が WordPress のウィジェットエリア price-range を呼び出す。
+          3) 実際のHTMLは Price_Range_Widget.php の widget() から出力される。
+        -->
         <div id="price-range-sidebar" class="">
             <?php dynamic_sidebar('price-range'); ?>
         </div>

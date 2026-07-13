@@ -57,7 +57,8 @@ if (!defined('ABSPATH')) {
  * ---------------------------------------------------------
  */
 if (!function_exists('naigai_fudo_page_meta')) {
-  function naigai_fudo_page_meta($key, $default = '') {
+  function naigai_fudo_page_meta($key, $default = '')
+  {
     $post_id = get_queried_object_id();
     $value = $post_id ? get_post_meta($post_id, $key, true) : '';
 
@@ -70,7 +71,8 @@ if (!function_exists('naigai_fudo_page_meta')) {
 }
 
 if (!function_exists('naigai_fudo_clean_media_ids')) {
-  function naigai_fudo_clean_media_ids($value) {
+  function naigai_fudo_clean_media_ids($value)
+  {
     if (is_array($value)) {
       $ids = $value;
     } else {
@@ -85,7 +87,8 @@ if (!function_exists('naigai_fudo_clean_media_ids')) {
 }
 
 if (!function_exists('naigai_fudo_youtube_id_from_value')) {
-  function naigai_fudo_youtube_id_from_value($value) {
+  function naigai_fudo_youtube_id_from_value($value)
+  {
     $value = trim((string) $value);
 
     if ($value === '') {
@@ -105,7 +108,8 @@ if (!function_exists('naigai_fudo_youtube_id_from_value')) {
 }
 
 if (!function_exists('naigai_fudo_render_hero_media')) {
-  function naigai_fudo_render_hero_media() {
+  function naigai_fudo_render_hero_media()
+  {
     $post_id = get_queried_object_id();
 
     if (!$post_id) {
@@ -409,6 +413,22 @@ if (!function_exists('naigai_fudo_render_card_facts')) {
   }
 }
 
+/*
+ * ---------------------------------------------------------
+ * Google Map 表示用helper
+ * ---------------------------------------------------------
+ *
+ * functions.php 側の役割:
+ * - 管理画面にGoogle Map入力欄を出す
+ * - _google_map_iframe_1 / _google_map_iframe_2 へ保存する
+ *
+ * このテンプレート側の役割:
+ * - 保存済みの地図iframeを取得する
+ * - front-map-modal.js が利用する data-map-html へ渡す
+ *
+ * つまり、functions.php の保存処理とは役割が別なので、
+ * このフロント表示用helperは残す。
+ */
 if (!function_exists('naigai_fudo_get_map_html')) {
   function naigai_fudo_get_map_html($post_id)
   {
@@ -454,7 +474,7 @@ if (!function_exists('naigai_fudo_render_map_button')) {
      * - data-map-html は base64 iframe
      * - SVGは巨大化しやすいので使わない
      */
-    return '<button type="button" class="fudo-card-btn fudo-card-btn--map google-location-trigger" data-map-open data-map-title="' . esc_attr(get_the_title($post_id)) . '" data-map-html="' . esc_attr(base64_encode($map)) . '" data-post-id="' . esc_attr($post_id) . '"><span class="fudo-card-btn__map-mark" aria-hidden="true">📍</span><span>地図を見る</span></button>';
+    return '<button type="button" class="fudo-card-btn fudo-card-btn--map google-location-trigger" data-map-open data-map-html="' . esc_attr(base64_encode($map)) . '" data-post-id="' . esc_attr($post_id) . '"><span class="fudo-card-btn__map-mark" aria-hidden="true">📍</span><span>地図を見る</span></button>';
   }
 }
 
@@ -587,19 +607,17 @@ if (!function_exists('naigai_fudo_render_card_media')) {
 }
 
 
-if (!function_exists('naigai_fudo_get_card_thumb_url')) {
-  function naigai_fudo_get_card_thumb_url($post_id)
-  {
-    $post_id = (int) $post_id;
-    $thumb = get_the_post_thumbnail_url($post_id, 'large');
-
-    if ($thumb) {
-      return $thumb;
-    }
-
-    return get_template_directory_uri() . '/images/no-image.jpg';
-  }
-}
+/*
+ * 予約モーダル用の画像URLは、このテンプレート専用helperを作らない。
+ *
+ * functions.php の naigai_get_sidebar_thumbnail_url() が、
+ * page_featured_type / page_video_id を使って
+ * YouTube・Vimeo・アイキャッチ画像を共通判定するため、
+ * 予約ボタンでもその共通関数を使用する。
+ *
+ * naigai_fudo_render_card_media() は、
+ * <lite-youtube> / <lite-vimeo> / <img> のHTMLを返す別用途なので残す。
+ */
 
 $page_id = get_queried_object_id();
 
@@ -873,11 +891,11 @@ if ($query->have_posts()) {
 
 <div class="hub-page hub-page-realestate fudousan-page">
 
-<?php
-$fudo_hero_kicker = naigai_fudo_page_meta('_fudo_hero_kicker', 'Nasu Real Estate');
-$fudo_hero_title  = naigai_fudo_page_meta('_fudo_hero_title', '那須の土地・住まい・不動産相談');
-$fudo_hero_lead   = naigai_fudo_page_meta('_fudo_hero_lead', '那須エリアを中心に、土地探し・住宅購入・賃貸・売却相談まで。暮らしと事業に合わせた不動産情報をご案内します。');
-?>
+  <?php
+  $fudo_hero_kicker = naigai_fudo_page_meta('_fudo_hero_kicker', 'Nasu Real Estate');
+  $fudo_hero_title  = naigai_fudo_page_meta('_fudo_hero_title', '那須の土地・住まい・不動産相談');
+  $fudo_hero_lead   = naigai_fudo_page_meta('_fudo_hero_lead', '那須エリアを中心に、土地探し・住宅購入・賃貸・売却相談まで。暮らしと事業に合わせた不動産情報をご案内します。');
+  ?>
   <section class="fudo-hero">
     <div class="fudo-shell fudo-hero__grid">
       <div class="fudo-hero__body">
@@ -962,7 +980,17 @@ $fudo_hero_lead   = naigai_fudo_page_meta('_fudo_hero_lead', '那須エリアを
 
           <article class="archive-post-box main-custom-post fudo-post-card <?php echo esc_attr($card_class); ?>">
             <?php if ($is_video_card) : ?>
-              <div class="fudo-post-card__image blog-post-image fudo-post-card__image--video">
+              <?php
+              /*
+               * 共通 js/scripts.js の予約モーダル処理は、
+               * .blog-post-image.youtube / .blog-post-image.vimeo を見て
+               * lite-youtube / lite-vimeo から動画サムネイルを判定する。
+               *
+               * そのため、不動産専用JSで動画画像URLを新しく組み立てず、
+               * 既存の共通仕様に合わせて動画種別クラスだけ付ける。
+               */
+              ?>
+              <div class="fudo-post-card__image blog-post-image fudo-post-card__image--video <?php echo esc_attr($featured_type); ?>">
                 <?php echo naigai_fudo_render_card_media($post_id); ?>
               </div>
             <?php else : ?>
@@ -1009,9 +1037,45 @@ $fudo_hero_lead   = naigai_fudo_page_meta('_fudo_hero_lead', '那須エリアを
                   <?php echo naigai_fudo_render_map_button($post_id); ?>
 
                   <?php
+                  /*
+                   * 予約モーダルへ渡す情報。
+                   *
+                   * 投稿ID:
+                   * - WordPress上の予約対象投稿を識別する
+                   *
+                   * タイトル / 価格:
+                   * - 不動産カードの表示内容をモーダルへ渡す
+                   *
+                   * サムネイル:
+                   * - functions.php の共通関数を使う
+                   * - YouTube / Vimeo / アイキャッチを共通判定する
+                   *
+                   * 共通関数が読み込まれていない場合だけ、
+                   * アイキャッチ → no-image の順でフォールバックする。
+                   */
                   $reservation_title = get_the_title($post_id);
                   $reservation_price = naigai_fudo_format_price_label($post_id);
-                  $reservation_thumb = naigai_fudo_get_card_thumb_url($post_id);
+
+                  if (function_exists('naigai_get_sidebar_thumbnail_url')) {
+                    $reservation_thumb = naigai_get_sidebar_thumbnail_url($post_id);
+                  } else {
+                    $reservation_thumb = get_the_post_thumbnail_url($post_id, 'large');
+
+                    if (!$reservation_thumb) {
+                      $reservation_thumb = get_template_directory_uri() . '/images/no-image.jpg';
+                    }
+                  }
+                  ?>
+                  <?php
+                  /*
+                   * data-reservation-* は /fudousan 専用JSの補助データ。
+                   *
+                   * 共通 scripts.js もカードDOMから情報を取得できるため、
+                   * 動画判定そのものは共通 scripts.js の仕様へ合わせる。
+                   *
+                   * 既存の不動産ページ側処理との互換性を壊さないため、
+                   * data属性は残し、画像URLだけ共通関数の結果に統一する。
+                   */
                   ?>
                   <a
                     class="fudo-card-btn fudo-card-btn--ghost store-reserve-link"

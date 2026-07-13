@@ -11,7 +11,7 @@ $my_query = new WP_Query($args); // WP_Queryを使って投稿を取得
 if ($my_query->have_posts()) : // 投稿がある場合
     global $post;
     ?>
-    <ul id="sidebar-recent-posts" class="sidebar-posts">
+    <ul class="sidebar-posts sidebar-recent-posts">
         <?php while ($my_query->have_posts()) : $my_query->the_post();
             $counter++; // 投稿ごとにカウンターをインクリメント
 

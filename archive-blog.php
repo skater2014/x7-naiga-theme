@@ -111,9 +111,6 @@ get_header('77');
                     </div> <!-- /.heart-icon -->
                 </div> <!-- /.blog-thumbnail-box1 -->
 
-                <div class="content-box1"> <!-- /.content-box1 -->
-                </div> <!-- /.content-box1 -->
-
                 <p class="custom-excerpt"><?php echo dess_get_excerpt(180); ?></p> <!-- /.custom-excerpt -->
 
                 <div class="more-link-wrapper"> <!-- /.more-link-wrapper -->

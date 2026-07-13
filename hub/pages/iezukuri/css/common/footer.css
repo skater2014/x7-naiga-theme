@@ -1,0 +1,118 @@
+/* =========================================================
+ * いえづくり共通 footer CSS
+ *
+ * 正本:
+ * - HTML: templates/shared/section-footer.php
+ * - CSS : css/common/footer.css
+ *
+ * 禁止:
+ * - top-footer.css に依存しない
+ * - subpage.css に footer CSS を重複させない
+ * ========================================================= */
+
+.ch-lp-footer {
+  display: block;
+  width: 100vw;
+  max-width: none;
+  margin: 0 calc(50% - 50vw);
+  padding: clamp(56px, 7vw, 92px) 0 clamp(44px, 5vw, 64px);
+  background: #10161f;
+  color: #f3f6f8;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  box-sizing: border-box;
+}
+
+.ch-lp-footer .ch-shell {
+  width: calc(100% - 80px);
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.ch-lp-footer__grid {
+  display: grid;
+  grid-template-columns: minmax(260px, 0.9fr) minmax(0, 1.8fr);
+  gap: clamp(32px, 5vw, 72px);
+  align-items: start;
+}
+
+.ch-lp-footer__label {
+  margin: 0 0 10px;
+  color: rgba(243, 246, 248, 0.62);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.ch-lp-footer h3,
+.ch-lp-footer h4 {
+  margin: 0 0 14px;
+  color: #fff;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.ch-lp-footer h3 {
+  font-size: clamp(18px, 1.8vw, 24px);
+}
+
+.ch-lp-footer h4 {
+  font-size: 16px;
+}
+
+.ch-lp-footer p {
+  margin: 0;
+  color: rgba(243, 246, 248, 0.76);
+  font-size: 14px;
+  line-height: 1.85;
+}
+
+.ch-lp-footer__menu {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px 28px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ch-lp-footer__menu li {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  line-height: 1.7;
+}
+
+.ch-lp-footer__menu a {
+  display: inline-block;
+  color: rgba(243, 246, 248, 0.84);
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.ch-lp-footer__menu a:hover,
+.ch-lp-footer__menu a:focus-visible {
+  color: #fff;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+@media (max-width: 900px) {
+  .ch-lp-footer {
+    padding: 48px 0 112px;
+  }
+
+  .ch-lp-footer .ch-shell {
+    width: calc(100% - 28px);
+  }
+
+  .ch-lp-footer__grid {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .ch-lp-footer__menu {
+    grid-template-columns: 1fr;
+  }
+}

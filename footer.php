@@ -2,12 +2,16 @@
 
 <!-- Start footer -->
 <div id="footer">
-    <p class="footer-wrapper">
-        &copy; <?php bloginfo('name'); ?> All Rights Reserved.
-        <?php if (get_privacy_policy_url()) : ?>
-            <a href="<?php echo esc_url(get_privacy_policy_url()); ?>" style="margin-left: 1em;">プライバシーポリシー</a>
-        <?php endif; ?>
-    </p>
+    <div class="footer-wrapper">
+        <p class="footer-copy">
+            &copy; <?php bloginfo('name'); ?> All Rights Reserved.
+            <?php if (get_privacy_policy_url()) : ?>
+                <a href="<?php echo esc_url(get_privacy_policy_url()); ?>" style="margin-left: 1em;">プライバシーポリシー</a>
+            <?php endif; ?>
+        </p>
+
+        <?php get_template_part('template-sidebar-parts/social-icons'); ?>
+    </div>
 </div>
 
 
@@ -54,7 +58,6 @@ if (!is_page_template('page-store-reservation.php')) :
 }
 endif;
 ?>
-
 <?php wp_footer(); ?> <!-- wp_footer()をここに配置 -->
 
 <!-- SVG FILE https://icomoon.io/ file -->

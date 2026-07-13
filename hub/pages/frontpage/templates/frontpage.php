@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Frontpage Portal
  *
@@ -16,8 +17,22 @@ if (!defined('ABSPATH')) {
 $post_id = get_queried_object_id();
 
 $fp_get = function ($key, $default = '') use ($post_id) {
-    $v = get_post_meta($post_id, $key, true);
-    return ($v !== '' && $v !== null) ? $v : $default;
+    /*
+     * フロント用の値取得
+     *
+     * 役割:
+     * - 保存済みの管理画面メタ値だけを優先して読む
+     * - 空文字で保存されている場合も、その空文字を尊重する
+     * - デフォルト文言は原則として管理画面側に表示・保存させる
+     *
+     * 重要:
+     * - 管理画面でデフォルト文言を消した場合、フロント側で勝手に戻さない
+     */
+    if (metadata_exists('post', $post_id, $key)) {
+        return get_post_meta($post_id, $key, true);
+    }
+
+    return $default;
 };
 
 $fp_url = function ($key, $default = '') use ($fp_get) {
@@ -25,22 +40,148 @@ $fp_url = function ($key, $default = '') use ($fp_get) {
     return $v ? esc_url($v) : '#';
 };
 
+$fp_one_line = function ($value) {
+    /*
+     * 1行テキスト化
+     *
+     * 役割:
+     * - 管理画面のtextareaに入った改行を、見出しでは強制改行にしない
+     * - 余計な段落・改行で「見出しが分解される」問題を防ぐ
+     * - 本文ではなく、見出し専用で使う
+     */
+    return trim(preg_replace('/\s+/u', ' ', wp_strip_all_tags((string) $value)));
+};
+
+$fp_clean_url = function ($url) {
+    /*
+     * URL正規化
+     *
+     * 役割:
+     * - 管理画面のURL選択で「リンクなし」を選んだ場合、__none__ をフロントに出さない
+     * - 空や __none__ は # に変換する
+     * - 通常のURLはそのまま返す
+     */
+    $url = trim((string) $url);
+    return ($url === '' || $url === '__none__') ? '#' : $url;
+};
+
+$fp_url_to_post_id = function ($url) {
+    /*
+     * URLから固定ページIDを取得
+     *
+     * 役割:
+     * - 管理画面で選択したURLをもとに、対応する固定ページを探す
+     * - オリジナル見出しが空の場合、そのページタイトルをカード見出しに使う
+     * - オリジナル本文が空の場合、そのページの抜粋や本文冒頭を使う
+     */
+    $url = trim((string) $url);
+
+    if ($url === '' || $url === '#' || $url === '__none__') {
+        return 0;
+    }
+
+    $post_id_from_url = url_to_postid($url);
+    if ($post_id_from_url) {
+        return (int) $post_id_from_url;
+    }
+
+    $home_path = trim((string) wp_parse_url(home_url('/'), PHP_URL_PATH), '/');
+    $url_path  = trim((string) wp_parse_url($url, PHP_URL_PATH), '/');
+
+    if ($home_path !== '' && strpos($url_path, $home_path . '/') === 0) {
+        $url_path = trim(substr($url_path, strlen($home_path)), '/');
+    }
+
+    if ($url_path === '') {
+        return 0;
+    }
+
+    $page = get_page_by_path($url_path, OBJECT, 'page');
+    return $page ? (int) $page->ID : 0;
+};
+
+$fp_page_excerpt = function ($page_id) {
+    /*
+     * 固定ページの説明文を取得
+     *
+     * 優先順位:
+     * 1. 固定ページの抜粋
+     * 2. 固定ページ本文の冒頭
+     */
+    $page_id = (int) $page_id;
+    if (!$page_id) {
+        return '';
+    }
+
+    if (has_excerpt($page_id)) {
+        return trim((string) get_the_excerpt($page_id));
+    }
+
+    $page = get_post($page_id);
+    if (!$page) {
+        return '';
+    }
+
+    return wp_trim_words(wp_strip_all_tags($page->post_content), 34, '…');
+};
+
 $fp_icon_svg = function ($key) {
+    /*
+     * 役割:
+     * - フロントページのサービスカード用SVGアイコンを返す
+     * - 不動産 / 家づくり / 民泊・住宅宿泊 / 法人相談 / 事業用途ブロックを切り替える
+     *
+     * 方針:
+     * - 24px系のシンプルな線画アイコンで統一
+     * - CSS側の currentColor で色を管理する
+     * - 民泊はホテル・宿泊として読みやすい「ベッド」アイコンにする
+     */
+    $svg_attr = 'viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"';
+
     $icons = array(
-        // 不動産: 土地 + 住宅
-        'realestate' => '<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M10 47h44"/><path d="M14 47V34l11-9 11 9v13"/><path d="M23 47V38h5v9"/><path d="M18 31l7-6 7 6"/><path d="M40 47V28h12v19"/><path d="M43 34h6"/><path d="M43 40h6"/><path d="M8 54c6-4 11-4 17 0s11 4 17 0 10-4 14 0"/><path d="M11 31l10-6"/></svg>',
+        'realestate' => '<svg ' . $svg_attr . '>
+            <path d="M3 21h18"/>
+            <path d="M5 21V10l7-6 7 6v11"/>
+            <path d="M9 21v-7h6v7"/>
+            <path d="M9 10h.01"/>
+            <path d="M15 10h.01"/>
+        </svg>',
 
-        // 家づくり: 家
-        'home' => '<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M10 31L32 13l22 18"/><path d="M18 29v24h28V29"/><path d="M28 53V40h8v13"/><path d="M42 18V10h7v15"/><path d="M24 35h5"/><path d="M35 35h5"/></svg>',
+        'home' => '<svg ' . $svg_attr . '>
+            <path d="M3 11l9-8 9 8"/>
+            <path d="M5 10v11h14V10"/>
+            <path d="M10 21v-6h4v6"/>
+            <path d="M16 5v3"/>
+        </svg>',
 
-        // 民泊・住宅宿泊: ベッド
-        'stay' => '<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M10 37h44"/><path d="M12 25h17v12H12z"/><path d="M29 30h19a6 6 0 0 1 6 6v1H29z"/><path d="M10 21v28"/><path d="M54 37v12"/><path d="M15 49v-5"/><path d="M49 49v-5"/></svg>',
+        'stay' => '<svg ' . $svg_attr . '>
+            <path d="M3 21V9"/>
+            <path d="M21 21v-7a4 4 0 0 0-4-4H8"/>
+            <path d="M3 14h18"/>
+            <path d="M7 10V7a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3"/>
+            <path d="M3 18h18"/>
+        </svg>',
 
-        // 法人: 握手
-        'business' => '<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M23 35l9-9 7 7a5 5 0 0 0 7 0l3-3"/><path d="M18 29l10-10 8 4 8-4 10 10"/><path d="M8 27l9-9 9 9-9 9z"/><path d="M56 27l-9-9-9 9 9 9z"/><path d="M24 40l6 6"/><path d="M31 40l6 6"/><path d="M38 39l5 5"/></svg>',
+        'business' => '<svg ' . $svg_attr . '>
+            <path d="M4 21h16"/>
+            <path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16"/>
+            <path d="M9 7h1"/>
+            <path d="M14 7h1"/>
+            <path d="M9 11h1"/>
+            <path d="M14 11h1"/>
+            <path d="M9 15h1"/>
+            <path d="M14 15h1"/>
+        </svg>',
 
-        // 事業用途・パートナー開発: ビル + 握手
-        'partner' => '<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M9 52h46"/><path d="M13 52V16h18v36"/><path d="M31 52V26h12v26"/><path d="M18 22h4"/><path d="M18 29h4"/><path d="M18 36h4"/><path d="M36 32h3"/><path d="M36 39h3"/><path d="M23 47l7-7 5 5a4 4 0 0 0 6 0l2-2"/><path d="M19 43l7-7 6 3 6-3 7 7"/><path d="M16 42l5-5 5 5-5 5z"/><path d="M48 42l-5-5-5 5 5 5z"/></svg>',
+        'partner' => '<svg ' . $svg_attr . '>
+            <path d="M3 21h18"/>
+            <path d="M5 21V7a2 2 0 0 1 2-2h5v16"/>
+            <path d="M12 9h5a2 2 0 0 1 2 2v10"/>
+            <path d="M8 9h1"/>
+            <path d="M8 13h1"/>
+            <path d="M15 13h1"/>
+            <path d="M15 17h1"/>
+        </svg>',
     );
 
     return $icons[$key] ?? $icons['realestate'];
@@ -80,7 +221,7 @@ $extract_vimeo_id = function ($value) {
     return '';
 };
 
-$render_media = function ($slot, $class = '') use ($post_id, $fp_get, $extract_youtube_id, $extract_vimeo_id) {
+$render_media = function ($slot, $class = '') use ($post_id, $fp_get, $fp_one_line, $fp_clean_url, $extract_youtube_id, $extract_vimeo_id) {
     $type = $fp_get("_fp_hero_media_{$slot}_type", 'image');
 
     if (!in_array($type, array('image', 'mp4', 'youtube', 'vimeo'), true)) {
@@ -144,14 +285,21 @@ $render_media = function ($slot, $class = '') use ($post_id, $fp_get, $extract_y
 
     if ((int) $slot === 1) {
         echo '<div class="fp-hero-media__copy">';
-        echo '<p class="fp-hero-media__copy-kicker">' . esc_html($fp_get('_fp_hero_kicker', 'NASU GROUP')) . '</p>';
-        echo '<h2>' . nl2br(esc_html($fp_get('_fp_hero_title', "那須で暮らす・建てる・泊まる。\n住まいも、事業も。\nまるごと相談できる総合窓口"))) . '</h2>';
-        echo '<p class="fp-hero-media__copy-lead">' . nl2br(esc_html($fp_get('_fp_hero_lead', "不動産探しから家づくり、民泊のご相談まで。\n那須の暮らしをもっと豊かに、もっと自由に。"))) . '</p>';
+        echo '<p class="fp-hero-media__copy-kicker">' . esc_html($fp_get('_fp_hero_kicker', '')) . '</p>';
+        echo '<h2>' . esc_html($fp_one_line($fp_get('_fp_hero_title', ''))) . '</h2>';
+        echo '<p class="fp-hero-media__copy-lead">' . esc_html($fp_one_line($fp_get('_fp_hero_lead', ''))) . '</p>';
         echo '<div class="fp-hero-media__copy-actions">';
-        echo '<a class="fp-btn fp-btn--blue" href="' . esc_url(home_url('/fudousan/')) . '">不動産を見る</a>';
-        echo '<a class="fp-btn fp-btn--green" href="' . esc_url(home_url('/iezukuri/')) . '">家づくりを見る</a>';
-        echo '<a class="fp-btn fp-btn--gold" href="' . esc_url(home_url('/minpaku/')) . '">宿泊を探す</a>';
-        echo '<a class="fp-btn fp-btn--outline" href="' . esc_url(home_url('/contact/')) . '">お問い合わせ</a>';
+        for ($i = 1; $i <= 4; $i++) {
+            $btn_label = $fp_get("_fp_hero_btn_{$i}_label", '');
+            $btn_url   = $fp_clean_url($fp_get("_fp_hero_btn_{$i}_url", ''));
+            $btn_color = $fp_get("_fp_hero_btn_{$i}_color", 'blue');
+
+            if ($btn_label === '') {
+                continue;
+            }
+
+            echo '<a class="fp-btn fp-btn--' . esc_attr($btn_color) . '" href="' . esc_url($btn_url) . '">' . esc_html($btn_label) . '</a>';
+        }
         echo '</div>';
         echo '</div>';
     }
@@ -163,42 +311,65 @@ $service_cards = array(
     array(
         'key'   => 'realestate',
         'icon'  => '⌂',
-        'title' => $fp_get('_fp_service_realestate_title', '不動産の窓口'),
-        'text'  => $fp_get('_fp_service_realestate_text', '土地や中古住宅の購入・売却、住み替えまで住まい探しをトータルサポート。'),
-        'url'   => $fp_url('_fp_service_realestate_url', home_url('/fudousan/')),
+        'title' => $fp_get('_fp_service_realestate_title', ''),
+        'text'  => $fp_get('_fp_service_realestate_text', ''),
+        'url'   => $fp_url('_fp_service_realestate_url', ''),
     ),
     array(
         'key'   => 'home',
         'icon'  => '⌂',
-        'title' => $fp_get('_fp_service_home_title', '家づくりの窓口'),
-        'text'  => $fp_get('_fp_service_home_text', '注文住宅・リノベーションなど理想の住まいをカタチにします。'),
-        'url'   => $fp_url('_fp_service_home_url', home_url('/iezukuri/')),
+        'title' => $fp_get('_fp_service_home_title', ''),
+        'text'  => $fp_get('_fp_service_home_text', ''),
+        'url'   => $fp_url('_fp_service_home_url', ''),
     ),
     array(
         'key'   => 'stay',
         'icon'  => '▭',
-        'title' => $fp_get('_fp_service_stay_title', '民泊・住宅宿泊'),
-        'text'  => $fp_get('_fp_service_stay_text', '那須の魅力を体験できる宿泊施設の運営や、住宅宿泊・民泊運用相談を承ります。'),
-        'url'   => $fp_url('_fp_service_stay_url', home_url('/minpaku/')),
+        'title' => $fp_get('_fp_service_stay_title', ''),
+        'text'  => $fp_get('_fp_service_stay_text', ''),
+        'url'   => $fp_url('_fp_service_stay_url', ''),
     ),
     array(
         'key'   => 'business',
         'icon'  => '◎',
-        'title' => $fp_get('_fp_service_business_title', '法人向けのご相談'),
-        'text'  => $fp_get('_fp_service_business_text', '土地活用・建物活用・事業用途のご提案やパートナー相談まで、事業の可能性を広げます。'),
-        'url'   => $fp_url('_fp_service_business_url', home_url('/contact/')),
+        'title' => $fp_get('_fp_service_business_title', ''),
+        'text'  => $fp_get('_fp_service_business_text', ''),
+        'url'   => $fp_url('_fp_service_business_url', ''),
     ),
 );
 
 $notice_items = array();
 for ($i = 1; $i <= 3; $i++) {
+    /*
+     * お知らせ・PRカード
+     *
+     * 役割:
+     * - フロント側に固定のデフォルト文言を書かない
+     * - 管理画面で保存した値だけを読む
+     * - タイトルや本文が空なら、選択URLの固定ページタイトル・抜粋を使う
+     * - カスタム投稿をまだ作らない段階では、固定ページへのPR導線として使える
+     */
+    $notice_url = $fp_clean_url($fp_get("_fp_notice_{$i}_url", ''));
+    $notice_page_id = $fp_url_to_post_id($notice_url);
+
+    $custom_title = trim((string) $fp_get("_fp_notice_{$i}_title", ''));
+    $custom_text  = trim((string) $fp_get("_fp_notice_{$i}_text", ''));
+
+    $notice_title = $custom_title !== '' ? $custom_title : ($notice_page_id ? get_the_title($notice_page_id) : '');
+    $notice_text  = $custom_text !== '' ? $custom_text : ($notice_page_id ? $fp_page_excerpt($notice_page_id) : '');
+
+    $thumb_id = (int) $fp_get("_fp_notice_{$i}_thumb_id", 0);
+    if (!$thumb_id && $notice_page_id) {
+        $thumb_id = (int) get_post_thumbnail_id($notice_page_id);
+    }
+
     $notice_items[] = array(
-        'thumb_id' => (int) $fp_get("_fp_notice_{$i}_thumb_id", 0),
-        'date'     => $fp_get("_fp_notice_{$i}_date", $i === 1 ? '2024.05.10' : ($i === 2 ? '2024.04.20' : '2024.04.05')),
-        'label'    => $fp_get("_fp_notice_{$i}_label", $i === 2 ? 'コラム' : 'お知らせ'),
-        'title'    => $fp_get("_fp_notice_{$i}_title", $i === 1 ? 'ゴールデンウィーク休業のお知らせ' : ($i === 2 ? '那須での暮らしを楽しむ、春の過ごし方' : '民泊運営セミナーを開催しました')),
-        'text'     => $fp_get("_fp_notice_{$i}_text", 'フロントページ用の簡易お知らせ本文を管理画面から入力できます。'),
-        'url'      => $fp_get("_fp_notice_{$i}_url", '#'),
+        'thumb_id' => $thumb_id,
+        'date'     => $fp_get("_fp_notice_{$i}_date", ''),
+        'label'    => $fp_get("_fp_notice_{$i}_label", ''),
+        'title'    => $notice_title,
+        'text'     => $notice_text,
+        'url'      => $notice_url,
     );
 }
 ?>
@@ -207,31 +378,25 @@ for ($i = 1; $i <= 3; $i++) {
     <section class="fp-hero">
         <div class="fp-shell fp-hero__grid">
             <div class="fp-hero__body">
-                <p class="fp-eyebrow"><?php echo esc_html($fp_get('_fp_hero_kicker', 'NASU GROUP')); ?></p>
+                <p class="fp-eyebrow"><?php echo esc_html($fp_get('_fp_hero_kicker', '')); ?></p>
                 <h1 class="fp-hero__title">
-                    <?php echo nl2br(esc_html($fp_get('_fp_hero_title', "那須で暮らす・建てる・泊まる。\n住まいも、事業も。\nまるごと相談できる総合窓口"))); ?>
+                    <?php echo esc_html($fp_one_line($fp_get('_fp_hero_title', ''))); ?>
                 </h1>
                 <p class="fp-hero__lead">
-                    <?php echo nl2br(esc_html($fp_get('_fp_hero_lead', "不動産探しから家づくり、民泊のご相談まで。\n那須の暮らしをもっと豊かに、もっと自由に。"))); ?>
+                    <?php echo esc_html($fp_one_line($fp_get('_fp_hero_lead', ''))); ?>
                 </p>
 
                 <div class="fp-hero__actions">
                     <?php
-                    $fp_hero_btn_defaults = array(
-                        1 => array('不動産を見る', home_url('/fudousan/'), 'blue'),
-                        2 => array('家づくりを見る', home_url('/iezukuri/'), 'green'),
-                        3 => array('宿泊を探す', home_url('/minpaku/'), 'gold'),
-                        4 => array('お問い合わせ', home_url('/contact/'), 'outline'),
-                    );
-
+                    /* Hero CTAは管理画面で保存された値だけ表示する */
                     for ($i = 1; $i <= 4; $i++) :
-                        $btn_label = $fp_get("_fp_hero_btn_{$i}_label", $fp_hero_btn_defaults[$i][0]);
-                        $btn_url   = $fp_get("_fp_hero_btn_{$i}_url", $fp_hero_btn_defaults[$i][1]);
-                        $btn_color = $fp_get("_fp_hero_btn_{$i}_color", $fp_hero_btn_defaults[$i][2]);
+                        $btn_label = $fp_get("_fp_hero_btn_{$i}_label", '');
+                        $btn_url   = $fp_clean_url($fp_get("_fp_hero_btn_{$i}_url", ''));
+                        $btn_color = $fp_get("_fp_hero_btn_{$i}_color", 'blue');
                         if ($btn_label === '') {
                             continue;
                         }
-                        ?>
+                    ?>
                         <a class="fp-btn fp-btn--<?php echo esc_attr($btn_color); ?>" href="<?php echo esc_url($btn_url); ?>">
                             <?php echo esc_html($btn_label); ?>
                         </a>
@@ -282,26 +447,21 @@ for ($i = 1; $i <= 3; $i++) {
                 }
             }
 
-            /*
-             * 何も設定されていない場合だけ、メディア1をプレースホルダーとして出す。
-             */
-            if (empty($fp_media_slots)) {
-                $fp_media_slots[] = 1;
-            }
-
             $fp_media_count = min(count($fp_media_slots), 5);
             ?>
 
-            <div class="fp-hero-media fp-hero-media--adaptive fp-hero-media--count-<?php echo esc_attr($fp_media_count); ?>" aria-label="フロントページメディア">
-                <?php
-                foreach ($fp_media_slots as $index => $slot) {
-                    $render_media(
-                        $slot,
-                        $index === 0 ? 'fp-hero-media__item--main' : 'fp-hero-media__item--sub'
-                    );
-                }
-                ?>
-            </div>
+            <?php if (!empty($fp_media_slots)) : ?>
+                <div class="fp-hero-media fp-hero-media--adaptive fp-hero-media--count-<?php echo esc_attr($fp_media_count); ?>" aria-label="フロントページメディア">
+                    <?php
+                    foreach ($fp_media_slots as $index => $slot) {
+                        $render_media(
+                            $slot,
+                            $index === 0 ? 'fp-hero-media__item--main' : 'fp-hero-media__item--sub'
+                        );
+                    }
+                    ?>
+                </div>
+            <?php endif; ?>
         </div>
     </section>
 
@@ -325,17 +485,25 @@ for ($i = 1; $i <= 3; $i++) {
             <div class="fp-business__title">
                 <span class="fp-business__icon" aria-hidden="true"><?php echo $fp_icon_svg('partner'); ?></span>
                 <div>
-                    <h2><?php echo esc_html($fp_get('_fp_business_title', '事業用途・パートナー開発もサポート')); ?></h2>
-                    <p><?php echo esc_html($fp_get('_fp_business_text', '土地の使い方や建物の活用方法に応じて、事業化の企画から設計・運営、パートナー・協業までワンストップで支援します。')); ?></p>
+                    <h2><?php echo esc_html($fp_get('_fp_business_title', '')); ?></h2>
+                    <p><?php echo esc_html($fp_get('_fp_business_text', '')); ?></p>
                 </div>
             </div>
             <ul class="fp-business__checks">
-                <li>土地活用のご提案</li>
-                <li>建物活用のご提案</li>
-                <li>事業用途の企画・設計</li>
-                <li>パートナー・協業のご相談</li>
+                <?php for ($i = 1; $i <= 4; $i++) : ?>
+                    <?php $business_check = $fp_get("_fp_business_check_{$i}", ''); ?>
+                    <?php if ($business_check !== '') : ?>
+                        <li><?php echo esc_html($business_check); ?></li>
+                    <?php endif; ?>
+                <?php endfor; ?>
             </ul>
-            <a class="fp-business__btn" href="<?php echo esc_url(home_url('/contact/')); ?>">法人向けのご相談はこちら →</a>
+            <?php
+            $fp_business_button_label = $fp_get('_fp_business_button_label', '');
+            $fp_business_button_url   = $fp_clean_url($fp_get('_fp_business_button_url', ''));
+            ?>
+            <?php if ($fp_business_button_label !== '') : ?>
+                <a class="fp-business__btn" href="<?php echo esc_url($fp_business_button_url); ?>"><?php echo esc_html($fp_business_button_label); ?></a>
+            <?php endif; ?>
         </div>
     </section>
 
@@ -349,59 +517,140 @@ for ($i = 1; $i <= 3; $i++) {
                         <h3>おすすめ物件</h3>
                         <a href="<?php echo esc_url(home_url('/fudousan/')); ?>">すべて見る →</a>
                     </div>
+
                     <div class="fp-mini-cards">
                         <?php
+                        /*
+         * おすすめ物件
+         * - 通常投稿 post のうち、naigai-tochi カテゴリーだけ取得
+         * - 建物・中古戸建・LDK は出さない
+         * - 表示枠は2つ
+         */
                         $property_q = new WP_Query(array(
-                            'post_type'      => array('house', 'post'),
-                            'posts_per_page' => 2,
-                            'post_status'    => 'publish',
+                            'post_type'           => 'post',
+                            'category_name'       => 'naigai-tochi',
+                            'posts_per_page'      => 2,
+                            'post_status'         => 'publish',
+                            'orderby'             => 'date',
+                            'order'               => 'DESC',
                             'ignore_sticky_posts' => true,
                         ));
+
+                        $property_count = 0;
+
                         if ($property_q->have_posts()) :
                             while ($property_q->have_posts()) :
                                 $property_q->the_post();
-                                ?>
+                                $property_count++;
+                        ?>
                                 <a class="fp-mini-card" href="<?php the_permalink(); ?>">
                                     <span class="fp-mini-card__thumb">
                                         <?php if (has_post_thumbnail()) the_post_thumbnail('medium'); ?>
                                     </span>
                                     <strong><?php the_title(); ?></strong>
-                                    <small>詳しく見る</small>
+                                    <small>土地情報を見る</small>
                                 </a>
-                                <?php
+                            <?php
                             endwhile;
                             wp_reset_postdata();
-                        else :
-                            for ($i = 1; $i <= 2; $i++) :
-                                ?>
-                                <a class="fp-mini-card" href="<?php echo esc_url(home_url('/fudousan/')); ?>">
-                                    <span class="fp-mini-card__thumb fp-mini-card__thumb--empty"></span>
-                                    <strong><?php echo $i === 1 ? '那須町 中古戸建' : '那須塩原市 土地'; ?></strong>
-                                    <small><?php echo $i === 1 ? '2,980万円 / 3LDK' : '1,250万円 / 土地'; ?></small>
-                                </a>
-                                <?php
-                            endfor;
                         endif;
-                        ?>
+
+                        /*
+         * 土地投稿が2件未満の場合だけ、空カードで2枠を維持する。
+         * ここでも中古戸建・LDK・建物情報は出さない。
+         */
+                        for ($i = $property_count; $i < 2; $i++) :
+                            ?>
+                            <a class="fp-mini-card" href="<?php echo esc_url(home_url('/fudousan/')); ?>">
+                                <span class="fp-mini-card__thumb fp-mini-card__thumb--empty"></span>
+                                <strong>土地情報</strong>
+                                <small>土地情報を見る</small>
+                            </a>
+                        <?php endfor; ?>
                     </div>
                 </div>
 
                 <div class="fp-pickup-block">
                     <div class="fp-block-head">
-                        <h3>施工事例</h3>
-                        <a href="<?php echo esc_url(home_url('/iezukuri/')); ?>">すべて見る →</a>
+                        <h3>間取りプラン</h3>
+                        <a href="<?php echo esc_url(home_url('/iezukuri/plans/')); ?>">すべて見る →</a>
                     </div>
+
                     <div class="fp-mini-cards">
-                        <a class="fp-mini-card" href="<?php echo esc_url(home_url('/iezukuri/')); ?>">
-                            <span class="fp-mini-card__thumb fp-mini-card__thumb--empty"></span>
-                            <strong>大きな窓とつながる平屋</strong>
-                            <small>那須町 / 注文住宅</small>
-                        </a>
-                        <a class="fp-mini-card" href="<?php echo esc_url(home_url('/iezukuri/')); ?>">
-                            <span class="fp-mini-card__thumb fp-mini-card__thumb--empty"></span>
-                            <strong>自然と調和する木の家</strong>
-                            <small>那須町 / 注文住宅</small>
-                        </a>
+                        <?php
+                        /*
+                     * 間取りプラン
+                     * - /iezukuri/plans/ の一覧と同じ iez_plan を使う
+                     * - フロントではランダムで2件だけ表示
+                     * - レイアウトは既存の fp-mini-card のまま
+                     */
+                        $plan_q = new WP_Query(array(
+                            'post_type'           => 'iez_plan',
+                            'post_status'         => 'publish',
+                            'posts_per_page'      => 2,
+                            'orderby'             => 'rand',
+                            'ignore_sticky_posts' => true,
+                        ));
+
+                        if ($plan_q->have_posts()) :
+                            while ($plan_q->have_posts()) :
+                                $plan_q->the_post();
+
+                                $plan_id = get_the_ID();
+
+                                /*
+                             * 一覧・詳細側と同じ画像の拾い方
+                             * 1. 外観写真
+                             * 2. アイキャッチ
+                             * 3. ギャラリー先頭
+                             * 4. 1F平面図
+                             */
+                                $plan_thumb_id = (int) get_post_meta($plan_id, '_ch_plan_exterior_image_id', true);
+
+                                if (!$plan_thumb_id && has_post_thumbnail($plan_id)) {
+                                    $plan_thumb_id = (int) get_post_thumbnail_id($plan_id);
+                                }
+
+                                if (!$plan_thumb_id) {
+                                    $gallery_raw = get_post_meta($plan_id, '_ch_plan_gallery_image_ids', true);
+                                    $gallery_ids = array_values(array_filter(array_map('absint', explode(',', (string) $gallery_raw))));
+
+                                    if (!empty($gallery_ids)) {
+                                        $plan_thumb_id = (int) $gallery_ids[0];
+                                    }
+                                }
+
+                                if (!$plan_thumb_id) {
+                                    $plan_thumb_id = (int) get_post_meta($plan_id, '_ch_plan_1f_image_id', true);
+                                }
+                        ?>
+                                <a class="fp-mini-card" href="<?php the_permalink(); ?>">
+                                    <span class="fp-mini-card__thumb<?php echo !$plan_thumb_id ? ' fp-mini-card__thumb--empty' : ''; ?>">
+                                        <?php
+                                        if ($plan_thumb_id) {
+                                            echo wp_get_attachment_image($plan_thumb_id, 'medium');
+                                        }
+                                        ?>
+                                    </span>
+                                    <strong><?php the_title(); ?></strong>
+                                    <small>間取りを見る</small>
+                                </a>
+                            <?php
+                            endwhile;
+                            wp_reset_postdata();
+                        else :
+                            ?>
+                            <a class="fp-mini-card" href="<?php echo esc_url(home_url('/iezukuri/plans/')); ?>">
+                                <span class="fp-mini-card__thumb fp-mini-card__thumb--empty"></span>
+                                <strong>間取りプラン一覧</strong>
+                                <small>プランを見る</small>
+                            </a>
+                            <a class="fp-mini-card" href="<?php echo esc_url(home_url('/iezukuri/plans/')); ?>">
+                                <span class="fp-mini-card__thumb fp-mini-card__thumb--empty"></span>
+                                <strong>家づくりの参考プラン</strong>
+                                <small>一覧を見る</small>
+                            </a>
+                        <?php endif; ?>
                     </div>
                 </div>
 
@@ -436,116 +685,150 @@ for ($i = 1; $i <= 3; $i++) {
     </section>
 
     <?php
-    $fp_life_kicker = $fp_get('_fp_life_kicker', 'NASU LIFE');
-    $fp_life_title  = $fp_get('_fp_life_title', '那須での暮らし');
-    $fp_life_text   = $fp_get('_fp_life_text', '豊かな自然に囲まれ、四季の移ろいを感じられる那須。子育て世代からセカンドライフまで、自分らしい暮らし方が見つかります。');
-    $fp_life_button_label = $fp_get('_fp_life_button_label', '那須の魅力をもっと見る');
-    $fp_life_button_url   = $fp_get('_fp_life_button_url', home_url('/'));
+    $fp_life_kicker = trim((string) $fp_get('_fp_life_kicker', ''));
+    $fp_life_title  = trim((string) $fp_get('_fp_life_title', ''));
+    $fp_life_text   = trim((string) $fp_get('_fp_life_text', ''));
+    $fp_life_button_label = trim((string) $fp_get('_fp_life_button_label', ''));
 
     /*
-     * Lifeカード:
-     * 現状の管理画面は _fp_life_point_1〜3 を使う。
-     * 将来 _fp_life_cards_json を追加した場合はそちらを優先できるようにしておく。
+     * 那須での暮らし：左側CTAボタンURL
+     *
+     * 役割:
+     * - 管理画面側の _fp_life_button_url をCTAリンクとして使う
+     * - まだ保存されていない場合だけ /nasu-ideal-home/ をデフォルトにする
+     * - 管理画面で「リンクなし」を選んだ場合はボタン自体を表示しない
+     */
+    $fp_life_button_url = $fp_clean_url($fp_get('_fp_life_button_url', home_url('/nasu-ideal-home/')));
+    $fp_life_has_button = $fp_life_button_label !== '' && $fp_life_button_url !== '#';
+
+    /*
+     * Lifeカードを先に組み立てる
+     *
+     * 空判定の基準:
+     * - タイトルが空
+     * - 本文が空
+     * - カード画像が未設定
+     * この3つが全部空なら、そのカードは表示しない。
+     *
+     * 重要:
+     * - リンク先URLは「コンテンツ」ではなく「クリック先」なので、空判定に入れない
+     * - URLだけ選ばれていても、固定ページタイトル・抜粋・アイキャッチで勝手に補完しない
+     * - 表示できるカードが0件なら、スライダー外枠・swiper-wrapper・矢印も出さない
      */
     $fp_life_points = array();
 
-    $fp_life_cards_json = $fp_get('_fp_life_cards_json', '');
-    $fp_life_cards_data = $fp_life_cards_json ? json_decode($fp_life_cards_json, true) : array();
+    for ($i = 1; $i <= 4; $i++) {
+        $point_title    = trim((string) $fp_get("_fp_life_point_{$i}_title", ''));
+        $point_text     = trim((string) $fp_get("_fp_life_point_{$i}_text", ''));
+        $point_url      = $fp_clean_url($fp_get("_fp_life_point_{$i}_url", ''));
+        $point_image_id = (int) $fp_get("_fp_life_point_{$i}_image_id", 0);
 
-    if (is_array($fp_life_cards_data) && !empty($fp_life_cards_data)) {
-        foreach ($fp_life_cards_data as $card) {
-            if (!is_array($card)) {
-                continue;
-            }
-
-            $fp_life_points[] = array(
-                'title'    => isset($card['title']) ? (string) $card['title'] : '',
-                'text'     => isset($card['text']) ? (string) $card['text'] : '',
-                'image_id' => isset($card['image_id']) ? (int) $card['image_id'] : 0,
-            );
+        if ($point_title === '' && $point_text === '' && !$point_image_id) {
+            continue;
         }
-    }
 
-    if (empty($fp_life_points)) {
-        $fp_life_point_defaults = array(
-            1 => array('自然と共に暮らす', '美しい自然を身近に感じられる環境。'),
-            2 => array('アクセスも快適', '週末利用や拠点づくりにも対応。'),
-            3 => array('家族にやさしい環境', '安心して暮らせる地域環境。'),
+        $fp_life_points[] = array(
+            'title'    => $point_title,
+            'text'     => $point_text,
+            'url'      => $point_url,
+            'image_id' => $point_image_id,
         );
-
-        for ($i = 1; $i <= 3; $i++) {
-            $fp_life_points[] = array(
-                'title'    => $fp_get("_fp_life_point_{$i}_title", $fp_life_point_defaults[$i][0]),
-                'text'     => $fp_get("_fp_life_point_{$i}_text", $fp_life_point_defaults[$i][1]),
-                'image_id' => (int) $fp_get("_fp_life_point_{$i}_image_id", 0),
-            );
-        }
     }
+
+    $fp_life_has_text = $fp_life_kicker !== '' || $fp_life_title !== '' || $fp_life_text !== '' || $fp_life_has_button;
+    $fp_life_has_points = !empty($fp_life_points);
     ?>
 
-    <section class="fp-life fp-life--cards-swiper">
-        <div class="fp-shell fp-life__inner">
-            <div class="fp-life__text">
-                <?php if ($fp_life_kicker !== '') : ?>
-                    <p class="fp-eyebrow"><?php echo esc_html($fp_life_kicker); ?></p>
-                <?php endif; ?>
+    <?php if ($fp_life_has_text || $fp_life_has_points) : ?>
+        <section class="fp-life fp-life--cards-swiper">
+            <div class="fp-shell fp-life__inner">
+                <?php if ($fp_life_has_text) : ?>
+                    <div class="fp-life__text">
+                        <?php if ($fp_life_kicker !== '') : ?>
+                            <p class="fp-eyebrow"><?php echo esc_html($fp_life_kicker); ?></p>
+                        <?php endif; ?>
 
-                <?php if ($fp_life_title !== '') : ?>
-                    <h2><?php echo esc_html($fp_life_title); ?></h2>
-                <?php endif; ?>
+                        <?php if ($fp_life_title !== '') : ?>
+                            <h2><?php echo esc_html($fp_life_title); ?></h2>
+                        <?php endif; ?>
 
-                <?php if ($fp_life_text !== '') : ?>
-                    <p><?php echo nl2br(esc_html($fp_life_text)); ?></p>
-                <?php endif; ?>
+                        <?php if ($fp_life_text !== '') : ?>
+                            <p><?php echo nl2br(esc_html($fp_life_text)); ?></p>
+                        <?php endif; ?>
 
-                <?php if ($fp_life_button_label !== '') : ?>
-                    <a class="fp-btn fp-btn--outline" href="<?php echo esc_url($fp_life_button_url); ?>">
-                        <?php echo esc_html($fp_life_button_label); ?>
-                    </a>
-                <?php endif; ?>
-            </div>
-
-            <div class="fp-life__points-shell">
-                <div class="fp-life__points swiper js-fp-life-swiper">
-                    <div class="swiper-wrapper">
-                        <?php foreach ($fp_life_points as $point) : ?>
-                            <div class="swiper-slide">
-                                <article class="fp-life__point">
-                                    <?php if (!empty($point['image_id'])) : ?>
-                                        <span class="fp-life__point-image">
-                                            <?php echo wp_get_attachment_image((int) $point['image_id'], 'large'); ?>
-                                        </span>
-                                    <?php endif; ?>
-
-                                    <span class="fp-life__point-body">
-                                        <?php if (!empty($point['title'])) : ?>
-                                            <strong><?php echo esc_html($point['title']); ?></strong>
-                                        <?php endif; ?>
-
-                                        <?php if (!empty($point['text'])) : ?>
-                                            <small><?php echo esc_html($point['text']); ?></small>
-                                        <?php endif; ?>
-                                    </span>
-                                </article>
-                            </div>
-                        <?php endforeach; ?>
+                        <?php if ($fp_life_has_button) : ?>
+                            <a class="fp-btn fp-btn--outline" href="<?php echo esc_url($fp_life_button_url); ?>">
+                                <?php echo esc_html($fp_life_button_label); ?>
+                            </a>
+                        <?php endif; ?>
                     </div>
-<button type="button" class="fp-life__nav fp-life__nav--prev" aria-label="前へ"></button>
-                    <button type="button" class="fp-life__nav fp-life__nav--next" aria-label="次へ"></button>
-                </div>
+                <?php endif; ?>
+
+                <?php if ($fp_life_has_points) : ?>
+                    <div class="fp-life__points-shell">
+                        <div class="fp-life__points swiper js-fp-life-swiper">
+                            <div class="swiper-wrapper">
+                                <?php foreach ($fp_life_points as $point) : ?>
+                                    <div class="swiper-slide">
+                                        <?php if ($point['url'] !== '#') : ?>
+                                            <a class="fp-life__point" href="<?php echo esc_url($point['url']); ?>">
+                                            <?php else : ?>
+                                                <article class="fp-life__point">
+                                                <?php endif; ?>
+
+                                                <?php if ($point['image_id']) : ?>
+                                                    <span class="fp-life__point-image">
+                                                        <?php echo wp_get_attachment_image($point['image_id'], 'large'); ?>
+                                                    </span>
+                                                <?php endif; ?>
+
+                                                <span class="fp-life__point-body">
+                                                    <?php if ($point['title'] !== '') : ?>
+                                                        <strong><?php echo esc_html($point['title']); ?></strong>
+                                                    <?php endif; ?>
+
+                                                    <?php if ($point['text'] !== '') : ?>
+                                                        <small><?php echo esc_html($point['text']); ?></small>
+                                                    <?php endif; ?>
+                                                </span>
+
+                                                <?php if ($point['url'] !== '#') : ?>
+                                            </a>
+                                        <?php else : ?>
+                                            </article>
+                                        <?php endif; ?>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
+
+                            <?php if (count($fp_life_points) > 1) : ?>
+                                <button type="button" class="fp-life__nav fp-life__nav--prev" aria-label="前へ"></button>
+                                <button type="button" class="fp-life__nav fp-life__nav--next" aria-label="次へ"></button>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                <?php endif; ?>
             </div>
-        </div>
-    </section>
+        </section>
+    <?php endif; ?>
 
     <?php
     $fp_cta_image_id  = (int) $fp_get('_fp_cta_image_id', 0);
     $fp_cta_image_url = $fp_cta_image_id ? wp_get_attachment_image_url($fp_cta_image_id, 'large') : '';
-    $fp_cta_title     = $fp_get('_fp_cta_title', "暮らし・不動産・家づくり・宿泊・事業まで\nお気軽にご相談ください");
+    /*
+     * 最後のCTA見出し
+     *
+     * 役割:
+     * - 管理画面で入力したCTA見出しを取得する
+     * - 既にDBに改行入りで保存されていても、下の表示時に1行化する
+     * - nl2br() は使わない。不要な <br> や段落感を出さない
+     */
+    $fp_cta_title     = $fp_get('_fp_cta_title', '');
 
-    $fp_cta_btn1_label = $fp_get('_fp_cta_btn1_label', 'お問い合わせ');
-    $fp_cta_btn1_url   = $fp_get('_fp_cta_btn1_url', home_url('/contact/'));
-    $fp_cta_btn2_label = $fp_get('_fp_cta_btn2_label', '来店予約');
-    $fp_cta_btn2_url   = $fp_get('_fp_cta_btn2_url', home_url('/reservation/'));
+    $fp_cta_btn1_label = $fp_get('_fp_cta_btn1_label', '');
+    $fp_cta_btn1_url   = $fp_clean_url($fp_get('_fp_cta_btn1_url', ''));
+    $fp_cta_btn2_label = $fp_get('_fp_cta_btn2_label', '');
+    $fp_cta_btn2_url   = $fp_clean_url($fp_get('_fp_cta_btn2_url', ''));
 
     $fp_cta_classes = array('fp-cta');
     $fp_cta_classes[] = $fp_cta_image_url ? 'fp-cta--has-bg-image' : 'fp-cta--no-image';
@@ -556,11 +839,18 @@ for ($i = 1; $i <= 3; $i++) {
     }
     ?>
 
-    <section class="<?php echo esc_attr(implode(' ', $fp_cta_classes)); ?>"<?php echo $fp_cta_style; ?>>
+    <section class="<?php echo esc_attr(implode(' ', $fp_cta_classes)); ?>" <?php echo $fp_cta_style; ?>>
         <div class="fp-shell fp-cta__inner">
             <div class="fp-cta__body">
                 <?php if ($fp_cta_title !== '') : ?>
-                    <h2><?php echo nl2br(esc_html($fp_cta_title)); ?></h2>
+                    <?php
+                    /*
+                     * CTA見出し表示
+                     * - $fp_one_line() で改行・連続スペースを1つの半角スペースにまとめる
+                     * - これで「暮らし・不動産...」と「お気軽に...」が別段落のように割れない
+                     */
+                    ?>
+                    <h2><?php echo esc_html($fp_one_line($fp_cta_title)); ?></h2>
                 <?php endif; ?>
 
                 <div class="fp-cta__actions">

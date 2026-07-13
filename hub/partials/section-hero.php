@@ -326,7 +326,7 @@ $build_front_feature_extra = function ($target_post_id) {
 
     if ($google_iframe_html !== '') {
       $extra_html .= '<div class="archive-post-location-action hub-front-hero__map-action">';
-      $extra_html .= '<button type="button" class="google-location-trigger hub-btn is-secondary" data-map-html="' . esc_attr(base64_encode($google_iframe_html)) . '" data-map-title="' . esc_attr(get_the_title($target_post_id)) . '">';
+      $extra_html .= '<button type="button" class="google-location-trigger hub-btn is-secondary" data-map-html="' . esc_attr(base64_encode($google_iframe_html)) . '">';
       $extra_html .= '<svg class="icon-location" aria-hidden="true" focusable="false" width="20" height="20"><use xlink:href="#icon-location"></use></svg>';
       $extra_html .= '<span>Google位置</span>';
       $extra_html .= '</button>';
@@ -562,7 +562,7 @@ if ($is_front_target) {
 
         if ($google_iframe_html !== '') {
           $extra_html .= '<div class="archive-post-location-action hub-front-hero__map-action">';
-          $extra_html .= '<button type="button" class="google-location-trigger hub-btn is-secondary" data-map-html="' . esc_attr(base64_encode($google_iframe_html)) . '" data-map-title="' . esc_attr(get_the_title($slider_post_id)) . '">';
+          $extra_html .= '<button type="button" class="google-location-trigger hub-btn is-secondary" data-map-html="' . esc_attr(base64_encode($google_iframe_html)) . '">';
           $extra_html .= '<svg class="icon-location" aria-hidden="true" focusable="false" width="20" height="20"><use xlink:href="#icon-location"></use></svg>';
           $extra_html .= '<span>Google位置</span>';
           $extra_html .= '</button>';

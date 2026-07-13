@@ -4460,28 +4460,31 @@ function display_custom_fields_table_1()
                                 <div>
                                     <?php echo esc_html($location); ?>
                                 </div>
-                                <div style="margin-top: 10px;">
-                                    <span class="google-location-link">
-                                        <svg class="icon-location" style="cursor:pointer; width: 20px; height: 20px;" id="iconLocation">
-                                            <use xlink:href="#icon-location"></use>
-                                        </svg>
-                                        <a href="javascript:void(0);" id="openMapLink">Google位置</a>
-                                    </span>
-                                </div>
-
                                 <?php
-                                $google_embed_code = get_post_meta($post->ID, 'GoogleEmbedcode', true);
+                                $google_embed_code = get_post_meta(
+                                    $post->ID,
+                                    'GoogleEmbedcode',
+                                    true
+                                );
+
                                 if ($google_embed_code) {
                                     $iframe_content = strpos($google_embed_code, '<iframe') !== false
                                         ? $google_embed_code
-                                        : '<iframe id="googleMapIframe" src="' . esc_url($google_embed_code) . '" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>';
-
-                                    echo '<div id="googleMapModal" class="google-map-modal" style="display: none;">
-                                    <div class="google-map-modal-content">
-                                        <span class="google-map-modal-close" id="closeModal">&times;</span>
-                                        ' . $iframe_content . '
+                                        : '<iframe src="' . esc_url($google_embed_code) . '" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>';
+                                ?>
+                                    <div style="margin-top: 10px;">
+                                        <span
+                                            class="google-location-link google-location-trigger"
+                                            data-map-open
+                                            data-map-html="<?php echo esc_attr(base64_encode($iframe_content)); ?>"
+                                        >
+                                            <svg class="icon-location" style="cursor:pointer; width:20px; height:20px;">
+                                                <use xlink:href="#icon-location"></use>
+                                            </svg>
+                                            <a href="#">Google位置</a>
+                                        </span>
                                     </div>
-                                </div>';
+                                <?php
                                 } else {
                                     echo '<p class="no-margin">Googleマップが設定されていません。</p>';
                                 }
@@ -4791,29 +4794,52 @@ function display_custom_fields_table_2()
                                 <div>
                                     <?php echo esc_html($new_location); ?>
                                 </div>
-                                <div style="margin-top: 10px;">
-                                    <span class="google-location-link">
-                                        <svg class="icon icon-location" style="cursor:pointer; width: 20px; height: 20px;" id="iconLocation">
-                                            <use xlink:href="#icon-location"></use>
-                                        </svg>
-                                        <a href="javascript:void(0);" id="openMapLink">Google位置</a>
-                                    </span>
-                                </div>
-
                                 <?php
-                                // NEWを優先、なければ旧をフォールバック（既存データ互換）
-                                $google_embed_code = $new_google_embed_code ? $new_google_embed_code : get_post_meta($post->ID, 'GoogleEmbedcode', true);
+                                // 新しい地図データを優先する。
+                                // 新しい値が空の場合は、既存データ互換のため
+                                // GoogleEmbedcode をフォールバックとして使用する。
+                                $google_embed_code = $new_google_embed_code
+                                    ? $new_google_embed_code
+                                    : get_post_meta(
+                                        $post->ID,
+                                        'GoogleEmbedcode',
+                                        true
+                                    );
 
                                 if ($google_embed_code) {
-                                    $iframe_content = strpos($google_embed_code, '<iframe') !== false
+                                    // URLだけ保存されている場合は iframe を生成する。
+                                    // iframe HTMLが保存済みなら、そのまま共通モーダルへ渡す。
+                                    $iframe_content = strpos(
+                                        $google_embed_code,
+                                        '<iframe'
+                                    ) !== false
                                         ? $google_embed_code
-                                        : '<iframe id="googleMapIframe" src="' . esc_url($google_embed_code) . '" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>';
-                                    echo '<div id="googleMapModal" class="google-map-modal" style="display: none;">
-                                            <div class="google-map-modal-content">
-                                                <span class="google-map-modal-close" id="closeModal">&times;</span>
-                                                ' . $iframe_content . '
-                                            </div>
-                                        </div>';
+                                        : '<iframe src="' . esc_url($google_embed_code) . '" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>';
+                                ?>
+                                    <div style="margin-top: 10px;">
+                                        <!--
+                                          地図HTMLは data-map-html に入れて
+                                          front-map-modal.js へ渡す。
+
+                                          アイコンや文字をクリックしても、
+                                          親の .google-location-trigger が
+                                          クリック対象として取得される。
+                                        -->
+                                        <span
+                                            class="google-location-link google-location-trigger"
+                                            data-map-open
+                                            data-map-html="<?php echo esc_attr(base64_encode($iframe_content)); ?>"
+                                        >
+                                            <svg
+                                                class="icon icon-location"
+                                                style="cursor:pointer; width:20px; height:20px;"
+                                            >
+                                                <use xlink:href="#icon-location"></use>
+                                            </svg>
+                                            <a href="#">Google位置</a>
+                                        </span>
+                                    </div>
+                                <?php
                                 } else {
                                     echo '<p class="no-margin">Googleマップが設定されていません。</p>';
                                 }
@@ -5500,7 +5526,7 @@ function my_custom_menu()
         the_widget(
             'Latest_Posts_Widget',
             array(
-                'title' => 'Latest Minpaku',
+                'title' => '宿泊情報',
                 'posts' => $posts,
             )
         );
@@ -5536,7 +5562,7 @@ function my_custom_menu()
         the_widget(
             'Latest_Posts_Widget',
             array(
-                'title' => 'Latest Land',
+                'title' => '土地情報',
                 'posts' => $posts,
             )
         );
@@ -5572,7 +5598,7 @@ function my_custom_menu()
         the_widget(
             'Latest_Posts_Widget',
             array(
-                'title' => 'Latest Construction',
+                'title' => '建物情報',
                 'posts' => $posts,
             )
         );
@@ -5604,7 +5630,7 @@ function my_custom_menu()
         the_widget(
             'Latest_Posts_Widget',
             array(
-                'title' => 'Latest Housing',
+                'title' => '建物情報',
                 'posts' => $posts,
             )
         );
@@ -5634,7 +5660,7 @@ function my_custom_menu()
     the_widget(
         'Latest_Posts_Widget',
         array(
-            'title' => 'Latest Posts',
+            'title' => '最新情報',
             'posts' => $posts,
         )
     );
@@ -7695,7 +7721,7 @@ if (file_exists($fudousan_admin_file)) {
  * ここでは hook するだけでよい。
  */
 if (function_exists('naigai_render_chatgpt_modal') && !has_action('wp_footer', 'naigai_render_chatgpt_modal')) {
-    add_action('wp_footer', 'naigai_render_chatgpt_modal', 20);
+    // chat modal duplicate disabled. inc/functions/chatgpt-modal-display.php handles output
 }
 
 // DEDUPED: require_once get_template_directory() . '/hub/pages/fudousan/admin/fudousan-admin.php';
@@ -8032,3 +8058,32 @@ if (file_exists($naigai_fudousan_loader_bridge)) {
 }
 
 /* Moved: B2C contact form assets are loaded via minpaku/inc/assets-b2c-contact.php. */
+
+
+/*
+ * Drawer / Sidebar 表示補助
+ * 1) ウィジェットタイトル "Latest Land" を表示上「土地情報」にする。
+ * 2) drawer / sidebar で使う Noto Sans JP を読み込む。
+ */
+if (!function_exists('naigai_sidebar_widget_title_ja')) {
+    function naigai_sidebar_widget_title_ja($title) {
+        if (trim(wp_strip_all_tags($title)) === 'Latest Land') {
+            return '土地情報';
+        }
+        return $title;
+    }
+    add_filter('widget_title', 'naigai_sidebar_widget_title_ja', 20);
+}
+
+if (!function_exists('naigai_enqueue_noto_sans_jp')) {
+    function naigai_enqueue_noto_sans_jp() {
+        wp_enqueue_style(
+            'naigai-noto-sans-jp',
+            'https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&display=swap',
+            array(),
+            null
+        );
+    }
+    add_action('wp_enqueue_scripts', 'naigai_enqueue_noto_sans_jp', 20);
+}
+

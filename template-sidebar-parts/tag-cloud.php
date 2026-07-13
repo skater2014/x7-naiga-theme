@@ -1,5 +1,5 @@
 <!-- Tag Cloud Widget -->
-<div class="widget">
+<div class="widget tag-widget">
     <div class="side-title">Tag Cloud</div>
     <?php
     // 現在のカテゴリースラッグを取得（アーカイブページとカテゴリーページに対応）

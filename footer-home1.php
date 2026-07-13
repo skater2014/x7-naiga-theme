@@ -38,7 +38,7 @@ if (is_archive()) : ?>
 
 
     <!-- CHATGPTモーダルの呼び出し -->
-    <?php naigai_render_chatgpt_modal(); ?>
+    <?php /* chat modal duplicate disabled. wp_footer controller outputs it */ ?>
 
     <div class="bottom-foot">
       <div class="copyright">
@@ -47,27 +47,7 @@ if (is_archive()) : ?>
           | <a href="<?php echo esc_url(function_exists('naigai_footer_privacy_policy_url') ? naigai_footer_privacy_policy_url() : home_url('/privacypolicy/')); ?>">Privacy Policy</a>
         </p>
       </div>
-      <div class="foot-socials">
-        <ul>
-          <?php
-          $socials = array('twitter', 'facebook', 'google-plus', 'instagram', 'pinterest', 'vimeo', 'youtube', 'linkedin', 'phone');
-          $iconSize = 24; // Adjust the image size as needed
-
-          for ($i = 0; $i < count($socials); $i++) {
-            $url = '';
-            $s = $socials[$i];
-            $url = dess_setting('dess_' . $s);
-
-            // Check if the URL is not empty
-            if ($url != '') {
-              $symbolId = 'icon-' . $s;
-              $iconHtml = '<svg class="icon icon-' . $s . '"><use xlink:href="#' . $symbolId . '"></use></svg>';
-              echo '<li><a target="_blank" href="' . $url . '">' . $iconHtml . '</a></li>';
-            }
-          }
-          ?>
-        </ul>
-      </div><!-- /foot-socials -->
+      <?php get_template_part('template-sidebar-parts/social-icons'); ?>
     </div><!-- /bottom-foot -->
   </div><!-- /section -->
 </footer><!-- /End Footer-Wrapper-->
@@ -101,7 +81,6 @@ if (!is_page_template('page-store-reservation.php')) :
 }
 endif;
 ?>
-
 <?php wp_footer(); ?>
 
 <!-- SVG FILE https://icomoon.io/ file -->
