@@ -14,6 +14,7 @@ if (!defined('ABSPATH')) {
 get_header('customhome');
 ?>
 <main id="primary" class="hub-customhome-page hub-customhome-top">
+
 <?php
 include get_template_directory() . '/hub/pages/iezukuri/templates/top/context.php';
 include get_template_directory() . '/hub/pages/iezukuri/templates/top/section-hero.php';

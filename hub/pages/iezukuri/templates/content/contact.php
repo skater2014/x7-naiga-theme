@@ -4,7 +4,9 @@
  *
  * 役割:
  * - /iezukuri/contact 専用の本文エリア
- * - <main> は出さない
+ * - <main>
+
+は出さない
  * - Gutenberg / クラシックエディタ本文は出さない
  * - フォーム本体は既存の customer-info-form-inner.php を使う
  */
@@ -15,10 +17,9 @@ if (!defined('ABSPATH')) {
 ?>
 
 <section class="iez-sub-section iez-sub-section--contact" id="contact-content">
-    <div class="iez-sub-section__inner">
+    <div class="iez-contact-section__inner">
         <div class="iez-sub-section__body">
 
-            <h2 class="iez-sub-section__title">ご相談・資料請求</h2>
 
             <div class="iez-contact-form-area">
                 <?php

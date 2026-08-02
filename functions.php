@@ -7882,7 +7882,6 @@ add_action('wp_enqueue_scripts', function () {
 
     $css = '/hub/pages/frontpage/css/frontpage.css';
     $js  = '/hub/pages/frontpage/js/frontpage.js';
-    $hero_swiper_js = '/hub/pages/frontpage/js/frontpage-hero-swiper.js';
 
     if (file_exists($theme_dir . $css)) {
         wp_enqueue_style(
@@ -7903,15 +7902,6 @@ add_action('wp_enqueue_scripts', function () {
         );
     }
 
-    if (file_exists($theme_dir . $hero_swiper_js)) {
-        wp_enqueue_script(
-            'naigai-frontpage-hero-swiper',
-            $theme_uri . $hero_swiper_js,
-            array('swiper-slider', 'naigai-frontpage-v2'),
-            filemtime($theme_dir . $hero_swiper_js),
-            true
-        );
-    }
 }, 30);
 
 /**
@@ -8087,3 +8077,126 @@ if (!function_exists('naigai_enqueue_noto_sans_jp')) {
     add_action('wp_enqueue_scripts', 'naigai_enqueue_noto_sans_jp', 20);
 }
 
+
+/**
+ * NAIGAI_IEZUKURI_PLAN_PAGER_20260730
+ *
+ * 家づくり間取り一覧を1ページ10件にする。
+ * 2ページ目以降は ?plan_page=2 で表示する。
+ */
+if (!function_exists('naigai_iezukuri_is_plan_archive_request')) {
+    function naigai_iezukuri_is_plan_archive_request() {
+        if (is_admin()) {
+            return false;
+        }
+
+        $request_uri = isset($_SERVER['REQUEST_URI'])
+            ? wp_unslash($_SERVER['REQUEST_URI'])
+            : '';
+
+        $path = (string) wp_parse_url($request_uri, PHP_URL_PATH);
+        $path = '/' . trim($path, '/') . '/';
+
+        return $path === '/iezukuri/plans/';
+    }
+}
+
+if (!function_exists('naigai_iezukuri_is_plan_query')) {
+    function naigai_iezukuri_is_plan_query($query) {
+        if (!($query instanceof WP_Query)) {
+            return false;
+        }
+
+        $post_type = $query->get('post_type');
+
+        if ($post_type === 'iez_plan') {
+            return true;
+        }
+
+        if (
+            is_array($post_type)
+            && in_array('iez_plan', $post_type, true)
+        ) {
+            return true;
+        }
+
+        return $query->is_post_type_archive('iez_plan');
+    }
+}
+
+if (!function_exists('naigai_iezukuri_plan_current_page')) {
+    function naigai_iezukuri_plan_current_page() {
+        $plan_page = isset($_GET['plan_page'])
+            ? absint(wp_unslash($_GET['plan_page']))
+            : 1;
+
+        return max(1, $plan_page);
+    }
+}
+
+add_action('pre_get_posts', function ($query) {
+    if (
+        !naigai_iezukuri_is_plan_archive_request()
+        || !naigai_iezukuri_is_plan_query($query)
+    ) {
+        return;
+    }
+
+    $query->set('posts_per_page', 10);
+    $query->set(
+        'paged',
+        naigai_iezukuri_plan_current_page()
+    );
+    $query->set('no_found_rows', false);
+}, 9999);
+
+add_action('loop_end', function ($query) {
+    static $pager_output = false;
+
+    if (
+        $pager_output
+        || !naigai_iezukuri_is_plan_archive_request()
+        || !naigai_iezukuri_is_plan_query($query)
+    ) {
+        return;
+    }
+
+    $total_pages = (int) $query->max_num_pages;
+
+    if ($total_pages <= 1) {
+        return;
+    }
+
+    $current_page = min(
+        naigai_iezukuri_plan_current_page(),
+        $total_pages
+    );
+
+    $base_url = home_url('/iezukuri/plans/');
+
+    $links = paginate_links(array(
+        'base'      => add_query_arg(
+            'plan_page',
+            '%#%',
+            $base_url
+        ),
+        'format'    => '',
+        'current'   => $current_page,
+        'total'     => $total_pages,
+        'type'      => 'list',
+        'mid_size'  => 1,
+        'end_size'  => 1,
+        'prev_text' => '← 前へ',
+        'next_text' => '次へ →',
+    ));
+
+    if (!$links) {
+        return;
+    }
+
+    $pager_output = true;
+
+    echo '<nav class="iez-plan-pagination" aria-label="間取りプランのページ送り">';
+    echo wp_kses_post($links);
+    echo '</nav>';
+}, 9999);

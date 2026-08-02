@@ -81,6 +81,91 @@ $footer_items = function_exists('naigai_iezukuri_footer_menu_items')
 </footer>
 
 <?php
+?>
+<!-- IEZUKURI FIXED FOOTER START -->
+<?php if (is_page('iezukuri') && has_nav_menu('footer_menu')) : ?>
+    <ul id="js-footer-fixed" class="footer-fixed show">
+        <?php
+        wp_nav_menu(array(
+            'theme_location' => 'footer_menu',
+            'container'      => false,
+            'items_wrap'     => '%3$s',
+            'fallback_cb'    => false,
+            'depth'          => 1,
+        ));
+        ?>
+    </ul>
+
+    <script>
+    (() => {
+        const adjustIezukuriChat = () => {
+            const footer = document.getElementById('js-footer-fixed');
+
+            if (!footer) {
+                return;
+            }
+
+            const mobile = window.matchMedia('(max-width: 767px)').matches;
+            const offset = footer.getBoundingClientRect().height + 12;
+
+            document.querySelectorAll('body *').forEach((element) => {
+                if (element.children.length !== 0) {
+                    return;
+                }
+
+                if (element.textContent.trim() !== 'チャット相談') {
+                    return;
+                }
+
+                let fixedElement = element;
+
+                while (
+                    fixedElement &&
+                    fixedElement !== document.body &&
+                    getComputedStyle(fixedElement).position !== 'fixed'
+                ) {
+                    fixedElement = fixedElement.parentElement;
+                }
+
+                if (!fixedElement || fixedElement === document.body) {
+                    return;
+                }
+
+                if (mobile) {
+                    fixedElement.style.setProperty(
+                        'bottom',
+                        offset + 'px',
+                        'important'
+                    );
+                } else {
+                    fixedElement.style.removeProperty('bottom');
+                }
+            });
+
+            if (mobile) {
+                document.body.style.paddingBottom =
+                    footer.getBoundingClientRect().height + 'px';
+            } else {
+                document.body.style.removeProperty('padding-bottom');
+            }
+        };
+
+        window.addEventListener('load', adjustIezukuriChat);
+        window.addEventListener('resize', adjustIezukuriChat);
+
+        const observer = new MutationObserver(adjustIezukuriChat);
+
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+
+        adjustIezukuriChat();
+    })();
+    </script>
+<?php endif; ?>
+<!-- IEZUKURI FIXED FOOTER END -->
+<?php
 wp_footer();
 
 $symbol_defs = get_template_directory() . '/images/symbol-defs.svg';

@@ -1431,3 +1431,198 @@
 }
 
 /* === CH STORY LAYOUT IMAGE END === */
+
+
+/* === NAIGAI MOBILE NEXT PLAN REAL START === */
+
+/**
+ * /iezukuri/
+ * 「次に見るプラン」のスマートフォン表示修正
+ *
+ * 修正前:
+ * 番号・画像・文章が横3列になり、文章が数文字ごとに折り返される。
+ *
+ * 修正後:
+ * 1段目 「次は 02」
+ * 2段目 画像
+ * 3段目 見出し・説明文
+ */
+@media screen and (max-width: 680px) {
+
+  .hub-customhome-page.hub-customhome-top
+  .ch-service-next-grid {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 16px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .hub-customhome-page.hub-customhome-top
+  .ch-service-next-card {
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    margin: 0 !important;
+    overflow: hidden !important;
+    border-radius: 18px !important;
+    box-sizing: border-box !important;
+  }
+
+  /**
+   * 番号・画像・文章を縦方向に並べる。
+   */
+  .hub-customhome-page.hub-customhome-top
+  .ch-service-next-card__select {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-rows: auto auto auto !important;
+    grid-template-areas:
+      "number"
+      "image"
+      "body" !important;
+    gap: 12px !important;
+    align-items: stretch !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 14px !important;
+    box-sizing: border-box !important;
+  }
+
+  /**
+   * 「次は 02」のラベル。
+   */
+  .hub-customhome-page.hub-customhome-top
+  .ch-service-next-card__num {
+    grid-area: number !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    justify-self: start !important;
+    width: auto !important;
+    min-width: 0 !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 6px 11px !important;
+    border-radius: 999px !important;
+    background: rgba(168, 133, 63, 0.14) !important;
+    font-size: 13px !important;
+    font-weight: 900 !important;
+    line-height: 1.2 !important;
+    white-space: nowrap !important;
+  }
+
+  .hub-customhome-page.hub-customhome-top
+  .ch-service-next-card__num::before {
+    content: "次は " !important;
+    margin-right: 4px !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+  }
+
+  /**
+   * 画像をカード横幅いっぱいにする。
+   */
+  .hub-customhome-page.hub-customhome-top
+  .ch-service-next-card__image {
+    grid-area: image !important;
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: 190px !important;
+    min-height: 190px !important;
+    margin: 0 !important;
+    overflow: hidden !important;
+    border-radius: 14px !important;
+    box-sizing: border-box !important;
+  }
+
+  .hub-customhome-page.hub-customhome-top
+  .ch-service-next-card__image img {
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    object-fit: cover !important;
+    object-position: center !important;
+  }
+
+  /**
+   * 見出しと説明文を画像の下に配置する。
+   */
+  .hub-customhome-page.hub-customhome-top
+  .ch-service-next-card__body {
+    grid-area: body !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    justify-content: flex-start !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 2px 2px 4px !important;
+    box-sizing: border-box !important;
+  }
+
+  .hub-customhome-page.hub-customhome-top
+  .ch-service-next-card__body strong {
+    display: block !important;
+    width: 100% !important;
+    margin: 0 !important;
+    font-size: 18px !important;
+    line-height: 1.5 !important;
+    word-break: normal !important;
+    overflow-wrap: break-word !important;
+  }
+
+  .hub-customhome-page.hub-customhome-top
+  .ch-service-next-card__body em {
+    display: block !important;
+    width: 100% !important;
+    margin: 6px 0 0 !important;
+    font-size: 14px !important;
+    line-height: 1.55 !important;
+    word-break: normal !important;
+    overflow-wrap: break-word !important;
+  }
+
+  .hub-customhome-page.hub-customhome-top
+  .ch-service-next-card__body small {
+    display: block !important;
+    width: 100% !important;
+    margin: 8px 0 0 !important;
+    font-size: 13px !important;
+    line-height: 1.75 !important;
+    word-break: normal !important;
+    overflow-wrap: break-word !important;
+  }
+}
+
+@media screen and (max-width: 380px) {
+
+  .hub-customhome-page.hub-customhome-top
+  .ch-service-next-card__select {
+    padding: 12px !important;
+  }
+
+  .hub-customhome-page.hub-customhome-top
+  .ch-service-next-card__image {
+    height: 170px !important;
+    min-height: 170px !important;
+  }
+
+  .hub-customhome-page.hub-customhome-top
+  .ch-service-next-card__body strong {
+    font-size: 17px !important;
+  }
+}
+
+/* === NAIGAI MOBILE NEXT PLAN REAL END === */

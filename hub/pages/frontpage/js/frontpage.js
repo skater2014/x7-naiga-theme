@@ -22,6 +22,28 @@
     });
   }
 
+
+  /* NAIGAI REMOVE LEGACY HERO CONTROLS 20260731
+   * 旧 frontpage-hero-swiper.js が生成していた矢印・ページャーを撤去。
+   * 現行Heroは手動スワイプ＋丸ドットだけを使用する。
+   */
+  function removeLegacyHeroControls(root) {
+    if (!root) {
+      return;
+    }
+
+    root.querySelectorAll(
+      '.fp-hero-media__nav, ' +
+      '.fp-hero-media__pagination, ' +
+      '.swiper-button-prev, ' +
+      '.swiper-button-next'
+    ).forEach(function (el) {
+      el.remove();
+    });
+
+    root.classList.remove('fp-hero-media--tablet-swiper');
+  }
+
   function getHeroMedia() {
     return document.querySelector('.fp-hero-media--adaptive');
   }
@@ -34,6 +56,8 @@
 
   function setupTabletSwiper() {
     var heroMedia = getHeroMedia();
+
+    removeLegacyHeroControls(heroMedia);
 
     if (!heroMedia) {
       return;
@@ -75,11 +99,6 @@
         spaceBetween: 14,
         centeredSlides: true,
         watchOverflow: true,
-        autoplay: {
-          delay: 2400,
-          disableOnInteraction: false,
-          pauseOnMouseEnter: false
-        },
         pagination: {
           el: pagination,
           clickable: true
@@ -157,7 +176,10 @@
     }
   }
 
-  document.addEventListener('DOMContentLoaded', syncHeroSwiper);
+  document.addEventListener('DOMContentLoaded', function () {
+    removeLegacyHeroControls(getHeroMedia());
+    syncHeroSwiper();
+  });
 
   window.addEventListener('resize', function () {
     clearTimeout(window.__frontpageHeroSwiperTimer);

@@ -5,7 +5,9 @@
  * 役割:
  * - 設計姿勢 ページ専用の本文エリア
  * - 存在しない common/section-content は呼ばない
- * - このファイルでは <main> を出さない
+ * - このファイルでは <main>
+
+を出さない
  */
 
 if (!defined('ABSPATH')) {

@@ -164,3 +164,70 @@ body.single-iez_plan {
 }
 
 /* IEZUKURI LIGHTBOX COLOR TOKENS END */
+
+/* IEZUKURI_COMMON_BACK_LINK_CSS_START */
+
+/*
+ * パンくず直後のBack Link領域
+ */
+.iezukuri-common-back-nav {
+  box-sizing: border-box;
+  width: min(1280px, calc(100% - 64px));
+  margin: 12px auto 18px;
+  padding: 0;
+  background: transparent;
+}
+
+/*
+ * 従来の間取り詳細Back Linkと同じボタンデザイン
+ */
+.iezukuri-common-back-nav
+.iez-plan-single-back-nav__link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 0 16px;
+  border: 1px solid var(--plan-border, #d9c3a5);
+  border-radius: 999px;
+  background: var(--plan-chip-bg, #f3e4cf);
+  color: var(--plan-chip-text, #5b341d);
+  font-weight: 800;
+  line-height: 1.4;
+  text-decoration: none;
+  box-shadow: none;
+}
+
+.iezukuri-common-back-nav
+.iez-plan-single-back-nav__link:hover,
+.iezukuri-common-back-nav
+.iez-plan-single-back-nav__link:focus {
+  color: var(--plan-chip-text, #5b341d);
+  text-decoration: none;
+}
+
+/*
+ * 間取り詳細本文の上に残っていた大きな空白を縮小
+ */
+body.single-iez_plan
+.iezukuri-common-back-nav
++ main.hub-customhome-subpage
+.iez-block:first-child {
+  padding-top: 18px;
+}
+
+@media (max-width: 900px) {
+  .iezukuri-common-back-nav {
+    width: calc(100% - 28px);
+    margin-top: 12px;
+    margin-bottom: 16px;
+  }
+
+  body.single-iez_plan
+  .iezukuri-common-back-nav
+  + main.hub-customhome-subpage
+  .iez-block:first-child {
+    padding-top: 16px;
+  }
+}
+
+/* IEZUKURI_COMMON_BACK_LINK_CSS_END */

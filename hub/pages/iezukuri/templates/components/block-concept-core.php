@@ -90,7 +90,8 @@ $cutaway_src = get_template_directory_uri() . '/hub/pages/iezukuri/assets/images
     </aside>
 
     <main class="ch-house-view" aria-label="高気密高断熱の住宅性能図">
-      <div class="ch-house-view__season-bg" aria-hidden="true"></div>
+
+<div class="ch-house-view__season-bg" aria-hidden="true"></div>
 
       <div class="ch-house-view__focus">
         <span>選択中の季節</span>

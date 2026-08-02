@@ -80,12 +80,7 @@ $has_pdf_download = ($pdf_download_url !== '');
     data-iezukuri-page="plan-single"
     data-iezukuri-slug="<?php echo esc_attr($slug); ?>"
 >
-    <nav class="iez-plan-single-back-nav" aria-label="参考プラン一覧へ戻る">
-        <a class="iez-plan-single-back-nav__link" href="<?php echo esc_url(home_url('/iezukuri/plans/')); ?>">
-            ← 参考プラン一覧へ戻る
-        </a>
-    </nav>
-    <?php
+<?php
     /**
      * 間取り詳細の本体表示。
      *

@@ -294,11 +294,11 @@ main.hub-customhome-subpage video {
 
 @media (max-width: 900px) {
   main.hub-customhome-subpage .iez-sub-hero {
-    min-height: 390px;
+    min-height: 0;
   }
 
   main.hub-customhome-subpage .iez-sub-hero__image {
-    min-height: 390px;
+    min-height: 0;
   }
 
   main.hub-customhome-subpage .iez-sub-hero__inner,
@@ -306,11 +306,11 @@ main.hub-customhome-subpage video {
   main.hub-customhome-subpage .ch-sub-localnav__inner,
   main.hub-customhome-subpage .iez-sub-section__inner,
   main.hub-customhome-subpage .iez-sub-cta__inner {
-    width: calc(100% - 28px);
+    width: calc(100% - 8px);
   }
 
   main.hub-customhome-subpage .iez-sub-hero__inner {
-    padding: 72px 0 58px;
+    padding: 24px 0 18px;
   }
 
   main.hub-customhome-subpage .iez-sub-hero__actions,
@@ -324,12 +324,12 @@ main.hub-customhome-subpage video {
   }
 
   main.hub-customhome-subpage .iez-sub-section {
-    padding: 48px 0;
+    padding: 20px 0 36px;
   }
 
   main.hub-customhome-subpage .iez-sub-section__inner,
   main.hub-customhome-subpage .iez-sub-cta__inner {
-    padding: 28px;
+    padding: 18px 8px;
     border-radius: 20px;
   }
 
@@ -384,7 +384,7 @@ main.hub-customhome-subpage .iez-plan-viewer {
   background: var(--iezukuri-surface);
   border: 1px solid rgba(77, 53, 29, .12);
   border-radius: 28px;
-  padding: 28px;
+  padding: 18px 8px;
   box-shadow: 0 18px 42px rgba(24, 18, 14, .07);
 }
 
@@ -594,7 +594,7 @@ main.hub-customhome-subpage .iez-plan-points__note {
   }
 
   main.hub-customhome-subpage .iez-plan-page__inner {
-    width: calc(100% - 28px);
+    width: calc(100% - 8px);
   }
 
   main.hub-customhome-subpage .iez-plan-viewer {
@@ -675,7 +675,7 @@ main.hub-customhome-subpage .iez-plan-viewer {
   background: var(--iezukuri-surface);
   border: 1px solid rgba(77, 53, 29, .12);
   border-radius: 28px;
-  padding: 28px;
+  padding: 18px 8px;
   box-shadow: 0 18px 42px rgba(24, 18, 14, .07);
 }
 
@@ -829,7 +829,7 @@ main.hub-customhome-subpage .iez-checklist-card p {
   }
 
   main.hub-customhome-subpage .iez-block__inner {
-    width: calc(100% - 28px);
+    width: calc(100% - 8px);
   }
 
   main.hub-customhome-subpage .iez-plan-viewer {
@@ -932,7 +932,7 @@ main.hub-customhome-subpage .iez-plan-page__inner {
 }
 
 main.hub-customhome-subpage .iez-plan-viewer {
-  padding: 28px;
+  padding: 18px 8px;
 }
 
 main.hub-customhome-subpage .iez-plan-viewer__layout {
@@ -1096,7 +1096,7 @@ main.hub-customhome-subpage .iez-plan-gallery__item:hover .iez-plan-gallery__ima
 
 @media (max-width: 900px) {
   main.hub-customhome-subpage .iez-plan-page__inner {
-    width: calc(100% - 28px);
+    width: calc(100% - 8px);
   }
 
   main.hub-customhome-subpage .iez-plan-viewer__frame {
@@ -1258,7 +1258,7 @@ main.hub-customhome-subpage .iez-plan-gallery__caption {
 
 @media (max-width: 900px) {
   main.hub-customhome-subpage .iez-plan-page__inner {
-    width: calc(100% - 28px) !important;
+    width: calc(100% - 8px) !important;
   }
 
   main.hub-customhome-subpage .iez-plan-viewer {
@@ -1307,7 +1307,7 @@ main.hub-customhome-subpage .iez-plan-card {
   background: var(--iezukuri-surface);
   border: 1px solid rgba(77, 53, 29, .12);
   border-radius: 30px;
-  padding: 28px;
+  padding: 18px 8px;
   box-shadow: 0 18px 42px rgba(24, 18, 14, .07);
 }
 
@@ -1611,7 +1611,7 @@ main.hub-customhome-subpage .iez-plan-card__actions {
 
 @media (max-width: 900px) {
   main.hub-customhome-subpage .iez-plan-list__inner {
-    width: calc(100% - 28px);
+    width: calc(100% - 8px);
   }
 
   main.hub-customhome-subpage .iez-plan-card {
@@ -1789,7 +1789,7 @@ main.hub-customhome-subpage .iez-plan-summary__list dd {
 
 @media (max-width: 700px) {
   main.hub-customhome-subpage .iez-plan-archive__inner {
-    width: calc(100% - 28px);
+    width: calc(100% - 8px);
   }
 
   main.hub-customhome-subpage .iez-plan-archive__grid {

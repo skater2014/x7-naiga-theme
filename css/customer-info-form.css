@@ -66,7 +66,7 @@ body.page-template-page-customer-info-form .customer-info-page {
 }
 
 body.page-template-page-customer-info-form .customer-info-form-wrap {
-  width: min(980px, calc(100% - 40px));
+  width: min(980px, calc(100% - 16px));
   margin-inline: auto;
 }
 
@@ -80,7 +80,7 @@ body.page-template-page-customer-info-form .customer-info-card {
   background: var(--cif-surface);
   color: var(--cif-text);
   box-shadow: var(--cif-shadow);
-  padding: clamp(24px, 4vw, 48px);
+  padding: clamp(16px, 4vw, 48px);
   overflow: hidden;
 }
 
@@ -291,12 +291,12 @@ body.page-template-page-customer-info-form .customer-info-card--thanks {
 
 @media (max-width: 760px) {
   body.page-template-page-customer-info-form .customer-info-form-wrap {
-    width: min(100% - 24px, 980px);
+    width: 100%;
   }
 
   body.page-template-page-customer-info-form .customer-info-card {
     border-radius: 22px;
-    padding: 20px;
+    padding: 16px;
   }
 
   body.page-template-page-customer-info-form .customer-info-grid {
@@ -332,7 +332,7 @@ body.page-template-page-customer-info-form .customer-info-page {
 
 /* 中のフォームカードだけ管理 */
 body.page-template-page-customer-info-form .customer-info-form-wrap {
-  width: min(980px, calc(100% - 40px));
+  width: min(980px, calc(100% - 16px));
   margin-inline: auto;
 }
 
@@ -342,7 +342,7 @@ body.page-template-page-customer-info-form .customer-info-card {
   background: var(--color-surface, #fff);
   color: var(--color-text, #182638);
   box-shadow: 0 22px 54px rgba(35, 45, 58, 0.12);
-  padding: clamp(24px, 4vw, 48px);
+  padding: clamp(16px, 4vw, 48px);
   overflow: hidden;
 }
 
@@ -529,12 +529,12 @@ body.page-template-page-customer-info-form .button2.is-secondary {
 
 @media (max-width: 760px) {
   body.page-template-page-customer-info-form .customer-info-form-wrap {
-    width: min(100% - 24px, 980px);
+    width: 100%;
   }
 
   body.page-template-page-customer-info-form .customer-info-card {
     border-radius: 22px;
-    padding: 20px;
+    padding: 16px;
   }
 
   body.page-template-page-customer-info-form .customer-info-grid {

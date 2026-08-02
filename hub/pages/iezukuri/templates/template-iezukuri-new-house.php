@@ -24,7 +24,8 @@ get_header('customhome');
 ?>
 
 <main id="primary" class="hub-customhome-page hub-customhome-subpage nh-page" data-iezukuri-page="new-house">
-    <section class="ch-hero ch-fullbleed is-no-media" data-customhome-hero>
+
+<section class="ch-hero ch-fullbleed is-no-media" data-customhome-hero>
         <div class="ch-hero__overlay"></div>
 
         <div class="ch-shell ch-hero__inner">

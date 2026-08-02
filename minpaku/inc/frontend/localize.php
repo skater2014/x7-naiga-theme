@@ -48,7 +48,13 @@ if (!function_exists('mnpk_localize_front_script')) {
         wp_localize_script('minpaku-single-js', 'mnpkBooking', array(
             'ajaxUrl'        => admin_url('admin-ajax.php'),
             'nonce'          => wp_create_nonce('mnpk_booking_nonce'),
-            'publishableKey' => get_option('mnpk_stripe_publishable_key', ''),
+            /* NAIGAI_LOCAL_STRIPE_PUBLISHABLE_FALLBACK */
+            'publishableKey' => (
+                defined('NAIGAI_STRIPE_PUBLISHABLE_KEY')
+                && NAIGAI_STRIPE_PUBLISHABLE_KEY
+                    ? (string) NAIGAI_STRIPE_PUBLISHABLE_KEY
+                    : (string) get_option('mnpk_stripe_publishable_key', '')
+            ),
         ));
     }
 }

@@ -170,7 +170,7 @@ if (!function_exists('naigai_iezukuri_default_nav_items')) {
             array('label' => '設計姿勢',         'url' => home_url('/iezukuri/design-policy/')),
             array('label' => '那須での家づくり', 'url' => home_url('/iezukuri/nasu-house/')),
             array('label' => 'デザインと設計',   'url' => home_url('/iezukuri/design-office/')),
-            array('label' => '会社概要',         'url' => home_url('/iezukuri/company/')),
+            array('label' => '会社概要',         'url' => home_url('/company/')),
             array('label' => 'ご相談・資料請求', 'url' => home_url('/iezukuri/contact/')),
         );
     }
@@ -456,7 +456,7 @@ if (!function_exists('naigai_iezukuri_footer_menu_items')) {
             array('label' => '住まいリフォーム',   'url' => home_url('/iezukuri/renovation/')),
             array('label' => '間取り・プラン',     'url' => home_url('/iezukuri/plans/')),
             array('label' => '暮らしのポイント',   'url' => home_url('/iezukuri/point/')),
-            array('label' => '会社概要',           'url' => home_url('/iezukuri/company/')),
+            array('label' => '会社概要',           'url' => home_url('/company/')),
             array('label' => 'お問い合わせ',       'url' => home_url('/iezukuri/contact/')),
         );
     }

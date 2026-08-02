@@ -236,7 +236,8 @@ $mobile_phone = get_theme_mod('dess_phone');
       </nav>
 
     </div><!-- /.header-wrapper END -->
-  </header><!-- /#head END -->
+  </header>
+<!-- /#head END -->
 
   <?php
   $slider_page_slug = '';

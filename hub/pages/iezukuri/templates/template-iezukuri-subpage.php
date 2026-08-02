@@ -29,7 +29,9 @@ if (!$slug) {
  * - ページメニュー表示
  * - 中間ナビ表示モード
  *
- * ここで post_meta を読み、<main> の class / data属性に出す。
+ * ここで post_meta を読み、<main>
+
+の class / data属性に出す。
  * CSSはその class / data属性を見て切り替える。
  */
 $header_style  = get_post_meta($page_id, '_hub_ch_header_menu_style', true);

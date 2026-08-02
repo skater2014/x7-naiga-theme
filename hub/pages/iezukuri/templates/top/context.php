@@ -247,4 +247,6 @@ if (is_array($cta_media_meta) && !empty($cta_media_meta)) {
 
 get_header('customhome');
 ?>
-<main class="hub-customhome-page" data-localnav-mode="<?php echo esc_attr($localnav_mode); ?>">
+<main class="hub-customhome-page" data-localnav-mode="<?php echo esc_attr($localnav_mode); ?>
+
+">

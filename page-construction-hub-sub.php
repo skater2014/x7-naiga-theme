@@ -218,7 +218,7 @@ get_header('customhome');
                     <li><a href="<?php echo esc_url(home_url('/iezukuri/design-policy/')); ?>">設計姿勢</a></li>
                     <li><a href="<?php echo esc_url(home_url('/iezukuri/nasu-house/')); ?>">那須での家づくり</a></li>
                     <li><a href="<?php echo esc_url(home_url('/iezukuri/design-office/')); ?>">デザインと設計</a></li>
-                    <li><a href="<?php echo esc_url(home_url('/iezukuri/company/')); ?>">会社概要</a></li>
+                    <li><a href="<?php echo esc_url(home_url('/iezukuri/')); ?>">家づくり</a></li>
                     <li><a href="<?php echo esc_url(home_url('/iezukuri/contact/')); ?>">ご相談・資料請求</a></li>
                 </ul>
             <?php endif; ?>

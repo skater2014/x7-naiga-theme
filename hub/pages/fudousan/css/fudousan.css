@@ -1372,3 +1372,36 @@ body.hub-page.hub-context-realestate .navg_under,
   }
 }
 /* === FUDOUSAN HERO MEDIA FINAL END === */
+
+/* NAIGAI FIX 20260731 ACTIVE: readable mobile property category tabs */
+@media (max-width: 767px) {
+  .fudousan-page .fudo-mobile-category-tabs,
+  body[class*="fudousan"] .fudo-mobile-category-tabs {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    gap: 12px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    padding: 4px 20px 14px !important;
+    scroll-padding-inline: 20px !important;
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-inline: contain;
+  }
+
+  .fudousan-page .fudo-mobile-category-tab,
+  body[class*="fudousan"] .fudo-mobile-category-tab {
+    flex: 0 0 auto !important;
+    width: auto !important;
+    max-width: none !important;
+    min-width: max-content !important;
+    white-space: nowrap !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    scroll-snap-align: center;
+  }
+}
+

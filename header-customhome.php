@@ -5,10 +5,44 @@ if (!defined('ABSPATH')) {
 
 $post_id = get_queried_object_id();
 
-$brand_logo_id = absint(get_post_meta($post_id, '_hub_ch_brand_logo_id', true));
+/* IEZUKURI_COMMON_HEADER_LOGO_SOURCE
+ *
+ * /iezukuri/ 配下のロゴは、家づくりトップページの設定を共通使用する。
+ * アーカイブでは投稿IDが取得できないため、トップページIDを正本にする。
+ */
+$brand_source_id = $post_id;
+
+$request_uri  = isset($_SERVER['REQUEST_URI'])
+    ? wp_unslash($_SERVER['REQUEST_URI'])
+    : '';
+
+$request_path = trim(
+    (string) wp_parse_url($request_uri, PHP_URL_PATH),
+    '/'
+);
+
+$is_iezukuri_request = (
+    $request_path === 'iezukuri'
+    || strpos($request_path, 'iezukuri/') === 0
+);
+
+if ($is_iezukuri_request) {
+    $iezukuri_top_page = get_page_by_path(
+        'iezukuri',
+        OBJECT,
+        'page'
+    );
+
+    if ($iezukuri_top_page instanceof WP_Post) {
+        $brand_source_id = (int) $iezukuri_top_page->ID;
+    }
+}
+
+
+$brand_logo_id = absint(get_post_meta($brand_source_id, '_hub_ch_brand_logo_id', true));
 $brand_logo_url = $brand_logo_id ? wp_get_attachment_image_url($brand_logo_id, 'medium') : '';
-$brand_text = get_post_meta($post_id, '_hub_ch_brand_text', true);
-$brand_subtext = get_post_meta($post_id, '_hub_ch_brand_subtext', true);
+$brand_text = get_post_meta($brand_source_id, '_hub_ch_brand_text', true);
+$brand_subtext = get_post_meta($brand_source_id, '_hub_ch_brand_subtext', true);
 $header_style = get_post_meta($post_id, '_hub_ch_header_menu_style', true);
 
 if ($brand_text === '') {
@@ -35,7 +69,7 @@ $header_fallback = static function () use ($room_url, $hokubei_url, $natural_url
     echo '<li><a href="' . esc_url(home_url('/iezukuri/design-policy/')) . '">設計姿勢</a></li>';
     echo '<li><a href="' . esc_url(home_url('/iezukuri/nasu-house/')) . '">那須での家づくり</a></li>';
     echo '<li><a href="' . esc_url(home_url('/iezukuri/design-office/')) . '">デザインと設計</a></li>';
-    echo '<li><a href="' . esc_url(home_url('/iezukuri/company/')) . '">会社概要</a></li>';
+    echo '<li><a href="' . esc_url(home_url('/iezukuri/')) . '">家づくり</a></li>';
     echo '<li><a href="' . esc_url(home_url('/iezukuri/contact/')) . '">ご相談・資料請求</a></li>';
     echo '</ul>';
 };
@@ -182,3 +216,117 @@ if ($header_variant === '') {
                 </div>
             </div>
         </header>
+<?php
+/* =========================================================
+ * IEZUKURI BREADCRUMB START
+ *
+ * 【このブロックの役割】
+ * 家づくり専用ヘッダーの直下で、
+ * サイト共通パンくず関数 breadcrumb1() を呼び出す。
+ *
+ * 【表示対象】
+ * 実際にアクセスしているURLが次に該当するページ。
+ *
+ * ・/iezukuri/
+ * ・/iezukuri/ 以下のすべてのページ
+ *
+ * 固定ページ、間取り一覧、間取り詳細をすべて含む。
+ *
+ * 【これまで表示されなかった理由】
+ * 以前はget_page_uri()で固定ページの親子関係を調べていた。
+ *
+ * その方法では、URLが/iezukuri/contact/であっても、
+ * 管理画面で「iezukuri」が親ページに設定されていなければ、
+ * 内部URIが「contact」になり、対象外と判定される。
+ *
+ * ここではファイル上部で作成済みの
+ * $is_iezukuri_requestを使用する。
+ *
+ * $is_iezukuri_request:
+ * 実際のアクセスURLが/iezukuri/以下ならtrueになる変数。
+ *
+ * 【重要】
+ * パンくずの文字と階層はここへ直接書かない。
+ * inc/functions/bread1-comment.phpで一元管理する。
+ * ========================================================= */
+
+
+/*
+ * $naigai_show_iezukuri_breadcrumb
+ *
+ * 家づくりパンくずを表示するかどうかを保存する変数。
+ *
+ * true:
+ *   /iezukuri/ またはその配下
+ *
+ * false:
+ *   家づくり以外のページ
+ */
+$naigai_show_iezukuri_breadcrumb =
+    !empty($is_iezukuri_request);
+?>
+
+
+<?php if (
+    $naigai_show_iezukuri_breadcrumb
+    && function_exists('breadcrumb1')
+) : ?>
+
+    <div
+        class="iezukuri-breadcrumb"
+        data-iezukuri-breadcrumb
+    >
+        <?php
+        /*
+         * breadcrumb1()
+         *
+         * 現在表示しているページ種類を判定し、
+         * パンくずのHTMLを出力する共通関数。
+         *
+         * 固定ページ、間取り一覧、間取り詳細の
+         * 条件分岐はbread1-comment.php側に置く。
+         */
+        breadcrumb1();
+        ?>
+    </div>
+
+<?php endif; ?>
+
+<!-- IEZUKURI BREADCRUMB END -->
+<?php
+/* IEZUKURI_COMMON_BACK_LINK_RENDER_START */
+
+$naigai_request_uri =
+    isset($_SERVER['REQUEST_URI'])
+        ? wp_unslash($_SERVER['REQUEST_URI'])
+        : '';
+
+$naigai_request_path = trim(
+    (string) wp_parse_url(
+        $naigai_request_uri,
+        PHP_URL_PATH
+    ),
+    '/'
+);
+
+$naigai_is_iezukuri = (
+    $naigai_request_path === 'iezukuri'
+    || strpos(
+        $naigai_request_path,
+        'iezukuri/'
+    ) === 0
+);
+
+if ($naigai_is_iezukuri) {
+    $naigai_back_link_file =
+        get_template_directory()
+        . '/hub/pages/iezukuri/templates/shared/back-link.php';
+
+    if (is_file($naigai_back_link_file)) {
+        require $naigai_back_link_file;
+    }
+}
+
+/* IEZUKURI_COMMON_BACK_LINK_RENDER_END */
+?>
+

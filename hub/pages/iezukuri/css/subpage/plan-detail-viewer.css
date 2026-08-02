@@ -24,29 +24,10 @@ body.single-iez_plan main.hub-customhome-subpage {
   color: var(--plan-text);
 }
 
-body.single-iez_plan main.hub-customhome-subpage .iez-plan-single-back-nav,
 body.single-iez_plan main.hub-customhome-subpage .iez-block__inner,
 body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail__inner {
   width: min(1280px, calc(100% - 64px));
   margin-inline: auto;
-}
-
-body.single-iez_plan main.hub-customhome-subpage .iez-plan-single-back-nav {
-  margin-top: 24px;
-  margin-bottom: 18px;
-}
-
-body.single-iez_plan main.hub-customhome-subpage .iez-plan-single-back-nav__link {
-  display: inline-flex;
-  align-items: center;
-  min-height: 40px;
-  padding: 0 16px;
-  border-radius: 999px;
-  border: 1px solid var(--plan-border);
-  background: var(--plan-chip-bg);
-  color: var(--plan-chip-text);
-  font-weight: 800;
-  text-decoration: none;
 }
 
 body.single-iez_plan main.hub-customhome-subpage .iez-block {
@@ -726,7 +707,7 @@ body.single-iez_plan .lg-outer .lg-next {
 }
 
 @media (max-width: 900px) {
-  body.single-iez_plan main.hub-customhome-subpage .iez-plan-single-back-nav,
+
   body.single-iez_plan main.hub-customhome-subpage .iez-block__inner,
   body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail__inner {
     width: calc(100% - 28px);

@@ -554,6 +554,386 @@ if (!function_exists('breadcrumb1')) {
             return;
         }
 
+
+        /* =====================================================
+         * IEZUKURI_FIXED_URL_BREADCRUMB_START
+         *
+         * 【この条件分岐の役割】
+         * /iezukuri/配下にある固定ページの
+         * パンくず階層を組み立てる。
+         *
+         * 【表示例】
+         *
+         * 家づくりトップ:
+         * ホーム ＞ 那須の注文住宅
+         *
+         * ご相談・資料請求:
+         * ホーム ＞ 那須の注文住宅 ＞ ご相談・資料請求
+         *
+         * 二世帯住宅:
+         * ホーム ＞ 那須の注文住宅 ＞ 二世帯住宅
+         *
+         * 【重要】
+         * WordPress管理画面の親ページ設定だけに依存せず、
+         * 実際のアクセスURLも使って家づくりページを判定する。
+         * ===================================================== */
+
+
+        /*
+         * $ng_iezukuri_request_uri
+         *
+         * 現在アクセスしているURLを保存する変数。
+         */
+        $ng_iezukuri_request_uri =
+            isset($_SERVER['REQUEST_URI'])
+                ? wp_unslash($_SERVER['REQUEST_URI'])
+                : '';
+
+
+        /*
+         * $ng_iezukuri_request_path
+         *
+         * URLからドメイン、クエリ文字列、前後の
+         * スラッシュを除いたパス。
+         *
+         * 例:
+         * /iezukuri/contact/?test=1
+         * ↓
+         * iezukuri/contact
+         */
+        $ng_iezukuri_request_path = trim(
+            (string) wp_parse_url(
+                $ng_iezukuri_request_uri,
+                PHP_URL_PATH
+            ),
+            '/'
+        );
+
+
+        /*
+         * $ng_is_iezukuri_fixed_page
+         *
+         * 現在のページが固定ページであり、
+         * 実際のURLが/iezukuri/以下ならtrue。
+         */
+        $ng_is_iezukuri_fixed_page =
+            is_page()
+            && (
+                $ng_iezukuri_request_path === 'iezukuri'
+                || strpos(
+                    $ng_iezukuri_request_path,
+                    'iezukuri/'
+                ) === 0
+            );
+
+
+        if ($ng_is_iezukuri_fixed_page) {
+            /*
+             * $current_page_id
+             *
+             * 現在表示している固定ページのID。
+             */
+            $current_page_id =
+                get_queried_object_id();
+
+
+            /*
+             * $iezukuri_root_page
+             *
+             * スラッグ「iezukuri」の家づくりトップ固定ページ。
+             */
+            $iezukuri_root_page =
+                get_page_by_path(
+                    'iezukuri',
+                    OBJECT,
+                    'page'
+                );
+
+
+            /*
+             * $iezukuri_root_id
+             *
+             * 家づくりトップ固定ページの投稿ID。
+             */
+            $iezukuri_root_id =
+                $iezukuri_root_page instanceof WP_Post
+                    ? (int) $iezukuri_root_page->ID
+                    : 0;
+
+
+            /*
+             * $iezukuri_root_url
+             *
+             * 家づくりトップへのリンクURL。
+             *
+             * 固定ページを取得できなかった場合も、
+             * /iezukuri/を予備URLとして使う。
+             */
+            $iezukuri_root_url =
+                $iezukuri_root_id
+                    ? get_permalink($iezukuri_root_id)
+                    : home_url('/iezukuri/');
+
+
+            /*
+             * $iezukuri_root_label
+             *
+             * パンくずへ表示する家づくりトップの名前。
+             *
+             * ng_get_page_breadcrumb_label()は、
+             * ページタイトルや保存済みhero見出しから
+             * 適切な表示名を返す既存関数。
+             */
+            if (
+                $iezukuri_root_id
+                && function_exists(
+                    'ng_get_page_breadcrumb_label'
+                )
+            ) {
+                $iezukuri_root_label =
+                    ng_get_page_breadcrumb_label(
+                        $iezukuri_root_id
+                    );
+            } elseif ($iezukuri_root_id) {
+                $iezukuri_root_label =
+                    get_the_title($iezukuri_root_id);
+            } else {
+                $iezukuri_root_label =
+                    '那須の注文住宅';
+            }
+
+            if ($iezukuri_root_label === '') {
+                $iezukuri_root_label =
+                    '那須の注文住宅';
+            }
+
+
+            /*
+             * $current_page_label
+             *
+             * 現在表示している固定ページのパンくず名。
+             */
+            if (
+                $current_page_id
+                && function_exists(
+                    'ng_get_page_breadcrumb_label'
+                )
+            ) {
+                $current_page_label =
+                    ng_get_page_breadcrumb_label(
+                        $current_page_id
+                    );
+            } else {
+                $current_page_label =
+                    get_the_title($current_page_id);
+            }
+
+            if ($current_page_label === '') {
+                $current_page_label =
+                    '現在のページ';
+            }
+
+
+            /*
+             * 家づくりトップ自身を表示している場合。
+             *
+             * $itemsにはすでに「ホーム」が入っているので、
+             * 現在地として家づくりトップ名だけを追加する。
+             */
+            if (
+                $ng_iezukuri_request_path === 'iezukuri'
+                || (
+                    $iezukuri_root_id
+                    && $current_page_id === $iezukuri_root_id
+                )
+            ) {
+                ng_breadcrumb_add_item(
+                    $items,
+                    $iezukuri_root_label
+                );
+
+                ng_breadcrumb_render($items);
+                return;
+            }
+
+
+            /*
+             * 家づくりサブページの場合。
+             *
+             * 2階層目へ家づくりトップをリンクとして追加する。
+             */
+            ng_breadcrumb_add_item(
+                $items,
+                $iezukuri_root_label,
+                $iezukuri_root_url
+            );
+
+
+            /*
+             * $ancestor_ids
+             *
+             * WordPress管理画面で親ページが設定されている場合の
+             * 親固定ページID一覧。
+             *
+             * 古い親から順番に並べ替えて追加する。
+             */
+            $ancestor_ids = array_reverse(
+                get_post_ancestors($current_page_id)
+            );
+
+            foreach ($ancestor_ids as $ancestor_id) {
+                /*
+                 * 家づくりトップはすでに追加したため、
+                 * 同じ項目を二重に表示しない。
+                 */
+                if (
+                    (int) $ancestor_id
+                    === $iezukuri_root_id
+                ) {
+                    continue;
+                }
+
+                $ancestor_label =
+                    function_exists(
+                        'ng_get_page_breadcrumb_label'
+                    )
+                        ? ng_get_page_breadcrumb_label(
+                            $ancestor_id
+                        )
+                        : get_the_title($ancestor_id);
+
+                if ($ancestor_label === '') {
+                    continue;
+                }
+
+                ng_breadcrumb_add_item(
+                    $items,
+                    $ancestor_label,
+                    get_permalink($ancestor_id)
+                );
+            }
+
+
+            /*
+             * 最後に現在のページを追加する。
+             *
+             * 現在地なのでリンクURLは付けない。
+             */
+            ng_breadcrumb_add_item(
+                $items,
+                $current_page_label
+            );
+
+
+            /*
+             * 完成した配列をパンくずHTMLとして出力する。
+             */
+            ng_breadcrumb_render($items);
+
+            /*
+             * 家づくり固定ページ用の処理が完了したため、
+             * 後ろにある通常固定ページ処理へ進ませない。
+             */
+            return;
+        }
+
+        /* IEZUKURI_FIXED_URL_BREADCRUMB_END */
+
+        /**
+         * IEZ_PLAN_ARCHIVE_BREADCRUMB_START
+         * --------------------------------------------------
+         * 間取り一覧ページ
+         * --------------------------------------------------
+         *
+         * is_post_type_archive('iez_plan')
+         *
+         * 現在表示しているページが、
+         * iez_planカスタム投稿の一覧か判定する。
+         *
+         * 表示:
+         * ホーム ＞ 那須の注文住宅 ＞ 間取り
+         */
+        if (is_post_type_archive('iez_plan')) {
+            /*
+             * $iezukuri_page
+             *
+             * スラッグ「iezukuri」の固定ページ情報。
+             */
+            $iezukuri_page = get_page_by_path(
+                'iezukuri',
+                OBJECT,
+                'page'
+            );
+
+            /*
+             * $iezukuri_url
+             *
+             * 家づくりトップへのURL。
+             */
+            $iezukuri_url =
+                $iezukuri_page instanceof WP_Post
+                    ? get_permalink($iezukuri_page->ID)
+                    : home_url('/iezukuri/');
+
+            /*
+             * $iezukuri_label
+             *
+             * 家づくりトップのパンくず表示名。
+             *
+             * 既存の専用関数がある場合はそれを使い、
+             * なければ固定ページタイトルを使う。
+             */
+            if (
+                $iezukuri_page instanceof WP_Post
+                && function_exists(
+                    'ng_get_page_breadcrumb_label'
+                )
+            ) {
+                $iezukuri_label =
+                    ng_get_page_breadcrumb_label(
+                        $iezukuri_page->ID
+                    );
+            } elseif (
+                $iezukuri_page instanceof WP_Post
+            ) {
+                $iezukuri_label =
+                    get_the_title(
+                        $iezukuri_page->ID
+                    );
+            } else {
+                $iezukuri_label =
+                    '那須の注文住宅';
+            }
+
+            if ($iezukuri_label === '') {
+                $iezukuri_label =
+                    '那須の注文住宅';
+            }
+
+            /*
+             * 家づくりトップをリンクとして追加。
+             */
+            ng_breadcrumb_add_item(
+                $items,
+                $iezukuri_label,
+                $iezukuri_url
+            );
+
+            /*
+             * 現在地「間取り」を追加。
+             * 最後の項目なのでリンクは付けない。
+             */
+            ng_breadcrumb_add_item(
+                $items,
+                '間取り'
+            );
+
+            ng_breadcrumb_render($items);
+            return;
+        }
+        /* IEZ_PLAN_ARCHIVE_BREADCRUMB_END */
+
+
         /**
          * 投稿タイプアーカイブ
          */
@@ -744,6 +1124,136 @@ if (!function_exists('breadcrumb1')) {
          */
         if (is_singular()) {
             $post_type = get_post_type();
+
+            /**
+             * IEZ_PLAN_SINGLE_BREADCRUMB_IN_BREAD1_START
+             * --------------------------------------------------
+             * 間取り詳細ページ
+             * --------------------------------------------------
+             *
+             * $post_type === 'iez_plan'
+             *
+             * 現在表示している個別投稿の投稿タイプが
+             * iez_planかを判定する。
+             *
+             * 表示:
+             * ホーム
+             * ＞ 那須の注文住宅
+             * ＞ 間取り
+             * ＞ 現在の間取りタイトル
+             */
+            if ($post_type === 'iez_plan') {
+                /*
+                 * 家づくりトップ固定ページ。
+                 */
+                $iezukuri_page = get_page_by_path(
+                    'iezukuri',
+                    OBJECT,
+                    'page'
+                );
+
+                /*
+                 * 家づくりトップURL。
+                 */
+                $iezukuri_url =
+                    $iezukuri_page instanceof WP_Post
+                        ? get_permalink(
+                            $iezukuri_page->ID
+                        )
+                        : home_url('/iezukuri/');
+
+                /*
+                 * 家づくりトップの表示名。
+                 */
+                if (
+                    $iezukuri_page instanceof WP_Post
+                    && function_exists(
+                        'ng_get_page_breadcrumb_label'
+                    )
+                ) {
+                    $iezukuri_label =
+                        ng_get_page_breadcrumb_label(
+                            $iezukuri_page->ID
+                        );
+                } elseif (
+                    $iezukuri_page instanceof WP_Post
+                ) {
+                    $iezukuri_label =
+                        get_the_title(
+                            $iezukuri_page->ID
+                        );
+                } else {
+                    $iezukuri_label =
+                        '那須の注文住宅';
+                }
+
+                if ($iezukuri_label === '') {
+                    $iezukuri_label =
+                        '那須の注文住宅';
+                }
+
+                /*
+                 * 間取り一覧のURL。
+                 *
+                 * get_post_type_archive_link()
+                 * = カスタム投稿一覧URLを取得する関数。
+                 */
+                $plan_archive_url =
+                    get_post_type_archive_link(
+                        'iez_plan'
+                    );
+
+                if (!$plan_archive_url) {
+                    $plan_archive_url =
+                        home_url(
+                            '/iezukuri/plans/'
+                        );
+                }
+
+                /*
+                 * 現在表示している間取り投稿のタイトル。
+                 */
+                $plan_title = get_the_title(
+                    get_queried_object_id()
+                );
+
+                if ($plan_title === '') {
+                    $plan_title =
+                        '間取り詳細';
+                }
+
+                /*
+                 * 家づくりトップを追加。
+                 */
+                ng_breadcrumb_add_item(
+                    $items,
+                    $iezukuri_label,
+                    $iezukuri_url
+                );
+
+                /*
+                 * 間取り一覧へのリンクを追加。
+                 */
+                ng_breadcrumb_add_item(
+                    $items,
+                    '間取り',
+                    $plan_archive_url
+                );
+
+                /*
+                 * 現在の間取りタイトルを追加。
+                 * 最後の項目なのでリンクは付けない。
+                 */
+                ng_breadcrumb_add_item(
+                    $items,
+                    $plan_title
+                );
+
+                ng_breadcrumb_render($items);
+                return;
+            }
+            /* IEZ_PLAN_SINGLE_BREADCRUMB_IN_BREAD1_END */
+
 
             /**
              * 通常投稿

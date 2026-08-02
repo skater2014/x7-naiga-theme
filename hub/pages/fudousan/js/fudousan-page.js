@@ -439,3 +439,64 @@
 
   window.addEventListener('load', initFudoHeroSwiper);
 })();
+
+/** NAIGAI FIX 20260731 ACTIVE: mobile property category tabs */
+(function () {
+  'use strict';
+
+  var expectedLabels = [
+    'すべて表示',
+    'マンション・戸建',
+    '土地・駐車場',
+    '事業用'
+  ];
+
+  function normalize(value) {
+    return String(value || '').replace(/\s+/g, '').trim();
+  }
+
+  function setupMobileCategoryTabs() {
+    if (window.location.pathname.indexOf('/fudousan') !== 0) {
+      return;
+    }
+
+    var controls = Array.prototype.slice.call(
+      document.querySelectorAll('button, a')
+    ).filter(function (element) {
+      return expectedLabels.indexOf(normalize(element.textContent)) !== -1;
+    });
+
+    if (controls.length < 3) {
+      return;
+    }
+
+    var parent = controls[0].parentElement;
+    if (!parent || !controls.every(function (element) {
+      return element.parentElement === parent;
+    })) {
+      return;
+    }
+
+    parent.classList.add('fudo-mobile-category-tabs');
+
+    controls.forEach(function (control) {
+      control.classList.add('fudo-mobile-category-tab');
+      control.addEventListener('click', function () {
+        window.setTimeout(function () {
+          control.scrollIntoView({
+            behavior: 'smooth',
+            block: 'nearest',
+            inline: 'center'
+          });
+        }, 0);
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupMobileCategoryTabs);
+  } else {
+    setupMobileCategoryTabs();
+  }
+})();
+

@@ -196,6 +196,10 @@ document.addEventListener('DOMContentLoaded', function () {
   let stripeInstance = null;
   let elementsInstance = null;
   let paymentElementInstance = null;
+
+  // NAIGAI_STRIPE_READY_MOUNT_FIX_20260730
+  let paymentElementReady = false;
+  let paymentElementMountPromise = null;
   let currentClientSecret = '';
   let reopenPaymentAfterPicker = '';
 
@@ -828,16 +832,28 @@ document.addEventListener('DOMContentLoaded', function () {
     return true;
   }
 
+  // NAIGAI_STRIPE_TARGET_PRESERVE_FIX_20260730
   function resetPaymentElement() {
     if (paymentElementInstance && typeof paymentElementInstance.destroy === 'function') {
       paymentElementInstance.destroy();
     }
     if (paymentElementWrap) {
-      paymentElementWrap.innerHTML = '';
+      let paymentElementTarget =
+        paymentElementWrap.querySelector('#mnpk-payment-element');
+
+      if (!paymentElementTarget) {
+        paymentElementTarget = document.createElement('div');
+        paymentElementTarget.id = 'mnpk-payment-element';
+        paymentElementTarget.className = 'mnpk-payment-element';
+        paymentElementWrap.appendChild(paymentElementTarget);
+      } else {
+        paymentElementTarget.innerHTML = '';
+      }
     }
     paymentElementInstance = null;
     elementsInstance = null;
     currentClientSecret = '';
+    paymentElementReady = false;
     setPaymentError('');
   }
 
@@ -931,90 +947,172 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
   async function mountPaymentElement() {
-    const calc = calculateBooking();
-
-    if (!calc.valid) {
-      setBookingError(calc.message || '予約内容を確認してください。');
-      return false;
+    /*
+     * 同じ時間に複数のマウント処理を走らせない。
+     * すでに処理中なら、その完了を待つ。
+     */
+    if (paymentElementMountPromise) {
+      return paymentElementMountPromise;
     }
 
-    if (!paymentForm || !paymentElementWrap) {
-      return false;
-    }
+    paymentElementMountPromise = (async () => {
+      const calc = calculateBooking();
 
-    if (!window.mnpkBooking || !window.mnpkBooking.publishableKey) {
-      setPaymentError('Stripe の公開可能キーが未設定です。');
-      return false;
-    }
+      if (!calc.valid) {
+        setBookingError(calc.message || '予約内容を確認してください。');
+        return false;
+      }
 
-    if (typeof window.Stripe !== 'function') {
-      setPaymentError('Stripe.js が読み込まれていません。');
-      return false;
-    }
+      if (!paymentForm || !paymentElementWrap) {
+        setPaymentError('支払いフォームの表示場所が見つかりません。');
+        return false;
+      }
 
-    setPaymentDebugStatus('PaymentIntent 作成開始');
-    setPaymentSkeletonState(false);
-    resetPaymentElement();
+      if (!window.mnpkBooking || !window.mnpkBooking.publishableKey) {
+        setPaymentError('Stripe の公開可能キーが未設定です。');
+        return false;
+      }
+
+      if (typeof window.Stripe !== 'function') {
+        setPaymentError('Stripe.js が読み込まれていません。');
+        return false;
+      }
+
+      setPaymentDebugStatus('PaymentIntent 作成開始');
+      setPaymentSkeletonState(false);
+      resetPaymentElement();
+
+      try {
+        const { clientSecret } = await createPaymentIntent();
+
+        setPaymentDebugStatus('client_secret 取得');
+        currentClientSecret = clientSecret;
+
+        stripeInstance = window.Stripe(
+          window.mnpkBooking.publishableKey
+        );
+
+        elementsInstance = stripeInstance.elements({
+          clientSecret: currentClientSecret,
+          appearance: {
+            theme: 'stripe',
+          },
+        });
+
+        paymentElementInstance = elementsInstance.create(
+          'payment',
+          {
+            layout: {
+              type: 'accordion',
+              defaultCollapsed: false,
+              radios: true,
+              spacedAccordionItems: false,
+            },
+            fields: {
+              billingDetails: {
+                name: 'never',
+                email: 'never',
+                phone: 'auto',
+                address: 'if_required',
+              },
+            },
+            wallets: {
+              applePay: 'never',
+              googlePay: 'never',
+              link: 'never',
+            },
+          }
+        );
+
+        paymentElementReady = false;
+
+        /*
+         * Stripeのreadyイベントが発生するまで、
+         * mountPaymentElementを完了扱いにしない。
+         */
+        const readyPromise = new Promise((resolve, reject) => {
+          let settled = false;
+
+          const timeout = window.setTimeout(() => {
+            if (settled) return;
+
+            settled = true;
+
+            reject(
+              new Error(
+                'Stripeの支払いフォームの準備が完了しませんでした。'
+              )
+            );
+          }, 15000);
+
+          paymentElementInstance.on('loaderstart', () => {
+            setPaymentSkeletonState(false);
+            setPaymentDebugStatus('Stripe loading');
+          });
+
+          paymentElementInstance.on('ready', () => {
+            if (settled) return;
+
+            settled = true;
+            paymentElementReady = true;
+
+            window.clearTimeout(timeout);
+
+            setPaymentSkeletonState(true);
+            setPaymentDebugStatus('Stripe ready');
+
+            resolve(true);
+          });
+        });
+
+        setPaymentDebugStatus('Stripe mount 実行');
+
+        /*
+         * 文字列セレクターではなく、
+         * 取得済みの実際のDOM要素へマウントする。
+         */
+        const paymentElementTarget =
+          paymentElementWrap.querySelector('#mnpk-payment-element');
+
+        if (!paymentElementTarget) {
+          throw new Error('Stripeの設置先が見つかりません。');
+        }
+
+        paymentElementInstance.mount(paymentElementTarget);
+
+        bindPaymentElementReadyObserver();
+
+        await readyPromise;
+
+        return true;
+      } catch (error) {
+        console.error('[mnpk mountPaymentElement]', error);
+
+        paymentElementReady = false;
+
+        setPaymentSkeletonState(true);
+        setPaymentDebugStatus(
+          '失敗: '
+            + (
+              error.message
+              || '支払いフォームの準備に失敗しました。'
+            ),
+          true
+        );
+
+        setPaymentError(
+          error.message
+          || '支払いフォームの準備に失敗しました。'
+        );
+
+        return false;
+      }
+    })();
 
     try {
-      const { clientSecret } = await createPaymentIntent();
-      setPaymentDebugStatus('client_secret 取得');
-      currentClientSecret = clientSecret;
-
-      stripeInstance = window.Stripe(window.mnpkBooking.publishableKey);
-      elementsInstance = stripeInstance.elements({
-        clientSecret: currentClientSecret,
-        appearance: { theme: 'stripe' },
-      });
-
-      paymentElementInstance = elementsInstance.create('payment', {
-        layout: {
-          type: 'accordion',
-          defaultCollapsed: false,
-          radios: true,
-          spacedAccordionItems: false,
-        },
-        fields: {
-          billingDetails: {
-            name: 'never',
-            email: 'never',
-            phone: 'auto',
-            address: 'if_required',
-          },
-        },
-        wallets: {
-          applePay: 'never',
-          googlePay: 'never',
-          link: 'never',
-        },
-      });
-
-      paymentElementInstance.on('loaderstart', () => {
-        setPaymentSkeletonState(false);
-      });
-
-      paymentElementInstance.on('ready', () => {
-        setPaymentSkeletonState(true);
-        setPaymentDebugStatus('Stripe ready');
-      });
-
-      setPaymentDebugStatus('Stripe mount 実行');
-      paymentElementInstance.mount('#mnpk-payment-element');
-      bindPaymentElementReadyObserver();
-
-      window.setTimeout(() => {
-        if (paymentElementWrap && paymentElementWrap.children.length > 0) {
-          setPaymentSkeletonState(true);
-        }
-      }, 1200);
-
-      return true;
-    } catch (error) {
-      console.error(error);
-      setPaymentSkeletonState(true);
-      setPaymentDebugStatus('失敗: ' + (error.message || '支払いフォームの準備に失敗しました。'), true);
-      setPaymentError(error.message || '支払いフォームの準備に失敗しました。');
-      return false;
+      return await paymentElementMountPromise;
+    } finally {
+      paymentElementMountPromise = null;
     }
   }
 
@@ -1221,14 +1319,92 @@ document.addEventListener('DOMContentLoaded', function () {
       const summaryOk = renderCheckoutSummary();
       if (!summaryOk) return;
 
-      if (!elementsInstance || !paymentElementInstance) {
+      /*
+       * オブジェクトの存在だけでなく、
+       * Stripeのready完了も確認する。
+       */
+      // NAIGAI_STRIPE_SUBMIT_READY_FIX_20260730
+      // NAIGAI_STRIPE_MOUNTED_ELEMENT_FIX_20260730
+      const hasMountedPaymentElement = () => {
+        if (!paymentElementWrap) return false;
+
+        return Boolean(
+          paymentElementWrap.querySelector(
+            'iframe, .__PrivateStripeElement, [data-testid="payment-element"]'
+          )
+        );
+      };
+
+      if (
+        !stripeInstance
+        || !elementsInstance
+        || !paymentElementInstance
+        || !hasMountedPaymentElement()
+      ) {
+        setPaymentDebugStatus('Payment Elementを再作成しています');
+
         const mounted = await mountPaymentElement();
-        if (!mounted) return;
+
+        if (
+          !mounted
+          || !stripeInstance
+          || !elementsInstance
+          || !paymentElementInstance
+        ) {
+          setPaymentError(
+            'Stripeの支払いフォームを再作成できませんでした。'
+          );
+          return;
+        }
+
+        /*
+         * Stripeのreadyイベントまたはiframe生成を待つ。
+         * 変数が存在するだけではconfirmPaymentを実行しない。
+         */
+        const mountedDeadline = Date.now() + 10000;
+
+        while (!hasMountedPaymentElement() && Date.now() < mountedDeadline) {
+          await new Promise((resolve) => window.setTimeout(resolve, 100));
+        }
+
+        if (!hasMountedPaymentElement()) {
+          setPaymentError(
+            'Stripeの支払いフォームを表示できませんでした。'
+          );
+          return;
+        }
       }
 
       setPaymentError('');
 
       try {
+        /*
+         * Stripe公式の手順。
+         * confirmPayment前に入力検証とウォレット情報収集を行う。
+         */
+        if (typeof elementsInstance.submit === 'function') {
+          const submitResult = await elementsInstance.submit();
+
+          if (submitResult?.error) {
+            setPaymentDebugStatus(
+              'elements.submit error: '
+                + (submitResult.error.message || '入力内容を確認してください。'),
+              true
+            );
+            setPaymentError(
+              submitResult.error.message || 'カード情報を確認してください。'
+            );
+            return;
+          }
+        }
+
+        if (!hasMountedPaymentElement()) {
+          setPaymentError(
+            '決済フォームがページから外れました。ページを再読み込みしてください。'
+          );
+          return;
+        }
+
         const result = await stripeInstance.confirmPayment({
           elements: elementsInstance,
           confirmParams: {

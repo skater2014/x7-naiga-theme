@@ -329,7 +329,6 @@ foreach ($gallery_ids as $gallery_id) {
     }
 }
 ?>
-
 <section class="iez-block iez-plan-detail" id="plan-viewer">
     <div class="iez-block__inner iez-plan-detail__inner">
 
@@ -451,9 +450,7 @@ foreach ($gallery_ids as $gallery_id) {
             </section>
             <!-- 3段目: 操作ボタン -->
             <section class="iez-plan-detail-board__row iez-plan-detail-board__row--actions" aria-label="操作ボタン">
-                <a class="iez-plan-single-control__btn is-secondary" href="<?php echo esc_url(home_url('/iezukuri/plans/')); ?>">
-                    参考プラン一覧へ戻る
-                </a>
+                
 
                 <?php if ($pdf_download_url) : ?>
                     <a

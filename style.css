@@ -7809,3 +7809,146 @@ body.dark-theme .mobile-menu {
 }
 
 /* === CHATGPT_CSS_RESTORE_END === */
+
+/* IEZUKURI BREADCRUMB LAYOUT START */
+/* =========================================================
+ * 家づくり専用パンくずのレイアウト
+ *
+ * 対象:
+ * header-customhome.phpが出力する
+ * .iezukuri-breadcrumbの内側だけ。
+ *
+ * 目的:
+ * - パンくずが画面幅からはみ出すのを防ぐ
+ * - デスクトップで本文と同じ左右余白を付ける
+ * - モバイルで左寄せし、項目単位で自然に折り返す
+ * - サイト内の不動産など、他のパンくずへ影響させない
+ * ========================================================= */
+
+.iezukuri-breadcrumb {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    overflow: hidden;
+    position: relative;
+    z-index: 5;
+    background: #ffffff;
+    border-bottom: 1px solid rgba(45, 36, 29, 0.12);
+}
+
+/*
+ * #breadcrumb
+ *
+ * breadcrumb1()が出力するパンくず本体。
+ * 既存の全体CSSにdisplay:flexがあっても、
+ * 家づくりでは通常のブロック要素として扱う。
+ */
+.iezukuri-breadcrumb #breadcrumb {
+    display: block;
+    width: 100%;
+    max-width: 1280px;
+    min-width: 0;
+    margin: 0 auto;
+    padding: 10px clamp(16px, 4vw, 64px);
+    box-sizing: border-box;
+    overflow: hidden;
+    line-height: 1.5;
+    text-align: left;
+}
+
+/*
+ * ol
+ *
+ * パンくず項目を横方向へ並べる。
+ * 画面幅に収まらない場合は項目単位で次の行へ折り返す。
+ */
+.iezukuri-breadcrumb #breadcrumb ol {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+    gap: 4px 8px;
+    list-style: none;
+    text-align: left;
+}
+
+/*
+ * li
+ *
+ * 各階層の項目。
+ * 長いページタイトルでも画面外へ押し出さない。
+ */
+.iezukuri-breadcrumb #breadcrumb li {
+    flex: 0 1 auto;
+    min-width: 0;
+    max-width: 100%;
+    margin: 0;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+    word-break: normal;
+}
+
+/*
+ * リンクと現在地の文字。
+ */
+.iezukuri-breadcrumb #breadcrumb a,
+.iezukuri-breadcrumb #breadcrumb span {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+}
+
+/*
+ * モバイル表示
+ *
+ * 既存CSSの中央寄せを上書きし、
+ * 左右16pxの余白を確保する。
+ */
+@media (max-width: 767.98px) {
+    .iezukuri-breadcrumb #breadcrumb {
+        display: block;
+        width: 100%;
+        max-width: 100%;
+        padding: 8px 16px;
+        overflow: hidden;
+        text-align: left;
+    }
+
+    .iezukuri-breadcrumb #breadcrumb ol {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        gap: 3px 6px;
+        text-align: left;
+    }
+
+    .iezukuri-breadcrumb #breadcrumb li {
+        min-width: 0;
+        max-width: 100%;
+        font-size: 13px;
+        line-height: 1.5;
+    }
+}
+/* IEZUKURI BREADCRUMB LAYOUT END */
+
+/* PINK LINK MENU RESTORE START */
+#js-footer-fixed.footer-fixed li.pink-link > a {
+  background-color: #ff69b4 !important;
+  border-color: #ff69b4 !important;
+  color: #fff !important;
+}
+
+#js-footer-fixed.footer-fixed li.pink-link > a:hover,
+#js-footer-fixed.footer-fixed li.pink-link > a:focus-visible {
+  background-color: #ff1493 !important;
+  border-color: #ff1493 !important;
+  color: #fff !important;
+}
+/* PINK LINK MENU RESTORE END */

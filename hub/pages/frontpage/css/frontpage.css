@@ -2444,3 +2444,62 @@
 }
 
 /* === FRONTPAGE PORTAL BACKGROUND OFF END === */
+
+/* NAIGAI YOUTUBE CONTROL FIX 20260731
+   再生前: Lite YouTubeの再生ボタンを1個だけ表示
+   再生後: Lite YouTubeのボタンを消し、YouTube標準操作を有効化
+*/
+.fp-hero-media__item--youtube
+> lite-youtube.fp-hero-media__lite-youtube {
+  z-index: 2 !important;
+  filter: none !important;
+  opacity: 1 !important;
+}
+
+.fp-hero-media__item--youtube
+> lite-youtube.fp-hero-media__lite-youtube
+> iframe {
+  z-index: 4 !important;
+  pointer-events: auto !important;
+}
+
+.fp-hero-media__item--youtube
+> lite-youtube.fp-hero-media__lite-youtube
+> .lty-playbtn {
+  z-index: 3 !important;
+  filter: none !important;
+}
+
+.fp-hero-media__item--youtube
+> lite-youtube.fp-hero-media__lite-youtube.lyt-activated
+> .lty-playbtn,
+.fp-hero-media__item--youtube
+> lite-youtube.fp-hero-media__lite-youtube.lyt-activated::before {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* YouTube枠に追加された余計な外部ボタンを消す */
+.fp-hero-media__item--youtube > .fp-hero-media__play,
+.fp-hero-media__item--youtube > button {
+  display: none !important;
+}
+
+/* YouTube標準コントロールを塞がない */
+.fp-hero-media__item--youtube::after,
+.fp-hero-media__item--youtube .fp-hero-media__badge {
+  display: none !important;
+}
+
+/* NAIGAI HIDE LEGACY HERO ARROWS 20260731
+   Heroは手動スワイプと丸ドットのみ。旧矢印UIは表示しない。 */
+.fp-hero-media--adaptive > .fp-hero-media__nav,
+.fp-hero-media--adaptive > .fp-hero-media__pagination,
+.fp-hero-media--adaptive > .swiper-button-prev,
+.fp-hero-media--adaptive > .swiper-button-next,
+.fp-hero-media--adaptive .fp-hero-media__nav,
+.fp-hero-media--adaptive .fp-hero-media__pagination {
+  display: none !important;
+}

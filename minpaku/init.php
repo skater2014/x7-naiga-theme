@@ -44,3 +44,17 @@ if (file_exists(__DIR__ . '/inc/admin/page-support-metabox-cleanup.php')) {
 
 
 /* B2B管理画面はB2Cと衝突中のため一時停止 */
+
+/*
+ * NAIGAI_MINPAKU_FRONTEND_LOCALIZE_LOADER
+ *
+ * Stripe公開可能キー、Ajax URL、nonceを
+ * minpaku-single-jsへ渡す既存処理を読み込む。
+ */
+$naigai_minpaku_frontend_localize =
+    __DIR__ . '/inc/frontend/localize.php';
+
+if (file_exists($naigai_minpaku_frontend_localize)) {
+    require_once $naigai_minpaku_frontend_localize;
+}
+
