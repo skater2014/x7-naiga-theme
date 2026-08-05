@@ -78,81 +78,14 @@ function naigai_front_footer_seed_menu_items($menu_id, array $items) {
 }
 
 /**
- * 本番でも自動で footer メニューを作成・割当
+ * =========================================================
+ * 自動メニュー作成・自動ロケーション割当は使用しない
+ * =========================================================
+ *
+ * WordPress標準の「外観 → メニュー → 位置を管理」で管理する。
+ *
+ * ここから wp_create_nav_menu() / wp_update_nav_menu_item() /
+ * set_theme_mod('nav_menu_locations', ...) を実行しない。
+ *
+ * テーマ切替時もWordPress標準のtheme_modsに任せる。
  */
-add_action('init', function () {
-    if (!function_exists('wp_get_nav_menu_object')) {
-        return;
-    }
-
-    $locations = get_theme_mod('nav_menu_locations', array());
-
-    $menus = array(
-        'front_footer_property' => array(
-            'name'  => 'フロントフッター：不動産を探す',
-            'items' => array(
-                array('title' => '物件一覧', 'url' => naigai_front_footer_seed_url('nasu-jutaku')),
-                array('title' => '土地を探す', 'url' => naigai_front_footer_seed_url('tochi')),
-                array('title' => '中古別荘を探す', 'url' => naigai_front_footer_seed_url('used')),
-                array('title' => '売却・査定について', 'url' => naigai_front_footer_seed_url('satei-reservation')),
-            ),
-        ),
-        'front_footer_construction' => array(
-            'name'  => 'フロントフッター：那須の住宅・別荘',
-            'items' => array(
-                array('title' => '注文住宅を見る', 'url' => naigai_front_footer_seed_url('construction-hub')),
-                array('title' => '施工事例', 'url' => naigai_front_footer_seed_url('sekoujirei')),
-                array('title' => '那須の住宅について', 'url' => naigai_front_footer_seed_url('construction-hub/concept')),
-                array('title' => 'お客様の声', 'url' => naigai_front_footer_seed_url('voice')),
-            ),
-        ),
-        'front_footer_house' => array(
-            'name'  => 'フロントフッター：家づくり',
-            'items' => array(
-                array('title' => 'コンセプト', 'url' => naigai_front_footer_seed_url('construction-hub/concept')),
-                array('title' => 'デザインポリシー', 'url' => naigai_front_footer_seed_url('construction-hub/design-policy')),
-                array('title' => '那須の家づくり', 'url' => naigai_front_footer_seed_url('construction-hub/nasu-house')),
-                array('title' => 'モデルハウス', 'url' => naigai_front_footer_seed_url('model-house')),
-            ),
-        ),
-        'front_footer_minpaku' => array(
-            'name'  => 'フロントフッター：民泊・貸別荘',
-            'items' => array(
-                array('title' => '民泊運営サポート', 'url' => naigai_front_footer_seed_url('minpaku-support')),
-                array('title' => '運営事例', 'url' => naigai_front_footer_seed_url('minpaku')),
-                array('title' => 'よくあるご質問', 'url' => naigai_front_footer_seed_url('minpaku-guide')),
-            ),
-        ),
-        'front_footer_company' => array(
-            'name'  => 'フロントフッター：会社案内',
-            'items' => array(
-                array('title' => '会社概要', 'url' => naigai_front_footer_seed_url('company')),
-                array('title' => 'スタッフ紹介', 'url' => naigai_front_footer_seed_url('staff')),
-                array('title' => 'アクセス', 'url' => naigai_front_footer_seed_url('access')),
-                array('title' => '採用情報', 'url' => naigai_front_footer_seed_url('recruitment')),
-            ),
-        ),
-    );
-
-    foreach ($menus as $location => $menu_data) {
-        $menu = wp_get_nav_menu_object($menu_data['name']);
-
-        if (!$menu) {
-            $menu_id = wp_create_nav_menu($menu_data['name']);
-        } else {
-            $menu_id = (int) $menu->term_id;
-        }
-
-        if ($menu_id <= 0) {
-            continue;
-        }
-
-        naigai_front_footer_seed_menu_items($menu_id, $menu_data['items']);
-
-        if (empty($locations[$location])) {
-            $locations[$location] = $menu_id;
-        }
-    }
-
-    set_theme_mod('nav_menu_locations', $locations);
-}, 30);

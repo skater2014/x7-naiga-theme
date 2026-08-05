@@ -747,3 +747,60 @@ body.mnpk-modal-open {
     line-height: 1 !important;
   }
 }
+
+/* === NAIGAI_MINPAKU_BACK_LINK_CSS_20260802_START === */
+/*
+ * 民泊 Back Link 共通表示
+ *
+ * 詳細ページと確認ページで戻るリンクの見た目を統一する。
+ */
+.mnpk-back-wrap {
+  margin: 0 0 16px;
+}
+
+.mnpk-back-link {
+  display: inline-flex;
+  align-items: center;
+
+  width: auto;
+  min-height: 38px;
+
+  padding: 8px 13px;
+
+  color: #315f78 !important;
+  background: #ffffff !important;
+
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.4;
+
+  text-decoration: none !important;
+
+  border: 1px solid #ccd6dc !important;
+  border-radius: 999px;
+
+  box-shadow: none !important;
+}
+
+.mnpk-back-link:hover,
+.mnpk-back-link:focus-visible {
+  color: #ffffff !important;
+  background: #315f78 !important;
+  border-color: #315f78 !important;
+  outline: none;
+}
+
+body.dark-theme .mnpk-back-link,
+body.dark-mode .mnpk-back-link {
+  color: #edf1f3 !important;
+  background: #1d252b !important;
+  border-color: #53636d !important;
+}
+
+body.dark-theme .mnpk-back-link:hover,
+body.dark-mode .mnpk-back-link:hover {
+  color: #ffffff !important;
+  background: #315f78 !important;
+}
+
+/* === NAIGAI_MINPAKU_BACK_LINK_CSS_20260802_END === */

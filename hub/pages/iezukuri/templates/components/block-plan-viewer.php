@@ -435,7 +435,67 @@ foreach ($gallery_ids as $gallery_id) {
                         </div>
                         <div>
                             <dt>延床面積</dt>
-                            <dd><?php echo esc_html($plan_total_area); ?>（<?php echo esc_html($plan_tsubo); ?>）</dd>
+                            <dd class="iez-plan-detail-area-cell">
+    <span class="iez-plan-detail-area-value">
+        <?php echo esc_html($plan_total_area); ?>（<?php echo esc_html($plan_tsubo); ?>）
+    </span>
+
+    <?php
+    /*
+     * ========================================================
+     * 延床面積帯
+     * ========================================================
+     *
+     * 実際の延床面積とは別に、
+     *
+     *   50〜70㎡
+     *   70〜100㎡
+     *   100㎡以上
+     *
+     * の検索用taxonomyが投稿へ紐付いている。
+     *
+     * 「面積帯」と明記することで、
+     * 実際の68.5㎡という数値と
+     * 50〜70㎡という検索範囲を混同しないようにする。
+     */
+    $plan_area_terms = get_the_terms(
+        $page_id,
+        'iez_plan_area'
+    );
+
+    $plan_area_term = (
+        !is_wp_error($plan_area_terms)
+        && !empty($plan_area_terms)
+    )
+        ? reset($plan_area_terms)
+        : null;
+
+    $plan_area_url = '';
+
+    if ($plan_area_term) {
+
+        $plan_area_link = get_term_link(
+            $plan_area_term
+        );
+
+        if (!is_wp_error($plan_area_link)) {
+            $plan_area_url = $plan_area_link;
+        }
+    }
+    ?>
+
+    <?php if ($plan_area_term && $plan_area_url !== '') : ?>
+        <span class="iez-plan-detail-area-filter">
+            <span class="iez-plan-detail-area-filter-label">
+                面積帯
+            </span>
+
+            <a href="<?php echo esc_url($plan_area_url); ?>">
+                <?php echo esc_html($plan_area_term->name); ?>
+            </a>
+        </span>
+    <?php endif; ?>
+</dd>
                         </div>
                         <div>
                             <dt>建築面積</dt>
@@ -532,7 +592,22 @@ foreach ($gallery_ids as $gallery_id) {
             <?php
             $related_tax_query = array('relation' => 'OR');
 
-            foreach (array('iez_plan_type', 'iez_plan_size', 'iez_plan_feature') as $tax) {
+            /*
+             * 関連プランの判定軸。
+             *
+             * 旧iez_plan_sizeは、
+             * 間取り・坪数・面積帯が混在していたため使用しない。
+             */
+            foreach (
+                array(
+                    'iez_plan_layout',
+                    'iez_plan_area',
+                    'iez_plan_type',
+                    'iez_plan_building_form',
+                    'iez_plan_feature',
+                )
+                as $tax
+            ) {
                 $term_ids = wp_get_post_terms($page_id, $tax, array('fields' => 'ids'));
 
                 if (!is_wp_error($term_ids) && !empty($term_ids)) {
@@ -564,7 +639,7 @@ foreach ($gallery_ids as $gallery_id) {
                 <section class="iez-plan-detail-board__row iez-plan-detail-board__row--related" aria-label="関連する参考プラン">
                     <header class="iez-plan-detail-board__section-header">
                         <h3>関連する参考プラン</h3>
-                        <p>住宅タイプ・坪数・特徴が近いプランを表示しています。</p>
+                        <p>間取り・面積帯・住宅タイプなどが近い参考プランを表示しています。</p>
                     </header>
 
                     <div class="iez-plan-detail-board__related-grid">
@@ -583,35 +658,193 @@ foreach ($gallery_ids as $gallery_id) {
                             $related_layout = get_post_meta($related_id, '_ch_plan_layout', true);
                             $related_area   = get_post_meta($related_id, '_ch_plan_total_area', true);
                             $related_tsubo  = get_post_meta($related_id, '_ch_plan_tsubo', true);
+
+                            /*
+                             * アーカイブカードで使用している小見出し。
+                             * 例: 2階建てプラン / 二世帯住宅
+                             */
+                            $related_label = trim(
+                                (string) get_post_meta(
+                                    $related_id,
+                                    '_ch_plan_label',
+                                    true
+                                )
+                            );
+
+
+                            /*
+                             * 間取りtaxonomy。
+                             *
+                             * 2LDKをクリックすると
+                             * 2LDKの参考プラン一覧へ移動できる。
+                             */
+                            $related_layout_terms = get_the_terms(
+                                $related_id,
+                                'iez_plan_layout'
+                            );
+
+                            $related_layout_term = (
+                                !is_wp_error($related_layout_terms)
+                                && !empty($related_layout_terms)
+                            )
+                                ? reset($related_layout_terms)
+                                : null;
+
+                            $related_layout_url = '';
+
+                            if ($related_layout_term) {
+
+                                $related_layout_link =
+                                    get_term_link($related_layout_term);
+
+                                if (!is_wp_error($related_layout_link)) {
+                                    $related_layout_url =
+                                        $related_layout_link;
+                                }
+                            }
+
+
+                            /*
+                             * 延床面積帯taxonomy。
+                             *
+                             * 実面積:
+                             *   68.5㎡（約20.7坪）
+                             *
+                             * 検索用:
+                             *   面積帯 50〜70㎡
+                             *
+                             * は別情報として表示する。
+                             */
+                            $related_area_terms = get_the_terms(
+                                $related_id,
+                                'iez_plan_area'
+                            );
+
+                            $related_area_term = (
+                                !is_wp_error($related_area_terms)
+                                && !empty($related_area_terms)
+                            )
+                                ? reset($related_area_terms)
+                                : null;
+
+                            $related_area_url = '';
+
+                            if ($related_area_term) {
+
+                                $related_area_link =
+                                    get_term_link($related_area_term);
+
+                                if (!is_wp_error($related_area_link)) {
+                                    $related_area_url =
+                                        $related_area_link;
+                                }
+                            }
                             ?>
 
                             <article class="iez-plan-detail-board__related-card">
-                                <a href="<?php the_permalink(); ?>">
-                                    <?php if ($related_thumb) : ?>
-                                        <img src="<?php echo esc_url($related_thumb); ?>" alt="<?php echo esc_attr(get_the_title()); ?>">
+
+                                <?php if ($related_thumb) : ?>
+                                    <a
+                                        class="iez-plan-detail-board__related-image-link"
+                                        href="<?php the_permalink(); ?>"
+                                    >
+                                        <img
+                                            src="<?php echo esc_url($related_thumb); ?>"
+                                            alt="<?php echo esc_attr(get_the_title()); ?>"
+                                        >
+                                    </a>
+                                <?php endif; ?>
+
+
+                                <div class="iez-plan-detail-board__related-body">
+
+                                    <?php if ($related_label !== '') : ?>
+                                        <p class="iez-plan-detail-board__related-label">
+                                            <?php echo esc_html($related_label); ?>
+                                        </p>
                                     <?php endif; ?>
 
-                                    <div class="iez-plan-detail-board__related-body">
-                                        <h4><?php the_title(); ?></h4>
 
-                                        <?php if ($related_layout || $related_area) : ?>
-                                            <p>
-                                                <?php if ($related_layout) : ?>
-                                                    <?php echo esc_html($related_layout); ?>
-                                                <?php endif; ?>
+                                    <h4>
+                                        <a href="<?php the_permalink(); ?>">
+                                            <?php the_title(); ?>
+                                        </a>
+                                    </h4>
 
-                                                <?php if ($related_area) : ?>
-                                                    / <?php echo esc_html($related_area); ?>
-                                                    <?php if ($related_tsubo) : ?>
-                                                        （<?php echo esc_html($related_tsubo); ?>）
+
+                                    <dl class="iez-plan-detail-board__related-meta">
+
+                                        <?php if ($related_layout) : ?>
+                                            <div class="iez-plan-detail-board__related-meta-row">
+                                                <dt>間取り</dt>
+
+                                                <dd>
+                                                    <?php if ($related_layout_url !== '') : ?>
+                                                        <a href="<?php echo esc_url($related_layout_url); ?>">
+                                                            <?php echo esc_html($related_layout); ?>
+                                                        </a>
+                                                    <?php else : ?>
+                                                        <?php echo esc_html($related_layout); ?>
                                                     <?php endif; ?>
-                                                <?php endif; ?>
-                                            </p>
+                                                </dd>
+                                            </div>
                                         <?php endif; ?>
-                                    </div>
-                                </a>
+
+
+                                        <?php if ($related_area) : ?>
+                                            <div class="iez-plan-detail-board__related-meta-row is-floor-area">
+                                                <dt>延床面積</dt>
+
+                                                <dd>
+                                                    <span class="iez-plan-detail-board__related-area-value">
+                                                        <?php echo esc_html($related_area); ?>
+
+                                                        <?php if ($related_tsubo) : ?>
+                                                            （<?php echo esc_html($related_tsubo); ?>）
+                                                        <?php endif; ?>
+                                                    </span>
+
+                                                    <?php if ($related_area_term && $related_area_url !== '') : ?>
+                                                        <span class="iez-plan-detail-board__related-area-filter">
+
+                                                            <span class="iez-plan-detail-board__related-area-filter-label">
+                                                                面積帯
+                                                            </span>
+
+                                                            <a href="<?php echo esc_url($related_area_url); ?>">
+                                                                <?php echo esc_html($related_area_term->name); ?>
+                                                            </a>
+
+                                                        </span>
+                                                    <?php endif; ?>
+                                                </dd>
+                                            </div>
+                                        <?php endif; ?>
+
+                                    </dl>
+
+                                </div>
                             </article>
                         <?php endwhile; ?>
+                    </div>
+
+                    <?php
+                    $related_archive_url =
+                        get_post_type_archive_link('iez_plan');
+
+                    if (!$related_archive_url) {
+                        $related_archive_url =
+                            home_url('/iezukuri/plans/');
+                    }
+                    ?>
+
+                    <div class="iez-plan-detail-board__related-more">
+                        <a
+                            class="iez-plan-detail-board__related-more-link"
+                            href="<?php echo esc_url($related_archive_url); ?>"
+                        >
+                            参考プラン一覧を見る
+                        </a>
                     </div>
                 </section>
                 <?php wp_reset_postdata(); ?>

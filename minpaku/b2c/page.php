@@ -633,6 +633,52 @@ $page_classes = array('mnpk-page', 'mnpk-page--unified');
     <main class="mnpk-page-shell">
 
         <?php
+        /*
+         * ========================================================
+         * NAIGAI_MINPAKU_B2C_BACKLINK_BEGINNER_GUIDE
+         * 民泊B2C共通「前のページに戻る」
+         * ========================================================
+         *
+         * 【対象】
+         * minpaku-guide
+         * minpaku-campaign
+         * minpaku-faq
+         * minpaku-rules
+         * minpaku-flow
+         * minpaku-difference
+         * minpaku-family
+         * minpaku-group
+         * minpaku-workation
+         * その他 page-minpaku-b2c.php を使用するB2Cページ
+         *
+         * 【表示】
+         * サイト内の別ページから移動してきた場合だけ表示する。
+         *
+         * そのため、民泊上部ナビゲーションから
+         * FAQ → ご利用案内
+         * 民泊ガイド → FAQ
+         * 宿泊一覧 → お得情報
+         * などへ移動した場合も表示対象になる。
+         *
+         * 【非表示】
+         * URL直接入力
+         * ブックマーク
+         * Google等の外部サイト
+         * Refererが取得できない場合
+         *
+         * 【デザイン】
+         * 新しいCSSは作らない。
+         * 民泊で既存使用している
+         * .mnpk-back-wrap / .mnpk-back-link
+         * をそのまま使用する。
+         * ========================================================
+         */
+        get_template_part(
+            'template-parts/common/minpaku-internal-back-link'
+        );
+        ?>
+
+        <?php
 /* B2C_REAL_HTML_ORDER_START */
 $mpb_layout_blocks = array();
 ?>

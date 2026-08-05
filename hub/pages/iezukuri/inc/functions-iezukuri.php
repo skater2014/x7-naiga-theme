@@ -33,6 +33,29 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+
+/**
+ * 家づくり参考プランに属するtaxonomyページか。
+ *
+ * taxonomyごとに別CSSを作らず、
+ * 通常の参考プランアーカイブと同じCSSを使用するための判定。
+ */
+if (!function_exists('naigai_iezukuri_is_plan_taxonomy')) {
+    function naigai_iezukuri_is_plan_taxonomy(): bool
+    {
+        return is_tax(array(
+            'iez_plan_type',
+            'iez_plan_size',
+            'iez_plan_feature',
+            'iez_plan_structure',
+            'iez_plan_scope',
+            'iez_plan_building_form',
+            'iez_plan_layout',
+            'iez_plan_area',
+        ));
+    }
+}
+
 /**
  * /iezukuri/ 系ページかどうかを判定する。
  */
@@ -42,7 +65,7 @@ if (!function_exists('naigai_iezukuri_is_target_request')) {
             return false;
         }
 
-        if (is_singular('iez_plan') || is_post_type_archive('iez_plan')) {
+        if (is_singular('iez_plan') || is_post_type_archive('iez_plan') || naigai_iezukuri_is_plan_taxonomy()) {
             return true;
         }
 
@@ -131,7 +154,7 @@ if (!function_exists('naigai_iezukuri_enqueue_dedicated_assets')) {
         $is_subpage   = (!$is_top);
         $is_new_house = in_array($uri, array('iezukuri/new-house', 'iezukuri/new-house'), true);
 
-        if (is_singular('iez_plan') || is_post_type_archive('iez_plan')) {
+        if (is_singular('iez_plan') || is_post_type_archive('iez_plan') || naigai_iezukuri_is_plan_taxonomy()) {
             $is_subpage = true;
         }
 
@@ -192,7 +215,7 @@ if (!function_exists('naigai_iezukuri_enqueue_dedicated_assets')) {
          * プラン系CSS。
          * ファイルがある場合だけ読む。
          */
-        if (is_post_type_archive('iez_plan')) {
+        if (is_post_type_archive('iez_plan') || naigai_iezukuri_is_plan_taxonomy()) {
             naigai_iezukuri_enqueue_style_file(
                 'naigai-iezukuri-plan-colors',
                 '/hub/pages/iezukuri/css/plan/plan-colors.css',
@@ -252,6 +275,20 @@ add_action('wp_enqueue_scripts', 'naigai_iezukuri_enqueue_dedicated_assets', 900
 if (!function_exists('naigai_iezukuri_is_page_scope')) {
     function naigai_iezukuri_is_page_scope(): bool
     {
+        /*
+         * IEZUKURI_PLAN_TAXONOMY_PAGE_SCOPE
+         *
+         * 参考プランtaxonomyも通常アーカイブと同じ
+         * 家づくりCSS/JSの対象にする。
+         */
+        if (
+            is_singular('iez_plan')
+            || is_post_type_archive('iez_plan')
+            || naigai_iezukuri_is_plan_taxonomy()
+        ) {
+            return true;
+        }
+
         if (is_page_template(array(
             'template-construction-hub.php',
             'page-construction-hub-sub.php',
@@ -406,7 +443,7 @@ add_action('wp_enqueue_scripts', function () {
          */
     }
 
-    if (is_post_type_archive('iezukuri_plan') || $slug === 'plans') {
+    if (is_post_type_archive('iez_plan') || naigai_iezukuri_is_plan_taxonomy() || $slug === 'plans') {
         naigai_iezukuri_enqueue_asset_file(
             'naigai-iezukuri-plan-archive',
             '/hub/pages/iezukuri/css/page-styles/plan-archive.css',
@@ -590,7 +627,7 @@ add_action('wp_enqueue_scripts', function () {
         );
     }
 
-    if ($slug === 'plans' || is_post_type_archive('iezukuri_plan')) {
+    if ($slug === 'plans' || is_post_type_archive('iez_plan') || naigai_iezukuri_is_plan_taxonomy()) {
         naigai_iezukuri_final_enqueue_file(
             'naigai-iezukuri-plan-archive',
             '/hub/pages/iezukuri/css/page-styles/plan-archive.css',

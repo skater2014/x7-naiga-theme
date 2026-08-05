@@ -10,6 +10,55 @@ if (!defined('ABSPATH')) {
 
 get_header('77');
 
+/*
+ * ============================================================
+ * NAIGAI_BACKLINK_MINPAKU_20260803
+ * 民泊トップ「前のページへ戻る」
+ * ============================================================
+ *
+ * フロントページなど自サイト内から /minpaku へ来た時だけ表示。
+ * URL直打ち・ブックマーク・外部サイトから来た場合は表示しない。
+ *
+ * CSSは新しく作らず、民泊詳細ですでに使用している
+ * .mnpk-back-wrap / .mnpk-back-link をそのまま使用する。
+ *
+ * wp_get_referer() で実際の直前ページを取得し、
+ * クリック時は history.back() で本当に1つ前へ戻す。
+ */
+$naigai_minpaku_referer = wp_get_referer();
+
+$naigai_minpaku_home_host = wp_parse_url(
+    home_url('/'),
+    PHP_URL_HOST
+);
+
+$naigai_minpaku_ref_host = $naigai_minpaku_referer
+    ? wp_parse_url($naigai_minpaku_referer, PHP_URL_HOST)
+    : '';
+
+$naigai_minpaku_current = home_url(
+    isset($_SERVER['REQUEST_URI'])
+        ? wp_unslash($_SERVER['REQUEST_URI'])
+        : '/'
+);
+
+$naigai_minpaku_show_back = (
+    $naigai_minpaku_referer
+    && $naigai_minpaku_home_host
+    && $naigai_minpaku_ref_host
+    && strtolower($naigai_minpaku_home_host) === strtolower($naigai_minpaku_ref_host)
+    && untrailingslashit($naigai_minpaku_referer) !== untrailingslashit($naigai_minpaku_current)
+);
+
+if ($naigai_minpaku_show_back) {
+    echo '<div class="mnpk-back-wrap">';
+    echo '<a class="mnpk-back-link" href="' . esc_url($naigai_minpaku_referer) . '" onclick="window.history.back(); return false;">';
+    echo '← 前のページへ戻る';
+    echo '</a>';
+    echo '</div>';
+}
+
+
 $post_id = get_the_ID();
 
 /**

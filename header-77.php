@@ -219,18 +219,88 @@ $mobile_phone = get_theme_mod('dess_phone');
 
       <nav class="navg navg_under">
         <?php
+        /**
+         * ============================================================
+         * HEADER MENU LOCATION : SINGLE SOURCE
+         * ヘッダーメニューのロケーション名はここだけで管理する。
+         * ============================================================
+         *
+         * 【通常ページ】
+         * PC     : header-menu-pc
+         * Mobile : header-menu-mobile
+         *
+         * 【民泊ページ】
+         * PC     : minpaku-header-menu-pc
+         * Mobile : minpaku-header-menu-mobile
+         *
+         * 重要:
+         * - ここではメニューを新規作成しない。
+         * - WordPress管理画面のメニュー割当も変更しない。
+         * - set_theme_mod() 等でDBを書き換えない。
+         * - ページ種別によって「使用するロケーション」だけ切り替える。
+         */
+
+        $header_menu_locations = array(
+
+          // 通常の不動産・会社案内など
+          'default' => array(
+            'pc'     => 'header-menu-pc',
+            'mobile' => 'header-menu-mobile',
+          ),
+
+          // 民泊関連ページ
+          'minpaku' => array(
+            'pc'     => 'minpaku-header-menu-pc',
+            'mobile' => 'minpaku-header-menu-mobile',
+          ),
+
+        );
+
+        /**
+         * 民泊ヘッダーを使用するページ判定
+         */
+        $is_minpaku_header = (
+          is_singular('minpaku')
+          || is_post_type_archive('minpaku')
+          || is_page_template('page-minpaku-b2c.php')
+          || is_page_template('page-minpaku-support.php')
+          || is_page('minpaku')
+          || is_page('minpaku-stay')
+        );
+
+        /**
+         * 使用するロケーションセットを決定
+         */
+        $current_header_locations = $is_minpaku_header
+          ? $header_menu_locations['minpaku']
+          : $header_menu_locations['default'];
+
+        /**
+         * MOBILE HEADER MENU
+         *
+         * 通常 : header-menu-mobile
+         * 民泊 : minpaku-header-menu-mobile
+         */
         wp_nav_menu(array(
-          'theme_location' => 'header-menu-mobile',
+          'theme_location' => $current_header_locations['mobile'],
           'container'      => false,
           'menu_class'     => 'navg__list header-menu-mobile',
           'items_wrap'     => '<ul class="%2$s">%3$s</ul>',
+          'fallback_cb'    => false,
         ));
 
+        /**
+         * PC HEADER MENU
+         *
+         * 通常 : header-menu-pc
+         * 民泊 : minpaku-header-menu-pc
+         */
         wp_nav_menu(array(
-          'theme_location' => 'header-menu-pc',
+          'theme_location' => $current_header_locations['pc'],
           'container'      => false,
           'menu_class'     => 'navg__list header-menu-pc',
           'items_wrap'     => '<ul class="%2$s">%3$s</ul>',
+          'fallback_cb'    => false,
         ));
         ?>
       </nav>

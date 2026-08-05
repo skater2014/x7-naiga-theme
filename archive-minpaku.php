@@ -163,6 +163,24 @@ $archive_section_actions = array(
 ?>
 <main id="primary" class="mnpk-archive-page">
     <div class="mnpk-archive-shell">
+
+        <?php
+        /*
+         * ========================================================
+         * 民泊宿泊施設一覧「前のページに戻る」
+         * ========================================================
+         *
+         * この一覧には従来back linkが無かったため、
+         * 民泊共通部品を読み込む。
+         *
+         * .mnpk-back-wrap / .mnpk-back-link の
+         * 既存デザインを使用し、CSSは追加しない。
+         */
+        get_template_part(
+            'template-parts/common/minpaku-internal-back-link'
+        );
+        ?>
+
         <section class="mnpk-archive-hero" <?php if (!empty($portal['hero_image_url'])) : ?>style="background-image:url('<?php echo esc_url($portal['hero_image_url']); ?>');" <?php endif; ?>>
             <div class="mnpk-archive-hero__overlay"></div>
             <div class="mnpk-archive-hero__inner">

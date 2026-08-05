@@ -365,13 +365,40 @@ if (have_posts()) :
                     <div class="mnpk-shell">
                         <div class="mnpk-head__row">
                             <div class="mnpk-head__main">
-                                <?php $mnpk_archive_link = get_post_type_archive_link('minpaku'); ?>
-
-                                <div class="mnpk-back-wrap">
-                                    <a class="mnpk-back-link" href="<?php echo esc_url($mnpk_archive_link ? $mnpk_archive_link : home_url('/minpaku-stay')); ?>">
-                                        ← 宿泊一覧に戻る
-                                    </a>
-                                </div>
+                                <?php
+                                /*
+                                 * =====================================================
+                                 * NAIGAI_MINPAKU_SINGLE_BACKLINK_BEGINNER_GUIDE
+                                 * 民泊詳細「前のページに戻る」
+                                 *
+                                 * 【初心者向け】
+                                 * 民泊詳細にも以前からback linkがありました。
+                                 *
+                                 * そのHTMLを別にもう1個追加すると二重表示になるため、
+                                 * 現在は共通back link部品をこの位置から呼び出します。
+                                 *
+                                 * 表示位置と既存CSSは維持しています。
+                                 * =====================================================
+                                 *
+                                 * 【既存back linkを維持】
+                                 *
+                                 * この位置には以前から
+                                 * .mnpk-back-wrap / .mnpk-back-link が存在していた。
+                                 *
+                                 * 新しいback linkを追加して二重表示にせず、
+                                 * 表示位置・デザインはそのままで、
+                                 * 判定処理だけ民泊共通部品へ一本化する。
+                                 *
+                                 * サイト内から来た場合だけ表示。
+                                 *
+                                 * URL直接入力・ブックマーク・外部サイトから
+                                 * 開いた場合には表示しない。
+                                 * =====================================================
+                                 */
+                                get_template_part(
+                                    'template-parts/common/minpaku-internal-back-link'
+                                );
+                                ?>
 
                                 <h1 class="mnpk-title"><?php the_title(); ?></h1>
 

@@ -24,12 +24,35 @@
                 <?php
                 // ここでアーカイブページへのリンクを直接指定
                 // "archive-house.php" に戻るリンクを作成
-                $archive_link = home_url('/house/');
+                /*
+                 * =========================================================
+                 * NAIGAI_FUDOUSAN_BACK_LINK_FIX_20260802
+                 * 不動産カスタム投稿の「前のページに戻る」
+                 * =========================================================
+                 *
+                 * 修正前:
+                 *   表示は「前のページに戻る」だったが、
+                 *   実際のリンクは /house/ に固定されていた。
+                 *
+                 * 修正後:
+                 *   ブラウザに履歴がある場合
+                 *       → 本当に1つ前のページへ戻る
+                 *
+                 *   履歴がない場合
+                 *       → 不動産トップ /fudousan/ へ戻る
+                 *
+                 * 不動産カスタム投稿 house は、
+                 * サイト上では /fudousan/ 配下の導線として扱う。
+                 * =========================================================
+                 */
+                $archive_link = get_post_type_archive_link('house');
                 ?>
 
                 <!-- 戻るリンクを追加 -->
-                <div class="back-link">
-                    <a href="<?php echo esc_url(home_url('house')); ?>">
+                <div class="back-link back-link--fudousan">
+                    <a
+                        href="<?php echo esc_url($archive_link); ?>"
+                    >
                         <svg class="icon icon-arrow-left2">
                             <use xlink:href="#icon-arrow-left2"></use>
                         </svg>

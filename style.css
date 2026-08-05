@@ -275,7 +275,6 @@ body.light-theme .color-mode .color-mode-label {
   width: 100%;
 }
 
-
 body:not(:is(
   .single-minpaku,
   .minpaku-single,
@@ -716,7 +715,6 @@ body.dark-theme .header__top > .search-form-container .search-form-30 input[type
     width: auto;
     height: auto;
   }
-
 
   .header__top > .search-form-container {
     grid-area: search;
@@ -2226,6 +2224,63 @@ input.firefox-validation:invalid {
   }
 }
 
+/*
+ * 投稿詳細ページ下部の固定CTA「この物件の来店予約」用。
+ * WordPress管理画面 → 外観 → メニュー → post_footer_menu の
+ * 「この物件の来店予約」の CSS class に「pink-link」を設定すると、
+ * そのメニュー項目の <li> に class="pink-link" が付与される。
+ *
+ * .pink-link a が通常時のピンク色を担当する。
+ * 通常色：#ff69b4
+ * 文字色：#fff
+ *
+ * このCSSは表示デザインだけを担当する。
+ * メニュー項目・URL・メニューロケーション自体は変更しない。
+ */
+.pink-link a {
+  background-color: #ff69b4; /* ピンク色 */
+  color: #fff; /* 文字色 */
+  padding: 10px 15px; /* 内側の余白 */
+  border-radius: 5px; /* 角を丸くする */
+  text-decoration: none; /* 下線を無効にする */
+  display: inline-block; /* インラインブロック要素にする */
+  transition:
+    background-color 0.3s ease,
+    transform 0.3s ease; /* トランジション */
+}
+
+/* マウスを乗せた時は通常より濃いピンク（#ff1493）にする */
+.pink-link a:hover {
+  background-color: #ff1493; /* ホバー時の濃いピンク */
+  transform: translateY(-2px); /* ボタンが少し上に動く */
+}
+
+/* モバイル・タブレット表示 (768px以上1024px以下) */
+@media (max-width: 1024px) {
+  .pink-link a {
+    padding: 12px 20px; /* ボタンの高さと幅を調整 */
+    font-size: 1em; /* フォントサイズ調整 */
+  }
+
+  /* ホバー時のスタイル */
+  .pink-link a:hover {
+    background-color: #ff1493; /* ホバー時の濃いピンク */
+  }
+}
+
+/* PC表示 (1025px以上) */
+@media (min-width: 1025px) {
+  .pink-link a {
+    padding: 12px 20px; /* ボタンの高さと幅を調整 */
+    font-size: 1em; /* フォントサイズ調整 */
+  }
+
+  /* ホバー時のスタイル */
+  .pink-link a:hover {
+    background-color: #ff1493; /* ホバー時の濃いピンク */
+  }
+}
+
 /* 資料請求ページ */
 .customer-info-form {
   max-width: 800px; /* 最大幅を増やす */
@@ -2305,7 +2360,7 @@ input.firefox-validation:invalid {
 
 /* 送信ボタン */
 .submit {
-  background-color: #4caf50; /* ボタンの背景色 */
+  background-color: #007bff; /* ボタンの背景色 */
   border: none; /* ボーダーなし */
   padding: 12px 24px; /* 内側の余白を増やす */
   font-size: 18px; /* フォントサイズを調整 */
@@ -2351,11 +2406,11 @@ body.dark-theme .customer-info-form :is(
 }
 
 body.dark-theme .submit {
-  background-color: #4caf50; /* ダークモードボタン背景色 */
+  background-color: #007bff; /* ダークモードボタン背景色 */
 }
 
 body.dark-theme .submit:hover {
-  background-color: #45a049; /* ダークモードホバー時の背景色 */
+  background-color: #0069d9; /* ダークモードホバー時の背景色 */
 }
 
 /* メディアクエリ（レスポンシブ対応） */
@@ -3801,7 +3856,6 @@ blockquote {
   justify-content: center;
 }
 
-
 /* SVG icon base */
 .icon {
   display: inline-block;
@@ -4165,9 +4219,9 @@ blockquote {
 
 /* 詳細リンクホバー時のスタイル */
 .more-link-wrapper .more-link:hover {
-  background-color: #4caf50; /* 緑色 */
+  background-color: #ff7f00; /* 緑色 */
   color: #fff;
-  border-color: #4caf50;
+  border-color: #ff7f00;
 }
 
 /* 予約リンクホバー時のスタイル（濃い青） */
@@ -5033,6 +5087,17 @@ span.small {
   text-align: right;
 }
 
+.reply a {
+  /*
+   * 【口コミ「返信」リンク】
+   *
+   * 「返信」も白固定や #333 固定にはしない。
+   * 現在のテーマ文字色を inherit で引き継ぐことで、
+   * ライト / ダークモードの両方で読める状態にする。
+   */
+  color: inherit;
+}
+
 #respond {
   margin-bottom: 40px;
   padding: 0 10px;
@@ -5056,8 +5121,8 @@ span.small {
 
 /* コメントフォームの送信ボタン */
 #comment-area input[type='submit'] {
-  background-color: #4caf50;
-  color: white;
+  background-color: #007bff;
+  color: #ffffff;
   border: none;
   padding: 10px 20px;
   font-size: 16px;
@@ -5067,9 +5132,9 @@ span.small {
   margin-top: 10px;
 }
 
-/* 送信ボタンにホバー効果を追加 */
+/* 口コミ送信ボタン：緑やピンクにはせず、従来の青系で統一 */
 #comment-area input[type='submit']:hover {
-  background-color: #45a049;
+  background-color: #264b5f;
 }
 
 /* メディアクエリ（レスポンシブデザイン） */
@@ -5115,8 +5180,31 @@ span.small {
 }
 
 #custom-comments .comment-meta,
-#custom-comments .comment-author-name {
+#custom-comments .comment-author-name,
+#custom-comments .comment-meta a,
+#custom-comments .comment-author-name a {
   margin-top: 0;
+
+  /*
+   * 【口コミ文字色：ライト / ダークモード対応】
+   *
+   * テーマには広域の「li a { color: #fff; }」があり、
+   * その白文字が口コミの日付・編集リンク等にも適用されていた。
+   *
+   * ここで #333 などの固定色を指定すると、
+   * ライトモードでは読めてもダークモードで黒く沈んでしまう。
+   *
+   * そのため固定色は使用せず「inherit」にする。
+   * inherit は、この口コミ部分の親要素が現在使用している文字色を
+   * そのまま引き継ぐ指定。
+   *
+   * ライトモード → 濃い文字色を引き継ぐ
+   * ダークモード → 明るい文字色を引き継ぐ
+   *
+   * グローバルの li a は変更しないため、
+   * ヘッダー・メニュー・その他のリンクには影響しない。
+   */
+  color: inherit;
 }
 
 #custom-comments .comment-author-name {
@@ -5460,7 +5548,6 @@ footer {
     display: block;
     padding: 5px;
   }
-
 
   #foot .top-foot .foot-col .wp-block-image img {
     height: auto;
@@ -6110,7 +6197,6 @@ body.dark-theme .recent-content-box h1 a {
   color: var(--link-color-blue);
 }
 
-
 .wp-block-kadence-column a {
   color: var(--link-color-black) !important;
   text-decoration: none; /* 下線を削除する場合は none に変更 */
@@ -6210,7 +6296,6 @@ li a {
 /*border: none !important;*/
 
 /*}
-
 
 
 .custom-background {
@@ -6963,7 +7048,6 @@ body.dark-theme .store-reservation-modal {
 }
 
 /* 共通モーダルを閉じるボタン */
-
 
 
 
@@ -7938,17 +8022,5 @@ body.dark-theme .mobile-menu {
 }
 /* IEZUKURI BREADCRUMB LAYOUT END */
 
-/* PINK LINK MENU RESTORE START */
-#js-footer-fixed.footer-fixed li.pink-link > a {
-  background-color: #ff69b4 !important;
-  border-color: #ff69b4 !important;
-  color: #fff !important;
-}
 
-#js-footer-fixed.footer-fixed li.pink-link > a:hover,
-#js-footer-fixed.footer-fixed li.pink-link > a:focus-visible {
-  background-color: #ff1493 !important;
-  border-color: #ff1493 !important;
-  color: #fff !important;
-}
-/* PINK LINK MENU RESTORE END */
+

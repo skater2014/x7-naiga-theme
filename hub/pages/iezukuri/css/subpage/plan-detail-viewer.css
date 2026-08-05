@@ -393,6 +393,304 @@ body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__row--ac
   background: var(--plan-button-bg-hover);
 }
 
+/* ============================================================
+ * IEZ_PLAN_UNIFIED_PAGE_GALLERY
+ * メイン画像＋サムネイル
+ * ============================================================
+ *
+ * 外観・図面・内装写真を1つのギャラリーとして表示する。
+ *
+ * メイン画像:
+ *   object-fit: contain
+ *   → 平面図も切らない。
+ *
+ * サムネイル:
+ *   object-fit: cover
+ *   → 小さい一覧では見た目を揃える。
+ * ============================================================ */
+
+body.single-iez_plan main.hub-customhome-subpage
+.iez-plan-unified-gallery {
+  display: grid;
+  gap: 14px;
+  padding: 0;
+}
+
+
+/*
+ * 大画像の表示領域。
+ *
+ * PCは16:9の一定枠にすることで、
+ * 外観→平面図→内装へ切り替えても
+ * ページ全体が上下に大きく跳ねない。
+ */
+body.single-iez_plan main.hub-customhome-subpage
+.iez-plan-unified-gallery__main {
+  min-width: 0;
+}
+
+
+body.single-iez_plan main.hub-customhome-subpage
+.iez-plan-unified-gallery__main-button {
+  position: relative;
+
+  display: grid;
+  place-items: center;
+
+  width: 100%;
+  aspect-ratio: 16 / 9;
+
+  padding: 0;
+
+  overflow: hidden;
+
+  border: 1px solid var(--plan-border);
+  border-radius: 28px;
+
+  background: #fff;
+
+  cursor: zoom-in;
+}
+
+
+body.single-iez_plan main.hub-customhome-subpage
+.iez-plan-unified-gallery__main-image {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: contain;
+  object-position: center;
+
+  background: #fff;
+}
+
+
+/*
+ * 「外観写真 1 / 6」など現在位置。
+ */
+body.single-iez_plan main.hub-customhome-subpage
+.iez-plan-unified-gallery__status {
+  position: absolute;
+  left: 16px;
+  top: 16px;
+  z-index: 4;
+
+  display: inline-flex;
+  align-items: center;
+
+  min-height: 32px;
+  max-width: calc(100% - 120px);
+
+  padding: 0 12px;
+
+  overflow: hidden;
+
+  border-radius: 999px;
+
+  background: rgba(255, 250, 242, .94);
+  color: var(--plan-accent-dark);
+
+  font-size: 12px;
+  font-weight: 900;
+  line-height: 1;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  box-shadow: var(--plan-shadow);
+}
+
+
+/*
+ * サムネイルは横一列。
+ *
+ * 画像が増えてもページ全体を横へ広げず、
+ * この部分だけ横スクロールする。
+ */
+body.single-iez_plan main.hub-customhome-subpage
+.iez-plan-unified-gallery__thumbs {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(118px, 148px);
+
+  gap: 10px;
+
+  width: 100%;
+
+  padding: 3px 2px 9px;
+
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  scroll-snap-type: x proximity;
+  overscroll-behavior-inline: contain;
+
+  scrollbar-width: thin;
+}
+
+
+body.single-iez_plan main.hub-customhome-subpage
+.iez-plan-unified-gallery__thumb {
+  min-width: 0;
+
+  padding: 0;
+
+  overflow: hidden;
+
+  border: 1px solid var(--plan-border);
+  border-radius: 14px;
+
+  background: #fff;
+  color: var(--plan-text);
+
+  text-align: left;
+
+  cursor: pointer;
+
+  scroll-snap-align: start;
+}
+
+
+body.single-iez_plan main.hub-customhome-subpage
+.iez-plan-unified-gallery__thumb img {
+  display: block;
+
+  width: 100%;
+  aspect-ratio: 4 / 3;
+
+  object-fit: cover;
+  object-position: center;
+}
+
+
+body.single-iez_plan main.hub-customhome-subpage
+.iez-plan-unified-gallery__thumb span {
+  display: block;
+
+  padding: 7px 9px 8px;
+
+  overflow: hidden;
+
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1.35;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+
+/*
+ * 選択中サムネイル。
+ */
+body.single-iez_plan main.hub-customhome-subpage
+.iez-plan-unified-gallery__thumb.is-active {
+  border-color: var(--plan-accent);
+  box-shadow:
+    0 0 0 2px var(--plan-accent-soft);
+}
+
+
+/*
+ * キーボード操作。
+ */
+body.single-iez_plan main.hub-customhome-subpage
+.iez-plan-unified-gallery__main-button:focus-visible,
+body.single-iez_plan main.hub-customhome-subpage
+.iez-plan-unified-gallery__thumb:focus-visible {
+  outline: 3px solid var(--plan-accent-soft);
+  outline-offset: 3px;
+}
+
+
+/*
+ * 新ギャラリーの生成が成功した時だけ
+ * 旧画像UIを隠す。
+ *
+ * JSが失敗した場合、この属性は付かないので
+ * 従来表示が残る。
+ */
+body.single-iez_plan main.hub-customhome-subpage
+.iez-plan-detail-board.has-unified-gallery
+[data-iez-plan-gallery-source-hidden] {
+  display: none !important;
+}
+
+
+/*
+ * 図面部分をギャラリーへ統合した後も
+ * 延床面積・建築面積・想定家族などの仕様表は残す。
+ *
+ * そのためplan-summaryは1列へ変更する。
+ */
+body.single-iez_plan main.hub-customhome-subpage
+.iez-plan-detail-board.has-unified-gallery
+.iez-plan-detail-board__row--plan-summary.is-unified-gallery-summary {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+
+body.single-iez_plan main.hub-customhome-subpage
+.iez-plan-detail-board.has-unified-gallery
+.iez-plan-detail-board__row--plan-summary.is-unified-gallery-summary > aside {
+  width: 100%;
+  max-width: none;
+}
+
+
+/*
+ * Mobile
+ *
+ * ページ本体の画像は4:3程度で見せる。
+ * タップ後のモーダルは別途100vw × 100dvh全画面。
+ */
+@media (max-width: 640px) {
+
+  body.single-iez_plan main.hub-customhome-subpage
+  .iez-plan-unified-gallery {
+    gap: 10px;
+  }
+
+  body.single-iez_plan main.hub-customhome-subpage
+  .iez-plan-unified-gallery__main-button {
+    aspect-ratio: 4 / 3;
+    border-radius: 20px;
+  }
+
+  body.single-iez_plan main.hub-customhome-subpage
+  .iez-plan-unified-gallery__status {
+    top: 10px;
+    left: 10px;
+
+    max-width: calc(100% - 76px);
+
+    min-height: 28px;
+
+    padding: 0 9px;
+
+    font-size: 10px;
+  }
+
+  body.single-iez_plan main.hub-customhome-subpage
+  .iez-plan-unified-gallery__thumbs {
+    grid-auto-columns: 96px;
+    gap: 8px;
+  }
+
+  body.single-iez_plan main.hub-customhome-subpage
+  .iez-plan-unified-gallery__thumb {
+    border-radius: 11px;
+  }
+
+  body.single-iez_plan main.hub-customhome-subpage
+  .iez-plan-unified-gallery__thumb span {
+    padding: 6px 7px 7px;
+    font-size: 10px;
+  }
+}
+
 /* =========================================================
  * 07. gallery
  * ========================================================= */
@@ -420,8 +718,8 @@ body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__gallery
 
 body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__gallery-item span {
   display: block;
-  min-height: 62px;
-  padding: 16px 124px 16px 20px;
+  min-height: 78px;
+  padding: 16px 190px 16px 20px;
   color: var(--plan-text);
   font-weight: 900;
   font-size: 15px;
@@ -502,24 +800,29 @@ body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__feature
 
 body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__related-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 22px;
+  align-items: stretch;
 }
 
 body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__related-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
   overflow: hidden;
-  border-radius: 22px;
+  border-radius: 24px;
   background: var(--plan-card-bg);
   border: 1px solid var(--plan-border);
-  box-shadow: var(--plan-shadow);
+  box-shadow: 0 14px 34px rgba(24, 18, 14, .07);
 }
 
-body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__related-card:nth-child(even) {
-  background: var(--plan-card-bg-alt);
-}
 
-body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__related-card a {
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__related-image-link {
   display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
   color: inherit;
   text-decoration: none;
 }
@@ -527,27 +830,125 @@ body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__related
 body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__related-card img {
   display: block;
   width: 100%;
-  height: 180px;
+  height: 100%;
+  max-width: none;
   object-fit: cover;
 }
 
 body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__related-body {
-  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  padding: 20px;
 }
 
 body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__related-body h4 {
-  margin: 0 0 8px;
+  margin: 0 0 16px;
   color: var(--plan-text);
-  font-size: 16px;
-  line-height: 1.45;
+  font-size: clamp(18px, 1.35vw, 23px);
+  line-height: 1.35;
 }
 
-body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__related-body p {
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__related-body h4 a {
+  color: inherit;
+  text-decoration: none;
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__related-body h4 a:hover,
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__related-body h4 a:focus-visible {
+  color: var(--plan-accent);
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__related-label {
+  margin: 0 0 8px;
+  color: var(--plan-accent);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .12em;
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__related-meta {
+  display: grid;
+  gap: 0;
+  margin: auto 0 0;
+  padding: 0;
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__related-meta-row {
+  display: grid;
+  grid-template-columns: 78px minmax(0, 1fr);
+  gap: 12px;
+  padding: 9px 0;
+  border-top: 1px solid var(--plan-border);
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__related-meta-row:last-child {
+  border-bottom: 1px solid var(--plan-border);
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__related-meta dt {
+  color: var(--plan-accent);
+  font-size: 12px;
+  font-weight: 900;
+  line-height: 1.6;
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__related-meta dd {
+  min-width: 0;
   margin: 0;
+  color: var(--plan-text);
+  font-size: 13px;
+  font-weight: 900;
+  line-height: 1.6;
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__related-meta dd > a {
+  color: inherit;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__related-meta dd > a:hover,
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__related-meta dd > a:focus-visible {
+  color: var(--plan-accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__related-meta-row.is-floor-area dd {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__related-area-value {
+  display: block;
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__related-area-filter {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: 6px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: var(--plan-secondary-bg);
+  font-size: .78em;
+  line-height: 1.3;
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__related-area-filter-label {
   color: var(--plan-muted);
-  font-size: 14px;
-  font-weight: 800;
-  line-height: 1.55;
+  font-size: .9em;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__related-area-filter a {
+  color: inherit;
+  text-decoration: none;
+  white-space: nowrap;
 }
 
 
@@ -661,14 +1062,77 @@ body.single-iez_plan .lg-backdrop {
   background: var(--plan-lightbox-overlay) !important;
 }
 
+/*
+ * LightGallery 現在画像の名称
+ *
+ * LightGallery の subHtml を利用する。
+ * サムネイル一枚ずつに文字は置かず、
+ * 現在メイン表示中の画像名称だけを表示する。
+ */
 body.single-iez_plan .lg-sub-html {
-  display: none !important;
+  display: block !important;
+  margin: 0 !important;
+  padding: 10px 16px 12px !important;
+  background: rgba(13, 10, 10, .92) !important;
+  color: #fff !important;
+  font-size: 14px !important;
+  font-weight: 800 !important;
+  line-height: 1.5 !important;
+  text-align: center !important;
 }
 
-body.single-iez_plan .lg-thumb-item,
-body.single-iez_plan .lg-thumb-item.active,
-body.single-iez_plan .lg-thumb-item:hover {
-  border-color: var(--plan-accent-soft) !important;
+/*
+ * LightGallery サムネイル通常状態
+ *
+ * 通常:
+ * #ead7bd = 薄いベージュ
+ */
+body.single-iez_plan .lg-outer .lg-thumb-item {
+  position: relative !important;
+  box-sizing: border-box !important;
+  border: 2px solid #ead7bd !important;
+  opacity: .72 !important;
+  transition:
+    opacity .2s ease,
+    border-color .2s ease !important;
+}
+
+body.single-iez_plan .lg-outer .lg-thumb-item:hover {
+  border-color: #ead7bd !important;
+  opacity: 1 !important;
+}
+
+/*
+ * 現在メイン画像に表示中のサムネイル
+ *
+ * #4d2b16 = サイトで使用している濃い茶色
+ *
+ * borderだけに依存せず、
+ * ::afterでも画像の内側に4pxの枠を重ねる。
+ */
+body.single-iez_plan .lg-outer .lg-thumb-item.active {
+  border-color: #4d2b16 !important;
+  opacity: 1 !important;
+  outline: 2px solid #f5e5cf !important;
+  outline-offset: -2px !important;
+}
+
+body.single-iez_plan .lg-outer .lg-thumb-item.active::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  box-sizing: border-box;
+  border: 4px solid #4d2b16 !important;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+@media (max-width: 640px) {
+  body.single-iez_plan .lg-sub-html {
+    padding: 8px 12px 10px !important;
+    font-size: 13px !important;
+  }
 }
 
 body.single-iez_plan .lg-toolbar .lg-close,
@@ -700,7 +1164,7 @@ body.single-iez_plan .lg-outer .lg-next {
  * 11. responsive
  * ========================================================= */
 
-@media (max-width: 1200px) {
+@media (max-width: 980px) {
   body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__related-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -724,8 +1188,7 @@ body.single-iez_plan .lg-outer .lg-next {
 
   body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__row--plan-summary,
   body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__gallery-grid,
-  body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__feature-grid,
-  body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__related-grid {
+  body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__feature-grid {
     grid-template-columns: 1fr;
   }
 
@@ -760,9 +1223,7 @@ body.single-iez_plan .lg-outer .lg-next {
     font-weight: 900;
   }
 
-  body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__related-card img {
-    height: 210px;
-  }
+
 }
 
 
@@ -830,6 +1291,335 @@ body.single-iez_plan main.hub-customhome-subpage [data-iez-plan-open]::before {
   pointer-events: none;
 }
 
+
+/*
+ * ============================================================
+ * IEZ_PLAN_MOBILE_FULLSCREEN_GALLERY
+ * モバイル画像ビューア
+ * ============================================================
+ *
+ * PC:
+ *   従来の大型モーダルをそのまま使用。
+ *
+ * Mobile:
+ *   画面全体を画像ビューアとして使用する。
+ *
+ * 重要:
+ *   画像をスマホの縦長比率へ変形しない。
+ *   width / height の両方をautoにし、
+ *   max-width / max-heightの範囲内で
+ *   元画像の縦横比を完全に維持する。
+ */
+@media (max-width: 640px) {
+
+  /*
+   * 外側の24px余白をなくす。
+   * スマホ画面そのものをモーダルにする。
+   */
+  body.single-iez_plan
+  .iez-plan-modal[aria-hidden="false"] {
+    padding: 0 !important;
+    place-items: stretch !important;
+  }
+
+
+  /*
+   * PC用の角丸カードを解除。
+   *
+   * 100dvh:
+   * Safari / Chrome等でアドレスバー高さが変化しても
+   * 現在見えている画面高に合わせる。
+   */
+  body.single-iez_plan
+  .iez-plan-modal__dialog {
+    width: 100vw !important;
+    height: 100dvh !important;
+
+    max-width: none !important;
+    max-height: none !important;
+
+    border-radius: 0 !important;
+    box-shadow: none !important;
+
+    grid-template-rows: auto minmax(0, 1fr);
+
+    background: var(--plan-panel-bg);
+  }
+
+
+  /*
+   * 上部バー。
+   *
+   * 長い写真名でも画像領域を圧迫しすぎないよう、
+   * 小さく2行までにする。
+   */
+  body.single-iez_plan
+  .iez-plan-modal__header {
+    position: relative;
+    z-index: 4;
+
+    min-height: 58px;
+
+    padding:
+      max(10px, env(safe-area-inset-top))
+      max(14px, env(safe-area-inset-right))
+      10px
+      max(14px, env(safe-area-inset-left));
+
+    gap: 12px;
+
+    background: var(--plan-panel-bg);
+    border-bottom: 1px solid var(--plan-border);
+  }
+
+
+  body.single-iez_plan
+  .iez-plan-modal__title {
+    min-width: 0;
+    margin: 0;
+
+    font-size: 13px;
+    line-height: 1.45;
+    font-weight: 800;
+
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+
+    overflow: hidden;
+  }
+
+
+  /*
+   * 閉じる。
+   *
+   * 現在の「閉じる」という大きな丸ボタンを、
+   * モバイルだけ小さい×ボタンに見せる。
+   *
+   * HTMLのbutton自体はそのままなので
+   * 閉じる機能は失わない。
+   */
+  body.single-iez_plan
+  .iez-plan-modal__close {
+    position: relative;
+
+    flex: 0 0 44px;
+
+    width: 44px;
+    min-width: 44px;
+    height: 44px;
+    min-height: 44px;
+
+    padding: 0 !important;
+
+    overflow: hidden;
+
+    border-radius: 50%;
+
+    font-size: 0 !important;
+  }
+
+
+  body.single-iez_plan
+  .iez-plan-modal__close::before {
+    content: "×";
+
+    position: absolute;
+    inset: 0;
+
+    display: grid;
+    place-items: center;
+
+    font-size: 27px;
+    line-height: 1;
+    font-weight: 500;
+  }
+
+
+  /*
+   * 画像表示領域。
+   *
+   * PC用の左右72px余白を解除する。
+   */
+  body.single-iez_plan
+  .iez-plan-modal__body {
+    position: relative;
+
+    width: 100%;
+    height: 100%;
+
+    min-width: 0;
+    min-height: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding:
+      12px
+      max(10px, env(safe-area-inset-right))
+      max(12px, env(safe-area-inset-bottom))
+      max(10px, env(safe-area-inset-left)) !important;
+
+    overflow: hidden;
+
+    /*
+     * 横長画像を比率維持で表示した時の上下部分も、
+     * 「余白」ではなく画像ビューアの領域として見せる。
+     */
+    background: rgba(24, 18, 14, .96);
+
+    /*
+     * 横方向の指操作はJSで画像送りに使う。
+     */
+    touch-action: pan-y;
+  }
+
+
+  /*
+   * 最重要部分。
+   *
+   * 横長の平面図でも、
+   * 縦長の写真でも、
+   * 正方形でも比率を変更しない。
+   *
+   * coverは使わない。
+   * containで画像全体を必ず表示する。
+   */
+  body.single-iez_plan
+  .iez-plan-modal__image {
+    display: block;
+
+    width: auto !important;
+    height: auto !important;
+
+    max-width: 100% !important;
+    max-height: 100% !important;
+
+    object-fit: contain !important;
+
+    margin: auto;
+  }
+
+
+
+  /*
+   * モバイルでは大きな「前へ / 次へ」は使わない。
+   *
+   * 既存ボタンを小さい ‹ › として画像の左右へ重ねる。
+   * 横スワイプもそのまま使用できる。
+   */
+  body.single-iez_plan
+  .iez-plan-modal__nav {
+    display: grid !important;
+    place-items: center;
+
+    top: 50%;
+    transform: translateY(-50%);
+
+    z-index: 5;
+
+    width: 42px;
+    min-width: 42px;
+    height: 42px;
+    min-height: 42px;
+
+    padding: 0 !important;
+
+    border: 1px solid rgba(255, 255, 255, .34);
+    border-radius: 50%;
+
+    background: rgba(24, 18, 14, .58);
+    color: #fff;
+
+    font-size: 0 !important;
+    line-height: 1;
+
+    opacity: .86;
+  }
+
+  body.single-iez_plan
+  .iez-plan-modal__nav.is-prev {
+    left: 10px;
+  }
+
+  body.single-iez_plan
+  .iez-plan-modal__nav.is-next {
+    right: 10px;
+  }
+
+  body.single-iez_plan
+  .iez-plan-modal__nav.is-prev::before {
+    content: "‹";
+    font-size: 30px;
+    font-weight: 400;
+    line-height: 1;
+    transform: translateY(-1px);
+  }
+
+  body.single-iez_plan
+  .iez-plan-modal__nav.is-next::before {
+    content: "›";
+    font-size: 30px;
+    font-weight: 400;
+    line-height: 1;
+    transform: translateY(-1px);
+  }
+
+  body.single-iez_plan
+  .iez-plan-modal__nav:active {
+    opacity: 1;
+  }
+
+
+  /*
+   * モーダル表示中は背景ページをスクロールさせない。
+   */
+  body:has(.iez-plan-modal[aria-hidden="false"]) {
+    overflow: hidden;
+  }
+}
+
+/*
+ * ============================================================
+ * IEZ_PLAN_MOBILE_ZOOM_CONTROL
+ * モバイル画像拡大UI
+ * ============================================================
+ *
+ * 画像全体がタップ可能なので、
+ * モバイルでは横長の「画像を拡大」ラベルを表示しない。
+ *
+ * 代わりに写真右上へ小さい「＋」だけ表示する。
+ */
+@media (max-width: 640px) {
+
+/* IEZ_GALLERY_TITLE_MOBILE: 拡大ラベル非表示時はタイトル幅を戻す */  body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__gallery-item span {    min-height: 62px;    padding: 16px 20px;  }
+  body.single-iez_plan main.hub-customhome-subpage
+  [data-iez-plan-open]::after {
+    display: none;
+  }
+
+  body.single-iez_plan main.hub-customhome-subpage
+  [data-iez-plan-open]::before {
+    content: "＋";
+    top: 12px;
+    right: 12px;
+    bottom: auto;
+
+    width: 44px;
+    height: 44px;
+
+    display: grid;
+    place-items: center;
+
+    padding: 0;
+    border-radius: 50%;
+
+    font-size: 23px;
+    line-height: 1;
+  }
+}
+
 /* サブ画像カード。背景は白寄せ、特徴カードとは分ける */
 body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__gallery-item {
   background: #fff;
@@ -852,29 +1642,173 @@ body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__feature
   box-shadow: none;
 }
 
-/* 関連プラン。背景色はいらない */
+/*
+ * 関連セクション自体には背景色を付けない。
+ *
+ * 各カードは上のrelated-cardルールで
+ * アーカイブと同じカード表現を使用する。
+ */
 body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__row--related {
   background: transparent;
-}
-
-body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__related-card,
-body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__related-card:nth-child(even) {
-  background: transparent;
-  box-shadow: none;
-  border: 0;
-  border-radius: 0;
-}
-
-body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__related-card img {
-  border-radius: 18px;
-  border: 1px solid var(--plan-border);
-}
-
-body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__related-body {
-  padding: 12px 0 0;
 }
 
 /* モーダルは閉じている時に絶対に表示しない */
 body.single-iez_plan .iez-plan-modal[aria-hidden="true"] {
   display: none !important;
+}
+
+/*
+ * ============================================================
+ * IEZ_PLAN_DETAIL_AREA_FILTER
+ * 詳細ページ 延床面積帯
+ * ============================================================
+ *
+ * 表示:
+ *
+ *   68.5㎡（約20.7坪）
+ *   面積帯 50〜70㎡
+ *
+ * 実面積が主情報。
+ * 面積帯は類似プランを探すための補助リンク。
+ */
+body.single-iez_plan .iez-plan-detail-area-value {
+  display: block;
+}
+
+body.single-iez_plan .iez-plan-detail-area-filter {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-top: 4px;
+  font-size: .86em;
+  line-height: 1.35;
+}
+
+body.single-iez_plan .iez-plan-detail-area-filter-label {
+  color: var(--plan-muted);
+  font-size: .9em;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+body.single-iez_plan .iez-plan-detail-area-filter a {
+  color: inherit;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+body.single-iez_plan .iez-plan-detail-area-filter a:hover {
+  color: var(--plan-accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+body.single-iez_plan .iez-plan-detail-area-filter a:focus-visible {
+  color: var(--plan-accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+/*
+ * ============================================================
+ * IEZ_PLAN_DETAIL_AREA_FILTER
+ * ============================================================
+ *
+ * 詳細ページ:
+ *
+ *   68.5㎡（約20.7坪）
+ *   [ 面積帯 50〜70㎡ ]
+ *
+ * の順で縦表示する。
+ */
+
+body.single-iez_plan .iez-plan-detail-area-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 5px;
+}
+
+body.single-iez_plan .iez-plan-detail-area-value {
+  display: block;
+  width: 100%;
+  text-align: left;
+}
+
+body.single-iez_plan .iez-plan-detail-area-filter {
+  display: inline-flex;
+  width: auto;
+  align-items: center;
+  align-self: flex-start;
+  gap: 6px;
+  margin: 0;
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: var(--plan-secondary-bg);
+  font-size: .78em;
+  line-height: 1.3;
+}
+
+body.single-iez_plan .iez-plan-detail-area-filter-label {
+  color: var(--plan-muted);
+  font-size: .9em;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+body.single-iez_plan .iez-plan-detail-area-filter a {
+  color: inherit;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+body.single-iez_plan .iez-plan-detail-area-filter a:hover,
+body.single-iez_plan .iez-plan-detail-area-filter a:focus-visible {
+  color: var(--plan-accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+
+/*
+ * IEZ_PLAN_RELATED_MOBILE_GRID
+ */
+@media (max-width: 640px) {
+  body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__related-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__related-meta-row {
+    grid-template-columns: 92px minmax(0, 1fr);
+  }
+}
+
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__related-more {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__related-more-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 22px;
+  border-radius: 999px;
+  border: 1px solid var(--plan-text);
+  background: var(--plan-text);
+  color: var(--plan-card-bg);
+  font-weight: 900;
+  text-decoration: none;
+}
+
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__related-more-link:hover,
+body.single-iez_plan main.hub-customhome-subpage .iez-plan-detail-board__related-more-link:focus-visible {
+  opacity: .82;
 }

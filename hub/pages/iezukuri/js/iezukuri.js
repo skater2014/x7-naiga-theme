@@ -1334,3 +1334,622 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 })();
 /* === CH STORY CARD TOGGLE END === */
+
+
+/*
+ * ============================================================
+ * IEZ_PLAN_UNIFIED_PAGE_GALLERY
+ * 詳細ページ メイン画像＋サムネイル
+ * ============================================================
+ *
+ * 目的:
+ *
+ * PC
+ *   大きなメイン画像
+ *   ↓
+ *   外観 / 平面図 / 内装写真などのサムネイル
+ *
+ * Mobile
+ *   メイン画像
+ *   ↓
+ *   横スクロールできるサムネイル
+ *
+ * メイン画像を押した時だけ、
+ * 既存の全画面モーダルを開く。
+ *
+ * 重要:
+ * data-iez-plan-lightbox の既存画像一覧をそのまま再利用する。
+ * 同じ画像データを別管理しない。
+ */
+(function () {
+  'use strict';
+
+  function initIezPlanUnifiedPageGallery() {
+    var board = document.querySelector(
+      '.iez-plan-detail-board'
+    );
+
+    if (!board) {
+      return;
+    }
+
+    if (board.dataset.iezUnifiedGalleryReady === '1') {
+      return;
+    }
+
+
+    /*
+     * --------------------------------------------------------
+     * 1. 現在ページに存在するLightbox画像グループを確認
+     * --------------------------------------------------------
+     *
+     * 外観・図面・内装写真は既存PHP側ですでに
+     * data-iez-plan-lightbox にまとまっている。
+     *
+     * 複数のdata-iez-plan-cardがある場合は、
+     * 一番画像数の多いグループを詳細ページの正本として使う。
+     */
+    var sourceCards = Array.prototype.slice.call(
+      board.querySelectorAll(
+        '[data-iez-plan-card][data-iez-plan-lightbox]'
+      )
+    );
+
+    if (!sourceCards.length) {
+      return;
+    }
+
+    var bestItems = [];
+
+    sourceCards.forEach(function (card) {
+      var items = [];
+
+      try {
+        items = JSON.parse(
+          card.getAttribute('data-iez-plan-lightbox') || '[]'
+        );
+      } catch (error) {
+        items = [];
+      }
+
+      if (Array.isArray(items) && items.length > bestItems.length) {
+        bestItems = items;
+      }
+    });
+
+
+    /*
+     * URLが同じ画像は1枚だけにする。
+     */
+    var seen = {};
+
+    var items = bestItems.filter(function (item) {
+      if (!item || !item.src || seen[item.src]) {
+        return false;
+      }
+
+      seen[item.src] = true;
+
+      return true;
+    });
+
+    if (!items.length) {
+      return;
+    }
+
+
+    /*
+     * --------------------------------------------------------
+     * 2. 既存ページ内にある小画像URLを再利用
+     * --------------------------------------------------------
+     *
+     * モーダル用JSONにはfull画像が入っている。
+     *
+     * サムネイルまでfull画像を読み込まないように、
+     * 現在の外観・図面・内装カードにあるimgを探して
+     * サムネイル表示だけ既存の小画像を再利用する。
+     */
+    var thumbnailByFullUrl = {};
+
+    board.querySelectorAll(
+      '[data-plan-src]'
+    ).forEach(function (button) {
+      var fullUrl = button.getAttribute('data-plan-src');
+      var image = button.querySelector('img');
+
+      if (!fullUrl || !image) {
+        return;
+      }
+
+      thumbnailByFullUrl[fullUrl] =
+        image.currentSrc ||
+        image.getAttribute('src') ||
+        fullUrl;
+    });
+
+
+    /*
+     * --------------------------------------------------------
+     * 3. 新しいギャラリーHTML
+     * --------------------------------------------------------
+     */
+
+    var gallery = document.createElement('section');
+
+    gallery.className =
+      'iez-plan-detail-board__row iez-plan-unified-gallery';
+
+    gallery.setAttribute(
+      'aria-label',
+      '参考プラン画像ギャラリー'
+    );
+
+    /*
+     * 既存モーダルJSが
+     * closest([data-iez-plan-card]) から画像一覧を取得するため、
+     * 新ギャラリー自体を画像カードとして扱う。
+     */
+    gallery.setAttribute(
+      'data-iez-plan-card',
+      ''
+    );
+
+    gallery.setAttribute(
+      'data-iez-plan-lightbox',
+      JSON.stringify(items)
+    );
+
+
+    /*
+     * メイン画像。
+     */
+    var main = document.createElement('div');
+
+    main.className =
+      'iez-plan-unified-gallery__main';
+
+
+    var mainButton = document.createElement('button');
+
+    mainButton.type = 'button';
+
+    mainButton.className =
+      'iez-plan-unified-gallery__main-button';
+
+    /*
+     * 既存モーダルを開くための属性。
+     */
+    mainButton.setAttribute(
+      'data-iez-plan-open',
+      ''
+    );
+
+
+    var mainImage = document.createElement('img');
+
+    mainImage.className =
+      'iez-plan-unified-gallery__main-image';
+
+    mainImage.decoding = 'async';
+
+
+    var status = document.createElement('span');
+
+    status.className =
+      'iez-plan-unified-gallery__status';
+
+
+    mainButton.appendChild(mainImage);
+    mainButton.appendChild(status);
+    main.appendChild(mainButton);
+
+
+    /*
+     * サムネイル一覧。
+     */
+    var thumbs = document.createElement('div');
+
+    thumbs.className =
+      'iez-plan-unified-gallery__thumbs';
+
+    thumbs.setAttribute(
+      'aria-label',
+      '画像を選択'
+    );
+
+
+    /*
+     * --------------------------------------------------------
+     * 4. 選択中画像を変更
+     * --------------------------------------------------------
+     */
+    function selectImage(index) {
+      if (!items[index]) {
+        return;
+      }
+
+      var item = items[index];
+
+      mainImage.src = item.src;
+      mainImage.alt = item.title || '住宅画像';
+
+      /*
+       * メイン画像を押した時、
+       * モーダル側が現在選択中画像から開けるよう更新する。
+       */
+      mainButton.setAttribute(
+        'data-plan-src',
+        item.src
+      );
+
+      mainButton.setAttribute(
+        'data-plan-title',
+        item.title || '画像'
+      );
+
+      status.textContent =
+        (item.title || '画像')
+        + '  '
+        + (index + 1)
+        + ' / '
+        + items.length;
+
+
+      thumbs.querySelectorAll(
+        '[data-iez-plan-gallery-thumb]'
+      ).forEach(function (button, buttonIndex) {
+        var active = buttonIndex === index;
+
+        button.classList.toggle(
+          'is-active',
+          active
+        );
+
+        button.setAttribute(
+          'aria-current',
+          active ? 'true' : 'false'
+        );
+      });
+    }
+
+
+    /*
+     * --------------------------------------------------------
+     * 5. サムネイル生成
+     * --------------------------------------------------------
+     */
+    items.forEach(function (item, index) {
+      var button = document.createElement('button');
+
+      button.type = 'button';
+
+      button.className =
+        'iez-plan-unified-gallery__thumb';
+
+      button.setAttribute(
+        'data-iez-plan-gallery-thumb',
+        String(index)
+      );
+
+      button.setAttribute(
+        'aria-label',
+        (item.title || '画像')
+        + 'を表示'
+      );
+
+
+      var image = document.createElement('img');
+
+      image.src =
+        thumbnailByFullUrl[item.src]
+        || item.src;
+
+      image.alt = '';
+      image.loading = 'lazy';
+      image.decoding = 'async';
+
+
+      var label = document.createElement('span');
+
+      label.textContent =
+        item.title || '画像';
+
+
+      button.appendChild(image);
+      button.appendChild(label);
+
+      button.addEventListener(
+        'click',
+        function () {
+          selectImage(index);
+
+          /*
+           * モバイルの横スクロール時も
+           * 選択したサムネイルが見える位置へ寄せる。
+           */
+          button.scrollIntoView({
+            behavior: 'smooth',
+            block: 'nearest',
+            inline: 'nearest'
+          });
+        }
+      );
+
+      thumbs.appendChild(button);
+    });
+
+
+    gallery.appendChild(main);
+    gallery.appendChild(thumbs);
+
+
+    /*
+     * --------------------------------------------------------
+     * 6. 現在の外観表示位置へ新ギャラリーを挿入
+     * --------------------------------------------------------
+     */
+    var exteriorButton = board.querySelector(
+      '.iez-plan-detail-board__exterior-button'
+    );
+
+    var exteriorRow = exteriorButton
+      ? exteriorButton.closest(
+          '.iez-plan-detail-board__row'
+        )
+      : null;
+
+    var firstRow = board.querySelector(
+      '.iez-plan-detail-board__row'
+    );
+
+    var insertBefore =
+      exteriorRow ||
+      firstRow;
+
+    if (insertBefore) {
+      board.insertBefore(
+        gallery,
+        insertBefore
+      );
+    } else {
+      board.prepend(gallery);
+    }
+
+
+    /*
+     * --------------------------------------------------------
+     * 7. 新ギャラリー完成後だけ旧画像UIを隠す
+     * --------------------------------------------------------
+     *
+     * JSが途中で失敗した場合にはここまで到達しないため、
+     * 元の外観・図面・複数内装写真がそのまま残る。
+     */
+
+
+    /*
+     * 外観の旧表示。
+     *
+     * 外観専用rowならrowごと隠す。
+     * 他要素も含むrowならbuttonだけを隠す。
+     */
+    if (exteriorButton) {
+      if (
+        exteriorRow
+        && exteriorRow.children.length <= 2
+      ) {
+        exteriorRow.setAttribute(
+          'data-iez-plan-gallery-source-hidden',
+          ''
+        );
+      } else {
+        exteriorButton.setAttribute(
+          'data-iez-plan-gallery-source-hidden',
+          ''
+        );
+      }
+    }
+
+
+    /*
+     * 旧「平面図 / 配置図」表示。
+     *
+     * 仕様表は残すので、
+     * plan-summary全体は隠さない。
+     */
+    var drawingRoot = board.querySelector(
+      '[data-iez-plan-drawing-root]'
+    );
+
+    if (drawingRoot) {
+      drawingRoot.setAttribute(
+        'data-iez-plan-gallery-source-hidden',
+        ''
+      );
+
+      var summaryRow = drawingRoot.closest(
+        '.iez-plan-detail-board__row--plan-summary'
+      );
+
+      if (summaryRow) {
+        summaryRow.classList.add(
+          'is-unified-gallery-summary'
+        );
+      }
+    }
+
+
+    /*
+     * 旧「複数内装写真」セクション。
+     *
+     * 同じ写真を新しいサムネイルへ統合したため、
+     * 二重表示しない。
+     */
+    var oldGallery = board.querySelector(
+      '.iez-plan-detail-board__row--gallery'
+    );
+
+    if (oldGallery) {
+      oldGallery.setAttribute(
+        'data-iez-plan-gallery-source-hidden',
+        ''
+      );
+    }
+
+
+    /*
+     * CSS側が完成状態だけを対象にできるようにする。
+     */
+    board.classList.add(
+      'has-unified-gallery'
+    );
+
+    board.dataset.iezUnifiedGalleryReady = '1';
+
+
+    /*
+     * 初期画像は1枚目。
+     */
+    selectImage(0);
+  }
+
+
+  if (document.readyState === 'loading') {
+    document.addEventListener(
+      'DOMContentLoaded',
+      initIezPlanUnifiedPageGallery
+    );
+  } else {
+    initIezPlanUnifiedPageGallery();
+  }
+})();
+
+/*
+ * ============================================================
+ * IEZ_PLAN_MOBILE_MODAL_SWIPE
+ * モバイル画像モーダル 横スワイプ
+ * ============================================================
+ *
+ * 画像送りそのものは既存処理を再利用する。
+ * この処理では画像URLや配列を独自管理しない。
+ */
+(function () {
+  'use strict';
+
+  function initIezPlanMobileModalSwipe() {
+    var modal = document.querySelector(
+      '[data-iez-plan-modal-root]'
+    );
+
+    if (!modal) {
+      return;
+    }
+
+    var body = modal.querySelector(
+      '.iez-plan-modal__body'
+    );
+
+    var prev = modal.querySelector(
+      '[data-iez-plan-prev]'
+    );
+
+    var next = modal.querySelector(
+      '[data-iez-plan-next]'
+    );
+
+    if (!body || !prev || !next) {
+      return;
+    }
+
+    /*
+     * 同じJSが二重に読み込まれても
+     * touchイベントを二重登録しない。
+     */
+    if (body.dataset.iezMobileSwipeReady === '1') {
+      return;
+    }
+
+    body.dataset.iezMobileSwipeReady = '1';
+
+    var startX = 0;
+    var startY = 0;
+    var startTime = 0;
+
+    body.addEventListener(
+      'touchstart',
+      function (event) {
+        if (
+          modal.getAttribute('aria-hidden') !== 'false'
+          || event.touches.length !== 1
+        ) {
+          return;
+        }
+
+        var touch = event.touches[0];
+
+        startX = touch.clientX;
+        startY = touch.clientY;
+        startTime = Date.now();
+      },
+      { passive: true }
+    );
+
+    body.addEventListener(
+      'touchend',
+      function (event) {
+        if (
+          modal.getAttribute('aria-hidden') !== 'false'
+          || !event.changedTouches.length
+        ) {
+          return;
+        }
+
+        var touch = event.changedTouches[0];
+
+        var diffX = touch.clientX - startX;
+        var diffY = touch.clientY - startY;
+        var elapsed = Date.now() - startTime;
+
+        /*
+         * 誤操作防止:
+         *
+         * ・横50px以上
+         * ・縦移動より横移動が明確に大きい
+         * ・1秒以内
+         *
+         * の時だけ画像送りにする。
+         */
+        if (
+          Math.abs(diffX) < 50
+          || Math.abs(diffX) <= Math.abs(diffY) * 1.2
+          || elapsed > 1000
+        ) {
+          return;
+        }
+
+        if (diffX < 0) {
+          /*
+           * 指を左へ動かした
+           * → 次の画像
+           */
+          next.click();
+        } else {
+          /*
+           * 指を右へ動かした
+           * → 前の画像
+           */
+          prev.click();
+        }
+      },
+      { passive: true }
+    );
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener(
+      'DOMContentLoaded',
+      initIezPlanMobileModalSwipe
+    );
+  } else {
+    initIezPlanMobileModalSwipe();
+  }
+})();

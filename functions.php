@@ -1,5 +1,75 @@
 <?php
 /**
+ * ============================================================
+ * NAIGAI THEME MENU POLICY / 新テーマ
+ * ============================================================
+ *
+ * 【重要：旧テーマと新テーマのメニュー管理方針】
+ *
+ * WordPressの「メニュー本体」と「テーマのメニューロケーション」は
+ * 別のものとして扱う。
+ *
+ * ------------------------------------------------------------
+ * 1. 旧テーマと新テーマで同じ内容を使用する共通メニュー
+ * ------------------------------------------------------------
+ *
+ * 以下の5メニューは、旧テーマ・新テーマの両方で
+ * 同じメニュー本体を使用する。
+ *
+ * - PC Header Menu
+ * - Mobile Header Menu
+ * - side-menu
+ * - footer_menu
+ * - post_footer_menu
+ *
+ * 同じ内容を両テーマで使用するため、
+ * これらをテーマごとに複製する必要はない。
+ *
+ * ただし「どのロケーションにどのメニューを配置するか」という
+ * nav_menu_locations の保存値はテーマごとに別管理する。
+ *
+ * 新テーマの保存先:
+ * theme_mods_x7-naigaicorp-20260713
+ *
+ * ------------------------------------------------------------
+ * 2. 新テーマ専用メニュー
+ * ------------------------------------------------------------
+ *
+ * 以下は新テーマだけで使用する。
+ *
+ * 【不動産】
+ * - fudosan-side-menu
+ *
+ * 【民泊】
+ * - minpaku-header-menu-pc
+ * - minpaku-header-menu-mobile
+ * - minpaku-side-menu
+ *
+ * 【注文住宅・家づくり】
+ * - customhome-header-menu
+ * - customhome-page-menu
+ * - iezukuri_footer_menu
+ *
+ * 注文住宅系ロケーションの一部は
+ * hub/pages/iezukuri/inc/helpers.php でも登録しているため、
+ * functions.php だけを見て削除・統合しないこと。
+ *
+ * ------------------------------------------------------------
+ * 3. テーマ切替時
+ * ------------------------------------------------------------
+ *
+ * 旧テーマと新テーマの nav_menu_locations を
+ * 相互コピーしない。
+ *
+ * メニューIDを固定値で別テーマへ強制設定しない。
+ *
+ * 共通5メニューは同じメニュー本体を参照してよいが、
+ * 新テーマ専用メニューは旧テーマへ割り当てない。
+ *
+ * ============================================================
+ */
+
+/**
  * ChatGPTモーダル表示設定
  * JSは触らず、表示対象だけ管理画面から制御する。
  */
@@ -584,7 +654,6 @@ register_nav_menu('footer-navi', 'フッターのナビゲーション');
 //)
 //);
 // BS5 Walkerをデフォルトウォーカーとして登録
-//require_once get_template_directory() . '/bs5-navwalker.php';
 //}
 //add_action('after_setup_theme', 'register_custom_menus');
 
@@ -7540,161 +7609,6 @@ if (!function_exists('naigai_register_customhome_menu_location')) {
 
 /* 注文住宅ページビルダー（サンプル） */
 // CUSTOMHOME BUILDER ADMIN SAMPLE DISABLED: legacy builder admin removed.
-
-
-/* === NAIGAI THEME COMMON FOOTER NAV START === */
-
-/**
- * テーマ全体の共通footerメニュー。
- * hub専用ではない。全ページ共通。
- */
-add_action('after_setup_theme', function () {
-    register_nav_menus(array(
-        'naigai_footer_property'     => '共通フッター：不動産を探す',
-        'naigai_footer_construction' => '共通フッター：那須の住宅・別荘',
-        'naigai_footer_house'        => '共通フッター：家づくり',
-        'naigai_footer_minpaku'      => '共通フッター：民泊・貸別荘',
-        'naigai_footer_company'      => '共通フッター：会社案内',
-    ));
-});
-
-if (!function_exists('naigai_theme_footer_page_url')) {
-    function naigai_theme_footer_page_url($slug) {
-        $page = get_page_by_path(trim((string) $slug, '/'));
-        if ($page && !is_wp_error($page) && $page->post_status === 'publish') {
-            return get_permalink($page->ID);
-        }
-        return '';
-    }
-}
-
-if (!function_exists('naigai_theme_footer_archive_url')) {
-    function naigai_theme_footer_archive_url($post_type) {
-        if (post_type_exists($post_type)) {
-            $url = get_post_type_archive_link($post_type);
-            return $url ? $url : '';
-        }
-        return '';
-    }
-}
-
-if (!function_exists('naigai_theme_footer_seed_menu')) {
-    function naigai_theme_footer_seed_menu($location, $menu_name, array $items) {
-        $menu = wp_get_nav_menu_object($menu_name);
-        $menu_id = ($menu && !is_wp_error($menu)) ? (int) $menu->term_id : (int) wp_create_nav_menu($menu_name);
-
-        if ($menu_id <= 0) {
-            return;
-        }
-
-        $existing_items = wp_get_nav_menu_items($menu_id);
-        $existing_titles = array();
-
-        if (!empty($existing_items)) {
-            foreach ($existing_items as $existing_item) {
-                $existing_titles[$existing_item->title] = true;
-            }
-        }
-
-        $valid_count = 0;
-
-        foreach ($items as $item) {
-            if (empty($item['title']) || empty($item['url'])) {
-                continue;
-            }
-
-            $valid_count++;
-
-            if (isset($existing_titles[$item['title']])) {
-                continue;
-            }
-
-            wp_update_nav_menu_item($menu_id, 0, array(
-                'menu-item-title'  => $item['title'],
-                'menu-item-url'    => esc_url_raw($item['url']),
-                'menu-item-status' => 'publish',
-                'menu-item-type'   => 'custom',
-            ));
-        }
-
-        if ($valid_count <= 0) {
-            return;
-        }
-
-        $locations = get_theme_mod('nav_menu_locations', array());
-
-        foreach (array(
-            'front_footer_property',
-            'front_footer_construction',
-            'front_footer_house',
-            'front_footer_minpaku',
-            'front_footer_company',
-        ) as $old_location) {
-            unset($locations[$old_location]);
-        }
-
-        $locations[$location] = $menu_id;
-        set_theme_mod('nav_menu_locations', $locations);
-    }
-}
-
-add_action('init', function () {
-    $groups = array(
-        'naigai_footer_property' => array(
-            'name' => '共通フッター：不動産を探す',
-            'items' => array(
-                array('title' => '物件一覧', 'url' => naigai_theme_footer_page_url('fudousan') ?: naigai_theme_footer_archive_url('house')),
-                array('title' => '土地を探す', 'url' => naigai_theme_footer_archive_url('house')),
-                array('title' => '中古別荘を探す', 'url' => naigai_theme_footer_page_url('nasu-used-renovation')),
-                array('title' => '売却・査定について', 'url' => naigai_theme_footer_page_url('satei')),
-            ),
-        ),
-
-        'naigai_footer_construction' => array(
-            'name' => '共通フッター：那須の住宅・別荘',
-            'items' => array(
-                array('title' => '注文住宅を見る', 'url' => naigai_theme_footer_page_url('iezukuri')),
-                array('title' => '施工事例', 'url' => naigai_theme_footer_page_url('sekou-jirei')),
-                array('title' => '那須の住宅について', 'url' => naigai_theme_footer_page_url('hokubei-jutaku')),
-                array('title' => 'デザインポリシー', 'url' => naigai_theme_footer_page_url('iezukuri/design-policy')),
-            ),
-        ),
-
-        'naigai_footer_house' => array(
-            'name' => '共通フッター：家づくり',
-            'items' => array(
-                array('title' => 'コンセプト', 'url' => naigai_theme_footer_page_url('iezukuri/concept')),
-                array('title' => '那須の家づくり', 'url' => naigai_theme_footer_page_url('iezukuri/nasu-house')),
-                array('title' => '在来工法', 'url' => naigai_theme_footer_page_url('zairai-kouhou')),
-            ),
-        ),
-
-        'naigai_footer_minpaku' => array(
-            'name' => '共通フッター：民泊・貸別荘',
-            'items' => array(
-                array('title' => '民泊・貸別荘', 'url' => naigai_theme_footer_archive_url('minpaku') ?: naigai_theme_footer_page_url('minpaku')),
-                array('title' => '民泊運営サポート', 'url' => naigai_theme_footer_page_url('minpaku')),
-                array('title' => 'よくあるご質問', 'url' => naigai_theme_footer_page_url('minpaku-faq')),
-            ),
-        ),
-
-        'naigai_footer_company' => array(
-            'name' => '共通フッター：会社案内',
-            'items' => array(
-                array('title' => '会社概要', 'url' => naigai_theme_footer_page_url('company')),
-                array('title' => '採用情報', 'url' => naigai_theme_footer_page_url('recruitment') ?: naigai_theme_footer_archive_url('recruitment')),
-                array('title' => 'プライバシーポリシー', 'url' => get_privacy_policy_url() ?: naigai_theme_footer_page_url('privacypolicy')),
-            ),
-        ),
-    );
-
-    foreach ($groups as $location => $group) {
-        naigai_theme_footer_seed_menu($location, $group['name'], $group['items']);
-    }
-}, 35);
-
-/* === NAIGAI THEME COMMON FOOTER NAV END === */
-
 
 /**
  * Frontpage portal admin metabox

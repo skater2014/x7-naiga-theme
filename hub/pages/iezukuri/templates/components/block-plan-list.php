@@ -201,21 +201,84 @@ if (!function_exists('naigai_iez_plan_list_get_floor_area_label')) {
     }
 }
 
-$q = new WP_Query(array(
+/*
+ * ============================================================
+ * 参考プラン一覧 + taxonomy絞り込み
+ * ============================================================
+ *
+ * 通常の参考プラン一覧では全件表示する。
+ *
+ * taxonomyページを開いた場合だけ、
+ * 現在のtermに該当する iez_plan に絞り込む。
+ *
+ * 不動産用taxonomy.phpの検索処理は使用しない。
+ */
+/*
+ * 3列 × 3段 = 9件を1ページとする。
+ * 10件目から2ページ目を表示する。
+ */
+$plan_paged = max(
+    1,
+    (int) get_query_var('paged'),
+    (int) get_query_var('page')
+);
+
+$plan_query_args = array(
     'post_type'      => 'iez_plan',
     'post_status'    => 'publish',
-    'posts_per_page' => -1,
+    'posts_per_page' => 9,
+            'paged'          => $plan_paged,
     'orderby'        => array(
         'menu_order' => 'ASC',
         'date'       => 'DESC',
     ),
-));
+);
+
+$plan_taxonomies = array(
+    'iez_plan_type',
+    'iez_plan_size',
+    'iez_plan_feature',
+    'iez_plan_structure',
+    'iez_plan_scope',
+    'iez_plan_building_form',
+    'iez_plan_layout',
+    'iez_plan_area',
+);
+
+if (is_tax($plan_taxonomies)) {
+
+    $current_term = get_queried_object();
+
+    if (
+        $current_term
+        && !empty($current_term->taxonomy)
+        && !empty($current_term->term_id)
+    ) {
+        $plan_query_args['tax_query'] = array(
+            array(
+                'taxonomy' => $current_term->taxonomy,
+                'field'    => 'term_id',
+                'terms'    => (int) $current_term->term_id,
+            ),
+        );
+    }
+}
+
+$q = new WP_Query($plan_query_args);
 ?>
 
 <section class="iez-block iez-plan-archive" data-iezukuri-block="plan-list">
     <div class="iez-block__inner iez-plan-archive__inner">
         <p class="iez-block__kicker">FLOOR PLAN</p>
-        <h1 class="iez-block__title">参考プラン一覧</h1>
+        <h1 class="iez-block__title">
+    <?php
+    echo esc_html(
+        is_tax($plan_taxonomies)
+            ? single_term_title('', false) . 'の参考プラン'
+            : '参考プラン一覧'
+    );
+    ?>
+</h1>
         <p class="iez-block__lead">
             平屋・コンパクト住宅・家族構成に合わせた参考プランを確認できます。
         </p>
@@ -297,6 +360,142 @@ $q = new WP_Query(array(
                         'family',
                         'target_family',
                     ));
+
+/*
+ * ============================================================
+ * カード内の絞り込みリンク
+ * ============================================================
+ *
+ * 新しい「分類」行は作らない。
+ *
+ * 今すでに表示している
+ *
+ *   ・上部ラベル
+ *   ・間取り
+ *   ・延床面積
+ *
+ * を、そのまま検索導線として利用する。
+ */
+
+
+/*
+ * 間取り
+ *
+ * 例:
+ * 2LDK → 2LDKの参考プラン一覧
+ */
+$layout_terms = get_the_terms(
+    $post_id,
+    'iez_plan_layout'
+);
+
+$layout_term = (
+    !is_wp_error($layout_terms)
+    && !empty($layout_terms)
+)
+    ? reset($layout_terms)
+    : null;
+
+$layout_url = '';
+
+if ($layout_term) {
+
+    $term_link = get_term_link($layout_term);
+
+    if (!is_wp_error($term_link)) {
+        $layout_url = $term_link;
+    }
+}
+
+
+/*
+ * 延床面積帯
+ *
+ * 実際の面積
+ *   68.5㎡（約20.7坪）
+ *
+ * はそのまま残す。
+ *
+ * その横に検索用の
+ *   50〜70㎡
+ * を表示する。
+ */
+$area_terms = get_the_terms(
+    $post_id,
+    'iez_plan_area'
+);
+
+$area_term = (
+    !is_wp_error($area_terms)
+    && !empty($area_terms)
+)
+    ? reset($area_terms)
+    : null;
+
+$area_url = '';
+
+if ($area_term) {
+
+    $term_link = get_term_link($area_term);
+
+    if (!is_wp_error($term_link)) {
+        $area_url = $term_link;
+    }
+}
+
+
+/*
+ * カード上部ラベル
+ *
+ * 二世帯住宅、平屋、2階建て等が
+ * 既存termと一致した場合だけリンクにする。
+ *
+ * 一致しない自由入力ラベルは、
+ * 従来どおり普通の文字として表示する。
+ */
+$label_url = '';
+
+if ($label !== '') {
+
+    /*
+     * 「2階建てプラン」
+     * ↓
+     * 「2階建て」
+     *
+     * としてtermを探す。
+     */
+    $label_lookup = preg_replace(
+        '/プラン$/u',
+        '',
+        trim($label)
+    );
+
+    foreach (
+        array(
+            'iez_plan_type',
+            'iez_plan_building_form',
+        )
+        as $label_taxonomy
+    ) {
+
+        $matched_term = get_term_by(
+            'name',
+            $label_lookup,
+            $label_taxonomy
+        );
+
+        if (!$matched_term) {
+            continue;
+        }
+
+        $term_link = get_term_link($matched_term);
+
+        if (!is_wp_error($term_link)) {
+            $label_url = $term_link;
+            break;
+        }
+    }
+}
                     ?>
                     <article class="iez-plan-archive-card">
                         <div class="iez-plan-archive-card__inner">
@@ -320,7 +519,15 @@ $q = new WP_Query(array(
 
                             <div class="iez-plan-archive-card__body">
                                 <?php if ($label !== '') : ?>
-                                    <p class="iez-plan-archive-card__label"><?php echo esc_html($label); ?></p>
+                                    <p class="iez-plan-archive-card__label">
+    <?php if ($label_url !== '') : ?>
+        <a href="<?php echo esc_url($label_url); ?>">
+            <?php echo esc_html($label); ?>
+        </a>
+    <?php else : ?>
+        <?php echo esc_html($label); ?>
+    <?php endif; ?>
+</p>
                                 <?php endif; ?>
 
                                 <h2 class="iez-plan-archive-card__title"><a href="<?php the_permalink(); ?>"><?php echo esc_html($plan_name); ?></a></h2>
@@ -329,14 +536,38 @@ $q = new WP_Query(array(
                                     <?php if ($layout !== '') : ?>
                                         <div>
                                             <dt>間取り</dt>
-                                            <dd><?php echo esc_html($layout); ?></dd>
+                                            <dd>
+    <?php if ($layout_url !== '') : ?>
+        <a href="<?php echo esc_url($layout_url); ?>">
+            <?php echo esc_html($layout); ?>
+        </a>
+    <?php else : ?>
+        <?php echo esc_html($layout); ?>
+    <?php endif; ?>
+</dd>
                                         </div>
                                     <?php endif; ?>
 
                                     <?php if ($floor_area !== '') : ?>
-                                        <div>
+                                        <div class="iez-plan-archive-card__meta-row is-floor-area">
                                             <dt>延床面積</dt>
-                                            <dd><?php echo esc_html($floor_area); ?></dd>
+                                            <dd>
+    <span class="iez-plan-archive-card__area-value">
+        <?php echo esc_html($floor_area); ?>
+    </span>
+
+    <?php if ($area_term && $area_url !== '') : ?>
+        <span class="iez-plan-archive-card__area-filter">
+            <span class="iez-plan-archive-card__area-filter-label">
+                面積帯
+            </span>
+
+            <a href="<?php echo esc_url($area_url); ?>">
+                <?php echo esc_html($area_term->name); ?>
+            </a>
+        </span>
+    <?php endif; ?>
+</dd>
                                         </div>
                                     <?php endif; ?>
 
@@ -371,6 +602,45 @@ $q = new WP_Query(array(
                     </article>
                 <?php endwhile; ?>
             </div>
+
+            <?php if ((int) $q->max_num_pages > 1) : ?>
+                <?php
+                /*
+                 * 9件を超えた場合だけ表示するページャー。
+                 *
+                 * 通常アーカイブとtaxonomy一覧の両方で
+                 * 同じ処理を使用する。
+                 */
+                $big = 999999999;
+
+                $pagination_links = paginate_links(array(
+                    'base'      => str_replace(
+                        $big,
+                        '%#%',
+                        esc_url(get_pagenum_link($big))
+                    ),
+                    'current'   => $plan_paged,
+                    'total'     => (int) $q->max_num_pages,
+                    'mid_size'  => 2,
+                    'end_size'  => 1,
+                    'prev_text' => '← 前へ',
+                    'next_text' => '次へ →',
+                    'type'      => 'array',
+                ));
+                ?>
+
+                <?php if (!empty($pagination_links)) : ?>
+                    <nav
+                        class="iez-plan-archive__pagination"
+                        aria-label="参考プラン一覧のページ"
+                    >
+                        <?php foreach ($pagination_links as $pagination_link) : ?>
+                            <?php echo wp_kses_post($pagination_link); ?>
+                        <?php endforeach; ?>
+                    </nav>
+                <?php endif; ?>
+
+            <?php endif; ?>
         <?php else : ?>
             <div class="iez-plan-archive__empty">
                 <p>現在、表示できる参考プランがありません。</p>
