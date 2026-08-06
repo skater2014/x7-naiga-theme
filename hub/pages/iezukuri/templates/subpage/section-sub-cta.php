@@ -1,11 +1,107 @@
 <?php
 /**
- * 家づくりサブページ共通CTA
+ * ============================================================
+ * Footer直前 サブCTA
+ * ============================================================
  *
- * 母体:
- * hub/pages/iezukuri/templates/template-iezukuri-subpage.php
+ * このテンプレートは
  *
- * chuko / nisetai / その他で文言を切り替える。
+ *     <section class="iez-sub-cta">
+ *
+ * を表示するための専用テンプレート。
+ *
+ *
+ * ============================================================
+ * このセクションの位置
+ * ============================================================
+ *
+ * Hero
+ *     ↓
+ * ページ本文 / フォーム等
+ *     ↓
+ * Footer直前 サブCTA ← このファイル
+ *     ↓
+ * 共通Footer
+ *
+ *
+ * ============================================================
+ * Heroとは別
+ * ============================================================
+ *
+ * Heroは
+ *
+ *     _ch_hero_*
+ *
+ * を使用する。
+ *
+ * このサブCTAからHeroメタは読まない。
+ *
+ *
+ * ============================================================
+ * ページ本文とも別
+ * ============================================================
+ *
+ * ページ本文は
+ *
+ *     _ch_intro_*
+ *     _ch_body_*
+ *
+ * を使用する。
+ *
+ * このサブCTAから本文メタは読まない。
+ *
+ *
+ * ============================================================
+ * 正式な保存キー
+ * ============================================================
+ *
+ * _ch_sub_cta_kicker
+ * _ch_sub_cta_title
+ * _ch_sub_cta_text
+ *
+ * _ch_sub_cta_primary_text
+ * _ch_sub_cta_primary_url
+ *
+ * _ch_sub_cta_secondary_text
+ * _ch_sub_cta_secondary_url
+ *
+ *
+ * ============================================================
+ * 重要
+ * ============================================================
+ *
+ * 表示文言をPHPへ直書きしない。
+ *
+ * 管理画面
+ *     ↓
+ * _ch_sub_cta_*
+ *     ↓
+ * このテンプレート
+ *     ↓
+ * <section class="iez-sub-cta">
+ *
+ * の1本だけにする。
+ *
+ * 旧 _iezukuri_sub_cta_* は使用しない。
+ * 旧 _ch_cta_* も使用しない。
+ *
+ *
+ * ============================================================
+ * ボタン表示ルール
+ * ============================================================
+ *
+ * ボタンは
+ *
+ *     文言
+ *       ＋
+ *     URL
+ *
+ * の両方がある場合だけ表示する。
+ *
+ * 文言のみ → 表示しない
+ * URLのみ  → 表示しない
+ *
+ * ============================================================
  */
 
 if (!defined('ABSPATH')) {
@@ -13,82 +109,183 @@ if (!defined('ABSPATH')) {
 }
 
 $page_id = get_queried_object_id();
-$slug = $page_id ? (string) get_post_field('post_name', $page_id) : '';
 
-$default = array(
-    'kicker' => 'CONTACT',
-    'title'  => '理想の住まいづくりを、最初の一歩から。',
-    'text'   => '土地のこと、資金のこと、間取りのこと。注文住宅に関するご相談を丁寧にお伺いします。',
-    'primary_label' => '家づくり相談をする',
-    'primary_url'   => home_url('/iezukuri/contact/'),
-    'secondary_label' => '注文住宅トップへ戻る',
-    'secondary_url'   => home_url('/iezukuri/'),
+if (!$page_id) {
+    return;
+}
+
+
+/*
+ * ============================================================
+ * 管理画面で保存した値だけを読む
+ * ============================================================
+ */
+
+$kicker = trim(
+    (string) get_post_meta(
+        $page_id,
+        '_ch_sub_cta_kicker',
+        true
+    )
 );
 
-$by_slug = array(
-    'chuko' => array(
-        'kicker' => 'REPAIR CONSULTATION',
-        'title'  => '中古住宅の修理について相談する',
-        'text'   => '雨漏り、屋根、外壁、水回り、床下、断熱、内装まで、修理の優先順位を整理して相談できます。',
-        'primary_label' => '修理について相談する',
-        'primary_url'   => home_url('/iezukuri/contact/'),
-        'secondary_label' => '注文住宅トップへ戻る',
-        'secondary_url'   => home_url('/iezukuri/'),
-    ),
-    'nisetai' => array(
-        'kicker' => 'TWO FAMILY CONSULTATION',
-        'title'  => '二世帯住宅の進め方を相談する',
-        'text'   => '親世帯と子世帯の距離感、共有部分、資金計画、将来の使い方まで整理して相談できます。',
-        'primary_label' => '二世帯住宅を相談する',
-        'primary_url'   => home_url('/iezukuri/contact/'),
-        'secondary_label' => '注文住宅トップへ戻る',
-        'secondary_url'   => home_url('/iezukuri/'),
-    ),
+$title = trim(
+    (string) get_post_meta(
+        $page_id,
+        '_ch_sub_cta_title',
+        true
+    )
 );
 
-$data = isset($by_slug[$slug]) ? $by_slug[$slug] : $default;
+$text = trim(
+    (string) get_post_meta(
+        $page_id,
+        '_ch_sub_cta_text',
+        true
+    )
+);
 
-$kicker = get_post_meta($page_id, '_iezukuri_sub_cta_kicker', true);
-$title  = get_post_meta($page_id, '_iezukuri_sub_cta_title', true);
-$text   = get_post_meta($page_id, '_iezukuri_sub_cta_text', true);
+$primary_text = trim(
+    (string) get_post_meta(
+        $page_id,
+        '_ch_sub_cta_primary_text',
+        true
+    )
+);
 
-$primary_label = get_post_meta($page_id, '_iezukuri_sub_cta_primary_label', true);
-$primary_url   = get_post_meta($page_id, '_iezukuri_sub_cta_primary_url', true);
+$primary_url = trim(
+    (string) get_post_meta(
+        $page_id,
+        '_ch_sub_cta_primary_url',
+        true
+    )
+);
 
-$secondary_label = get_post_meta($page_id, '_iezukuri_sub_cta_secondary_label', true);
-$secondary_url   = get_post_meta($page_id, '_iezukuri_sub_cta_secondary_url', true);
+$secondary_text = trim(
+    (string) get_post_meta(
+        $page_id,
+        '_ch_sub_cta_secondary_text',
+        true
+    )
+);
 
-$kicker = $kicker ?: $data['kicker'];
-$title  = $title ?: $data['title'];
-$text   = $text ?: $data['text'];
+$secondary_url = trim(
+    (string) get_post_meta(
+        $page_id,
+        '_ch_sub_cta_secondary_url',
+        true
+    )
+);
 
-$primary_label = $primary_label ?: $data['primary_label'];
-$primary_url   = $primary_url ?: $data['primary_url'];
 
-$secondary_label = $secondary_label ?: $data['secondary_label'];
-$secondary_url   = $secondary_url ?: $data['secondary_url'];
+/*
+ * ============================================================
+ * ボタン有効判定
+ * ============================================================
+ */
+
+$show_primary = (
+    $primary_text !== ''
+    && $primary_url !== ''
+);
+
+$show_secondary = (
+    $secondary_text !== ''
+    && $secondary_url !== ''
+);
+
+
+/*
+ * ============================================================
+ * サブCTA全体の表示判定
+ * ============================================================
+ *
+ * 何も入力されていなければ
+ * section.iez-sub-cta 自体を出力しない。
+ */
+
+$has_content = (
+    $kicker !== ''
+    || $title !== ''
+    || $text !== ''
+    || $show_primary
+    || $show_secondary
+);
+
+if (!$has_content) {
+    return;
+}
 ?>
 
-<section class="iez-sub-cta" id="iez-cta">
+<section
+    class="iez-sub-cta"
+    id="iez-cta"
+    data-iez-sub-cta
+>
     <div class="iez-sub-cta__inner">
-        <p class="iez-sub-cta__kicker"><?php echo esc_html($kicker); ?></p>
 
-        <h2 class="iez-sub-cta__title">
-            <?php echo esc_html($title); ?>
-        </h2>
+        <?php if ($kicker !== '') : ?>
 
-        <p class="iez-sub-cta__text">
-            <?php echo esc_html($text); ?>
-        </p>
+            <p class="iez-sub-cta__kicker">
+                <?php echo esc_html($kicker); ?>
+            </p>
 
-        <div class="iez-sub-cta__actions">
-            <a class="iez-sub-btn iez-sub-btn--primary" href="<?php echo esc_url($primary_url); ?>">
-                <?php echo esc_html($primary_label); ?>
-            </a>
+        <?php endif; ?>
 
-            <a class="iez-sub-btn iez-sub-btn--ghost" href="<?php echo esc_url($secondary_url); ?>">
-                <?php echo esc_html($secondary_label); ?>
-            </a>
-        </div>
+
+        <?php if ($title !== '') : ?>
+
+            <h2 class="iez-sub-cta__title">
+                <?php echo esc_html($title); ?>
+            </h2>
+
+        <?php endif; ?>
+
+
+        <?php if ($text !== '') : ?>
+
+            <p class="iez-sub-cta__text">
+                <?php echo nl2br(
+                    esc_html($text)
+                ); ?>
+            </p>
+
+        <?php endif; ?>
+
+
+        <?php if (
+            $show_primary
+            || $show_secondary
+        ) : ?>
+
+            <div class="iez-sub-cta__actions">
+
+                <?php if ($show_primary) : ?>
+
+                    <a
+                        class="iez-sub-btn iez-sub-btn--primary"
+                        href="<?php echo esc_url($primary_url); ?>"
+                    >
+                        <?php echo esc_html($primary_text); ?>
+                    </a>
+
+                <?php endif; ?>
+
+
+                <?php if ($show_secondary) : ?>
+
+                    <a
+                        class="iez-sub-btn iez-sub-btn--ghost"
+                        href="<?php echo esc_url($secondary_url); ?>"
+                    >
+                        <?php echo esc_html($secondary_text); ?>
+                    </a>
+
+                <?php endif; ?>
+
+            </div>
+
+        <?php endif; ?>
+
     </div>
 </section>

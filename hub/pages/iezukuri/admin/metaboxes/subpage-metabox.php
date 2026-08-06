@@ -62,9 +62,9 @@ if (!function_exists('naigai_iez_admin_get_meta')) {
         }
 
         $fallbacks = array(
-            '_ch_hero_gallery_ids' => array('_hub_ch_hero_gallery_ids', '_hub_hero_gallery_ids'),
-            '_ch_hero_image_id' => array('_ch_subpage_hero_image_id', '_hub_ch_hero_image_id'),
-            '_ch_hero_video_mp4_id' => array('_hub_ch_hero_video_mp4_id', '_mpb_hero_video_mp4_id'),
+            '_ch_hero_gallery_ids' => array('_ch_hero_gallery_ids', '_ch_hero_gallery_ids'),
+            '_ch_hero_image_id' => array('_ch_hero_image_id', '_ch_hero_image_id'),
+            '_ch_hero_video_mp4_id' => array('_ch_hero_video_mp4_id', '_mpb_hero_video_mp4_id'),
         );
 
         if (!empty($fallbacks[$key])) {
@@ -202,6 +202,60 @@ if (!function_exists('naigai_iez_admin_icon_select')) {
     }
 }
 
+/*
+ * ============================================================
+ * IEZ_FIXED_PAGE_CLASSIC_EDITOR_20260806
+ * 家づくり固定ページ 管理画面
+ * ============================================================
+ *
+ * 家づくり固定ページは
+ *
+ *     家づくり 固定ページ入力
+ *
+ * メタボックスを中心に編集する。
+ *
+ * Gutenbergを使用するとClassic Meta Boxが
+ * 下部の互換エリアへ表示され、
+ * 画面が上下に分断されて編集しづらくなる。
+ *
+ * そのため家づくり固定ページだけ
+ * ブロックエディタを使用しない。
+ *
+ * 通常の固定ページや投稿には影響させない。
+ * ============================================================
+ */
+add_filter(
+    'use_block_editor_for_post',
+    function ($use_block_editor, $post) {
+
+        if (
+            !($post instanceof WP_Post)
+            || $post->post_type !== 'page'
+        ) {
+            return $use_block_editor;
+        }
+
+        if (
+            !function_exists(
+                'naigai_iez_admin_is_fixed_page_target'
+            )
+            ||
+            !naigai_iez_admin_is_fixed_page_target(
+                $post
+            )
+        ) {
+            return $use_block_editor;
+        }
+
+        /*
+         * 家づくり固定ページだけClassic編集画面へ。
+         */
+        return false;
+    },
+    20,
+    2
+);
+
 add_action('add_meta_boxes', function ($post_type, $post) {
     if ($post_type !== 'page') {
         return;
@@ -243,19 +297,66 @@ if (!function_exists('naigai_iez_render_fixed_page_input_metabox')) {
         } else {
             ?>
             <div class="naigai-iez-admin-section">
-                <h3>現在ページの本文</h3>
+                <h3>サブコンテンツ（ページ本文）</h3>
+
+<p class="description">
+    Heroの下に表示するページ本文です。
+    Hero・Footer直前CTAとは別の内容です。
+</p>
 
                 <table class="form-table naigai-iez-admin-table">
                     <tbody>
                         <?php
-                        naigai_iez_admin_text_input('_ch_intro_kicker', '導入キッカー', $get('_ch_intro_kicker', ''));
+                                            /*
+                     * ====================================================
+                     * IEZ_SUB_CONTENT_ADMIN_NOTE_20260806
+                     * サブコンテンツ（ページ本文）
+                     * ====================================================
+                     *
+                     * _ch_intro_* = ページ本文の導入部分
+                     * _ch_body_*  = ページ本文の本体部分
+                     *
+                     * Heroではない。
+                     * Footerではない。
+                     * Footer直前のサブCTAでもない。
+                     * ====================================================
+                     */
+                    echo '<p class="description" style="margin:0 0 16px;">'
+                        . 'この項目はページ本文です。Hero・Footer直前サブCTAとは別です。'
+                        . '</p>';
+naigai_iez_admin_text_input('_ch_intro_kicker', '導入キッカー', $get('_ch_intro_kicker', ''));
                         naigai_iez_admin_text_input('_ch_intro_title', '導入見出し', $get('_ch_intro_title', ''));
                         naigai_iez_admin_textarea('_ch_intro_text', '導入本文', $get('_ch_intro_text', ''), 5);
 
-                        naigai_iez_admin_text_input('_ch_body_title', '本文見出し', $get('_ch_body_title', ''));
-                        naigai_iez_admin_textarea('_ch_body_text', '本文', $get('_ch_body_text', ''), 8);
-                        naigai_iez_admin_media_input('_ch_body_image_id', '本文画像ID', $get('_ch_body_image_id', ''), 'image');
-                        naigai_iez_admin_media_input('_ch_gallery_ids', 'ギャラリー画像ID', $get('_ch_gallery_ids', ''), 'image', true, '複数画像はカンマ区切りで保存されます。');
+                        /*
+                         * ====================================================
+                         * IEZ_CONTENT_ITEMS_ADMIN_CALL_20260806
+                         * サブコンテンツ「画像＋テキスト」
+                         * ====================================================
+                         *
+                         * 旧:
+                         * - 本文見出し
+                         * - 本文
+                         * - 本文画像ID
+                         * - ギャラリー画像ID
+                         *
+                         * は管理画面から廃止。
+                         *
+                         * 画像とその画像に対応する文章を
+                         * 1セットとして管理する。
+                         *
+                         * 1セットのみ登録
+                         *     → 単体画像
+                         *
+                         * 複数セット登録
+                         *     → 複数画像
+                         *
+                         * 表示パターンだけ変更することで
+                         * カード / 左画像 / 右画像 / 左右交互
+                         * を同じ保存データから表示できる。
+                         * ====================================================
+                         */
+                        naigai_iez_admin_render_content_items($post);
                         ?>
                     </tbody>
                 </table>
@@ -265,16 +366,58 @@ if (!function_exists('naigai_iez_render_fixed_page_input_metabox')) {
         ?>
 
         <div class="naigai-iez-admin-section">
-            <h3>CTA</h3>
+            <h3>Footer直前 サブCTA</h3>
+
+<p class="description">
+    ページ本文の後、共通Footerの直前に表示するCTAです。
+    Hero CTAとは別の項目です。
+</p>
 
             <table class="form-table naigai-iez-admin-table">
                 <tbody>
                     <?php
-                    naigai_iez_admin_text_input('_ch_cta_title', 'CTA見出し', $get('_ch_cta_title', ''));
-                    naigai_iez_admin_textarea('_ch_cta_text', 'CTA本文', $get('_ch_cta_text', ''), 4);
-                    naigai_iez_admin_text_input('_ch_cta_button_text', 'ボタン文言', $get('_ch_cta_button_text', ''));
-                    naigai_iez_admin_url_input('_ch_cta_button_url', 'ボタンURL', $get('_ch_cta_button_url', ''));
-                    naigai_iez_admin_media_input('_ch_cta_image_id', 'CTA画像ID', $get('_ch_cta_image_id', ''), 'image');
+                    naigai_iez_admin_text_input(
+                        '_ch_sub_cta_kicker',
+                        'CTAキッカー',
+                        $get('_ch_sub_cta_kicker', '')
+                    );
+
+                    naigai_iez_admin_text_input(
+                        '_ch_sub_cta_title',
+                        'CTA見出し',
+                        $get('_ch_sub_cta_title', '')
+                    );
+
+                    naigai_iez_admin_textarea(
+                        '_ch_sub_cta_text',
+                        'CTA本文',
+                        $get('_ch_sub_cta_text', ''),
+                        4
+                    );
+
+                    naigai_iez_admin_text_input(
+                        '_ch_sub_cta_primary_text',
+                        'メインボタン文言',
+                        $get('_ch_sub_cta_primary_text', '')
+                    );
+
+                    naigai_iez_admin_url_input(
+                        '_ch_sub_cta_primary_url',
+                        'メインボタンURL',
+                        $get('_ch_sub_cta_primary_url', '')
+                    );
+
+                    naigai_iez_admin_text_input(
+                        '_ch_sub_cta_secondary_text',
+                        'サブボタン文言',
+                        $get('_ch_sub_cta_secondary_text', '')
+                    );
+
+                    naigai_iez_admin_url_input(
+                        '_ch_sub_cta_secondary_url',
+                        'サブボタンURL',
+                        $get('_ch_sub_cta_secondary_url', '')
+                    );
                     ?>
                 </tbody>
             </table>
@@ -336,16 +479,42 @@ add_action('save_post_page', function ($post_id) {
         '_ch_intro_kicker' => 'text',
         '_ch_intro_title' => 'text',
         '_ch_intro_text' => 'textarea',
-        '_ch_body_title' => 'text',
-        '_ch_body_text' => 'textarea',
-        '_ch_body_image_id' => 'number',
-        '_ch_gallery_ids' => 'ids',
+        /*
+         * ====================================================
+         * IEZ_OLD_BODY_FIELDS_REMOVED_20260806
+         * ====================================================
+         *
+         * 以下の旧フィールドは新規保存対象から外した。
+         *
+         * _ch_body_title
+         * _ch_body_text
+         * _ch_body_image_id
+         * _ch_gallery_ids
+         *
+         * 新しい画像＋文章は
+         * _ch_content_items に配列で保存する。
+         * ====================================================
+         */
 
-        '_ch_cta_title' => 'text',
-        '_ch_cta_text' => 'textarea',
-        '_ch_cta_button_text' => 'text',
-        '_ch_cta_button_url' => 'url',
-        '_ch_cta_image_id' => 'number',
+        /*
+         * ====================================================
+         * Footer直前 サブCTA
+         * ====================================================
+         *
+         * section.iez-sub-cta 専用。
+         *
+         * Hero用 _ch_hero_* とは完全に別。
+         * ページ本文 _ch_intro_* / _ch_body_* とも別。
+         */
+        '_ch_sub_cta_kicker'         => 'text',
+        '_ch_sub_cta_title'          => 'text',
+        '_ch_sub_cta_text'           => 'textarea',
+
+        '_ch_sub_cta_primary_text'   => 'text',
+        '_ch_sub_cta_primary_url'    => 'url',
+
+        '_ch_sub_cta_secondary_text' => 'text',
+        '_ch_sub_cta_secondary_url'  => 'url',
     );
 
     $fields = apply_filters('naigai_iez_admin_fixed_page_fields', $fields, $post);
@@ -390,21 +559,22 @@ add_action('save_post_page', function ($post_id) {
      * - 移行中の「選んだのに表示されない」を防ぐ。
      */
     $gallery_ids = get_post_meta($post_id, '_ch_hero_gallery_ids', true);
-    if ($gallery_ids !== '') {
-        update_post_meta($post_id, '_hub_ch_hero_gallery_ids', $gallery_ids);
-        update_post_meta($post_id, '_hub_hero_gallery_ids', $gallery_ids);
-    }
 
-    $image_id = get_post_meta($post_id, '_ch_hero_image_id', true);
-    if ($image_id !== '') {
-        update_post_meta($post_id, '_ch_subpage_hero_image_id', $image_id);
-        update_post_meta($post_id, '_hub_ch_hero_image_id', $image_id);
-    }
+if ($gallery_ids === '') {
+} else {
+}
 
-    $video_id = get_post_meta($post_id, '_ch_hero_video_mp4_id', true);
-    if ($video_id !== '') {
-        update_post_meta($post_id, '_hub_ch_hero_video_mp4_id', $video_id);
-    }
+$image_id = get_post_meta($post_id, '_ch_hero_image_id', true);
+
+if ($image_id === '' || absint($image_id) === 0) {
+} else {
+}
+
+$video_id = get_post_meta($post_id, '_ch_hero_video_mp4_id', true);
+
+if ($video_id === '' || absint($video_id) === 0) {
+} else {
+}
 });
 
 
@@ -442,10 +612,10 @@ if (!function_exists('naigai_iez_existing_metabox_hero_save')) {
         }
 
         if (
-            !isset($_POST['naigai_iezukuri_subpage_nonce']) ||
+            !isset($_POST['naigai_iez_fixed_page_nonce']) ||
             !wp_verify_nonce(
-                sanitize_text_field(wp_unslash($_POST['naigai_iezukuri_subpage_nonce'])),
-                'naigai_iezukuri_subpage_save'
+                sanitize_text_field(wp_unslash($_POST['naigai_iez_fixed_page_nonce'])),
+                'naigai_iez_save_fixed_page_input'
             )
         ) {
             return;
@@ -491,7 +661,30 @@ if (!function_exists('naigai_iez_existing_metabox_hero_save')) {
     }
 }
 
-add_action('save_post_page', 'naigai_iez_existing_metabox_hero_save', 40);
+/*
+ * ============================================================
+ * IEZ_HERO_LEGACY_SAVE_DISABLED_20260806
+ * 旧Hero保存処理は実行しない
+ * ============================================================
+ *
+ * naigai_iez_existing_metabox_hero_save()
+ * は過去データとの互換用コードとして定義だけ残す。
+ *
+ * save_post_page へは登録しない。
+ *
+ * 現在の正式なHero保存処理は
+ *
+ *     naigai_iez_save_hero_new_keys_only()
+ *
+ * だけ。
+ *
+ * 保存先も
+ *
+ *     _ch_hero_*
+ *
+ * のみに統一する。
+ * ============================================================
+ */
 
 if (!function_exists('naigai_iez_existing_metabox_hero_admin_ui')) {
     function naigai_iez_existing_metabox_hero_admin_ui() {
@@ -636,10 +829,10 @@ add_action('save_post_page', function ($post_id) {
     }
 
     if (
-        !isset($_POST['naigai_iezukuri_subpage_nonce']) ||
+        !isset($_POST['naigai_iez_fixed_page_nonce']) ||
         !wp_verify_nonce(
-            sanitize_text_field(wp_unslash($_POST['naigai_iezukuri_subpage_nonce'])),
-            'naigai_iezukuri_subpage_save'
+            sanitize_text_field(wp_unslash($_POST['naigai_iez_fixed_page_nonce'])),
+            'naigai_iez_save_fixed_page_input'
         )
     ) {
         return;
@@ -744,76 +937,276 @@ add_action('admin_footer-post-new.php', 'naigai_iez_admin_motion_ui_final');
 
 
 /* IEZ_HERO_SAVE_NEW_KEYS_ONLY_START */
+
 /**
- * Hero保存先統一
+ * ============================================================
+ * IEZ_HERO_SAVE_POLICY_20260806
+ * 家づくり固定ページ Hero 正式保存処理
+ * ============================================================
  *
- * 方針:
- * - 新規保存は _ch_hero_* のみに統一。
- * - 旧 _hub_ch_hero_* / _ch_subpage_hero_* には保存しない。
- * - 追加メタボックスは作らない。
+ * 【正式保存先】
+ *
+ * Heroは _ch_hero_* だけを使用する。
+ *
+ *
+ * ------------------------------------------------------------
+ * Hero文字
+ * ------------------------------------------------------------
+ *
+ * _ch_hero_kicker
+ * _ch_hero_title
+ * _ch_hero_lead
+ *
+ *
+ * ------------------------------------------------------------
+ * Heroメディア
+ * ------------------------------------------------------------
+ *
+ * _ch_hero_image_id
+ * _ch_hero_gallery_ids
+ * _ch_hero_video_mp4_id
+ *
+ *
+ * ------------------------------------------------------------
+ * Hero CTA
+ * ------------------------------------------------------------
+ *
+ * メイン:
+ *
+ * _ch_hero_cta_text
+ * _ch_hero_cta_url
+ *
+ * サブ:
+ *
+ * _ch_hero_sub_cta_text
+ * _ch_hero_sub_cta_url
+ *
+ *
+ * ============================================================
+ * CTAについて重要
+ * ============================================================
+ *
+ * CTAは「文言だけ」入力してもフロントには表示しない。
+ *
+ * 必ず
+ *
+ *     CTA文言
+ *          ＋
+ *     CTA URL
+ *
+ * の両方を入力する。
+ *
+ * URLまで入力しないとCTAは表示しない。
+ *
+ *
+ * 例:
+ *
+ * CTA文言:
+ *     家づくり相談をする
+ *
+ * CTA URL:
+ *     /iezukuri/contact/
+ *
+ *      ↓
+ *
+ * この2つが両方ある場合だけCTAを表示する。
+ *
+ *
+ * 文言だけ:
+ *     表示しない
+ *
+ * URLだけ:
+ *     表示しない
+ *
+ *
+ * ============================================================
+ * 削除について
+ * ============================================================
+ *
+ * 管理画面で値を削除した場合は
+ * delete_post_meta() を実行する。
+ *
+ * 以前のように空値を保存したままにしたり、
+ * 旧 _hub_* Heroメタを再利用したりしない。
+ * ============================================================
  */
+
 if (!function_exists('naigai_iez_save_hero_new_keys_only')) {
-    function naigai_iez_save_hero_new_keys_only($post_id) {
-        if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
-            return;
-        }
 
-        if (!current_user_can('edit_post', $post_id)) {
-            return;
-        }
-
+    function naigai_iez_save_hero_new_keys_only($post_id)
+    {
+        /*
+         * 自動保存では変更しない。
+         */
         if (
-            !isset($_POST['naigai_iezukuri_subpage_nonce']) ||
-            !wp_verify_nonce(
-                sanitize_text_field(wp_unslash($_POST['naigai_iezukuri_subpage_nonce'])),
-                'naigai_iezukuri_subpage_save'
+            defined('DOING_AUTOSAVE')
+            && DOING_AUTOSAVE
+        ) {
+            return;
+        }
+
+        /*
+         * リビジョン保存では変更しない。
+         */
+        if (
+            wp_is_post_revision($post_id)
+            || wp_is_post_autosave($post_id)
+        ) {
+            return;
+        }
+
+        /*
+         * 固定ページ以外では動かさない。
+         */
+        if (
+            get_post_type($post_id)
+            !== 'page'
+        ) {
+            return;
+        }
+
+        /*
+         * 編集権限が無いユーザーでは保存しない。
+         */
+        if (
+            !current_user_can(
+                'edit_post',
+                $post_id
             )
         ) {
             return;
         }
 
+        /*
+         * ====================================================
+         * nonce
+         * ====================================================
+         *
+         * 実際の
+         * 「家づくり 固定ページ入力」
+         * メタボックスが出しているnonceと同じものを確認する。
+         *
+         * ここが以前一致していなかったため、
+         * CTAなどが保存されていなかった。
+         */
+        if (
+            !isset(
+                $_POST[
+                    'naigai_iez_fixed_page_nonce'
+                ]
+            )
+            ||
+            !wp_verify_nonce(
+                sanitize_text_field(
+                    wp_unslash(
+                        $_POST[
+                            'naigai_iez_fixed_page_nonce'
+                        ]
+                    )
+                ),
+                'naigai_iez_save_fixed_page_input'
+            )
+        ) {
+            return;
+        }
+
+
+        /*
+         * ====================================================
+         * 1. 一行テキスト
+         * ====================================================
+         */
+
         $text_fields = array(
             '_ch_hero_engine',
+            '_ch_hero_kicker',
             '_ch_hero_title',
-            '_ch_hero_lead',
-            '_ch_hero_eyebrow',
             '_ch_hero_motion',
             '_ch_hero_caption_motion',
+
             '_ch_hero_cta_text',
             '_ch_hero_sub_cta_text',
         );
 
         foreach ($text_fields as $key) {
-            if (!isset($_POST[$key])) {
-                continue;
-            }
 
-            $value = sanitize_text_field(wp_unslash($_POST[$key]));
+            /*
+             * 入力が無い場合も空扱いにする。
+             *
+             * これによって以前の値を確実に削除できる。
+             */
+            $value = isset($_POST[$key])
+                ? sanitize_text_field(
+                    wp_unslash(
+                        $_POST[$key]
+                    )
+                )
+                : '';
 
             if ($value === '') {
-                delete_post_meta($post_id, $key);
+
+                delete_post_meta(
+                    $post_id,
+                    $key
+                );
+
             } else {
-                update_post_meta($post_id, $key, $value);
+
+                update_post_meta(
+                    $post_id,
+                    $key,
+                    $value
+                );
             }
         }
 
-        $textarea_fields = array(
-            '_ch_hero_lead',
-        );
 
-        foreach ($textarea_fields as $key) {
-            if (!isset($_POST[$key])) {
-                continue;
-            }
+        /*
+         * ====================================================
+         * 2. 複数行Hero本文
+         * ====================================================
+         */
 
-            $value = sanitize_textarea_field(wp_unslash($_POST[$key]));
+        $lead = isset(
+            $_POST['_ch_hero_lead']
+        )
+            ? sanitize_textarea_field(
+                wp_unslash(
+                    $_POST['_ch_hero_lead']
+                )
+            )
+            : '';
 
-            if ($value === '') {
-                delete_post_meta($post_id, $key);
-            } else {
-                update_post_meta($post_id, $key, $value);
-            }
+        if ($lead === '') {
+
+            delete_post_meta(
+                $post_id,
+                '_ch_hero_lead'
+            );
+
+        } else {
+
+            update_post_meta(
+                $post_id,
+                '_ch_hero_lead',
+                $lead
+            );
         }
+
+
+        /*
+         * ====================================================
+         * 3. CTA URL
+         * ====================================================
+         *
+         * URLはesc_url_raw()して保存する。
+         *
+         * CTA文言とURLは別々に保存するが、
+         * フロント表示は「両方ある時だけ」。
+         *
+         * URLまで入力しないとCTAは表示しない。
+         * ====================================================
+         */
 
         $url_fields = array(
             '_ch_hero_cta_url',
@@ -821,52 +1214,179 @@ if (!function_exists('naigai_iez_save_hero_new_keys_only')) {
         );
 
         foreach ($url_fields as $key) {
-            if (!isset($_POST[$key])) {
-                continue;
-            }
 
-            $value = esc_url_raw(wp_unslash($_POST[$key]));
+            $value = isset($_POST[$key])
+                ? esc_url_raw(
+                    wp_unslash(
+                        $_POST[$key]
+                    )
+                )
+                : '';
 
             if ($value === '') {
-                delete_post_meta($post_id, $key);
+
+                delete_post_meta(
+                    $post_id,
+                    $key
+                );
+
             } else {
-                update_post_meta($post_id, $key, $value);
+
+                update_post_meta(
+                    $post_id,
+                    $key,
+                    $value
+                );
             }
         }
 
+
+        /*
+         * ====================================================
+         * 4. 単体画像 / MP4
+         * ====================================================
+         *
+         * 管理画面で「削除」した場合、
+         * hidden input が空または0になる。
+         *
+         * その場合はDBのメタそのものを削除する。
+         */
         $id_fields = array(
             '_ch_hero_image_id',
             '_ch_hero_video_mp4_id',
         );
 
         foreach ($id_fields as $key) {
-            if (!isset($_POST[$key])) {
-                continue;
-            }
 
-            $value = absint(wp_unslash($_POST[$key]));
+            $value = isset($_POST[$key])
+                ? absint(
+                    wp_unslash(
+                        $_POST[$key]
+                    )
+                )
+                : 0;
 
             if (!$value) {
-                delete_post_meta($post_id, $key);
+
+                delete_post_meta(
+                    $post_id,
+                    $key
+                );
+
             } else {
-                update_post_meta($post_id, $key, $value);
+
+                update_post_meta(
+                    $post_id,
+                    $key,
+                    $value
+                );
             }
         }
 
-        if (isset($_POST['_ch_hero_gallery_ids'])) {
-            $raw = wp_unslash($_POST['_ch_hero_gallery_ids']);
-            $ids = array_values(array_unique(array_filter(array_map('absint', explode(',', (string) $raw)))));
 
-            if (empty($ids)) {
-                delete_post_meta($post_id, '_ch_hero_gallery_ids');
-            } else {
-                update_post_meta($post_id, '_ch_hero_gallery_ids', implode(',', $ids));
-            }
+        /*
+         * ====================================================
+         * 5. Heroギャラリー
+         * ====================================================
+         *
+         * ギャラリーから全画像を削除した場合も
+         * 必ずDBを空にする。
+         *
+         * POST自体が無い場合にも
+         * 古いギャラリーを残さない。
+         */
+        $gallery_raw = isset(
+            $_POST['_ch_hero_gallery_ids']
+        )
+            ? (string) wp_unslash(
+                $_POST['_ch_hero_gallery_ids']
+            )
+            : '';
+
+        $gallery_ids = array_values(
+            array_unique(
+                array_filter(
+                    array_map(
+                        'absint',
+                        preg_split(
+                            '/[\s,]+/',
+                            trim($gallery_raw)
+                        )
+                    )
+                )
+            )
+        );
+
+        if (empty($gallery_ids)) {
+
+            delete_post_meta(
+                $post_id,
+                '_ch_hero_gallery_ids'
+            );
+
+        } else {
+
+            update_post_meta(
+                $post_id,
+                '_ch_hero_gallery_ids',
+                implode(
+                    ',',
+                    $gallery_ids
+                )
+            );
+        }
+
+
+        /*
+         * ====================================================
+         * 6. スライド切替時間
+         * ====================================================
+         */
+
+        $interval_raw = isset(
+            $_POST['_ch_hero_interval']
+        )
+            ? absint(
+                wp_unslash(
+                    $_POST['_ch_hero_interval']
+                )
+            )
+            : 0;
+
+        if ($interval_raw > 0) {
+
+            update_post_meta(
+                $post_id,
+                '_ch_hero_interval',
+                max(
+                    4000,
+                    $interval_raw
+                )
+            );
+
+        } else {
+
+            delete_post_meta(
+                $post_id,
+                '_ch_hero_interval'
+            );
         }
     }
 }
 
-add_action('save_post_page', 'naigai_iez_save_hero_new_keys_only', 90);
+
+/*
+ * priority 90:
+ *
+ * 他の通常本文保存が終わったあと、
+ * 最終的にHeroの正式キー _ch_hero_* を確定させる。
+ */
+add_action(
+    'save_post_page',
+    'naigai_iez_save_hero_new_keys_only',
+    90
+);
+
 /* IEZ_HERO_SAVE_NEW_KEYS_ONLY_END */
 
 
@@ -886,16 +1406,30 @@ if (!function_exists('naigai_iez_save_per_slide_text_ui')) {
         }
 
         if (
-            !isset($_POST['naigai_iezukuri_subpage_nonce']) ||
+            !isset($_POST['naigai_iez_fixed_page_nonce']) ||
             !wp_verify_nonce(
-                sanitize_text_field(wp_unslash($_POST['naigai_iezukuri_subpage_nonce'])),
-                'naigai_iezukuri_subpage_save'
+                sanitize_text_field(wp_unslash($_POST['naigai_iez_fixed_page_nonce'])),
+                'naigai_iez_save_fixed_page_input'
             )
         ) {
             return;
         }
 
         if (!isset($_POST['_ch_hero_slides_json'])) {
+
+            /*
+             * IEZ_HERO_SLIDE_DELETE_POLICY_20260806
+             *
+             * ギャラリー画像をすべて削除すると、
+             * スライド用hidden input自体が無くなる場合がある。
+             *
+             * その場合は以前のスライドJSONを残さない。
+             */
+            delete_post_meta(
+                $post_id,
+                '_ch_hero_slides_json'
+            );
+
             return;
         }
 
@@ -1123,4 +1657,1339 @@ if (!function_exists('naigai_iez_render_per_slide_text_ui')) {
 add_action('admin_footer-post.php', 'naigai_iez_render_per_slide_text_ui');
 add_action('admin_footer-post-new.php', 'naigai_iez_render_per_slide_text_ui');
 /* IEZ_HERO_PER_SLIDE_TEXT_UI_END */
+
+/**
+ * ============================================================
+ * IEZ_CONTENT_ITEMS_SYSTEM_V2_20260806
+ * サブコンテンツ「画像＋テキスト」
+ * 各コンテンツ個別レイアウト版
+ * ============================================================
+ *
+ * 【管理単位】
+ *
+ * 1つのコンテンツ =
+ *
+ *     画像
+ *     見出し
+ *     文章
+ *     配置
+ *
+ *
+ * 【各コンテンツで選択できる配置】
+ *
+ * card
+ *
+ *     画像
+ *      ↓
+ *     文章
+ *
+ *
+ * image-left
+ *
+ *     画像 ｜ 文章
+ *
+ *
+ * image-right
+ *
+ *     文章 ｜ 画像
+ *
+ *
+ * ============================================================
+ * 単体画像と複数画像
+ * ============================================================
+ *
+ * 別々の機能にはしない。
+ *
+ * _ch_content_items が1件
+ *
+ *     → 単体
+ *
+ * _ch_content_items が複数件
+ *
+ *     → 複数
+ *
+ *
+ * cardを複数続けて登録した場合は、
+ * PCでは横並びカードとして表示する。
+ *
+ *
+ * ============================================================
+ * Mobile
+ * ============================================================
+ *
+ * PCで image-right を選択していても、
+ * モバイルでは必ず
+ *
+ *     画像
+ *      ↓
+ *     文章
+ *
+ * の順に戻す。
+ *
+ *
+ * ============================================================
+ * 保存先
+ * ============================================================
+ *
+ * _ch_content_items
+ *
+ * の各項目へ、
+ *
+ *     image_id
+ *     title
+ *     text
+ *     layout
+ *
+ * を保存する。
+ *
+ *
+ * 旧 _ch_content_layout は新規保存には使用しない。
+ * 既存データ互換の読み取りだけに使用する。
+ * ============================================================
+ */
+
+
+/**
+ * サブコンテンツ管理UIを表示する。
+ *
+ * @param WP_Post $post 現在編集中の固定ページ。
+ * @return void
+ */
+function naigai_iez_admin_render_content_items($post) {
+
+    if (!$post instanceof WP_Post) {
+        return;
+    }
+
+
+    /*
+     * WordPress標準の
+     * 「メディアを追加 / 画像を選択」
+     * を使用するために読み込む。
+     */
+    wp_enqueue_media();
+
+
+    /*
+     * ========================================================
+     * 新しいコンテンツ一覧
+     * ========================================================
+     */
+    $items = get_post_meta(
+        $post->ID,
+        '_ch_content_items',
+        true
+    );
+
+
+    if (!is_array($items)) {
+        $items = array();
+    }
+
+
+    /*
+     * ========================================================
+     * 旧全体レイアウト
+     * ========================================================
+     *
+     * 旧版ですでに保存したデータとの互換だけに使う。
+     *
+     * 新しく保存するときは
+     * 各コンテンツの layout を使う。
+     */
+    $legacy_layout = sanitize_key(
+        (string) get_post_meta(
+            $post->ID,
+            '_ch_content_layout',
+            true
+        )
+    );
+
+
+    /*
+     * まだコンテンツが1件もない場合でも、
+     * 管理画面には最初の空行を1件表示する。
+     */
+    if (!$items) {
+
+        $items = array(
+            array(
+                'image_id' => 0,
+                'title'    => '',
+                'text'     => '',
+                'layout'   => 'image-left',
+            ),
+        );
+    }
+
+    ?>
+
+    <tr>
+
+        <th scope="row">
+            画像＋テキスト
+        </th>
+
+
+        <td>
+
+            <div
+                id="iez-content-items-admin"
+                class="iez-content-items-admin"
+            >
+
+                <?php
+                foreach (
+                    $items
+                    as $index => $item
+                ) :
+
+                    if (!is_array($item)) {
+                        continue;
+                    }
+
+
+                    $image_id = absint(
+                        $item['image_id'] ?? 0
+                    );
+
+
+                    $title = sanitize_text_field(
+                        (string) (
+                            $item['title']
+                            ?? ''
+                        )
+                    );
+
+
+                    $item_text = sanitize_textarea_field(
+                        (string) (
+                            $item['text']
+                            ?? ''
+                        )
+                    );
+
+
+                    /*
+                     * =========================================
+                     * 各コンテンツの配置
+                     * =========================================
+                     */
+                    $item_layout = sanitize_key(
+                        (string) (
+                            $item['layout']
+                            ?? ''
+                        )
+                    );
+
+
+                    $allowed_layouts = array(
+                        'card',
+                        'image-left',
+                        'image-right',
+                    );
+
+
+                    /*
+                     * 旧データにlayoutがない場合だけ、
+                     * 以前のページ全体レイアウトを引き継ぐ。
+                     */
+                    if (
+                        !in_array(
+                            $item_layout,
+                            $allowed_layouts,
+                            true
+                        )
+                    ) {
+
+                        if (
+                            $legacy_layout === 'image-right'
+                        ) {
+
+                            $item_layout =
+                                'image-right';
+
+                        } elseif (
+                            $legacy_layout === 'cards'
+                        ) {
+
+                            $item_layout =
+                                'card';
+
+                        } elseif (
+                            $legacy_layout === 'alternate'
+                        ) {
+
+                            $item_layout =
+                                ($index % 2 === 0)
+                                    ? 'image-left'
+                                    : 'image-right';
+
+                        } else {
+
+                            $item_layout =
+                                'image-left';
+                        }
+                    }
+
+                    ?>
+
+                    <div
+                        class="iez-content-item-admin"
+                        data-index="<?php echo esc_attr($index); ?>"
+                    >
+
+
+                        <div
+                            class="iez-content-item-admin__header"
+                        >
+
+                            <strong>
+
+                                コンテンツ
+
+                                <span
+                                    class="iez-content-item-number"
+                                >
+                                    <?php echo esc_html($index + 1); ?>
+                                </span>
+
+                            </strong>
+
+
+                            <div
+                                class="iez-content-item-admin__buttons"
+                            >
+
+                                <button
+                                    type="button"
+                                    class="button iez-content-item-up"
+                                >
+                                    ↑
+                                </button>
+
+
+                                <button
+                                    type="button"
+                                    class="button iez-content-item-down"
+                                >
+                                    ↓
+                                </button>
+
+
+                                <button
+                                    type="button"
+                                    class="button iez-content-item-remove"
+                                >
+                                    削除
+                                </button>
+
+                            </div>
+
+                        </div>
+
+
+                        <!--
+                        ======================================================
+                        このコンテンツだけのレイアウト
+                        ======================================================
+
+                        ページ全体ではなく、
+                        この1件だけに適用する。
+
+                        そのため、
+
+                        コンテンツ1 = 画像左
+                        コンテンツ2 = 画像右
+                        コンテンツ3 = カード
+
+                        のような混在が可能。
+                        ======================================================
+                        -->
+
+                        <p>
+
+                            <label>
+                                <strong>
+                                    このコンテンツの配置
+                                </strong>
+                            </label>
+
+                            <br>
+
+                            <select
+                                class="iez-content-item-layout"
+                                name="naigai_iez_content_items[<?php echo esc_attr($index); ?>][layout]"
+                                style="min-width:280px;"
+                            >
+
+                                <option
+                                    value="image-left"
+                                    <?php selected($item_layout, 'image-left'); ?>
+                                >
+                                    画像左 ＋ 文章右
+                                </option>
+
+
+                                <option
+                                    value="image-right"
+                                    <?php selected($item_layout, 'image-right'); ?>
+                                >
+                                    文章左 ＋ 画像右
+                                </option>
+
+
+                                <option
+                                    value="card"
+                                    <?php selected($item_layout, 'card'); ?>
+                                >
+                                    画像上 ＋ 文章下（カード）
+                                </option>
+
+                            </select>
+
+                        </p>
+
+
+                        <!-- 画像 -->
+
+                        <div
+                            class="iez-content-item-admin__media"
+                        >
+
+                            <div
+                                class="iez-content-image-preview"
+                            >
+
+                                <?php
+                                if ($image_id) {
+
+                                    echo wp_get_attachment_image(
+                                        $image_id,
+                                        'thumbnail'
+                                    );
+                                }
+                                ?>
+
+                            </div>
+
+
+                            <input
+                                type="hidden"
+                                class="iez-content-image-id"
+                                name="naigai_iez_content_items[<?php echo esc_attr($index); ?>][image_id]"
+                                value="<?php echo esc_attr($image_id); ?>"
+                            >
+
+
+                            <button
+                                type="button"
+                                class="button iez-content-image-select"
+                            >
+                                画像を選択
+                            </button>
+
+
+                            <button
+                                type="button"
+                                class="button iez-content-image-clear"
+                            >
+                                画像を外す
+                            </button>
+
+                        </div>
+
+
+                        <!-- 見出し -->
+
+                        <p>
+
+                            <label>
+                                <strong>
+                                    見出し（任意）
+                                </strong>
+                            </label>
+
+                            <input
+                                type="text"
+                                class="widefat iez-content-item-title"
+                                name="naigai_iez_content_items[<?php echo esc_attr($index); ?>][title]"
+                                value="<?php echo esc_attr($title); ?>"
+                            >
+
+                        </p>
+
+
+                        <!-- 本文 -->
+
+                        <p>
+
+                            <label>
+                                <strong>
+                                    画像に対応する文章
+                                </strong>
+                            </label>
+
+                            <textarea
+                                class="widefat iez-content-item-text"
+                                name="naigai_iez_content_items[<?php echo esc_attr($index); ?>][text]"
+                                rows="4"
+                            ><?php echo esc_textarea($item_text); ?></textarea>
+
+                        </p>
+
+
+                    </div>
+
+                <?php endforeach; ?>
+
+            </div>
+
+
+            <p>
+
+                <button
+                    type="button"
+                    class="button button-secondary"
+                    id="iez-content-item-add"
+                >
+                    ＋ コンテンツを追加
+                </button>
+
+            </p>
+
+
+            <p class="description">
+
+                コンテンツごとに
+                「画像左」「画像右」「カード」
+                を選択できます。
+
+                モバイルではすべて
+                「画像 → 文章」の1列表示になります。
+
+            </p>
+
+
+            <style>
+
+                /*
+                 * =================================================
+                 * WordPress管理画面専用
+                 * =================================================
+                 */
+
+                .iez-content-items-admin {
+                    display: grid;
+                    gap: 16px;
+                }
+
+
+                .iez-content-item-admin {
+                    padding: 16px;
+                    border: 1px solid #dcdcde;
+                    border-radius: 8px;
+                    background: #fff;
+                }
+
+
+                .iez-content-item-admin__header {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    gap: 12px;
+                    margin-bottom: 16px;
+                }
+
+
+                .iez-content-item-admin__buttons {
+                    display: flex;
+                    gap: 6px;
+                }
+
+
+                .iez-content-item-admin__media {
+                    display: flex;
+                    align-items: center;
+                    flex-wrap: wrap;
+                    gap: 10px;
+                    margin: 14px 0 16px;
+                }
+
+
+                .iez-content-image-preview {
+                    width: 120px;
+                    min-height: 80px;
+                }
+
+
+                .iez-content-image-preview img {
+                    display: block;
+                    width: 120px;
+                    height: 80px;
+                    object-fit: cover;
+                }
+
+            </style>
+
+
+            <script>
+            jQuery(function ($) {
+
+                var $wrap =
+                    $('#iez-content-items-admin');
+
+
+                /*
+                 * =================================================
+                 * 並び替え後のinput nameを再構築
+                 * =================================================
+                 *
+                 * layoutも含めて
+                 *
+                 * [0]
+                 * [1]
+                 * [2]
+                 *
+                 * の連番に直す。
+                 */
+                function renumberItems() {
+
+                    $wrap
+                        .find('.iez-content-item-admin')
+                        .each(function (index) {
+
+                            var $row =
+                                $(this);
+
+
+                            $row.attr(
+                                'data-index',
+                                index
+                            );
+
+
+                            $row
+                                .find(
+                                    '.iez-content-item-number'
+                                )
+                                .text(
+                                    index + 1
+                                );
+
+
+                            $row
+                                .find(
+                                    '.iez-content-item-layout'
+                                )
+                                .attr(
+                                    'name',
+                                    'naigai_iez_content_items['
+                                    + index
+                                    + '][layout]'
+                                );
+
+
+                            $row
+                                .find(
+                                    '.iez-content-image-id'
+                                )
+                                .attr(
+                                    'name',
+                                    'naigai_iez_content_items['
+                                    + index
+                                    + '][image_id]'
+                                );
+
+
+                            $row
+                                .find(
+                                    '.iez-content-item-title'
+                                )
+                                .attr(
+                                    'name',
+                                    'naigai_iez_content_items['
+                                    + index
+                                    + '][title]'
+                                );
+
+
+                            $row
+                                .find(
+                                    '.iez-content-item-text'
+                                )
+                                .attr(
+                                    'name',
+                                    'naigai_iez_content_items['
+                                    + index
+                                    + '][text]'
+                                );
+                        });
+                }
+
+
+                /*
+                 * =================================================
+                 * 新しいコンテンツ行
+                 * =================================================
+                 *
+                 * 初期配置は
+                 *
+                 *     画像左＋文章右
+                 *
+                 * にしている。
+                 */
+                function newItemHtml() {
+
+                    return `
+
+                        <div class="iez-content-item-admin">
+
+                            <div class="iez-content-item-admin__header">
+
+                                <strong>
+                                    コンテンツ
+                                    <span class="iez-content-item-number"></span>
+                                </strong>
+
+                                <div class="iez-content-item-admin__buttons">
+
+                                    <button
+                                        type="button"
+                                        class="button iez-content-item-up"
+                                    >
+                                        ↑
+                                    </button>
+
+                                    <button
+                                        type="button"
+                                        class="button iez-content-item-down"
+                                    >
+                                        ↓
+                                    </button>
+
+                                    <button
+                                        type="button"
+                                        class="button iez-content-item-remove"
+                                    >
+                                        削除
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+
+                            <p>
+
+                                <label>
+                                    <strong>
+                                        このコンテンツの配置
+                                    </strong>
+                                </label>
+
+                                <br>
+
+                                <select
+                                    class="iez-content-item-layout"
+                                    style="min-width:280px;"
+                                >
+
+                                    <option value="image-left">
+                                        画像左 ＋ 文章右
+                                    </option>
+
+                                    <option value="image-right">
+                                        文章左 ＋ 画像右
+                                    </option>
+
+                                    <option value="card">
+                                        画像上 ＋ 文章下（カード）
+                                    </option>
+
+                                </select>
+
+                            </p>
+
+
+                            <div class="iez-content-item-admin__media">
+
+                                <div class="iez-content-image-preview"></div>
+
+                                <input
+                                    type="hidden"
+                                    class="iez-content-image-id"
+                                    value=""
+                                >
+
+                                <button
+                                    type="button"
+                                    class="button iez-content-image-select"
+                                >
+                                    画像を選択
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="button iez-content-image-clear"
+                                >
+                                    画像を外す
+                                </button>
+
+                            </div>
+
+
+                            <p>
+
+                                <label>
+                                    <strong>
+                                        見出し（任意）
+                                    </strong>
+                                </label>
+
+                                <input
+                                    type="text"
+                                    class="widefat iez-content-item-title"
+                                    value=""
+                                >
+
+                            </p>
+
+
+                            <p>
+
+                                <label>
+                                    <strong>
+                                        画像に対応する文章
+                                    </strong>
+                                </label>
+
+                                <textarea
+                                    class="widefat iez-content-item-text"
+                                    rows="4"
+                                ></textarea>
+
+                            </p>
+
+                        </div>
+
+                    `;
+                }
+
+
+                /*
+                 * 追加
+                 */
+                $('#iez-content-item-add')
+                    .on(
+                        'click',
+                        function () {
+
+                            $wrap.append(
+                                newItemHtml()
+                            );
+
+                            renumberItems();
+                        }
+                    );
+
+
+                /*
+                 * 削除
+                 */
+                $wrap.on(
+                    'click',
+                    '.iez-content-item-remove',
+                    function () {
+
+                        $(this)
+                            .closest(
+                                '.iez-content-item-admin'
+                            )
+                            .remove();
+
+                        renumberItems();
+                    }
+                );
+
+
+                /*
+                 * 上へ
+                 */
+                $wrap.on(
+                    'click',
+                    '.iez-content-item-up',
+                    function () {
+
+                        var $row =
+                            $(this)
+                                .closest(
+                                    '.iez-content-item-admin'
+                                );
+
+                        var $prev =
+                            $row.prev(
+                                '.iez-content-item-admin'
+                            );
+
+
+                        if ($prev.length) {
+
+                            $row.insertBefore(
+                                $prev
+                            );
+
+                            renumberItems();
+                        }
+                    }
+                );
+
+
+                /*
+                 * 下へ
+                 */
+                $wrap.on(
+                    'click',
+                    '.iez-content-item-down',
+                    function () {
+
+                        var $row =
+                            $(this)
+                                .closest(
+                                    '.iez-content-item-admin'
+                                );
+
+                        var $next =
+                            $row.next(
+                                '.iez-content-item-admin'
+                            );
+
+
+                        if ($next.length) {
+
+                            $row.insertAfter(
+                                $next
+                            );
+
+                            renumberItems();
+                        }
+                    }
+                );
+
+
+                /*
+                 * =================================================
+                 * WordPressメディアライブラリ
+                 * =================================================
+                 */
+                $wrap.on(
+                    'click',
+                    '.iez-content-image-select',
+                    function () {
+
+                        var $row =
+                            $(this)
+                                .closest(
+                                    '.iez-content-item-admin'
+                                );
+
+
+                        if (
+                            typeof wp === 'undefined'
+                            || !wp.media
+                        ) {
+
+                            alert(
+                                'メディアライブラリを読み込めません。'
+                            );
+
+                            return;
+                        }
+
+
+                        var frame =
+                            wp.media({
+
+                                title:
+                                    '画像を選択',
+
+                                button: {
+                                    text:
+                                        'この画像を使用'
+                                },
+
+                                multiple:
+                                    false
+                            });
+
+
+                        frame.on(
+                            'select',
+                            function () {
+
+                                var attachment =
+                                    frame
+                                        .state()
+                                        .get('selection')
+                                        .first()
+                                        .toJSON();
+
+
+                                var imageUrl =
+                                    attachment.url;
+
+
+                                if (
+                                    attachment.sizes
+                                    && attachment.sizes.thumbnail
+                                ) {
+
+                                    imageUrl =
+                                        attachment
+                                            .sizes
+                                            .thumbnail
+                                            .url;
+                                }
+
+
+                                $row
+                                    .find(
+                                        '.iez-content-image-id'
+                                    )
+                                    .val(
+                                        attachment.id
+                                    );
+
+
+                                $row
+                                    .find(
+                                        '.iez-content-image-preview'
+                                    )
+                                    .html(
+                                        '<img src="'
+                                        + imageUrl
+                                        + '" alt="">'
+                                    );
+                            }
+                        );
+
+
+                        frame.open();
+                    }
+                );
+
+
+                /*
+                 * 画像解除。
+                 *
+                 * 文章や配置は残す。
+                 */
+                $wrap.on(
+                    'click',
+                    '.iez-content-image-clear',
+                    function () {
+
+                        var $row =
+                            $(this)
+                                .closest(
+                                    '.iez-content-item-admin'
+                                );
+
+
+                        $row
+                            .find(
+                                '.iez-content-image-id'
+                            )
+                            .val('');
+
+
+                        $row
+                            .find(
+                                '.iez-content-image-preview'
+                            )
+                            .empty();
+                    }
+                );
+
+
+                /*
+                 * 保存直前にも番号を確定。
+                 */
+                $('#post')
+                    .on(
+                        'submit',
+                        function () {
+
+                            renumberItems();
+                        }
+                    );
+
+
+                renumberItems();
+
+            });
+            </script>
+
+        </td>
+
+    </tr>
+
+    <?php
+}
+
+
+/**
+ * ============================================================
+ * 各コンテンツ保存処理
+ * ============================================================
+ *
+ * 1件ごとに
+ *
+ *     layout
+ *     image_id
+ *     title
+ *     text
+ *
+ * を保存する。
+ *
+ *
+ * ページ全体の
+ *
+ *     _ch_content_layout
+ *
+ * はもう新規保存しない。
+ *
+ * ============================================================
+ *
+ * @param int $post_id 固定ページID。
+ * @return void
+ */
+function naigai_iez_save_content_items($post_id) {
+
+    /*
+     * このUIがPOSTされていないページでは何もしない。
+     */
+    if (
+        !isset(
+            $_POST['naigai_iez_content_items']
+        )
+    ) {
+        return;
+    }
+
+
+    /*
+     * 家づくり固定ページのnonce確認。
+     */
+    if (
+        !isset(
+            $_POST[
+                'naigai_iez_fixed_page_nonce'
+            ]
+        )
+    ) {
+        return;
+    }
+
+
+    if (
+        !wp_verify_nonce(
+            sanitize_text_field(
+                wp_unslash(
+                    $_POST[
+                        'naigai_iez_fixed_page_nonce'
+                    ]
+                )
+            ),
+            'naigai_iez_save_fixed_page_input'
+        )
+    ) {
+        return;
+    }
+
+
+    /*
+     * 自動保存では保存しない。
+     */
+    if (
+        defined('DOING_AUTOSAVE')
+        && DOING_AUTOSAVE
+    ) {
+        return;
+    }
+
+
+    /*
+     * 編集権限確認。
+     */
+    if (
+        !current_user_can(
+            'edit_page',
+            $post_id
+        )
+    ) {
+        return;
+    }
+
+
+    $raw_items =
+        is_array(
+            $_POST[
+                'naigai_iez_content_items'
+            ]
+        )
+            ? wp_unslash(
+                $_POST[
+                    'naigai_iez_content_items'
+                ]
+            )
+            : array();
+
+
+    $items =
+        array();
+
+
+    $allowed_layouts =
+        array(
+            'card',
+            'image-left',
+            'image-right',
+        );
+
+
+    foreach (
+        $raw_items
+        as $raw_item
+    ) {
+
+        if (
+            !is_array(
+                $raw_item
+            )
+        ) {
+            continue;
+        }
+
+
+        /*
+         * =============================================
+         * 各コンテンツの配置
+         * =============================================
+         */
+        $layout =
+            sanitize_key(
+                (string) (
+                    $raw_item['layout']
+                    ?? 'image-left'
+                )
+            );
+
+
+        if (
+            !in_array(
+                $layout,
+                $allowed_layouts,
+                true
+            )
+        ) {
+
+            $layout =
+                'image-left';
+        }
+
+
+        /*
+         * =============================================
+         * 保存値
+         * =============================================
+         */
+        $item =
+            array(
+
+                'layout' =>
+                    $layout,
+
+                'image_id' =>
+                    absint(
+                        $raw_item['image_id']
+                        ?? 0
+                    ),
+
+                'title' =>
+                    sanitize_text_field(
+                        (string) (
+                            $raw_item['title']
+                            ?? ''
+                        )
+                    ),
+
+                'text' =>
+                    sanitize_textarea_field(
+                        (string) (
+                            $raw_item['text']
+                            ?? ''
+                        )
+                    ),
+            );
+
+
+        /*
+         * 画像・見出し・文章が全部空なら保存しない。
+         *
+         * layoutだけの空行はDBへ入れない。
+         */
+        if (
+            !$item['image_id']
+            && $item['title'] === ''
+            && $item['text'] === ''
+        ) {
+            continue;
+        }
+
+
+        $items[] =
+            $item;
+    }
+
+
+    if ($items) {
+
+        update_post_meta(
+            $post_id,
+            '_ch_content_items',
+            $items
+        );
+
+    } else {
+
+        delete_post_meta(
+            $post_id,
+            '_ch_content_items'
+        );
+    }
+
+
+    /*
+     * ========================================================
+     * 旧ページ全体レイアウトを削除
+     * ========================================================
+     *
+     * 新方式では各コンテンツ自身がlayoutを持つため、
+     * ページ全体レイアウトは不要。
+     *
+     * 新UIから保存したタイミングで整理する。
+     */
+    delete_post_meta(
+        $post_id,
+        '_ch_content_layout'
+    );
+}
+
+
+add_action(
+    'save_post_page',
+    'naigai_iez_save_content_items',
+    60
+);
 

@@ -37,10 +37,15 @@ if (
 ) {
     $common_hero_data = naigai_iez_get_page_hero_data($page_id_for_common_hero);
 
-    if (!empty($common_hero_data['items'])) {
-        naigai_iez_render_hero($common_hero_data);
-        return;
-    }
+    /*
+     * 管理画面の _ch_hero_* を唯一の表示元にする。
+     *
+     * 画像が0枚でも旧Heroへフォールバックしない。
+     * これにより管理画面でCTA未入力の場合、
+     * 固定文言のCTAが勝手に表示されることもない。
+     */
+    naigai_iez_render_hero($common_hero_data);
+    return;
 }
 /* IEZ_COMMON_HERO_SUBPAGE_SWITCH_END */
 

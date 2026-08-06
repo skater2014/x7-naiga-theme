@@ -18,7 +18,7 @@
 
 .iez-common-faq {
   width: 100%;
-  margin: 0 auto 32px;
+  margin: clamp(24px, 2vw, 32px) auto 32px;
   padding: clamp(22px, 3vw, 34px);
   border: 1px solid rgba(48, 38, 26, 0.12);
   border-radius: 24px;
@@ -46,10 +46,36 @@
 }
 
 .iez-common-faq__item summary {
+  position: relative;
   cursor: pointer;
-  padding: 16px 18px;
+  padding: 16px 56px 16px 18px;
+  list-style: none;
   font-weight: 700;
   line-height: 1.6;
+}
+
+.iez-common-faq__item summary::-webkit-details-marker {
+  display: none;
+}
+
+.iez-common-faq__item summary::after {
+  content: "+";
+  position: absolute;
+  top: 50%;
+  right: 18px;
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: rgba(48, 38, 26, 0.08);
+  font-size: 20px;
+  line-height: 1;
+  transform: translateY(-50%);
+}
+
+.iez-common-faq__item[open] summary::after {
+  content: "−";
 }
 
 .iez-common-faq__answer {
@@ -85,23 +111,19 @@
   }
 }
 
+
 /* =========================================================
- * /iezukuri/contact spacing tune
- * FAQ とフォームの見た目バランスだけ調整
- * フォーム内部は customer-info-form.css に任せる
+ * /iezukuri/contact spacing
+ *
+ * 実際の contact 本文は
+ * #contact-content / .iez-sub-section--contact。
+ *
+ * hero直下とフォームが接触しないように、
+ * contact本文の上だけ余白を取る。
  * ========================================================= */
 
-.iez-contact-template {
-  padding-top: clamp(32px, 5vw, 56px);
-}
-
-.iez-contact-template .ch-shell {
-  width: min(1080px, calc(100% - 40px));
-  margin-inline: auto;
-}
-
-.iez-common-faq {
-  margin-bottom: 28px;
+body.iezukuri-subpage--contact #contact-content {
+  padding-top: clamp(32px, 3.5vw, 48px);
 }
 
 .iez-common-contact-form {
@@ -112,19 +134,159 @@
   margin-top: 0;
 }
 
+ (max-width: 720px) {
+  body.iezukuri-subpage--contact #contact-content {
+    padding-top: 24px;
+  }
+}
+
+
+/* contact hero:
+ * 人物の顔が上側で切れすぎないように表示位置を調整。
+ * サブページhero / 旧heroの両方を対象にする。
+ */
+body.iezukuri-subpage--contact .iez-sub-hero__image,
+body.iezukuri-subpage--contact .iez-sub-hero img,
+body.iezukuri-subpage--contact .iez-hero__image,
+body.iezukuri-subpage--contact .iez-hero__slide img {
+  object-position: center 26% !important;
+}
+
+
+
+
+/* =========================================================
+ * /iezukuri/contact
+ *
+ * contactページ固有の配置。
+ * FAQの幅・デザインとは分離する。
+ * ========================================================= */
+
+/*
+ * HEROとフォームを接触させない。
+ *
+ * 実際のcontactテンプレート:
+ * #contact-content
+ *   └ .iez-contact-section__inner
+ *      └ .iez-contact-form-area
+ *
+ * フォームそのものではなく、
+ * 外側のareaに余白を持たせる。
+ */
+body.iezukuri-subpage--contact .iez-contact-form-area {
+  padding-top: clamp(36px, 4vw, 56px);
+}
+
+
+/*
+ * contact HERO
+ *
+ * object-fit: cover の切り抜きによって
+ * 人物の頭・顔が上側で切れないよう、
+ * 画像の上端を基準に表示する。
+ */
+body.iezukuri-subpage--contact .iez-sub-hero__image,
+body.iezukuri-subpage--contact .iez-sub-hero img,
+body.iezukuri-subpage--contact .iez-hero__image,
+body.iezukuri-subpage--contact .iez-hero__slide img {
+  object-position: center top !important;
+}
+
+
+/* mobile */
 @media (max-width: 720px) {
-  .iez-contact-template {
+
+  body.iezukuri-subpage--contact .iez-contact-form-area {
     padding-top: 28px;
   }
 
-  .iez-common-faq {
-    margin-bottom: 22px;
-  }
 }
 
-/* contact hero: 顔が切れすぎないように画像位置だけ調整 */
+
+/* CONTACT-PAGE-FINAL-START
+ *
+ * /iezukuri/contact 専用。
+ *
+ * ・HEROの高さ
+ * ・HERO画像のトリミング
+ * ・HEROとフォームの間隔
+ *
+ * この3点だけをここで管理する。
+ */
+
+
+/* =========================================================
+ * CONTACT HERO
+ * ========================================================= */
+
+/*
+ * 実際に使われている可能性のある
+ * 家づくりサブページheroをcontactページ内だけ対象にする。
+ */
+body.iezukuri-subpage--contact .ch-hero,
+body.iezukuri-subpage--contact .ch-sub-hero,
+body.iezukuri-subpage--contact .iez-hero,
+body.iezukuri-subpage--contact .iez-sub-hero {
+  height: clamp(400px, 32vw, 520px) !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+
+
+/*
+ * HERO画像。
+ *
+ * 横幅いっぱいに表示しつつ、
+ * 人物の頭側を切らない。
+ */
+body.iezukuri-subpage--contact .ch-hero img,
+body.iezukuri-subpage--contact .ch-sub-hero img,
+body.iezukuri-subpage--contact .iez-hero img,
+body.iezukuri-subpage--contact .iez-sub-hero img,
 body.iezukuri-subpage--contact .iez-hero__image,
+body.iezukuri-subpage--contact .iez-sub-hero__image,
 body.iezukuri-subpage--contact .iez-hero__slide img {
-  object-position: center 38% !important;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover !important;
+  object-position: center top !important;
 }
 
+
+/* =========================================================
+ * HERO → FORM
+ * ========================================================= */
+
+/*
+ * 実際にHTMLへ出ている
+ * .iez-common-contact-form に直接余白を付ける。
+ *
+ * 古い .iez-contact-template 前提にはしない。
+ */
+body.iezukuri-subpage--contact .iez-common-contact-form {
+  padding-top: clamp(40px, 4vw, 56px) !important;
+}
+
+
+/* =========================================================
+ * MOBILE
+ * ========================================================= */
+
+@media (max-width: 720px) {
+
+  body.iezukuri-subpage--contact .ch-hero,
+  body.iezukuri-subpage--contact .ch-sub-hero,
+  body.iezukuri-subpage--contact .iez-hero,
+  body.iezukuri-subpage--contact .iez-sub-hero {
+    height: clamp(280px, 64vw, 400px) !important;
+  }
+
+  body.iezukuri-subpage--contact .iez-common-contact-form {
+    padding-top: 28px !important;
+  }
+
+}
+
+
+/* CONTACT-PAGE-FINAL-END */

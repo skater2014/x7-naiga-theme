@@ -56,6 +56,11 @@ $base = get_template_directory() . '/hub/pages/iezukuri/templates';
 
 $hero_part     = $base . '/subpage/section-sub-hero.php';
 /*
+ * IEZ_COMMON_SUB_CONTENT_PART_20260806
+ * Hero直後の共通サブコンテンツ。
+ */
+$sub_content_part = $base . '/subpage/section-sub-content.php';
+/*
  * サブページ中間ナビの読み込み。
  * section-sub-localnav.php は WordPress nav location ではなく、
  * ページ内アンカー href="#..." を出す中間導線。
@@ -79,6 +84,18 @@ $cta_part      = $base . '/subpage/section-sub-cta.php';
     <?php
     if (file_exists($hero_part)) {
         include $hero_part;
+    }
+
+    /*
+     * ========================================================
+     * 共通サブコンテンツ
+     * ========================================================
+     *
+     * Heroとは別section。
+     * Hero終了直後に表示する。
+     */
+    if (file_exists($sub_content_part)) {
+        include $sub_content_part;
     }
 
     if (file_exists($localnav_part)) {

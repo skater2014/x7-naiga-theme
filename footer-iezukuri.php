@@ -77,6 +77,14 @@ $footer_items = function_exists('naigai_iezukuri_footer_menu_items')
                 <?php endif; ?>
             </nav>
         </div>
+
+        <div class="ch-lp-footer__bottom">
+            <p>
+                <a href="<?php echo esc_url(home_url('/iezukuri/rule/')); ?>">利用規約</a>
+                <span aria-hidden="true">｜</span>
+                <a href="<?php echo esc_url(home_url('/iezukuri/privacypolicy/')); ?>">プライバシーポリシー</a>
+            </p>
+        </div>
     </div>
 </footer>
 

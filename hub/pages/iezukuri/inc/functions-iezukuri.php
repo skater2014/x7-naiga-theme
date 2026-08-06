@@ -741,7 +741,10 @@ function naigai_iezukuri_css_load_final_normalizer() {
 
         $page_css_map = array('concept' => 'concept.css',
             'company' => 'company.css',
-            'contact' => 'contact.css',
+            
+      'contact' => 'contact.css',
+            'faq'     => 'contact.css',
+    
             'chuko'   => 'chuko.css',
             'nisetai' => 'nisetai.css',
         );

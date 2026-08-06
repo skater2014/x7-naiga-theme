@@ -1,4 +1,91 @@
 <?php
+
+/**
+ * ============================================================
+ * IEZ_HERO_ADMIN_POLICY_20260806
+ * 家づくり固定ページ Hero 管理画面仕様
+ * ============================================================
+ *
+ * Heroの正式な保存キーは _ch_hero_* のみ。
+ *
+ *
+ * 【Hero画像あり】
+ *
+ * _ch_hero_image_id
+ * _ch_hero_gallery_ids
+ * _ch_hero_video_mp4_id
+ *
+ * のいずれかが存在する
+ *
+ *      ↓
+ *
+ * 画像 / 動画Heroを表示する。
+ *
+ *
+ * 【Hero画像なし + Hero文字等あり】
+ *
+ * _ch_hero_kicker
+ * _ch_hero_title
+ * _ch_hero_lead
+ *
+ * または有効なCTAが存在する
+ *
+ *      ↓
+ *
+ * 茶系背景Heroを表示する。
+ *
+ *
+ * 【Hero完全空】
+ *
+ * 画像なし
+ * 動画なし
+ * キッカーなし
+ * Heroタイトルなし
+ * リードなし
+ * 有効CTAなし
+ *
+ *      ↓
+ *
+ * Hero自体を表示しない。
+ *
+ * WordPress固定ページタイトル post_title を
+ * 通常のH1として本文・フォーム上へ表示する。
+ *
+ *
+ * ============================================================
+ * CTA入力ルール
+ * ============================================================
+ *
+ * CTAは
+ *
+ *     文言
+ *       ＋
+ *     URL
+ *
+ * の両方が必要。
+ *
+ * URLまで入力しないとCTAは表示しない。
+ *
+ * 文言だけ入力:
+ *     表示しない
+ *
+ * URLだけ入力:
+ *     表示しない
+ *
+ * 文言 + URL:
+ *     表示する
+ *
+ *
+ * ============================================================
+ * 固定ページタイトルについて
+ * ============================================================
+ *
+ * post_title と _ch_hero_title は別物。
+ *
+ * 固定ページタイトルを
+ * _ch_hero_title へ自動コピーしない。
+ * ============================================================
+ */
 /**
  * hub/pages/iezukuri/admin/metaboxes/parts/hero-metabox.php
  *
@@ -57,7 +144,7 @@ if (!function_exists('naigai_iez_admin_render_hero_input')) {
                     <tbody>
                         <?php
                         naigai_iez_admin_text_input('_ch_hero_kicker', 'キッカー', $get('_ch_hero_kicker', ''));
-                        naigai_iez_admin_text_input('_ch_hero_title', 'タイトル', $get('_ch_hero_title', get_the_title($post)));
+                        naigai_iez_admin_text_input('_ch_hero_title', 'タイトル', $get('_ch_hero_title', ''));
                         naigai_iez_admin_textarea('_ch_hero_lead', 'リード文', $get('_ch_hero_lead', ''), 4);
                         ?>
                     </tbody>

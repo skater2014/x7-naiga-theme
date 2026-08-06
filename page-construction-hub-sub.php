@@ -50,8 +50,24 @@ if ($hero_kicker === '') {
 }
 
 $hero_title = trim((string) get_post_meta($post_id, '_ch_hero_title', true));
-if ($hero_title === '') {
-    $hero_title = $title;
+/*
+ * ------------------------------------------------------------
+ * Heroタイトルは固定ページタイトルから自動補完しない。
+ *
+ * $hero_title が空の場合は空のまま使用する。
+ *
+ * 固定ページタイトルとHeroタイトルは別項目。
+ * ------------------------------------------------------------
+ */
+
+/* 規約系ページは管理画面の長い旧タイトルに左右されず、公開画面のH1を統一する。 */
+$legal_page_slug = (string) get_post_field('post_name', $post_id);
+if ($legal_page_slug === 'privacypolicy') {
+    $hero_kicker = '';
+    $hero_title = '家づくり プライバシーポリシー';
+} elseif ($legal_page_slug === 'rule') {
+    $hero_kicker = '';
+    $hero_title = '家づくり 利用規約';
 }
 
 $lead = trim((string) get_post_meta($post_id, '_ch_hero_lead', true));
@@ -103,7 +119,10 @@ $template_map = array(
     'nasu-house'    => get_template_directory() . '/hub/pages/iezukuri/templates/page-nasu-house.php',
     'design-office' => get_template_directory() . '/hub/pages/iezukuri/templates/page-design-office.php',
     'company'       => get_template_directory() . '/hub/pages/iezukuri/templates/page-company.php',
-    'contact'       => get_template_directory() . '/hub/pages/iezukuri/templates/page-contact.php',
+    
+      'contact'       => get_template_directory() . '/hub/pages/iezukuri/templates/page-contact.php',
+    'faq'           => get_template_directory() . '/hub/pages/iezukuri/templates/page-faq.php',
+    
 );
 
 $lookup_key   = $template_key !== '' ? $template_key : $post_slug;
@@ -226,7 +245,35 @@ get_header('customhome');
     </nav>
 
     <?php if ($partial_file !== '') : ?>
-        <?php require $partial_file; ?>
+        <?php
+/*
+ * ============================================================
+ * IEZ_ACTIVE_SUB_CONTENT_COMPAT_20260806
+ * 共通サブコンテンツ互換呼出
+ * ============================================================
+ *
+ * 現在、このpage templateにも独自HTML構造が残っている。
+ *
+ * 本来の共通パーツ:
+ *
+ *     section-sub-content.php
+ *
+ * をここからも呼び、
+ * _ch_intro_* / _ch_body_* の表示経路を1つにする。
+ *
+ * このファイルへ本文HTMLを直接複製しない。
+ * ============================================================
+ */
+
+$iez_sub_content_part =
+    get_template_directory()
+    . '/hub/pages/iezukuri/templates/subpage/section-sub-content.php';
+
+if (is_readable($iez_sub_content_part)) {
+    include $iez_sub_content_part;
+}
+?>
+<?php require $partial_file; ?>
     <?php else : ?>
         <section class="ch-section ch-section--white ch-subpage-section">
             <div class="ch-shell">

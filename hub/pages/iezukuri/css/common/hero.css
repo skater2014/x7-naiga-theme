@@ -905,3 +905,76 @@ body.single-iez_plan main.hub-customhome-subpage {
   position: relative;
   overflow: clip;
 }
+
+
+/* ============================================================
+ * IEZ_PAGE_HEADING_WHEN_HERO_EMPTY_20260806
+ * Hero完全未設定時の通常H1
+ * ============================================================
+ *
+ * 表示条件はPHP側で決定する。
+ *
+ * Heroに
+ *
+ * ・画像
+ * ・動画
+ * ・キッカー
+ * ・Heroタイトル
+ * ・リード
+ * ・有効CTA
+ *
+ * が1つも無い場合だけ出力される。
+ *
+ * 背景色は付けない。
+ * ============================================================ */
+
+.iez-page-heading {
+  width: 100%;
+  margin: 0;
+  padding:
+    clamp(32px, 4vw, 56px)
+    clamp(20px, 5vw, 72px)
+    clamp(18px, 2.5vw, 32px);
+
+  background: transparent;
+}
+
+.iez-page-heading__inner {
+  width: min(100%, 1180px);
+  margin-inline: auto;
+}
+
+.iez-page-heading__title {
+  margin: 0;
+
+  font-size: clamp(32px, 4.2vw, 58px);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+
+  color: #1b2638;
+}
+
+
+/*
+ * ------------------------------------------------------------
+ * モバイル
+ * ------------------------------------------------------------
+ *
+ * PCの余白をそのまま使うと、
+ * H1とフォームの距離が大きくなるため縮める。
+ */
+@media (max-width: 760px) {
+
+  .iez-page-heading {
+    padding:
+      28px
+      20px
+      16px;
+  }
+
+  .iez-page-heading__title {
+    font-size: clamp(28px, 8.5vw, 40px);
+    line-height: 1.25;
+  }
+}

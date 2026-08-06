@@ -2158,3 +2158,1951 @@ main.hub-customhome-subpage[data-page-menu-style="default"] .iez-sub-localnav {
   display: block;
 }
 
+
+/* =========================================================
+ * IEZUKURI RULE CONTENT WIDTH
+ *
+ * 既存の家づくり本文設計に合わせる。
+ * .ch-shell 自体は共通1280pxのまま変更しない。
+ *
+ * 対象:
+ * - /iezukuri/rule/
+ * - /iezukuri/privacypolicy/
+ * ========================================================= */
+main.hub-customhome-subpage .ch-rule-page .ch-head,
+main.hub-customhome-subpage .ch-rule-page .ch-rule-body {
+  max-width: 860px;
+}
+
+/* IEZ_SUB_CONTENT_LAYOUT_START */
+
+/* ============================================================
+ * 家づくり
+ * サブコンテンツ 個別レイアウト
+ * ============================================================
+ *
+ * 各コンテンツ自身が
+ *
+ *     card
+ *     image-left
+ *     image-right
+ *
+ * を持つ。
+ *
+ *
+ * そのため同じページ内で
+ *
+ *     画像 ｜ 文章
+ *
+ *     文章 ｜ 画像
+ *
+ *     カード カード カード
+ *
+ * を混在できる。
+ * ============================================================ */
+
+
+.iezukuri-subpage
+.ch-sub-content {
+  /*
+   * ページタイトルH1の直後なので、
+   * 上側は大きく空けない。
+   */
+  padding-top:
+    clamp(16px, 2vw, 24px);
+
+  /*
+   * 下側は次のコンテンツとの区切りとして
+   * 適度な余白を残す。
+   */
+  padding-bottom:
+    clamp(40px, 6vw, 72px);
+}
+
+
+/* ============================================================
+ * 導入
+ * ============================================================ */
+
+.iezukuri-subpage
+.ch-sub-content__intro {
+  margin-bottom:
+    clamp(28px, 4vw, 52px);
+}
+
+
+.iezukuri-subpage
+.ch-sub-content__kicker {
+  margin:
+    0 0 10px;
+
+  font-weight:
+    700;
+
+  letter-spacing:
+    0.08em;
+}
+
+
+.iezukuri-subpage
+.ch-sub-content__title {
+  margin:
+    0;
+
+  line-height:
+    1.35;
+}
+
+
+.iezukuri-subpage
+.ch-sub-content__lead {
+  margin-top:
+    18px;
+
+  line-height:
+    1.9;
+}
+
+
+/* ============================================================
+ * 全体
+ * ============================================================ */
+
+.iezukuri-subpage
+.ch-sub-content__items {
+  display:
+    grid;
+
+  gap:
+    clamp(36px, 6vw, 72px);
+}
+
+
+/* ============================================================
+ * card
+ * ============================================================
+ *
+ * cardが連続している部分だけ
+ * renderer側でcard-rowへまとめている。
+ *
+ * 1枚でも複数枚でも同じHTML構造。
+ * ============================================================ */
+
+.iezukuri-subpage
+.ch-sub-content__card-row {
+  display:
+    grid;
+
+  grid-template-columns:
+    repeat(
+      auto-fit,
+      minmax(
+        min(100%, 250px),
+        1fr
+      )
+    );
+
+  gap:
+    clamp(20px, 3vw, 32px);
+}
+
+
+.iezukuri-subpage
+.ch-sub-content__item--card
+.ch-sub-content__copy {
+  margin-top:
+    14px;
+}
+
+
+/* ============================================================
+ * 画像左＋文章右
+ * 文章左＋画像右
+ * ============================================================ */
+
+.iezukuri-subpage
+.ch-sub-content__item--image-left,
+
+.iezukuri-subpage
+.ch-sub-content__item--image-right {
+  display:
+    grid;
+
+  grid-template-columns:
+    minmax(220px, 0.85fr)
+    minmax(0, 1.15fr);
+
+  align-items:
+    center;
+
+  gap:
+    clamp(24px, 5vw, 64px);
+}
+
+
+/*
+ * image-right
+ *
+ * HTMLは常に
+ *
+ *     image
+ *     copy
+ *
+ * の順にしておき、
+ * PCだけCSS orderで逆にする。
+ *
+ * これによりモバイルでは
+ * 簡単に画像→文章へ戻せる。
+ */
+
+.iezukuri-subpage
+.ch-sub-content__item--image-right
+.ch-sub-content__media {
+  order:
+    2;
+}
+
+
+.iezukuri-subpage
+.ch-sub-content__item--image-right
+.ch-sub-content__copy {
+  order:
+    1;
+}
+
+
+/*
+ * 画像なしの場合は
+ * 文章を1列全幅へ戻す。
+ */
+
+.iezukuri-subpage
+.ch-sub-content__item--image-left.no-media,
+
+.iezukuri-subpage
+.ch-sub-content__item--image-right.no-media {
+  grid-template-columns:
+    1fr;
+}
+
+
+/* ============================================================
+ * 画像
+ * ============================================================ */
+
+.iezukuri-subpage
+.ch-sub-content__media {
+  margin:
+    0;
+
+  overflow:
+    hidden;
+}
+
+
+.iezukuri-subpage
+.ch-sub-content__image {
+  display:
+    block;
+
+  width:
+    100%;
+
+  height:
+    auto;
+
+  aspect-ratio:
+    4 / 3;
+
+  object-fit:
+    cover;
+}
+
+
+/* ============================================================
+ * 文章
+ * ============================================================ */
+
+.iezukuri-subpage
+.ch-sub-content__item-title {
+  margin:
+    0 0 12px;
+
+  line-height:
+    1.45;
+}
+
+
+.iezukuri-subpage
+.ch-sub-content__item-text {
+  line-height:
+    1.85;
+}
+
+
+.iezukuri-subpage
+.ch-sub-content__item-text > :first-child {
+  margin-top:
+    0;
+}
+
+
+.iezukuri-subpage
+.ch-sub-content__item-text > :last-child {
+  margin-bottom:
+    0;
+}
+
+
+/* ============================================================
+ * Mobile
+ * ============================================================
+ *
+ * card
+ * image-left
+ * image-right
+ *
+ * すべて
+ *
+ *     画像
+ *      ↓
+ *     文章
+ *
+ * の1列に統一する。
+ * ============================================================ */
+
+@media (max-width: 767px) {
+
+
+  .iezukuri-subpage
+  .ch-sub-content {
+    /*
+     * モバイルでもH1直後を空けすぎない。
+     */
+    padding-top:
+      16px;
+
+    padding-bottom:
+      36px;
+  }
+
+
+  .iezukuri-subpage
+  .ch-sub-content__card-row {
+    grid-template-columns:
+      1fr;
+  }
+
+
+  .iezukuri-subpage
+  .ch-sub-content__item--image-left,
+
+  .iezukuri-subpage
+  .ch-sub-content__item--image-right {
+    grid-template-columns:
+      1fr;
+
+    gap:
+      16px;
+  }
+
+
+  /*
+   * PCでimage-rightでも
+   * Mobileでは画像を1番目へ戻す。
+   */
+
+  .iezukuri-subpage
+  .ch-sub-content__item--image-right
+  .ch-sub-content__media {
+    order:
+      1;
+  }
+
+
+  .iezukuri-subpage
+  .ch-sub-content__item--image-right
+  .ch-sub-content__copy {
+    order:
+      2;
+  }
+
+}
+
+/* IEZ_SUB_CONTENT_LAYOUT_END */
+
+/* IEZ_SUB_CONTENT_LAYOUT_FORCE_START */
+
+/* ============================================================
+ * 家づくり サブコンテンツ
+ * 横長カード / 左右レイアウト
+ * ============================================================
+ *
+ * このCSSが担当するのは「見た目」だけ。
+ *
+ * 保存:
+ *     _ch_content_items
+ *
+ * PHP:
+ *     page-content-renderer.php
+ *
+ * で決まった
+ *
+ *     image-left
+ *     image-right
+ *     card
+ *
+ * の値は変更しない。
+ *
+ *
+ * ------------------------------------------------------------
+ * PC
+ * ------------------------------------------------------------
+ *
+ * image-left
+ *
+ *     ┌─────────────────────────────────┐
+ *     │ 画像 38% │ 見出し              │
+ *     │          │ 本文                │
+ *     └─────────────────────────────────┘
+ *
+ *
+ * image-right
+ *
+ *     ┌─────────────────────────────────┐
+ *     │ 見出し      │ 画像 38%          │
+ *     │ 本文        │                   │
+ *     └─────────────────────────────────┘
+ *
+ *
+ * card
+ *
+ *     ┌────────┐ ┌────────┐ ┌────────┐
+ *     │ 画像   │ │ 画像   │ │ 画像   │
+ *     │ 見出し │ │ 見出し │ │ 見出し │
+ *     │ 本文   │ │ 本文   │ │ 本文   │
+ *     └────────┘ └────────┘ └────────┘
+ *
+ *
+ * ------------------------------------------------------------
+ * Mobile / 狭いタブレット
+ * ------------------------------------------------------------
+ *
+ * 左右指定に関係なく
+ *
+ *     画像
+ *      ↓
+ *     見出し
+ *     本文
+ *
+ * の1列へ変更する。
+ * ============================================================ */
+
+
+/* ============================================================
+ * 1. コンテンツ全体
+ * ============================================================
+ *
+ * コンテンツ1とコンテンツ2そのものは
+ * 横並びにしない。
+ *
+ * 1コンテンツ = 1段。
+ *
+ * 以前は段と段の距離が大きすぎたため、
+ * 24～32px程度まで縮める。
+ * ============================================================ */
+
+.iezukuri-subpage
+.ch-sub-content
+.ch-sub-content__items {
+  display: grid !important;
+
+  grid-template-columns:
+    minmax(0, 1fr) !important;
+
+  grid-auto-flow:
+    row !important;
+
+  width:
+    100% !important;
+
+  gap:
+    clamp(24px, 3vw, 32px) !important;
+}
+
+
+/* ============================================================
+ * 2. 左右レイアウト共通カード
+ * ============================================================
+ *
+ * ページ背景は現在のベージュをそのまま見せる。
+ *
+ * 各コンテンツだけ白背景にすることで、
+ * 画像と文章を「1つの内容」として視認しやすくする。
+ *
+ * 強い影ではなく薄い枠＋薄い影にする。
+ * ============================================================ */
+
+.iezukuri-subpage
+.ch-sub-content
+.ch-sub-content__item[data-iez-item-layout="image-left"],
+
+.iezukuri-subpage
+.ch-sub-content
+.ch-sub-content__item[data-iez-item-layout="image-right"] {
+  display:
+    grid !important;
+
+  width:
+    100% !important;
+
+  max-width:
+    none !important;
+
+  min-width:
+    0 !important;
+
+  margin:
+    0 !important;
+
+  border:
+    1px solid rgba(25, 42, 52, 0.10);
+
+  border-radius:
+    16px;
+
+  overflow:
+    hidden;
+
+  background:
+    #fff;
+
+  box-shadow:
+    0 10px 28px rgba(25, 42, 52, 0.055);
+}
+
+
+/* ============================================================
+ * 3. 画像左 ＋ 文章右
+ * ============================================================
+ *
+ * 今までの画像は約半分の幅を使っていたため、
+ * 写真の存在感が強すぎた。
+ *
+ * 画像を38%程度にして、
+ * 文章側を62%程度確保する。
+ * ============================================================ */
+
+.iezukuri-subpage
+.ch-sub-content
+.ch-sub-content__item[data-iez-item-layout="image-left"] {
+  /*
+   * サムネイル30% / 文章70%
+   *
+   * 画像を大きく見せすぎない。
+   */
+  grid-template-columns:
+    minmax(0, 30%)
+    minmax(0, 70%) !important;
+
+  align-items:
+    stretch !important;
+}
+
+
+.iezukuri-subpage
+.ch-sub-content
+.ch-sub-content__item[data-iez-item-layout="image-left"]
+.ch-sub-content__media {
+  grid-column:
+    1 !important;
+
+  grid-row:
+    1 !important;
+
+  order:
+    initial !important;
+}
+
+
+.iezukuri-subpage
+.ch-sub-content
+.ch-sub-content__item[data-iez-item-layout="image-left"]
+.ch-sub-content__copy {
+  grid-column:
+    2 !important;
+
+  grid-row:
+    1 !important;
+
+  order:
+    initial !important;
+}
+
+
+/* ============================================================
+ * 4. 文章左 ＋ 画像右
+ * ============================================================
+ */
+
+.iezukuri-subpage
+.ch-sub-content
+.ch-sub-content__item[data-iez-item-layout="image-right"] {
+  /*
+   * 文章70% / サムネイル30%
+   */
+  grid-template-columns:
+    minmax(0, 70%)
+    minmax(0, 30%) !important;
+
+  align-items:
+    stretch !important;
+}
+
+
+.iezukuri-subpage
+.ch-sub-content
+.ch-sub-content__item[data-iez-item-layout="image-right"]
+.ch-sub-content__copy {
+  grid-column:
+    1 !important;
+
+  grid-row:
+    1 !important;
+
+  order:
+    initial !important;
+}
+
+
+.iezukuri-subpage
+.ch-sub-content
+.ch-sub-content__item[data-iez-item-layout="image-right"]
+.ch-sub-content__media {
+  grid-column:
+    2 !important;
+
+  grid-row:
+    1 !important;
+
+  order:
+    initial !important;
+}
+
+
+/* ============================================================
+ * 5. 左右カード内の画像
+ * ============================================================
+ *
+ * 【重要】
+ *
+ * 画像をカード全高へ無制限に伸ばさない。
+ *
+ * PCでは画像の高さを
+ *
+ *     最小 220px
+ *     最大 320px
+ *
+ * の範囲にする。
+ *
+ * 横長カードの文章が短くても、
+ * 画像だけ巨大になることを防止する。
+ *
+ *
+ * object-fit: cover
+ *
+ * により、元画像の縦横比が違っても
+ * この表示枠の中へ自然にトリミングする。
+ * ============================================================ */
+
+.iezukuri-subpage
+.ch-sub-content
+.ch-sub-content__item[data-iez-item-layout="image-left"]
+.ch-sub-content__media,
+
+.iezukuri-subpage
+.ch-sub-content
+.ch-sub-content__item[data-iez-item-layout="image-right"]
+.ch-sub-content__media {
+  width:
+    100% !important;
+
+  min-width:
+    0 !important;
+
+  /*
+   * 以前の min-height / stretch 方式をやめる。
+   *
+   * viewportに応じて少しだけ変化させるが、
+   * 320px以上にはしない。
+   */
+  /*
+   * PCでも大きなメイン写真にしない。
+   * サムネイル用途なので最大220px。
+   */
+  height:
+    clamp(180px, 18vw, 220px) !important;
+
+  min-height:
+    0 !important;
+
+  max-height:
+    220px !important;
+
+  margin:
+    0 !important;
+
+  /*
+   * Grid行全体の高さへ強制的に引き伸ばさない。
+   */
+  align-self:
+    center !important;
+
+  overflow:
+    hidden;
+}
+
+
+.iezukuri-subpage
+.ch-sub-content
+.ch-sub-content__item[data-iez-item-layout="image-left"]
+.ch-sub-content__media img,
+
+.iezukuri-subpage
+.ch-sub-content
+.ch-sub-content__item[data-iez-item-layout="image-right"]
+.ch-sub-content__media img {
+  display:
+    block !important;
+
+  width:
+    100% !important;
+
+  /*
+   * 親figureの高さ以上へは伸ばさない。
+   */
+  height:
+    100% !important;
+
+  min-height:
+    0 !important;
+
+  max-height:
+    220px !important;
+
+  max-width:
+    100% !important;
+
+  /*
+   * 表示枠内で写真をトリミング。
+   *
+   * 元画像そのものを変形させない。
+   */
+  object-fit:
+    cover !important;
+
+  object-position:
+    center !important;
+}
+
+/* ============================================================
+ * 6. 左右カード内の文章
+ * ============================================================
+ *
+ * スクリーンショットでは文字が中央付近に
+ * 単独で置かれたように見えていた。
+ *
+ * カード内paddingを作り、
+ * 画像と文章を1つのコンテンツとして見せる。
+ * ============================================================ */
+
+.iezukuri-subpage
+.ch-sub-content
+.ch-sub-content__item[data-iez-item-layout="image-left"]
+.ch-sub-content__copy,
+
+.iezukuri-subpage
+.ch-sub-content
+.ch-sub-content__item[data-iez-item-layout="image-right"]
+.ch-sub-content__copy {
+  display:
+    flex;
+
+  flex-direction:
+    column;
+
+  justify-content:
+    center;
+
+  width:
+    100% !important;
+
+  min-width:
+    0 !important;
+
+  margin:
+    0 !important;
+
+  padding:
+    clamp(26px, 4vw, 46px);
+}
+
+
+/* 見出し */
+
+.iezukuri-subpage
+.ch-sub-content
+.ch-sub-content__item[data-iez-item-layout="image-left"]
+.ch-sub-content__item-title,
+
+.iezukuri-subpage
+.ch-sub-content
+.ch-sub-content__item[data-iez-item-layout="image-right"]
+.ch-sub-content__item-title {
+  margin:
+    0 0 12px;
+
+  font-size:
+    clamp(20px, 2vw, 26px);
+
+  line-height:
+    1.45;
+}
+
+
+/* 本文 */
+
+.iezukuri-subpage
+.ch-sub-content
+.ch-sub-content__item[data-iez-item-layout="image-left"]
+.ch-sub-content__item-text,
+
+.iezukuri-subpage
+.ch-sub-content
+.ch-sub-content__item[data-iez-item-layout="image-right"]
+.ch-sub-content__item-text {
+  margin:
+    0;
+
+  font-size:
+    16px;
+
+  line-height:
+    1.9;
+}
+
+
+.iezukuri-subpage
+.ch-sub-content
+.ch-sub-content__item-text > :first-child {
+  margin-top:
+    0;
+}
+
+
+.iezukuri-subpage
+.ch-sub-content
+.ch-sub-content__item-text > :last-child {
+  margin-bottom:
+    0;
+}
+
+
+/* ============================================================
+ * 7. 画像がない場合
+ * ============================================================
+ *
+ * 画像が削除されても文章が38%/62%の片側だけに
+ * 残らないようにする。
+ * ============================================================ */
+
+.iezukuri-subpage
+.ch-sub-content
+.ch-sub-content__item[data-iez-item-layout="image-left"].no-media,
+
+.iezukuri-subpage
+.ch-sub-content
+.ch-sub-content__item[data-iez-item-layout="image-right"].no-media {
+  grid-template-columns:
+    minmax(0, 1fr) !important;
+}
+
+
+.iezukuri-subpage
+.ch-sub-content
+.ch-sub-content__item[data-iez-item-layout="image-left"].no-media
+.ch-sub-content__copy,
+
+.iezukuri-subpage
+.ch-sub-content
+.ch-sub-content__item[data-iez-item-layout="image-right"].no-media
+.ch-sub-content__copy {
+  grid-column:
+    1 !important;
+}
+
+
+/* ============================================================
+ * 8. 横並びカード
+ * ============================================================
+ *
+ * layout=card を連続して登録した場合だけ横並び。
+ *
+ * image-left / image-right の横長カードとは
+ * 別のデザインとして扱う。
+ * ============================================================ */
+
+.iezukuri-subpage
+.ch-sub-content
+.ch-sub-content__card-row {
+  display:
+    grid !important;
+
+  grid-template-columns:
+    repeat(
+      auto-fit,
+      minmax(
+        min(100%, 250px),
+        1fr
+      )
+    ) !important;
+
+  gap:
+    clamp(18px, 2.5vw, 28px) !important;
+
+  width:
+    100% !important;
+}
+
+
+.iezukuri-subpage
+.ch-sub-content
+.ch-sub-content__card-row
+.ch-sub-content__item--card {
+  min-width:
+    0;
+
+  overflow:
+    hidden;
+
+  border:
+    1px solid rgba(25, 42, 52, 0.10);
+
+  border-radius:
+    14px;
+
+  background:
+    #fff;
+
+  box-shadow:
+    0 8px 24px rgba(25, 42, 52, 0.05);
+}
+
+
+.iezukuri-subpage
+.ch-sub-content
+.ch-sub-content__card-row
+.ch-sub-content__item--card
+.ch-sub-content__media {
+  margin:
+    0;
+}
+
+
+.iezukuri-subpage
+.ch-sub-content
+.ch-sub-content__card-row
+.ch-sub-content__item--card
+.ch-sub-content__image {
+  display:
+    block;
+
+  width:
+    100%;
+
+  aspect-ratio:
+    4 / 3;
+
+  object-fit:
+    cover;
+}
+
+
+.iezukuri-subpage
+.ch-sub-content
+.ch-sub-content__card-row
+.ch-sub-content__item--card
+.ch-sub-content__copy {
+  margin:
+    0;
+
+  padding:
+    18px 20px 22px;
+}
+
+
+/* ============================================================
+ * 9. タブレット以下
+ * ============================================================
+ *
+ * 横幅が狭くなったら、
+ * PCの左右配置を維持しない。
+ *
+ * 画像
+ *  ↓
+ * 文章
+ *
+ * に切り替える。
+ * ============================================================ */
+
+@media (max-width: 860px) {
+
+  .iezukuri-subpage
+  .ch-sub-content
+  .ch-sub-content__item[data-iez-item-layout="image-left"],
+
+  .iezukuri-subpage
+  .ch-sub-content
+  .ch-sub-content__item[data-iez-item-layout="image-right"] {
+    grid-template-columns:
+      minmax(0, 1fr) !important;
+  }
+
+
+  /*
+   * image-rightであっても、
+   * 狭い画面では画像を上へ戻す。
+   */
+
+  .iezukuri-subpage
+  .ch-sub-content
+  .ch-sub-content__item[data-iez-item-layout="image-left"]
+  .ch-sub-content__media,
+
+  .iezukuri-subpage
+  .ch-sub-content
+  .ch-sub-content__item[data-iez-item-layout="image-right"]
+  .ch-sub-content__media {
+    grid-column:
+      1 !important;
+
+    grid-row:
+      1 !important;
+
+    min-height:
+      0;
+
+    order:
+      initial !important;
+  }
+
+
+  .iezukuri-subpage
+  .ch-sub-content
+  .ch-sub-content__item[data-iez-item-layout="image-left"]
+  .ch-sub-content__copy,
+
+  .iezukuri-subpage
+  .ch-sub-content
+  .ch-sub-content__item[data-iez-item-layout="image-right"]
+  .ch-sub-content__copy {
+    grid-column:
+      1 !important;
+
+    grid-row:
+      2 !important;
+
+    order:
+      initial !important;
+
+    padding:
+      24px;
+  }
+
+
+  .iezukuri-subpage
+  .ch-sub-content
+  .ch-sub-content__item[data-iez-item-layout="image-left"]
+  .ch-sub-content__media img,
+
+  .iezukuri-subpage
+  .ch-sub-content
+  .ch-sub-content__item[data-iez-item-layout="image-right"]
+  .ch-sub-content__media img {
+    height:
+      auto !important;
+
+    min-height:
+      0;
+
+    aspect-ratio:
+      16 / 9 !important;
+  }
+
+}
+
+
+/* ============================================================
+ * 10. モバイル
+ * ============================================================ */
+
+@media (max-width: 767px) {
+
+  /*
+   * コンテンツ間隔をさらに少し縮める。
+   */
+  .iezukuri-subpage
+  .ch-sub-content
+  .ch-sub-content__items {
+    gap:
+      20px !important;
+  }
+
+
+  /*
+   * 横長カードの角丸を少し小さくする。
+   */
+  .iezukuri-subpage
+  .ch-sub-content
+  .ch-sub-content__item[data-iez-item-layout="image-left"],
+
+  .iezukuri-subpage
+  .ch-sub-content
+  .ch-sub-content__item[data-iez-item-layout="image-right"] {
+    border-radius:
+      12px;
+  }
+
+
+  .iezukuri-subpage
+  .ch-sub-content
+  .ch-sub-content__item[data-iez-item-layout="image-left"]
+  .ch-sub-content__copy,
+
+  .iezukuri-subpage
+  .ch-sub-content
+  .ch-sub-content__item[data-iez-item-layout="image-right"]
+  .ch-sub-content__copy {
+    padding:
+      20px;
+  }
+
+
+  /*
+   * card指定もモバイルでは1列。
+   */
+  .iezukuri-subpage
+  .ch-sub-content
+  .ch-sub-content__card-row {
+    grid-template-columns:
+      minmax(0, 1fr) !important;
+
+    gap:
+      20px !important;
+  }
+
+}
+
+/* IEZ_PAGE_HEADING_BALANCE_START */
+
+/* ============================================================
+ * ページタイトル
+ * ============================================================
+ *
+ * data-iez-page-heading は現在の共通ページタイトル部分。
+ *
+ * class名だけに依存せず、
+ * 既存HTMLのdata属性を使って対象を限定する。
+ * ============================================================ */
+
+.iezukuri-subpage
+[data-iez-page-heading] {
+  /*
+   * H1とサブコンテンツの間を空けすぎない。
+   */
+  margin-bottom:
+    0 !important;
+
+  padding-bottom:
+    clamp(22px, 2.5vw, 34px) !important;
+}
+
+
+/*
+ * H1
+ *
+ * 現在の見た目ではタイトルが大きすぎるため、
+ * PCでも最大64pxまでに抑える。
+ */
+.iezukuri-subpage
+[data-iez-page-heading] h1 {
+  margin-bottom:
+    0 !important;
+
+  font-size:
+    clamp(42px, 4.6vw, 64px) !important;
+
+  line-height:
+    1.08 !important;
+
+  letter-spacing:
+    -0.025em;
+}
+
+
+/* ============================================================
+ * サブコンテンツsection
+ * ============================================================
+ *
+ * ページタイトル側ですでに下余白を作るため、
+ * section上部でもさらにpaddingを追加しない。
+ * ============================================================ */
+
+.iezukuri-subpage
+.ch-sub-content {
+  padding-top:
+    0 !important;
+}
+
+
+/* ============================================================
+ * 導入文
+ * ============================================================
+ *
+ * 以前:
+ *
+ *     margin-inline:auto
+ *
+ * により780px幅の文章が中央配置され、
+ * H1の左端と揃っていなかった。
+ *
+ * 今回:
+ *
+ *     margin-left:0
+ *     margin-right:auto
+ *
+ * として、親 .ch-shell の左端に合わせる。
+ * ============================================================ */
+
+.iezukuri-subpage
+.ch-sub-content
+.ch-sub-content__intro {
+  width:
+    100%;
+
+  max-width:
+    780px;
+
+  margin-left:
+    0 !important;
+
+  margin-right:
+    auto !important;
+
+  margin-top:
+    0 !important;
+
+  margin-bottom:
+    clamp(24px, 3vw, 32px) !important;
+}
+
+
+/*
+ * 導入本文
+ *
+ * _ch_intro_text の表示部分。
+ *
+ * タイトル直下のリード文なので、
+ * 大きすぎず読みやすいサイズにする。
+ */
+.iezukuri-subpage
+.ch-sub-content
+.ch-sub-content__lead {
+  margin-top:
+    0 !important;
+
+  font-size:
+    16px;
+
+  line-height:
+    1.8;
+}
+
+
+/*
+ * WordPressのwpautop()で生成された
+ * 最初・最後のpの余白を整理する。
+ */
+.iezukuri-subpage
+.ch-sub-content
+.ch-sub-content__lead > :first-child {
+  margin-top:
+    0 !important;
+}
+
+
+.iezukuri-subpage
+.ch-sub-content
+.ch-sub-content__lead > :last-child {
+  margin-bottom:
+    0 !important;
+}
+
+
+/* ============================================================
+ * Tablet
+ * ============================================================ */
+
+@media (max-width: 860px) {
+
+  .iezukuri-subpage
+  [data-iez-page-heading] {
+    padding-bottom:
+      24px !important;
+  }
+
+
+  .iezukuri-subpage
+  [data-iez-page-heading] h1 {
+    font-size:
+      clamp(38px, 7vw, 52px) !important;
+  }
+
+}
+
+
+/* ============================================================
+ * Mobile
+ * ============================================================ */
+
+@media (max-width: 767px) {
+
+  .iezukuri-subpage
+  [data-iez-page-heading] {
+    padding-bottom:
+      18px !important;
+  }
+
+
+  .iezukuri-subpage
+  [data-iez-page-heading] h1 {
+    font-size:
+      clamp(32px, 10vw, 42px) !important;
+
+    line-height:
+      1.12 !important;
+  }
+
+
+  .iezukuri-subpage
+  .ch-sub-content
+  .ch-sub-content__intro {
+    max-width:
+      none;
+
+    margin-bottom:
+      22px !important;
+  }
+
+
+  .iezukuri-subpage
+  .ch-sub-content
+  .ch-sub-content__lead {
+    font-size:
+      15px;
+
+    line-height:
+      1.75;
+  }
+
+}
+
+/* IEZ_PAGE_HEADING_BALANCE_END */
+
+/* IEZ_SUB_CONTENT_COMPACT_START */
+
+/* ============================================================
+ * サブコンテンツ全体
+ * ============================================================
+ *
+ * 大画面でもコンテンツが横いっぱいに広がらないようにする。
+ * ============================================================ */
+
+.iezukuri-subpage
+.ch-sub-content
+.ch-sub-content__items {
+  width: 100% !important;
+  max-width: 920px !important;
+  margin-inline: auto !important;
+
+  gap:
+    clamp(18px, 2vw, 24px) !important;
+}
+
+
+/* ============================================================
+ * 導入文
+ * ============================================================
+ *
+ * 画像群との間が広がりすぎないようにする。
+ * ============================================================ */
+
+.iezukuri-subpage
+.ch-sub-content
+.ch-sub-content__intro {
+  max-width: 920px;
+  margin-inline: auto;
+
+  margin-bottom:
+    clamp(22px, 3vw, 30px);
+}
+
+
+/* ============================================================
+ * CARD
+ * 画像上＋文章下
+ * ============================================================
+ *
+ * 写真ギャラリーではなく、
+ * 「説明用カード」として見える大きさにする。
+ *
+ *
+ * 2件:
+ *
+ *        ┌──────────┐  ┌──────────┐
+ *        │  画像    │  │  画像    │
+ *        ├──────────┤  ├──────────┤
+ *        │ 見出し   │  │ 見出し   │
+ *        │ 本文     │  │ 本文     │
+ *        └──────────┘  └──────────┘
+ *
+ * ============================================================ */
+
+.iezukuri-subpage
+.ch-sub-content
+.ch-sub-content__card-row {
+  display: grid !important;
+
+  grid-template-columns:
+    repeat(
+      auto-fit,
+      minmax(260px, 320px)
+    ) !important;
+
+  justify-content:
+    center !important;
+
+  width:
+    100% !important;
+
+  max-width:
+    700px !important;
+
+  margin-inline:
+    auto !important;
+
+  gap:
+    22px !important;
+}
+
+
+.iezukuri-subpage
+.ch-sub-content
+.ch-sub-content__card-row
+.ch-sub-content__item--card {
+  width:
+    100% !important;
+
+  max-width:
+    320px !important;
+
+  border-radius:
+    12px !important;
+
+  overflow:
+    hidden;
+}
+
+
+/*
+ * カード画像
+ *
+ * 画像がカード全体を支配しないよう
+ * 高さ150pxへ固定。
+ */
+.iezukuri-subpage
+.ch-sub-content
+.ch-sub-content__card-row
+.ch-sub-content__item--card
+.ch-sub-content__media {
+  width:
+    100% !important;
+
+  height:
+    150px !important;
+
+  min-height:
+    0 !important;
+
+  max-height:
+    150px !important;
+
+  margin:
+    0 !important;
+
+  overflow:
+    hidden;
+}
+
+
+.iezukuri-subpage
+.ch-sub-content
+.ch-sub-content__card-row
+.ch-sub-content__item--card
+.ch-sub-content__image {
+  display:
+    block !important;
+
+  width:
+    100% !important;
+
+  height:
+    150px !important;
+
+  min-height:
+    0 !important;
+
+  max-height:
+    150px !important;
+
+  aspect-ratio:
+    auto !important;
+
+  object-fit:
+    cover !important;
+
+  object-position:
+    center !important;
+}
+
+
+/*
+ * カードの文章。
+ *
+ * title / text は
+ * _ch_content_items に保存された文章。
+ */
+.iezukuri-subpage
+.ch-sub-content
+.ch-sub-content__card-row
+.ch-sub-content__item--card
+.ch-sub-content__copy {
+  margin:
+    0 !important;
+
+  padding:
+    13px 15px 15px !important;
+}
+
+
+.iezukuri-subpage
+.ch-sub-content
+.ch-sub-content__card-row
+.ch-sub-content__item--card
+.ch-sub-content__item-title {
+  margin:
+    0 0 5px !important;
+
+  font-size:
+    18px !important;
+
+  line-height:
+    1.4 !important;
+}
+
+
+.iezukuri-subpage
+.ch-sub-content
+.ch-sub-content__card-row
+.ch-sub-content__item--card
+.ch-sub-content__item-text {
+  margin:
+    0 !important;
+
+  font-size:
+    15px !important;
+
+  line-height:
+    1.7 !important;
+}
+
+
+.iezukuri-subpage
+.ch-sub-content
+.ch-sub-content__card-row
+.ch-sub-content__item--card
+.ch-sub-content__item-text p {
+  margin:
+    0 !important;
+}
+
+
+/* ============================================================
+ * IMAGE LEFT / IMAGE RIGHT
+ * ============================================================
+ *
+ * こちらはカード表示とは別。
+ *
+ * 本文量があるコンテンツ向け。
+ *
+ *
+ * image-left:
+ *
+ *     [240×180] ｜ 見出し
+ *                 本文
+ *
+ *
+ * image-right:
+ *
+ *     見出し      ｜ [240×180]
+ *     本文
+ *
+ * ============================================================ */
+
+.iezukuri-subpage
+.ch-sub-content
+.ch-sub-content__item[data-iez-item-layout="image-left"],
+
+.iezukuri-subpage
+.ch-sub-content
+.ch-sub-content__item[data-iez-item-layout="image-right"] {
+  width:
+    100% !important;
+
+  max-width:
+    900px !important;
+
+  margin-inline:
+    auto !important;
+}
+
+
+/* 画像左 */
+
+.iezukuri-subpage
+.ch-sub-content
+.ch-sub-content__item[data-iez-item-layout="image-left"] {
+  grid-template-columns:
+    240px
+    minmax(0, 1fr) !important;
+}
+
+
+/* 画像右 */
+
+.iezukuri-subpage
+.ch-sub-content
+.ch-sub-content__item[data-iez-item-layout="image-right"] {
+  grid-template-columns:
+    minmax(0, 1fr)
+    240px !important;
+}
+
+
+/*
+ * 左右型サムネイル
+ */
+.iezukuri-subpage
+.ch-sub-content
+.ch-sub-content__item[data-iez-item-layout="image-left"]
+.ch-sub-content__media,
+
+.iezukuri-subpage
+.ch-sub-content
+.ch-sub-content__item[data-iez-item-layout="image-right"]
+.ch-sub-content__media {
+  width:
+    240px !important;
+
+  height:
+    180px !important;
+
+  min-height:
+    0 !important;
+
+  max-width:
+    240px !important;
+
+  max-height:
+    180px !important;
+
+  align-self:
+    center !important;
+
+  overflow:
+    hidden;
+}
+
+
+.iezukuri-subpage
+.ch-sub-content
+.ch-sub-content__item[data-iez-item-layout="image-left"]
+.ch-sub-content__media img,
+
+.iezukuri-subpage
+.ch-sub-content
+.ch-sub-content__item[data-iez-item-layout="image-right"]
+.ch-sub-content__media img {
+  display:
+    block !important;
+
+  width:
+    100% !important;
+
+  height:
+    100% !important;
+
+  min-height:
+    0 !important;
+
+  max-height:
+    none !important;
+
+  object-fit:
+    cover !important;
+
+  object-position:
+    center !important;
+}
+
+
+/*
+ * 左右型文章
+ */
+.iezukuri-subpage
+.ch-sub-content
+.ch-sub-content__item[data-iez-item-layout="image-left"]
+.ch-sub-content__copy,
+
+.iezukuri-subpage
+.ch-sub-content
+.ch-sub-content__item[data-iez-item-layout="image-right"]
+.ch-sub-content__copy {
+  padding:
+    18px 24px !important;
+}
+
+
+.iezukuri-subpage
+.ch-sub-content
+.ch-sub-content__item[data-iez-item-layout="image-left"]
+.ch-sub-content__item-title,
+
+.iezukuri-subpage
+.ch-sub-content
+.ch-sub-content__item[data-iez-item-layout="image-right"]
+.ch-sub-content__item-title {
+  margin:
+    0 0 7px !important;
+
+  font-size:
+    19px !important;
+
+  line-height:
+    1.4 !important;
+}
+
+
+.iezukuri-subpage
+.ch-sub-content
+.ch-sub-content__item[data-iez-item-layout="image-left"]
+.ch-sub-content__item-text,
+
+.iezukuri-subpage
+.ch-sub-content
+.ch-sub-content__item[data-iez-item-layout="image-right"]
+.ch-sub-content__item-text {
+  font-size:
+    15px !important;
+
+  line-height:
+    1.8 !important;
+}
+
+
+/* ============================================================
+ * Tablet
+ * ============================================================ */
+
+@media (max-width: 860px) {
+
+  .iezukuri-subpage
+  .ch-sub-content
+  .ch-sub-content__item[data-iez-item-layout="image-left"],
+
+  .iezukuri-subpage
+  .ch-sub-content
+  .ch-sub-content__item[data-iez-item-layout="image-right"] {
+    grid-template-columns:
+      minmax(0, 1fr) !important;
+
+    max-width:
+      680px !important;
+  }
+
+
+  /*
+   * image-rightでも
+   * タブレット以下は画像を上へ。
+   */
+
+  .iezukuri-subpage
+  .ch-sub-content
+  .ch-sub-content__item[data-iez-item-layout="image-left"]
+  .ch-sub-content__media,
+
+  .iezukuri-subpage
+  .ch-sub-content
+  .ch-sub-content__item[data-iez-item-layout="image-right"]
+  .ch-sub-content__media {
+    grid-column:
+      1 !important;
+
+    grid-row:
+      1 !important;
+
+    width:
+      100% !important;
+
+    max-width:
+      none !important;
+
+    height:
+      auto !important;
+
+    max-height:
+      none !important;
+  }
+
+
+  .iezukuri-subpage
+  .ch-sub-content
+  .ch-sub-content__item[data-iez-item-layout="image-left"]
+  .ch-sub-content__media img,
+
+  .iezukuri-subpage
+  .ch-sub-content
+  .ch-sub-content__item[data-iez-item-layout="image-right"]
+  .ch-sub-content__media img {
+    width:
+      100% !important;
+
+    height:
+      auto !important;
+
+    aspect-ratio:
+      16 / 9 !important;
+  }
+
+
+  .iezukuri-subpage
+  .ch-sub-content
+  .ch-sub-content__item[data-iez-item-layout="image-left"]
+  .ch-sub-content__copy,
+
+  .iezukuri-subpage
+  .ch-sub-content
+  .ch-sub-content__item[data-iez-item-layout="image-right"]
+  .ch-sub-content__copy {
+    grid-column:
+      1 !important;
+
+    grid-row:
+      2 !important;
+
+    padding:
+      17px 19px !important;
+  }
+}
+
+
+/* ============================================================
+ * Mobile
+ * ============================================================ */
+
+@media (max-width: 767px) {
+
+  .iezukuri-subpage
+  .ch-sub-content
+  .ch-sub-content__items {
+    max-width:
+      100% !important;
+
+    gap:
+      16px !important;
+  }
+
+
+  /*
+   * カードもモバイルでは1列。
+   */
+  .iezukuri-subpage
+  .ch-sub-content
+  .ch-sub-content__card-row {
+    grid-template-columns:
+      minmax(0, 1fr) !important;
+
+    width:
+      100% !important;
+
+    max-width:
+      100% !important;
+  }
+
+
+  .iezukuri-subpage
+  .ch-sub-content
+  .ch-sub-content__card-row
+  .ch-sub-content__item--card {
+    max-width:
+      100% !important;
+  }
+
+
+  /*
+   * モバイルではカード画像も
+   * 固定150pxではなく16:9へする。
+   */
+  .iezukuri-subpage
+  .ch-sub-content
+  .ch-sub-content__card-row
+  .ch-sub-content__item--card
+  .ch-sub-content__media,
+
+  .iezukuri-subpage
+  .ch-sub-content
+  .ch-sub-content__card-row
+  .ch-sub-content__item--card
+  .ch-sub-content__image {
+    height:
+      auto !important;
+
+    max-height:
+      none !important;
+  }
+
+
+  .iezukuri-subpage
+  .ch-sub-content
+  .ch-sub-content__card-row
+  .ch-sub-content__item--card
+  .ch-sub-content__image {
+    aspect-ratio:
+      16 / 9 !important;
+  }
+
+}
+
+/* IEZ_SUB_CONTENT_COMPACT_END */
+
+/* IEZ_SUB_CONTENT_LAYOUT_FORCE_END */
