@@ -59,3 +59,15 @@ _pdf-test/
 *.broken*
 *.destroyed*
 # NAIGAI_THEME_ARTIFACTS_END
+
+# NAIGAI_FINAL_ARTIFACTS_START
+# テーマ実行には不要な画像取込元・作業履歴・圧縮バックアップ
+_incoming/
+_repair-backup/
+*.tar.gz
+_debug-*.txt
+_git_*.txt
+_git_*.patch
+theme-error-check-*.txt
+full-file-check-*.txt
+# NAIGAI_FINAL_ARTIFACTS_END
