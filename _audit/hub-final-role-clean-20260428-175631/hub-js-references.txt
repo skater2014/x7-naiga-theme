@@ -1,5 +1,0 @@
-hub/inc/customhome-shortcode.php:178:            '/hub/js/hub-swiper-init.js',
-hub/inc/customhome-shortcode.php:253:            '#<script[^>]+src=["\'][^"\']*/hub/js/hub-swiper-init\.js(?:\?[^"\']*)?["\'][^>]*></script>\s*#i',
-hub/templates/construction.php:18:$js_path = get_template_directory() . '/hub/js/customhome-nav.js';
-hub/templates/construction.php:21:        'hub-customhome-nav',
-hub/templates/construction.php:22:        get_template_directory_uri() . '/hub/js/customhome-nav.js',

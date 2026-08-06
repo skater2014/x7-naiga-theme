@@ -1,2 +1,0 @@
-hub/js/customhome-nav.js
-hub/js/hub-swiper-init.js

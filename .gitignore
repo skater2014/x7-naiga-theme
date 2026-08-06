@@ -43,3 +43,19 @@ live-theme-check-*.txt
 iezukuri-*-check-*.txt
 iezukuri-current-audit-*.txt
 iezukuri-cta-*.txt
+
+# NAIGAI_THEME_ARTIFACTS_START
+# テーマ実行には不要な調査・バックアップ・退避ファイル
+_audit/
+_bak_nested_wp-content_*/
+_broken/
+_debug/
+_disabled/
+_pdf-test/
+.backup*/
+*.bak*
+*.before*
+*.backup*
+*.broken*
+*.destroyed*
+# NAIGAI_THEME_ARTIFACTS_END

@@ -1,7 +1,0 @@
-minpaku/admin/css/minpaku-b2c-admin.css
-minpaku/b2c/css/minpaku-b2c.css
-minpaku/common/css/minpaku-archive.css
-minpaku/common/css/minpaku-base.css
-minpaku/common/css/minpaku-booking.css
-minpaku/common/css/minpaku-footer-nav.css
-minpaku/common/css/minpaku-single.css

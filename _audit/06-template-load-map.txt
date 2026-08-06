@@ -1,215 +1,0 @@
-archive-blog.php:141:    <?php get_template_part('sidebar-land'); ?>
-archive-house.php:165:                    //get_template_part('property-info-table');
-archive-house.php:206:    <?php get_template_part('sidebar-land'); ?>
-archive-minpaku.php:186:            include $mnpk_footer_nav;
-archive-recruitment.php:164:    // get_template_part('property-info-table');
-archive-recruitment.php:165:    get_template_part('recruit-info-table'); // Correct way to load template part
-archive-recruitment.php:206:    <?php get_template_part('sidebar-land'); ?>
-archive.php:150:                get_template_part('property-info-table'); // 物件情報テーブルの読み込み
-archive.php:213:    get_template_part('sidebar-land');
-archive.php:215:    get_template_part('sidebar-house');
-archive.php:217:    get_template_part('sidebar');
-category-naigai-construction.php:120:                    get_template_part('property-info-table'); // 物件情報テーブルの読み込み
-category-naigai-construction.php:176:    <?php get_template_part('sidebar-land'); // 不動産関連のサイドバー 
-category-naigai-construction.php:181:<?php //get_template_part('templates/store-reservation-modal'); 
-category-naigai-tochi.php:110:                    get_template_part('property-info-table'); // 物件情報テーブルの読み込み
-category-naigai-tochi.php:166:    <?php get_template_part('sidebar-land'); // 不動産関連のサイドバー 
-category-naigai-tochi.php:171:<?php //get_template_part('templates/store-reservation-modal'); 
-category-new-house.php:129:                    get_template_part('property-info-table'); // 物件情報テーブルの読み込み
-category-new-house.php:180:    <?php get_template_part('sidebar-land'); // 不動産関連のサイドバー ?>
-category-new-house.php:184:<?php //get_template_part('templates/store-reservation-modal'); ?>
-category-recommended-land-and-house.php:126:                    get_template_part('property-info-table'); // 物件情報テーブルの読み込み
-category-recommended-land-and-house.php:182:    <?php get_template_part('sidebar-land'); // 不動産関連のサイドバー 
-category-recommended-land-and-house.php:187:<?php //get_template_part('templates/store-reservation-modal'); 
-category-sold-out.php:116:                    get_template_part('property-info-table'); // 物件情報テーブルの読み込み
-category-sold-out.php:172:    <?php get_template_part('sidebar-land'); // 不動産関連のサイドバー 
-category-sold-out.php:177:<?php //get_template_part('templates/store-reservation-modal'); 
-category-travel.php:132:    <?php get_template_part('sidebar-land'); ?>
-category.php:115:                    get_template_part('property-info-table'); // 物件情報テーブルの読み込み
-category.php:169:    <?php get_template_part('sidebar-land'); // 不動産関連のサイドバー 
-category.php:174:<?php //get_template_part('templates/store-reservation-modal'); 
-footer-home1.php:101:  get_template_part('templates/store-reservation-modal');
-footer-home1.php:108:<?php include_once get_template_directory() . '/images/symbol-defs.svg'; ?>
-footer.php:100:<?php include_once get_template_directory() . '/images/symbol-defs.svg'; ?>
-footer.php:93:    get_template_part('templates/store-reservation-modal');
-front-page.php:5:require get_template_directory() . '/hub/templates/front.php';
-functions.php:1149:        get_template_part('templates/chatgpt-modal');
-functions.php:1149:        get_template_part('templates/chatgpt-modal');
-functions.php:1899://require get_template_directory().'/inc/functions/category-functions.php';
-functions.php:1899://require get_template_directory().'/inc/functions/category-functions.php';
-functions.php:1927:require_once get_template_directory() . '/hub/init.php';
-functions.php:1927:require_once get_template_directory() . '/hub/init.php';
-functions.php:1930:require_once get_template_directory() . '/minpaku/init.php';
-functions.php:1930:require_once get_template_directory() . '/minpaku/init.php';
-functions.php:1934:require get_template_directory() . '/inc/functions/custom-walker.php';
-functions.php:1934:require get_template_directory() . '/inc/functions/custom-walker.php';
-functions.php:1937:require_once get_template_directory() . '/inc/functions/functions-nasu-guide.php';
-functions.php:1937:require_once get_template_directory() . '/inc/functions/functions-nasu-guide.php';
-functions.php:1940:require_once get_template_directory() . '/inc/functions/functions-page-company.php';
-functions.php:1940:require_once get_template_directory() . '/inc/functions/functions-page-company.php';
-functions.php:1944:// require_once get_template_directory() . '/inc/functions/functions-minpaku-layout-assets.php';
-functions.php:1944:// require_once get_template_directory() . '/inc/functions/functions-minpaku-layout-assets.php';
-functions.php:1949:require_once get_template_directory() . '/inc/functions/functions-page-used-renovation.php';
-functions.php:1949:require_once get_template_directory() . '/inc/functions/functions-page-used-renovation.php';
-functions.php:1952:require_once get_template_directory() . '/inc/functions/functions-page-zairai.php';
-functions.php:1952:require_once get_template_directory() . '/inc/functions/functions-page-zairai.php';
-functions.php:1955:require_once get_template_directory() . '/inc/functions/functions-page-wakugumi.php';
-functions.php:1955:require_once get_template_directory() . '/inc/functions/functions-page-wakugumi.php';
-functions.php:1958:require_once get_template_directory() . '/inc/functions/functions-page-sekoujirei.php';
-functions.php:1958:require_once get_template_directory() . '/inc/functions/functions-page-sekoujirei.php';
-functions.php:1961:require get_template_directory() . '/inc/functions/custom-functions.php';
-functions.php:1961:require get_template_directory() . '/inc/functions/custom-functions.php';
-functions.php:1964:require get_template_directory() . '/inc/functions/page-gallery-room-functions.php';
-functions.php:1964:require get_template_directory() . '/inc/functions/page-gallery-room-functions.php';
-functions.php:1967:require_once get_template_directory() . '/inc/functions/functions-customer-info-form.php';
-functions.php:1967:require_once get_template_directory() . '/inc/functions/functions-customer-info-form.php';
-functions.php:1970://require_once get_template_directory() . '/inc/functions/generate-pdf.php';
-functions.php:1970://require_once get_template_directory() . '/inc/functions/generate-pdf.php';
-functions.php:1974://require_once $walker_path;
-functions.php:1974://require_once $walker_path;
-functions.php:1980:require get_template_directory() . '/inc/functions/bread1-comment.php';
-functions.php:1980:require get_template_directory() . '/inc/functions/bread1-comment.php';
-functions.php:1983:// require get_template_directory() . '/inc/functions/bread2-comment.php';
-functions.php:1983:// require get_template_directory() . '/inc/functions/bread2-comment.php';
-functions.php:1986://require get_template_directory().'/inc/functions/customizer-metabox-menu.php';
-functions.php:1986://require get_template_directory().'/inc/functions/customizer-metabox-menu.php';
-functions.php:1989:require get_template_directory() . '/inc/functions/comment-forme.php';
-functions.php:1989:require get_template_directory() . '/inc/functions/comment-forme.php';
-functions.php:1992:require_once get_template_directory() . '/inc/admin/admin-viewing-list.php';
-functions.php:1992:require_once get_template_directory() . '/inc/admin/admin-viewing-list.php';
-functions.php:3975:    require_once ABSPATH . 'wp-admin/includes/file.php';
-functions.php:3975:    require_once ABSPATH . 'wp-admin/includes/file.php';
-functions.php:3976:    require_once ABSPATH . 'wp-admin/includes/media.php';
-functions.php:3976:    require_once ABSPATH . 'wp-admin/includes/media.php';
-functions.php:3977:    require_once ABSPATH . 'wp-admin/includes/image.php';
-functions.php:3977:    require_once ABSPATH . 'wp-admin/includes/image.php';
-functions.php:5635:        include get_template_directory() . '/searchform30.php';
-functions.php:5635:        include get_template_directory() . '/searchform30.php';
-functions.php:567://require_once get_template_directory() . '/Custom_Mega_Menu_Walker.php';
-functions.php:567://require_once get_template_directory() . '/Custom_Mega_Menu_Walker.php';
-functions.php:5671:        include get_template_directory() . '/searchform30.php';
-functions.php:5671:        include get_template_directory() . '/searchform30.php';
-functions.php:5734:    include get_template_directory() . '/searchform30.php';
-functions.php:5734:    include get_template_directory() . '/searchform30.php';
-functions.php:577://require_once get_template_directory() . '/bs5-navwalker.php';
-functions.php:577://require_once get_template_directory() . '/bs5-navwalker.php';
-functions.php:6214:    include_once get_template_directory() . '/Price_Range_Widget.php'; 
-functions.php:6214:    include_once get_template_directory() . '/Price_Range_Widget.php'; 
-functions.php:6234:    require_once get_template_directory() . '/Price_Range_Widget.php';
-functions.php:6234:    require_once get_template_directory() . '/Price_Range_Widget.php';
-functions.php:6648:        require_once ABSPATH . 'wp-admin/includes/file.php';
-functions.php:6648:        require_once ABSPATH . 'wp-admin/includes/file.php';
-functions.php:6649:        require_once ABSPATH . 'wp-admin/includes/image.php';
-functions.php:6649:        require_once ABSPATH . 'wp-admin/includes/image.php';
-functions.php:7084:    require_once ABSPATH . 'wp-admin/includes/upgrade.php';
-functions.php:7084:    require_once ABSPATH . 'wp-admin/includes/upgrade.php';
-functions.php:7622:require_once get_template_directory() . '/hub/inc/admin/customhome-builder-admin.php';
-functions.php:7622:require_once get_template_directory() . '/hub/inc/admin/customhome-builder-admin.php';
-functions.php:7626:require_once get_template_directory() . '/hub/inc/admin/customhome-builder-admin-sample.php';
-functions.php:7626:require_once get_template_directory() . '/hub/inc/admin/customhome-builder-admin-sample.php';
-header-77.php:215:          <?php include get_template_directory() . '/searchform20.php'; ?>
-header-77.php:250:    require get_template_directory() . '/inc/functions/swiper-slider.php';
-header-77.php:257:    require get_template_directory() . '/inc/functions/home-slider.php';
-header-77.php:259:    require get_template_directory() . '/inc/functions/category-slider-tochi.php';
-header-77.php:261:    require get_template_directory() . '/inc/functions/category-slider-construction.php';
-header-77.php:263:    require get_template_directory() . '/inc/functions/category-slider-house.php';
-header-77.php:265:    require get_template_directory() . '/inc/functions/home-slider.php';
-header-nobootstrap.php:1:<?php/*  Template Name: nobootstrap.php*/?><!DOCTYPE html><html lang='ja'><head>    <!-- Google Tag Manager -->    <script>        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);        })(window,document,'script','dataLayer','GTM-WJJFJFX');    </script>    <!-- End Google Tag Manager -->        <meta charset="<?php bloginfo( 'charset' ); ?>">    <title>        <?php if ( ! is_front_page() ) { wp_title( '::', true, 'right' ); }        bloginfo( 'name' ); ?>    </title>    <meta name="viewport" content="width=device-width, initial-scale=1.0">    <link rel="shortcut icon" href="<?php echo get_template_directory_uri(); ?>/images/favicon.ico" />    <!-- Vimeo CDN 読み込み -->    <script type="module" src="https://cdn.jsdelivr.net/npm/lite-vimeo-embed/+esm"></script>    <?php wp_head(); ?></head><body <?php body_class(); ?>><!--Start Wrapper--><div class="wrapper">      <?php breadcrumb1(); //** パンくずリスト（CHAPTER 16）?><div class="fix-header">  <div class="fix-header-contents">    <div class="head-nav head-position"> <!-- トグルボタン -->                <!--<button id="toggleMenuButton" class="toggle-menu-button">Toggle Menu</button>-->      <?php      wp_nav_menu(array(          'menu' => 'Additional Menu',          'menu_class' => 'custom-slick-menu', // メニュー全体に適用されるクラス          'container_class' => 'custom-slick-container', // メニューコンテナに適用されるクラス          //'walker' => new WP_Bootstrap_Mega_Navwalker() // カスタムウォーカーを指定      ));      ?>      <?php //wp_nav_menu( array( 'theme_location' => 'max_mega_menu_2' ) ); ?> <!--Max Mega menu plugin-->      <div class="head-search">        <?php require get_template_directory().'/searchform1.php';?>      </div>    </div><!-- head-nav -->  </div></div>  <header id="head">    <div class="head-section">      <div class="logo">        <?php //echo (dess_setting('dess_logo') != '' ? '<a href="'.home_url().'"><img src="'.dess_setting('dess_logo').'" alt="logo" /></a>' : '<a href="'.home_url().'"><img src="'.esc_url(get_stylesheet_directory_uri()).'/images/logo.png" alt="logo" /></a>'); ?>      </div><!-- logo -->      <div class="head-nav">        <?php //wp_nav_menu(array('menu' => 'Additional Menu')); ?>        <?php //wp_nav_menu( array( 'theme_location' => 'max_mega_menu_2' ) ); ?> <!--Max Mega menu plugin-->        <div class="head-search">          <?php //require get_template_directory().'/searchform1.php';?>        </div>      </div><!-- head-nav -->      <aside class="header-aside">        <div class="header-aside-inner">          <span id="touch-menu" class="mobile-menu"><span></span></span><!--サイドバートグルー-->          <div class="social-icons">            <?php            $social_icons = array('twitter', 'facebook', 'google', 'instagram', 'pinterest', 'vimeo', 'youtube', 'linkedin');            foreach ($social_icons as $icon) :              $value = get_theme_mod('footer_' . $icon);              if ($value !== '') :            ?>                <a href="<?php echo $value; ?>" target="_blank" class="ta-<?php echo $icon; ?> ta-icon"><?php echo ucfirst($icon); ?></a>            <?php              endif;            endforeach;            ?>          </div>        </div>      </aside>            <div class="sidebar-navigation"><?php // カスタムウィジェットエリアを表示            if ( is_active_sidebar( 'custom-widget-area' ) ) {                dynamic_sidebar( 'custom-widget-area' );            }            // カスタムメニューを表示            my_custom_menu();            ?>      </div>      <div class="clear"></div>    </div><!--/head-section end-->  </header>  <!--Start page-wrapper--><div class="page-wrapper">
-home.php:85:          get_template_part('templates/post', 'template');
-house-category.php:132:        get_template_part('property-info-table'); // 物件情報テーブルの読み込み
-house-category.php:188:   <?php get_template_part('sidebar-land'); // 不動産関連のサイドバー ?>
-house-category.php:192:<?php //get_template_part('templates/store-reservation-modal'); ?>
-inc/functions/category-slider-construction.php:35:                    get_template_part('slide', 'template');
-inc/functions/category-slider-house.php:34:                    get_template_part('slide', 'template');
-inc/functions/category-slider-tochi.php:35:                    get_template_part('slide', 'template');
-inc/functions/functions-page-used-renovation.php:17: * 1. functions.php でこのファイルを require_once する
-inc/functions/generate-pdf.php:2:require_once __DIR__ . '/vendor/autoload.php';
-inc/functions/home-slider.php:27:            get_template_part('slide', 'template');
-inc/functions/hub/admin/functions-hub-admin.php:5:require_once get_template_directory() . '/hub/inc/admin.php';
-inc/functions/hub/common/functions-hub-common.php:5:require_once get_template_directory() . '/hub/inc/common.php';
-inc/functions/hub/common/functions-hub-context.php:5:require_once get_template_directory() . '/hub/inc/context.php';
-inc/functions/hub/front/functions-hub-assets.php:5:require_once get_template_directory() . '/hub/inc/assets.php';
-inc/functions/hub/functions-hub-loader.php:5:require_once get_template_directory() . '/hub/init.php';
-inc/functions/minpaku/common/functions-minpaku-checkout-endpoint.php:27: * - このファイルで template_include を使って
-inc/functions/minpaku/common/functions-minpaku-checkout-endpoint.php:99: * template_include は、
-inc/migrations/migrate-front-v1.php:6:require_once __DIR__ . '/migrate-runner.php';
-inc/migrations/migrate-hub-v1.php:6:require_once __DIR__ . '/migrate-runner.php';
-inc/migrations/migrate-minpaku-b2c-v1.php:6:require_once __DIR__ . '/migrate-runner.php';
-inc/minpaku/booking.php:4:require_once get_template_directory() . '/inc/functions/minpaku/common/functions-minpaku-booking.php';
-inc/minpaku/booking.php:5:require_once get_template_directory() . '/inc/functions/minpaku/common/functions-minpaku-checkout-endpoint.php';
-inc/minpaku/init.php:10:require_once __DIR__ . '/context.php';
-inc/minpaku/init.php:11:require_once __DIR__ . '/enqueue.php';
-inc/minpaku/init.php:12:require_once __DIR__ . '/common.php';
-inc/minpaku/init.php:13:require_once __DIR__ . '/booking.php';
-inc/minpaku/init.php:14:require_once __DIR__ . '/admin.php';
-inc/minpaku/init.php:15:require_once __DIR__ . '/b2c.php';
-inc/minpaku/init.php:16:require_once __DIR__ . '/b2b.php';
-inc/preview-custom-page.php:17:require_once get_template_directory() . '/inc/settings.php';
-inc/preview-custom-page.php:20:require_once get_template_directory() . '/inc/custom-function.php';
-index.php:158:                    get_template_part('property-info-table'); // 物件情報テーブルの読み込み
-index.php:222:        get_template_part('sidebar-land');
-index.php:224:        get_template_part('sidebar-house');
-index.php:226:        get_template_part('sidebar');
-Land-category.php:113:        get_template_part('property-info-table'); // 物件情報テーブルの読み込み
-Land-category.php:169:   <?php get_template_part('sidebar-land'); // 不動産関連のサイドバー ?>
-Land-category.php:173:<?php //get_template_part('templates/store-reservation-modal'); ?>
-page-construction-hub-sub.php:207:                <?php require $partial_file; ?>
-page-minpaku-b2c.php:6:require get_template_directory() . '/minpaku/b2c/page.php';
-search.php:251:                    <?php get_template_part('property-info-table'); ?>
-search.php:316:    <?php get_template_part('sidebar-land'); ?>
-sidebar-house.php:28:        <?php get_template_part('sidebar-house'); ?>
-sidebar-house.php:30:        <?php get_template_part('sidebar-land'); ?>
-sidebar-house.php:32:        <?php get_template_part('sidebar'); ?><?//昔のサイドバーコードがやや違う?>
-sidebar-house.php:63:    <?php get_template_part('template-sidebar-parts/social-icons'); ?>
-sidebar-house.php:65:    <?php get_template_part('template-sidebar-parts/material1-post');?>
-sidebar-house.php:67:    <?php get_template_part('template-sidebar-parts/popular-post'); ?>
-sidebar-house.php:69:    <?php get_template_part('template-sidebar-parts/artifacts-post'); ?>
-sidebar-house.php:73:        get_template_part('template-sidebar-parts/tag-cloud');
-sidebar-land.php:65:    <?php get_template_part('template-sidebar-parts/social-icons'); ?>
-sidebar-land.php:66:    <?php get_template_part('template-sidebar-parts/material-post'); ?>
-sidebar-land.php:67:    <?php get_template_part('template-sidebar-parts/popular-post'); ?>
-sidebar-land.php:68:    <?php get_template_part('template-sidebar-parts/artifacts-post'); ?>
-sidebar-land.php:73:        get_template_part('template-sidebar-parts/tag-cloud');
-single-blog.php:103:                get_template_part('single-template-parts/image-tab');
-single-blog.php:107:                get_template_part('single-template-parts/panorama-tab');
-single-blog.php:159:                <?php require get_template_directory() . '/pager-post-navigation.php'; ?>
-single-blog.php:193:            <?php get_template_part('reservation-form-content', null, array('post_id' => $post_id)); ?>
-single-blog.php:371:    <?php get_template_part('sidebar-land'); ?>
-single-default.php:163:			<?php get_template_part( 'sidebar-house' ); ?>
-single-default.php:165:			<?php get_template_part( 'sidebar-land' ); ?>
-single-default.php:167:			<?php get_template_part( 'sidebar' ); ?><?//昔のサイドバーコードがやや違う?>
-single-default.php:62:			<?php require get_template_directory().'/pager.php';?>
-single-house.php:114:                    get_template_part('template-sidebar-parts/tekken7-tag-cloud');
-single-house.php:156:                <?php require get_template_directory() . '/pager-post-navigation.php'; ?>
-single-house.php:294:                    <?php get_template_part('property-info-table'); ?>
-single-house.php:329:        get_template_part('reservation-form-content', null, array('post_id' => $post_id));
-single-house.php:348:    <?php get_template_part('sidebar-house'); ?>
-single-house.php:75:                get_template_part('single-template-parts/image-tab');
-single-house.php:79:                get_template_part('single-template-parts/panorama-tab');
-single-minpaku.php:880:                <?php get_template_part('template-parts/minpaku/payment-modal-mobile'); ?>
-single-recruitment.php:127:                    get_template_part('single-template-parts/image-tab');
-single-recruitment.php:130:                    get_template_part('single-template-parts/panorama-tab');
-single-recruitment.php:144:                    get_template_part('template-sidebar-parts/tekken7-tag-cloud');
-single-recruitment.php:183:                <?php require get_template_directory() . '/pager-post-navigation.php'; ?>
-single-recruitment.php:313:                    <?php get_template_part('recruit-info-table'); ?>
-single-recruitment.php:351:        get_template_part('reservation-form-content', null, array('post_id' => $post_id));
-single-recruitment.php:370:    <?php get_template_part('sidebar-house'); ?>
-single-recruitment.php:69:                get_template_part('single-template-parts/image-tab');
-single-recruitment.php:73:                get_template_part('single-template-parts/panorama-tab');
-single.php:187:                <?php //require get_template_directory() . '/single-template-parts/event-modal-template.php'; 
-single.php:204:            <?php require get_template_directory() . '/pager-post-navigation.php'; ?>
-single.php:287:                                    <?php get_template_part('property-info-table'); ?>
-single.php:330:        <?php get_template_part('reservation-form-content', null, ['post_id' => $post_id]); ?>
-single.php:348:            <?php get_template_part('sidebar-land'); ?>
-single.php:350:            <?php get_template_part('sidebar-house'); ?>
-single.php:352:            <?php get_template_part('sidebar-recommended'); ?>
-single.php:354:            <?php get_template_part('sidebar'); ?>
-single.php:60:                get_template_part('single-template-parts/image-tab');
-single.php:64:                get_template_part('single-template-parts/panorama-tab');
-slide-template.php:64:                get_template_part('property-info-table');
-taxonomy-blog_genre.php:164:    <?php get_template_part('sidebar-land'); ?>
-taxonomy.php:156:                    <?php get_template_part('property-info-table'); ?>
-taxonomy.php:196:    <?php get_template_part('sidebar-house'); ?>
-template-construction-hub.php:9:require get_template_directory() . '/hub/templates/construction.php';
-template-parts/front/post-tabs.php:48:          <?php get_template_part('templates/post', 'template'); ?>
-template-realestate-hub.php:9:require get_template_directory() . '/hub/templates/realestate.php';
