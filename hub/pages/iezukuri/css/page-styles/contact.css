@@ -87,10 +87,6 @@
   margin: 0;
 }
 
-.iez-common-contact-form {
-  width: 100%;
-  margin: 32px auto 0;
-}
 
 .iez-common-contact-form .customer-info-page {
   width: 100%;
@@ -113,33 +109,66 @@
 
 
 /* =========================================================
- * /iezukuri/contact spacing
+ * CONTACT FORM PAGE SPACING
  *
- * 実際の contact 本文は
- * #contact-content / .iez-sub-section--contact。
+ * 【このCSSの役割】
+ * /iezukuri/contact/ における
+ * 「共通フォームの外側の配置」だけを管理する。
  *
- * hero直下とフォームが接触しないように、
- * contact本文の上だけ余白を取る。
+ * 共通フォーム内部の
+ * input / select / textarea / button / card は
+ * css/customer-info-form.css が担当する。
+ *
+ * 表示構造:
+ *
+ * ページタイトル・説明文
+ *        ↓
+ *      20px
+ *        ↓
+ * 共通フォーム
+ *        ↓
+ *      48px
+ *        ↓
+ * 次のセクション（SUB CTA等）
+ *
+ * 重要:
+ * 以前は
+ * #contact-content
+ * .iez-contact-form-area
+ * .iez-common-contact-form
+ * の3か所に上余白があり、
+ * 空白が重複していた。
+ *
+ * 現在は .iez-common-contact-form のmarginだけを
+ * フォーム外側余白の正本とする。
  * ========================================================= */
 
-body.iezukuri-subpage--contact #contact-content {
-  padding-top: clamp(32px, 3.5vw, 48px);
-}
-
 .iez-common-contact-form {
-  margin-top: 0;
+  width: 100%;
+  margin: 0;
 }
 
-.iez-common-contact-form .customer-info-card {
-  margin-top: 0;
+body.iezukuri-subpage--contact #contact-content {
+  padding-top: 0;
 }
 
- (max-width: 720px) {
-  body.iezukuri-subpage--contact #contact-content {
-    padding-top: 24px;
+body.iezukuri-subpage--contact .iez-contact-form-area {
+  padding-top: 0;
+}
+
+body.iezukuri-subpage--contact .iez-common-contact-form {
+  margin: 20px auto 48px;
+  padding-top: 0 !important;
+}
+
+@media (max-width: 720px) {
+
+  body.iezukuri-subpage--contact .iez-common-contact-form {
+    margin-top: 16px;
+    margin-bottom: 36px;
   }
-}
 
+}
 
 /* contact hero:
  * 人物の顔が上側で切れすぎないように表示位置を調整。
@@ -153,29 +182,12 @@ body.iezukuri-subpage--contact .iez-hero__slide img {
 }
 
 
-
-
 /* =========================================================
  * /iezukuri/contact
  *
  * contactページ固有の配置。
  * FAQの幅・デザインとは分離する。
  * ========================================================= */
-
-/*
- * HEROとフォームを接触させない。
- *
- * 実際のcontactテンプレート:
- * #contact-content
- *   └ .iez-contact-section__inner
- *      └ .iez-contact-form-area
- *
- * フォームそのものではなく、
- * 外側のareaに余白を持たせる。
- */
-body.iezukuri-subpage--contact .iez-contact-form-area {
-  padding-top: clamp(36px, 4vw, 56px);
-}
 
 
 /*
@@ -194,13 +206,6 @@ body.iezukuri-subpage--contact .iez-hero__slide img {
 
 
 /* mobile */
-@media (max-width: 720px) {
-
-  body.iezukuri-subpage--contact .iez-contact-form-area {
-    padding-top: 28px;
-  }
-
-}
 
 
 /* CONTACT-PAGE-FINAL-START
@@ -258,16 +263,6 @@ body.iezukuri-subpage--contact .iez-hero__slide img {
  * HERO → FORM
  * ========================================================= */
 
-/*
- * 実際にHTMLへ出ている
- * .iez-common-contact-form に直接余白を付ける。
- *
- * 古い .iez-contact-template 前提にはしない。
- */
-body.iezukuri-subpage--contact .iez-common-contact-form {
-  padding-top: clamp(40px, 4vw, 56px) !important;
-}
-
 
 /* =========================================================
  * MOBILE
@@ -282,9 +277,6 @@ body.iezukuri-subpage--contact .iez-common-contact-form {
     height: clamp(280px, 64vw, 400px) !important;
   }
 
-  body.iezukuri-subpage--contact .iez-common-contact-form {
-    padding-top: 28px !important;
-  }
 
 }
 
