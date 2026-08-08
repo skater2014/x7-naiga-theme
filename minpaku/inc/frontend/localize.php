@@ -46,7 +46,27 @@ if (!function_exists('mnpk_localize_front_script')) {
         }
 
         wp_localize_script('minpaku-single-js', 'mnpkBooking', array(
-            'ajaxUrl'        => admin_url('admin-ajax.php'),
+            /**
+             * Stripe決済の環境全体ON/OFF。
+             * PHP側を正本にしてJSへ渡す。
+             */
+            'paymentEnabled' => (
+                function_exists('mnpk_is_payment_feature_enabled')
+                && mnpk_is_payment_feature_enabled()
+                    ? 1
+                    : 0
+            ),
+            /*
+             * Stripe / 予約AJAXは現在表示中ページと
+             * 必ず同一オリジンへ送る。
+             *
+             * localhost と 127.0.0.1 の混在によって
+             * WordPressログインCookieが失われ、
+             * nonce検証が403になることを防止する。
+             */
+            'ajaxUrl'        => wp_make_link_relative(
+                admin_url('admin-ajax.php')
+            ),
             'nonce'          => wp_create_nonce('mnpk_booking_nonce'),
             /* NAIGAI_LOCAL_STRIPE_PUBLISHABLE_FALLBACK */
             'publishableKey' => (

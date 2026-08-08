@@ -69,6 +69,42 @@ if (
 }
 
 $mobile_phone = get_theme_mod('dess_phone');
+
+/*
+ * NAIGAI_GTM_ENV_SWITCH
+ *
+ * 【アクセス解析の環境分離】
+ *
+ * このPHPでは「GA4の測定ID」ではなく、
+ * 読み込む「GTMコンテナID」だけを環境ごとに切り替える。
+ *
+ * ローカル:
+ *   127.0.0.1 / localhost
+ *   → GTM-5BWSL67B
+ *
+ * 本番:
+ *   naigaicorp.net
+ *   → GTM-P6LLPHR5
+ *
+ * GA4の測定IDはここでは管理しない。
+ * 各GTMコンテナ内の「Google タグ」で管理する。
+ *
+ * そのため、ローカルで行うStripe TEST決済やGA4テストデータが
+ * 本番用GTM / GA4へ混ざらない構成になっている。
+ *
+ * ローカル環境と本番環境でGTMコンテナを分離する。
+ * ローカルのStripe TEST / GA4テストデータを
+ * 本番Analyticsへ混ぜないための切替。
+ */
+$naigai_gtm_host = wp_parse_url(home_url('/'), PHP_URL_HOST);
+
+$naigai_gtm_id = in_array(
+    $naigai_gtm_host,
+    array('127.0.0.1', 'localhost'),
+    true
+)
+    ? 'GTM-5BWSL67B'
+    : 'GTM-P6LLPHR5';
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -88,7 +124,7 @@ $mobile_phone = get_theme_mod('dess_phone');
       j.async = true;
       j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
       f.parentNode.insertBefore(j, f);
-    })(window, document, 'script', 'dataLayer', 'GTM-P6LLPHR5');
+    })(window, document, 'script', 'dataLayer', '<?php echo esc_js($naigai_gtm_id); ?>');
   </script>
   <!-- End Google Tag Manager -->
 
@@ -110,7 +146,7 @@ $mobile_phone = get_theme_mod('dess_phone');
   <!-- Google Tag Manager (noscript) -->
   <noscript>
     <iframe
-      src="https://www.googletagmanager.com/ns.html?id=GTM-P6LLPHR5"
+      src="https://www.googletagmanager.com/ns.html?id=<?php echo esc_attr($naigai_gtm_id); ?>"
       height="0"
       width="0"
       style="display:none;visibility:hidden"></iframe>

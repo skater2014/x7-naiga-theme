@@ -275,6 +275,93 @@ if (!function_exists('mnpk_get_gallery_image_urls')) {
  * - 新しい定数名 NAIGAI_STRIPE_SECRET_KEY を優先
  * - もし昔の MINPAKU_STRIPE_SECRET_KEY が残っていても救済
  */
+/**
+ * =========================================================
+ * 民泊オンライン決済：環境全体のON / OFF
+ * =========================================================
+ *
+ * 【この関数の役割】
+ *
+ * 各施設には既に
+ *
+ * - _mnpk_booking_enabled
+ * - _mnpk_online_payment_enabled
+ *
+ * という個別設定がある。
+ *
+ * この関数はそれより一段上の、
+ *
+ * 「このWordPress環境そのものでStripe決済を許可するか」
+ *
+ * を判定する。
+ *
+ * ---------------------------------------------------------
+ * なぜ必要か
+ * ---------------------------------------------------------
+ *
+ * ローカル:
+ *   Stripe TESTキーで決済画面を開発・検証したい。
+ *
+ * 本番:
+ *   Stripeを正式採用するか未確定の間は、
+ *   誤って本番決済を開始させたくない。
+ *
+ * そのためテーマコードを削除せず、
+ * 決済機能だけ安全に停止できるようにする。
+ *
+ * ---------------------------------------------------------
+ * 優先順位
+ * ---------------------------------------------------------
+ *
+ * 1. NAIGAI_MINPAKU_PAYMENT_ENABLED が定義されていれば
+ *    その値を最優先する。
+ *
+ * 2. 定義されていない場合、
+ *    localhost / 127.0.0.1 は開発環境としてON。
+ *
+ * 3. それ以外は安全側に倒してOFF。
+ *
+ * 本番でStripeを正式利用すると決めた場合だけ、
+ * wp-config.php 等で以下を設定する。
+ *
+ * define('NAIGAI_MINPAKU_PAYMENT_ENABLED', true);
+ *
+ * =========================================================
+ */
+if (!function_exists('mnpk_is_payment_feature_enabled')) {
+    function mnpk_is_payment_feature_enabled()
+    {
+        if (defined('NAIGAI_MINPAKU_PAYMENT_ENABLED')) {
+
+            return filter_var(
+                NAIGAI_MINPAKU_PAYMENT_ENABLED,
+                FILTER_VALIDATE_BOOLEAN
+            );
+        }
+
+        $host = isset($_SERVER['HTTP_HOST'])
+            ? strtolower((string) $_SERVER['HTTP_HOST'])
+            : '';
+
+        $host = preg_replace('/:\d+$/', '', $host);
+
+        if (
+            $host === '127.0.0.1' ||
+            $host === 'localhost'
+        ) {
+            return true;
+        }
+
+        /*
+         * 本番では明示的にONにするまで決済させない。
+         *
+         * Stripeキーが存在していても、
+         * このスイッチがfalseならPaymentIntentを作らない。
+         */
+        return false;
+    }
+}
+
 if (!function_exists('mnpk_get_stripe_secret_key')) {
     function mnpk_get_stripe_secret_key()
     {
@@ -1042,6 +1129,31 @@ if (!function_exists('mnpk_calculate_booking_total')) {
 if (!function_exists('mnpk_create_payment_intent')) {
     function mnpk_create_payment_intent()
     {
+
+        /**
+         * MINPAKU_PAYMENT_ENVIRONMENT_GUARD
+         * =====================================================
+         * Stripe環境スイッチの最終防御。
+         *
+         * JavaScript側の表示状態に関係なく、
+         * 決済OFF環境ではStripe PaymentIntentを作成しない。
+         *
+         * これにより本番でStripeを採用するか未確定でも、
+         * テーマ内に決済コードを残したまま安全に公開できる。
+         * =====================================================
+         */
+        if (
+            function_exists('mnpk_is_payment_feature_enabled') &&
+            !mnpk_is_payment_feature_enabled()
+        ) {
+            wp_send_json_error(
+                array(
+                    'message' =>
+                        'オンライン決済は現在準備中です。'
+                ),
+                403
+            );
+        }
         $nonce = isset($_POST['nonce']) ? sanitize_text_field(wp_unslash($_POST['nonce'])) : '';
 
         if (!$nonce || !wp_verify_nonce($nonce, 'mnpk_booking_nonce')) {

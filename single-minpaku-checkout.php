@@ -159,7 +159,7 @@ if (have_posts()) :
             <section class="mnpk-checkout-page-head">
                 <div class="mnpk-shell">
                     <div class="mnpk-back-wrap">
-                        <a class="mnpk-back-link" href="<?php echo esc_url($detail_url); ?>">← 詳細ページに戻る</a>
+                        <a class="mnpk-back-link" href="<?php echo esc_url($detail_url); ?>" data-mnpk-history-back>← 前のページへ戻る</a>
                     </div>
                     <h1 class="mnpk-title">確認とお支払い</h1>
                 </div>
@@ -312,13 +312,52 @@ if (have_posts()) :
                                     <div class="mnpk-booking-error" data-payment-error hidden></div>
 
                                     <div class="mnpk-checkout-page-actions">
-                                        <a href="<?php echo esc_url($detail_url); ?>" class="mnpk-button mnpk-button--ghost">詳細ページへ戻る</a>
+                                        <a href="<?php echo esc_url($detail_url); ?>" class="mnpk-button mnpk-button--ghost" data-mnpk-history-back>前のページへ戻る</a>
                                         <button type="submit" class="mnpk-button" data-confirm-payment>支払いを確定する</button>
                                     </div>
                                 </form>
                             </div>
                         </section>
                     </div>
+                </div>
+            </section>
+
+            <!-- =========================================================
+                 checkout 完了画面
+                 ---------------------------------------------------------
+                 初期状態では表示しない。
+
+                 Stripe決済が succeeded の時だけ
+                 minpaku-single.js が表示する。
+
+                 サンクスHTML本体は、
+                 お問い合わせと同じ共通PHP部品を利用する。
+
+                 CV計測はこのHTMLとは別に
+                 minpaku_purchase イベントで処理する。
+                 ========================================================= -->
+            <section
+                id="mnpk-checkout-thanks"
+                class="mnpk-checkout-thanks-step"
+                hidden
+            >
+                <div class="mnpk-shell">
+                    <?php
+                    get_template_part(
+                        'template-parts/common/thanks-state',
+                        null,
+                        array(
+                            'variant'      => 'minpaku',
+                            'heading_tag'  => 'h1',
+                            'title'        => 'ご予約ありがとうございます',
+                            'message'      => 'お支払いが完了しました。<br>ご予約を受け付けました。',
+                            'button_label' => '宿泊施設の詳細へ戻る',
+                            'button_url'   => $detail_url,
+                            'button_type'  => 'link',
+                            'button_class' => 'mnpk-button',
+                        )
+                    );
+                    ?>
                 </div>
             </section>
 

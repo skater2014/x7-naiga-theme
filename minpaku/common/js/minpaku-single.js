@@ -334,8 +334,497 @@ document.addEventListener('DOMContentLoaded', function () {
     setPaymentError('');
   }
 
+
+  // =========================================================
+  // MINPAKU_CHECKOUT_SHARED_THANKS
+  // =========================================================
+  //
+  // Stripe決済成功後、
+  // checkoutの「決済前画面」から
+  // 共通サンクス表示へ切り替える。
+  //
+  // URLは変更しない。
+  //
+  // 共通化するのは画面のHTML。
+  // CVは minpaku_purchase という
+  // 民泊専用イベントで分離する。
+  // =========================================================
+
+  function pushMinpakuPurchaseEvent(paymentIntent) {
+    if (!paymentIntent || !paymentIntent.id) return;
+
+    const transactionId = String(paymentIntent.id);
+
+    /*
+     * 同じPaymentIntentで、
+     * 同一タブからイベントを複数回発火しないためのガード。
+     */
+    const storageKey = `mnpk_purchase_${transactionId}`;
+
+    try {
+      if (
+        window.sessionStorage.getItem(storageKey) === '1'
+      ) {
+        return;
+      }
+    } catch (error) {
+      console.warn(
+        '[mnpk] sessionStorage read failed',
+        error
+      );
+    }
+
+    const calc = calculateBooking();
+
+    /*
+     * =====================================================
+     * 民泊専用CV
+     * =====================================================
+     *
+     * サンクスURLで判定するのではなく、
+     *
+     * event: minpaku_purchase
+     *
+     * というイベント名で判別する。
+     *
+     * そのため、
+     * お問い合わせと同じサンクスUIを使っても
+     * CVは別々に管理できる。
+     *
+     * GTM側では、
+     * minpaku_purchase をトリガーとして
+     * GA4のpurchase等へ接続できる。
+     */
+    window.dataLayer = window.dataLayer || [];
+
+    /*
+ * NAIGAI_MINPAKU_GA4_PURCHASE
+ *
+ * Stripeの決済が成功したときに、
+ * サイト独自イベント「minpaku_purchase」をdataLayerへ送る。
+ *
+ * このJSからGA4へ直接送信しているわけではない。
+ *
+ * 流れ:
+ *
+ * Stripe 決済成功
+ *   ↓
+ * dataLayer.push()
+ *   event = minpaku_purchase
+ *   ↓
+ * GTMのカスタムイベントトリガー
+ *   minpaku_purchase
+ *   ↓
+ * GTMの「Google アナリティクス: GA4 イベント」
+ *   event name = purchase
+ *   ↓
+ * GA4
+ *
+ * ecommerce の各値はGTM側の
+ * 「データレイヤーの変数（DLV）」で読み取る。
+ *
+ * 対応:
+ *
+ * ecommerce.transaction_id
+ *   → DLV - ecommerce.transaction_id
+ *   → Stripe PaymentIntent IDを購入取引IDとして使用
+ *
+ * ecommerce.value
+ *   → DLV - ecommerce.value
+ *   → 今回の決済総額
+ *
+ * ecommerce.currency
+ *   → DLV - ecommerce.currency
+ *   → JPY
+ *
+ * ecommerce.items
+ *   → DLV - ecommerce.items
+ *   → GA4の商品 / 宿泊施設情報
+ *
+ * GTM側でこれらをGA4の purchase イベントパラメータへ渡す。
+ *
+ * 注意:
+ * GTMのDLV変数そのものはWordPressコードでは定義しない。
+ * GTM管理画面側で設定・管理する。
+ */
+window.dataLayer.push({
+      event: 'minpaku_purchase',
+
+      ecommerce: {
+        transaction_id: transactionId,
+        value:
+          calc && calc.valid
+            ? Number(calc.total)
+            : 0,
+        currency: 'JPY',
+
+        items: [
+          {
+            item_id: String(cfg.postId || ''),
+            item_name:
+              document
+                .querySelector('[data-checkout-stay-title]')
+                ?.textContent
+                ?.trim() || document.title,
+            quantity: 1,
+          },
+        ],
+      },
+    });
+
+    try {
+      window.sessionStorage.setItem(
+        storageKey,
+        '1'
+      );
+    } catch (error) {
+      console.warn(
+        '[mnpk] sessionStorage write failed',
+        error
+      );
+    }
+  }
+
+
+  function showMinpakuCheckoutThanks(paymentIntent) {
+    if (!isCheckoutPage) return false;
+
+    const checkoutHead =
+      document.querySelector(
+        '.mnpk-checkout-page-head'
+      );
+
+    const checkoutMain =
+      document.querySelector(
+        '.mnpk-checkout-page-main'
+      );
+
+    const checkoutThanks =
+      document.getElementById(
+        'mnpk-checkout-thanks'
+      );
+
+    if (!checkoutMain || !checkoutThanks) {
+      console.error(
+        '[mnpk] checkout thanks UI not found'
+      );
+
+      return false;
+    }
+
+    /*
+     * =====================================================
+     * 決済後は決済前UIを全部終了する
+     * =====================================================
+     *
+     * 決済後に不要なもの:
+     *
+     * ・宿泊日の「変更」
+     * ・人数の「変更」
+     * ・料金再計算UI
+     * ・氏名入力
+     * ・メール入力
+     * ・Stripe Payment Element
+     * ・支払い確定ボタン
+     *
+     * 個別に隠すのではなく、
+     * checkout本体をまとめて非表示にする。
+     */
+    if (checkoutHead) {
+      checkoutHead.hidden = true;
+    }
+
+    checkoutMain.hidden = true;
+
+    /*
+     * PHP側であらかじめ出力している
+     * 共通サンクスだけを表示する。
+     */
+    checkoutThanks.hidden = false;
+
+    document.body.classList.add(
+      'mnpk-checkout-is-complete'
+    );
+
+    /*
+     * サンクス表示とCV計測は別処理。
+     *
+     * ここでは民泊専用CVだけ発火する。
+     */
+    pushMinpakuPurchaseEvent(
+      paymentIntent
+    );
+
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+
+    return true;
+  }
+
+
+  // =========================================================
+  // MINPAKU_CHECKOUT_HISTORY_BACK
+  // =========================================================
+  //
+  // checkoutの「前のページへ戻る」は、
+  // 詳細ページURLを新しく開くリンクではない。
+  //
+  // ブラウザ履歴を本当に1段だけ戻す。
+  //
+  // 正常な流れ:
+  //
+  //   宿泊一覧
+  //      ↓
+  //   宿泊詳細
+  //      ↓
+  //   checkout
+  //
+  // checkoutでBack
+  //      ↓
+  //   宿泊詳細
+  //
+  // 詳細でもう一度Back
+  //      ↓
+  //   宿泊一覧
+  //
+  // これによって
+  //
+  // checkout → 詳細 → checkout
+  //
+  // という固定URLによる往復を防ぐ。
+  // =========================================================
+
+  const checkoutBackResetKey =
+    'mnpk_checkout_reset_after_back';
+
+
+  document
+    .querySelectorAll('[data-mnpk-history-back]')
+    .forEach((link) => {
+
+      link.addEventListener('click', (event) => {
+
+        let canUseInternalHistory = false;
+
+        /*
+         * 同じサイト内からcheckoutへ来た場合だけ
+         * history.back() を使用する。
+         *
+         * URL直接入力や外部サイトから開いた場合は
+         * HTMLのhrefをそのまま使用する。
+         */
+        try {
+
+          if (document.referrer) {
+
+            const referrer =
+              new URL(document.referrer);
+
+            canUseInternalHistory =
+              referrer.origin ===
+                window.location.origin
+              && window.history.length > 1;
+
+          }
+
+        } catch (error) {
+
+          console.warn(
+            '[mnpk] Back Link referrer check failed',
+            error
+          );
+
+        }
+
+
+        if (!canUseInternalHistory) {
+          return;
+        }
+
+        event.preventDefault();
+
+
+        /*
+         * ===================================================
+         * checkout入力内容を次回へ持ち越さない
+         * ===================================================
+         *
+         * Backした瞬間に履歴そのものを削除するわけではない。
+         *
+         * 「このcheckoutを次に表示した時は、
+         *  フォームを新しい状態で作り直す」
+         *
+         * という目印だけsessionStorageへ保存する。
+         *
+         * 日付・人数はURLの
+         *
+         * ?checkin=
+         * &checkout=
+         * &adults=
+         * &children=
+         *
+         * から再構築できる。
+         *
+         * 一方、
+         *
+         * ・名前
+         * ・メール
+         * ・Stripeカード入力
+         *
+         * は古い状態を復元しない。
+         */
+        if (isCheckoutPage) {
+
+          try {
+
+            window.sessionStorage.setItem(
+              checkoutBackResetKey,
+              '1'
+            );
+
+          } catch (error) {
+
+            console.warn(
+              '[mnpk] checkout reset flag save failed',
+              error
+            );
+
+          }
+
+        }
+
+
+        /*
+         * hrefで詳細ページを開き直すのではなく、
+         * ブラウザ履歴を1段だけ戻す。
+         */
+        window.history.back();
+
+      });
+
+    });
+
+
+  /*
+   * =========================================================
+   * checkoutが履歴から復元された場合
+   * =========================================================
+   *
+   * Chrome等はBack/Forward時に
+   * ページをBFCacheからそのまま復元することがある。
+   *
+   * その場合、
+   *
+   * ・名前
+   * ・メール
+   * ・Stripe Payment Element
+   *
+   * まで以前の画面状態が復元される可能性がある。
+   *
+   * Back Linkで一度離れたcheckoutを再表示した場合は
+   * 1回だけページを読み直し、
+   * Stripeを含めて新規状態から開始する。
+   *
+   * URLはそのままなので、
+   * 日程・人数はquery stringから再表示される。
+   */
+  window.addEventListener(
+    'pageshow',
+    () => {
+
+      if (!isCheckoutPage) {
+        return;
+      }
+
+      let shouldReset = false;
+
+      try {
+
+        shouldReset =
+          window.sessionStorage.getItem(
+            checkoutBackResetKey
+          ) === '1';
+
+      } catch (error) {
+
+        console.warn(
+          '[mnpk] checkout reset flag read failed',
+          error
+        );
+
+      }
+
+      if (!shouldReset) {
+        return;
+      }
+
+
+      /*
+       * 先にフラグを削除する。
+       *
+       * 削除してからreloadすることで
+       * reload → reload → reload
+       * の無限ループを防ぐ。
+       */
+      try {
+
+        window.sessionStorage.removeItem(
+          checkoutBackResetKey
+        );
+
+      } catch (error) {
+
+        console.warn(
+          '[mnpk] checkout reset flag remove failed',
+          error
+        );
+
+      }
+
+
+      /*
+       * checkoutページを新しく読み直す。
+       *
+       * 結果:
+       *
+       * 日付・人数
+       *   → URLから復元
+       *
+       * 名前・メール
+       *   → 空
+       *
+       * Stripeカード
+       *   → Payment Elementを新しく生成
+       */
+      window.location.reload();
+
+    }
+  );
+
   function openModal(modal) {
     if (!modal) return;
+
+    // =====================================================
+    // MINPAKU_PHOTO_MODAL_BODY_LAYER
+    // =====================================================
+    //
+    // 写真モーダルは既存 #mnpk-photo-modal を使う。
+    // 新しいモーダルを作る処理ではない。
+    //
+    // 写真だけは body 直下へ移動し、
+    // サイトヘッダー・パンくず・民泊ナビ等の
+    // 重なり順の影響を受けないようにする。
+    //
+    // 日付・人数など他のモーダルは移動しない。
+    if (
+      modal.id === 'mnpk-photo-modal'
+      && modal.parentElement !== document.body
+    ) {
+      document.body.appendChild(modal);
+    }
+
     modal.classList.add('is-open');
     modal.setAttribute('aria-hidden', 'false');
     document.body.classList.add('mnpk-modal-open');
@@ -385,7 +874,7 @@ document.addEventListener('DOMContentLoaded', function () {
       photoModalSwiper = new Swiper(photoModalEl, {
         slidesPerView: 1,
         spaceBetween: 16,
-        loop: false,
+        loop: true,
         navigation: {
           prevEl: photoModal.querySelector('.mnpk-photo-prev'),
           nextEl: photoModal.querySelector('.mnpk-photo-next'),
@@ -403,6 +892,11 @@ document.addEventListener('DOMContentLoaded', function () {
       const index = parseInt(button.dataset.galleryIndex || '0', 10);
       openModal(photoModal);
       if (photoModalSwiper) {
+        /*
+         * モーダルをbody直下へ移した後なので、
+         * Swiperへ現在の幅・高さを再計算させる。
+         */
+        photoModalSwiper.update();
         photoModalSwiper.slideTo(index, 0);
       }
     });
@@ -879,9 +1373,27 @@ document.addEventListener('DOMContentLoaded', function () {
     formData.append('name', paymentNameInput ? paymentNameInput.value.trim() : '');
     formData.append('email', paymentEmailInput ? paymentEmailInput.value.trim() : '');
 
+    /*
+     * Stripe PaymentIntent 作成AJAX。
+     *
+     * credentials: 'same-origin'
+     *   WordPressのログイン/セッションCookieを
+     *   同一オリジンのadmin-ajax.phpへ送る。
+     *
+     * cache: 'no-store'
+     *   決済用レスポンスをブラウザキャッシュへ残さない。
+     *
+     * ajaxUrl自体も /wp-admin/admin-ajax.php の
+     * 相対URLにしているため、localhost / 127.0.0.1 が
+     * 混在しても別オリジンへ送信しない。
+     */
     const response = await fetch(window.mnpkBooking.ajaxUrl, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
+      credentials: 'same-origin',
+      cache: 'no-store',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+      },
       body: formData.toString(),
     });
 
@@ -947,6 +1459,58 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
   async function mountPaymentElement() {
+    /**
+     * MINPAKU_PAYMENT_FRONTEND_GUARD
+     * =====================================================
+     * 本番でオンライン決済を使用しない場合の表示制御。
+     *
+     * 料金計算・日程・人数などの予約UIはそのまま利用する。
+     *
+     * Stripe決済だけを停止し、
+     * PaymentIntent作成やPayment Element生成へ進ませない。
+     *
+     * PHP側にも同じガードがあるため、
+     * これはセキュリティ処理ではなく利用者向けUI制御。
+     * =====================================================
+     */
+    /*
+     * wp_localize_script()では値が文字列化されることがある。
+     *
+     * "1"だけを決済ONとして扱い、
+     * "0" / 空文字 / false / 未定義は安全側のOFFにする。
+     */
+    const paymentFeatureEnabled =
+      window.mnpkBooking &&
+      String(window.mnpkBooking.paymentEnabled) === '1';
+
+    if (!paymentFeatureEnabled) {
+
+      if (typeof setPaymentSkeletonState === 'function') {
+        setPaymentSkeletonState(true);
+      }
+
+      if (paymentElementWrap) {
+        paymentElementWrap.innerHTML = `
+          <div class="mnpk-payment-disabled-notice">
+            <strong>オンライン決済は現在準備中です。</strong>
+            <p>
+              宿泊料金や予約内容は確認できます。
+              オンラインでのお支払いは現在受け付けていません。
+            </p>
+          </div>
+        `;
+      }
+
+      if (paymentSubmitButton) {
+        paymentSubmitButton.disabled = true;
+        paymentSubmitButton.textContent =
+          'オンライン決済準備中';
+      }
+
+      setPaymentError('');
+
+      return false;
+    }
     /*
      * 同じ時間に複数のマウント処理を走らせない。
      * すでに処理中なら、その完了を待つ。
@@ -1435,10 +1999,28 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (
           result.paymentIntent &&
-          ['succeeded', 'processing', 'requires_capture'].includes(result.paymentIntent.status)
+          result.paymentIntent.status === 'succeeded'
         ) {
-          alert('お支払い処理を受け付けました。');
+          /*
+           * checkout専用ページでは、
+           * alertを出して終わるのではなく
+           * ページ全体を共通サンクスへ切り替える。
+           */
+          if (isCheckoutPage) {
+            showMinpakuCheckoutThanks(
+              result.paymentIntent
+            );
+
+            return;
+          }
+
+          /*
+           * 詳細ページ上の既存支払いモーダルは
+           * 現時点では従来の完了動作を維持する。
+           */
+          alert('お支払いが完了しました。');
           closeModal(paymentModal);
+
           return;
         }
 
