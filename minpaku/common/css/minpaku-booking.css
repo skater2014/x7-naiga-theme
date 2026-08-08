@@ -1721,3 +1721,164 @@
 }
 
 /* MINPAKU MODAL ONE SYSTEM END */
+
+/* === NAIGAI_MINPAKU_PHOTO_MODAL_LAYER_START === */
+/**
+ * =========================================================
+ * 写真一覧モーダル専用
+ * =========================================================
+ *
+ * 新しいモーダルを作っているのではなく、
+ * single-minpaku.php に既にある
+ *
+ *   #mnpk-photo-modal
+ *
+ * の表示だけを整える。
+ *
+ * 現在の共通モーダルCSSは維持し、
+ * 写真一覧に必要な差分だけここで指定する。
+ *
+ * 【目的】
+ *
+ * ・青い民泊ナビ等が写真より前へ出ない
+ * ・背景ページと写真閲覧画面を明確に分離
+ * ・写真を画面内でできるだけ大きく表示
+ * ・左右矢印 / ドット / × は既存Swiperをそのまま利用
+ * =========================================================
+ */
+
+#mnpk-photo-modal {
+  z-index: 2147483000 !important;
+
+  padding: 12px !important;
+
+  overflow: hidden !important;
+
+  background:
+    rgba(2, 8, 23, 0.90) !important;
+}
+
+#mnpk-photo-modal .mnpk-modal__backdrop {
+  background:
+    rgba(2, 8, 23, 0.90) !important;
+}
+
+#mnpk-photo-modal .mnpk-modal__dialog--photo {
+  width:
+    min(1280px, calc(100vw - 24px)) !important;
+
+  height:
+    calc(100dvh - 24px) !important;
+
+  max-width: none !important;
+  max-height:
+    calc(100dvh - 24px) !important;
+
+  margin: 0 auto !important;
+
+  overflow: hidden !important;
+}
+
+#mnpk-photo-modal .mnpk-modal__header {
+  flex: 0 0 auto !important;
+}
+
+#mnpk-photo-modal .mnpk-photo-modal-swiper {
+  flex: 1 1 auto !important;
+
+  width: 100% !important;
+  min-height: 0 !important;
+}
+
+#mnpk-photo-modal .swiper-wrapper,
+#mnpk-photo-modal .swiper-slide {
+  height: 100% !important;
+}
+
+#mnpk-photo-modal .swiper-slide {
+  display: flex !important;
+
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+#mnpk-photo-modal .mnpk-photo-slide {
+  display: flex !important;
+
+  flex-direction: column !important;
+
+  align-items: center !important;
+  justify-content: center !important;
+
+  width: 100% !important;
+  height: 100% !important;
+
+  min-height: 0 !important;
+}
+
+#mnpk-photo-modal .mnpk-photo-slide img {
+  display: block !important;
+
+  width: auto !important;
+  height: auto !important;
+
+  max-width: 100% !important;
+  max-height:
+    calc(100dvh - 150px) !important;
+
+  margin: auto !important;
+
+  object-fit: contain !important;
+}
+
+#mnpk-photo-modal .mnpk-modal__close {
+  z-index: 20 !important;
+}
+
+
+/**
+ * モバイルではカード風の外周余白をなくし、
+ * 写真閲覧に画面全体を使う。
+ */
+@media (max-width: 760px) {
+
+  #mnpk-photo-modal {
+    padding: 0 !important;
+  }
+
+  #mnpk-photo-modal .mnpk-modal__dialog--photo {
+    /*
+     * モバイルではモーダル自体を100dvh固定にしない。
+     *
+     * 横長写真の場合にSwiperが画面の縦いっぱいまで伸びて
+     * 写真の上下へ大きな空白ができるのを防ぐ。
+     */
+    width: calc(100vw - 16px) !important;
+    height: auto !important;
+    max-height: calc(100dvh - 16px) !important;
+    margin: 8px auto !important;
+    border-radius: 16px !important;
+  }
+
+  /*
+   * PCではSwiperが残り高さを使う。
+   * モバイルだけは写真の実際の高さに合わせる。
+   */
+  #mnpk-photo-modal .mnpk-photo-modal-swiper {
+    flex: 0 0 auto !important;
+    height: auto !important;
+  }
+
+  #mnpk-photo-modal .swiper-wrapper,
+  #mnpk-photo-modal .swiper-slide,
+  #mnpk-photo-modal .mnpk-photo-slide {
+    height: auto !important;
+  }
+
+  #mnpk-photo-modal .mnpk-photo-slide img {
+    max-height:
+      calc(100dvh - 120px) !important;
+  }
+}
+
+/* === NAIGAI_MINPAKU_PHOTO_MODAL_LAYER_END === */

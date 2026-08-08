@@ -298,16 +298,28 @@ $prefectures = array(
         </section>
 
         <section id="customer-info-step-thanks" class="customer-info-step" hidden>
-            <div class="customer-info-card customer-info-card--thanks">
-                <div class="customer-info-thanks__icon" aria-hidden="true">✓</div>
-                <h2>ありがとうございます</h2>
-                <p>送信を受け付けました。<br>内容を確認のうえ、担当者よりご連絡いたします。</p>
-
-                <div class="customer-info-actions customer-info-actions--center">
-                    <button type="button" class="btn button2 is-secondary js-customer-info-reset">入力画面へ戻る</button>
-                </div>
-            </div>
-        </section>
+    <?php
+    /**
+     * 共通サンクスUI。
+     *
+     * 送信成功の判定自体は、
+     * 今まで通り customer-info-form.js が担当する。
+     */
+    get_template_part(
+        'template-parts/common/thanks-state',
+        null,
+        array(
+            'variant'      => 'contact',
+            'heading_tag'  => 'h2',
+            'title'        => 'ありがとうございます',
+            'message'      => '送信を受け付けました。<br>内容を確認のうえ、担当者よりご連絡いたします。',
+            'button_label' => '入力画面へ戻る',
+            'button_type'  => 'button',
+            'button_class' => 'btn button2 is-secondary js-customer-info-reset',
+        )
+    );
+    ?>
+</section>
 
     </div>
 </div>

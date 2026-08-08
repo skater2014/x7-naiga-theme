@@ -964,3 +964,117 @@
   }
 }
 
+/* === NAIGAI_MINPAKU_CHECKOUT_THANKS_START === */
+/**
+ * =========================================================
+ * 民泊 checkout サンクス
+ * =========================================================
+ *
+ * HTML本体は
+ *
+ * template-parts/common/thanks-state.php
+ *
+ * をお問い合わせと共通利用する。
+ *
+ * ここでは民泊checkoutに必要な
+ * 幅・余白だけを指定する。
+ *
+ * CV計測はCSSとは無関係で、
+ * minpaku-single.js の
+ * minpaku_purchase イベントが担当する。
+ * =========================================================
+ */
+
+.mnpk-checkout-thanks-step {
+  padding: 56px 0 80px;
+}
+
+.mnpk-checkout-thanks-step
+.naigai-thanks-card {
+  box-sizing: border-box;
+
+  width:
+    min(760px, calc(100% - 32px));
+
+  margin: 0 auto;
+
+  padding: 48px 40px;
+
+  text-align: center;
+
+  border:
+    1px solid var(--mnpk-border, #cfe3ec);
+
+  border-radius: 24px;
+
+  background:
+    var(--mnpk-surface, #ffffff);
+
+  color:
+    var(--mnpk-text, #102235);
+}
+
+.mnpk-checkout-thanks-step
+.naigai-thanks-card__icon {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  width: 64px;
+  height: 64px;
+
+  margin: 0 auto 20px;
+
+  border-radius: 999px;
+
+  background:
+    var(--mnpk-accent-soft, #e4f2f7);
+
+  color:
+    var(--mnpk-accent, #2f7fa2);
+
+  font-size: 32px;
+  font-weight: 900;
+
+  line-height: 1;
+}
+
+.mnpk-checkout-thanks-step
+.naigai-thanks-card h1 {
+  margin: 0 0 18px;
+
+  color:
+    var(--mnpk-heading, #102235);
+}
+
+.mnpk-checkout-thanks-step
+.naigai-thanks-card__message {
+  margin: 0;
+
+  line-height: 1.85;
+}
+
+.mnpk-checkout-thanks-step
+.naigai-thanks-card__actions {
+  display: flex;
+
+  justify-content: center;
+
+  margin-top: 30px;
+}
+
+
+@media (max-width: 760px) {
+
+  .mnpk-checkout-thanks-step {
+    padding: 28px 0 48px;
+  }
+
+  .mnpk-checkout-thanks-step
+  .naigai-thanks-card {
+    padding: 34px 20px;
+  }
+}
+
+/* === NAIGAI_MINPAKU_CHECKOUT_THANKS_END === */
