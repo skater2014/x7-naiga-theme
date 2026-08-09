@@ -1,0 +1,20 @@
+/*
+ * 固定ページ編集画面 共通調整
+ *
+ * Gutenberg下部の互換メタボックスや
+ * Classic Editorのメタボックス見出しを固定しない。
+ * フロント画面には読み込まない。
+ */
+
+.edit-post-meta-boxes-area .components-panel__header,
+.edit-post-meta-boxes-area .components-panel__body-title,
+.edit-post-meta-boxes-area .postbox-header,
+.edit-post-meta-boxes-area__container .components-panel__header,
+.edit-post-meta-boxes-area__container .components-panel__body-title,
+.edit-post-layout__metaboxes .components-panel__header,
+.edit-post-layout__metaboxes .postbox-header,
+#poststuff .postbox .postbox-header {
+    position: static !important;
+    top: auto !important;
+    bottom: auto !important;
+}

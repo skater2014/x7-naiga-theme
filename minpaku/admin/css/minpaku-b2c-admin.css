@@ -204,9 +204,9 @@
 }
 
 .mpbfix-admin-nav {
-  position: sticky;
-  top: 32px;
-  z-index: 50;
+  position: static;
+  top: auto;
+  z-index: auto;
   display: flex;
   flex-wrap: wrap;
   gap: 7px;

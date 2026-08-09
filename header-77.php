@@ -129,10 +129,6 @@ $naigai_gtm_id = in_array(
   <!-- End Google Tag Manager -->
 
   <meta charset="<?php bloginfo('charset'); ?>">
-  <title><?php if (!is_front_page()) {
-            wp_title('::', true, 'right');
-          }
-          bloginfo('name'); ?></title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <!-- External Scripts -->

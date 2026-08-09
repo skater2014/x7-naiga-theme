@@ -400,7 +400,20 @@ add_action('add_meta_boxes_page', function ($post) {
       }
 
       foreach ($boxes as $box_id => $box) {
-        if (!in_array($box_id, $keep_ids, true)) {
+
+        /*
+         * AIOSEO のSEO設定メタボックスは残す。
+         *
+         * /fudousan は専用「不動産ページ設定」で
+         * Hero・CTAなどを管理するが、
+         * SEOタイトル・description は AIOSEO で管理する。
+         */
+        $is_aioseo_box = (stripos((string) $box_id, 'aioseo') !== false);
+
+        if (
+          !in_array($box_id, $keep_ids, true)
+          && !$is_aioseo_box
+        ) {
           unset($wp_meta_boxes['page'][$context][$priority][$box_id]);
         }
       }

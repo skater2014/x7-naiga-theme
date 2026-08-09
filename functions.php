@@ -8114,3 +8114,7 @@ add_action('loop_end', function ($query) {
     echo wp_kses_post($links);
     echo '</nav>';
 }, 9999);
+
+/* 固定ページ編集画面 共通管理CSS */
+
+require_once get_template_directory() . "/inc/functions/functions-admin-page-editor.php";
