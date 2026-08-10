@@ -202,59 +202,7 @@ if (!function_exists('naigai_iez_admin_icon_select')) {
     }
 }
 
-/*
- * ============================================================
- * IEZ_FIXED_PAGE_CLASSIC_EDITOR_20260806
- * 家づくり固定ページ 管理画面
- * ============================================================
- *
- * 家づくり固定ページは
- *
- *     家づくり 固定ページ入力
- *
- * メタボックスを中心に編集する。
- *
- * Gutenbergを使用するとClassic Meta Boxが
- * 下部の互換エリアへ表示され、
- * 画面が上下に分断されて編集しづらくなる。
- *
- * そのため家づくり固定ページだけ
- * ブロックエディタを使用しない。
- *
- * 通常の固定ページや投稿には影響させない。
- * ============================================================
- */
-add_filter(
-    'use_block_editor_for_post',
-    function ($use_block_editor, $post) {
 
-        if (
-            !($post instanceof WP_Post)
-            || $post->post_type !== 'page'
-        ) {
-            return $use_block_editor;
-        }
-
-        if (
-            !function_exists(
-                'naigai_iez_admin_is_fixed_page_target'
-            )
-            ||
-            !naigai_iez_admin_is_fixed_page_target(
-                $post
-            )
-        ) {
-            return $use_block_editor;
-        }
-
-        /*
-         * 家づくり固定ページだけClassic編集画面へ。
-         */
-        return false;
-    },
-    20,
-    2
-);
 
 add_action('add_meta_boxes', function ($post_type, $post) {
     if ($post_type !== 'page') {

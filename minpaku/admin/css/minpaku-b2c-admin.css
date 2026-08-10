@@ -552,3 +552,20 @@
 }
 
 /* MPBFIX SECTIONS BUILDER ADMIN END */
+
+/* MPBFIX REMOVE GUTENBERG SEPARATOR START */
+
+/* WordPress Gutenberg 下部メタボックスの灰色ドラッグバーを非表示 */
+.edit-post-meta-boxes-main__presenter {
+    display: none !important;
+}
+
+/* 分割された高さを解除 */
+.edit-post-meta-boxes-main,
+.edit-post-meta-boxes-main.is-resizable {
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+}
+
+/* MPBFIX REMOVE GUTENBERG SEPARATOR END */

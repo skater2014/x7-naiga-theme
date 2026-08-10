@@ -512,6 +512,65 @@ if (!function_exists('naigai_iezukuri_header_menu_allowed_styles')) {
     }
 }
 
+/* === IEZUKURI CONTEXT ARCHITECTURE NOTE START === */
+
+/**
+ * ============================================================
+ * 家づくり領域 共通コンテキストの設計
+ * ============================================================
+ *
+ * 家づくり側は、
+ *
+ * - /iezukuri/
+ * - /iezukuri/ 以下の固定ページ
+ * - iez_plan アーカイブ
+ * - iez_plan 詳細
+ *
+ * を共通の「家づくり領域」として判定する。
+ *
+ *
+ * 【役割分担】
+ *
+ * helpers.php
+ *   → 家づくり領域の判定
+ *   → body class 等の共通条件
+ *
+ * functions-iezukuri.php
+ *   → 家づくりCSS / JSの読込
+ *
+ * css/common/nav.css
+ *   → 共通header / navigation
+ *
+ * css/common/hero.css
+ *   → 共通Hero
+ *
+ * css/common/footer.css
+ *   → 共通footer
+ *
+ * css/page-styles/*.css
+ *   → 個別ページ固有デザイン
+ *
+ *
+ * 【重要】
+ *
+ * header / navigation の共通問題を
+ * company.css や contact.css などで
+ * ページごとに修正しない。
+ *
+ * 共通部分は common/ 側、
+ * ページ固有部分だけ page-styles/ 側に置く。
+ *
+ * 以下の
+ *
+ *   naigai_iezukuri_is_global_header_menu_target()
+ *
+ * が家づくり共通header判定の入口。
+ *
+ * 既存の判定処理そのものは変更しない。
+ */
+
+/* === IEZUKURI CONTEXT ARCHITECTURE NOTE END === */
+
 if (!function_exists('naigai_iezukuri_is_global_header_menu_target')) {
     function naigai_iezukuri_is_global_header_menu_target() {
         $request_path = isset($_SERVER['REQUEST_URI'])
@@ -622,4 +681,3 @@ add_filter('body_class', function ($classes) {
 }, 45);
 
 /* === IEZUKURI GLOBAL HEADER MENU STYLE END === */
-

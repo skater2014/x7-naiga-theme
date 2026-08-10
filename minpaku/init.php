@@ -9,6 +9,49 @@ if (!defined('ABSPATH')) exit;
 require_once __DIR__ . '/inc/context.php';
 require_once __DIR__ . '/inc/enqueue.php';
 
+/* === MINPAKU B2C CONTACT ASSETS START === */
+
+/**
+ * ============================================================
+ * 民泊B2Cページ：お問い合わせフォーム用CSS / JS
+ * ============================================================
+ *
+ * 対象:
+ * - page-minpaku-b2c.php を利用する民泊固定ページ
+ *
+ * 読み込む実ファイル:
+ * - minpaku/inc/assets-b2c-contact.php
+ *
+ * そのファイルから、
+ *
+ * - css/customer-info-form.css
+ * - js/customer-info-form.js
+ *
+ * を必要なページだけenqueueする。
+ *
+ *
+ * 【読み込み構造】
+ *
+ * functions.php
+ *      ↓
+ * minpaku/init.php
+ *      ↓
+ * inc/assets-b2c-contact.php
+ *
+ *
+ *
+ * 民泊機能の入口を minpaku/init.php に一本化し、
+ * functions.php に民泊固有処理を増やさない。
+ */
+$naigai_minpaku_b2c_contact_assets =
+    __DIR__ . '/inc/assets-b2c-contact.php';
+
+if (file_exists($naigai_minpaku_b2c_contact_assets)) {
+    require_once $naigai_minpaku_b2c_contact_assets;
+}
+
+/* === MINPAKU B2C CONTACT ASSETS END === */
+
 if (file_exists(__DIR__ . '/inc/common-core.php')) {
     require_once __DIR__ . '/inc/common-core.php';
 }
@@ -57,4 +100,3 @@ $naigai_minpaku_frontend_localize =
 if (file_exists($naigai_minpaku_frontend_localize)) {
     require_once $naigai_minpaku_frontend_localize;
 }
-

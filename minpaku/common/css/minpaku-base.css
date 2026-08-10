@@ -804,3 +804,69 @@ body.dark-mode .mnpk-back-link:hover {
 }
 
 /* === NAIGAI_MINPAKU_BACK_LINK_CSS_20260802_END === */
+
+/* === MINPAKU DRAWER THEME START === */
+
+/**
+ * ============================================================
+ * 民泊 サイドメニュー / Drawer 配色
+ * ============================================================
+ *
+ * Drawer本体の構造・位置・開閉・z-indexは
+ * style.css の共通Drawerをそのまま利用する。
+ *
+ * このファイルでは「民泊時の配色」だけを担当する。
+ *
+ *
+ * 【色の正本】
+ *
+ * --mnpk-bg
+ *   → 民泊ページ全体の背景色
+ *
+ * --mnpk-surface
+ *   → 民泊内のカード等の表面色
+ *
+ * --mnpk-border
+ *   → 民泊共通の境界線色
+ *
+ *
+ * 民泊専用の色をstyle.cssへ書かず、
+ * minpaku/common/css/minpaku-base.css 内で管理する。
+ */
+
+
+/**
+ * 民泊ライトモード
+ *
+ * サイドメニュー本体を、
+ * 民泊ページと同じ --mnpk-bg にする。
+ *
+ * 現在のライトテーマでは
+ * --mnpk-bg = #f6fbfd。
+ */
+body.naigai-minpaku-context:not(.dark-theme):not(.dark-mode)
+  .sidebar-navigation {
+  --drawer-bg: var(--mnpk-bg);
+  --drawer-card: var(--mnpk-surface);
+  --drawer-border: var(--mnpk-border);
+
+  background: var(--drawer-bg);
+}
+
+
+/**
+ * Drawer内部は独自背景を持たせず、
+ * 親 .sidebar-navigation の民泊背景をそのまま見せる。
+ */
+body.naigai-minpaku-context:not(.dark-theme):not(.dark-mode)
+  .sidebar-navigation .drawer-head,
+body.naigai-minpaku-context:not(.dark-theme):not(.dark-mode)
+  .sidebar-navigation .drawer-body,
+body.naigai-minpaku-context:not(.dark-theme):not(.dark-mode)
+  .sidebar-navigation .mobile-menu,
+body.naigai-minpaku-context:not(.dark-theme):not(.dark-mode)
+  .sidebar-navigation .custom-widget-container {
+  background: transparent;
+}
+
+/* === MINPAKU DRAWER THEME END === */

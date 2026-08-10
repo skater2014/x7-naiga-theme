@@ -79,7 +79,6 @@ if (file_exists($naigai_chatgpt_modal_display_file)) {
 }
 
 
-
 /****************************************
 
         functions.php
@@ -1028,7 +1027,6 @@ function themebs_enqueue_scripts()
 add_action('wp_enqueue_scripts', 'themebs_enqueue_scripts');
 
 
-
 // single.php h2 タブリンクの判定
 function naigai_property_kind($post_id = null): string
 {
@@ -1887,8 +1885,35 @@ if (file_exists($naigai_hub_loader_bridge)) {
     require_once $naigai_hub_loader_bridge;
 }
 
-// Disabled: minpaku/init.php is loaded via inc/loaders/minpaku-loader.php -> minpaku/inc/loader.php.
-// require_once get_template_directory() . '/minpaku/init.php';
+/* === MINPAKU MODULE ENTRY START === */
+
+/**
+ * ============================================================
+ * 民泊機能の起動入口
+ * ============================================================
+ *
+ * functions.php には、
+ * 民泊固有の判定・CSS読込・予約処理などを
+ * ベタ書きしない。
+ *
+ * 民泊本体は /minpaku/ 配下で管理する。
+ *
+ * 読み込み:
+ *
+ * functions.php
+ *      ↓
+ * minpaku/init.php
+ *      ↓
+ * minpaku/inc/context.php
+ * minpaku/inc/enqueue.php
+ * その他の民泊専用処理
+ *
+ * functions.php の役割は
+ * 「民泊モジュールを起動すること」だけ。
+ */
+require_once get_template_directory() . '/minpaku/init.php';
+
+/* === MINPAKU MODULE ENTRY END === */
 // カスタム　walker 
 require get_template_directory() . '/inc/functions/custom-walker.php';
 
@@ -5450,42 +5475,6 @@ function naigai_register_theme_menus()
 }
 add_action('after_setup_theme', 'naigai_register_theme_menus');
 
-/**
- * =========================================================
- * 民泊ページ判定
- * =========================================================
- *
- * 役割:
- * - 民泊アーカイブ
- * - 民泊詳細
- * - slug に minpaku を含む固定ページなど
- * を民泊コンテキストとして扱う
- */
-function naigai_is_minpaku_context()
-{
-    $queried_obj = get_queried_object();
-    $current_page_slug = '';
-
-    if ($queried_obj instanceof WP_Post) {
-        $current_page_slug = (string) $queried_obj->post_name;
-    } elseif ($queried_obj instanceof WP_Term) {
-        $current_page_slug = (string) $queried_obj->slug;
-    } else {
-        $post_obj = get_post();
-        if ($post_obj instanceof WP_Post) {
-            $current_page_slug = (string) get_post_field('post_name', $post_obj);
-        }
-    }
-
-    return (
-        is_post_type_archive('minpaku') ||
-        is_singular('minpaku') ||
-        (
-            $current_page_slug !== '' &&
-            strpos($current_page_slug, 'minpaku') !== false
-        )
-    );
-}
 
 /**
  * =========================================================
@@ -7602,7 +7591,6 @@ if (!function_exists('naigai_register_customhome_menu_location')) {
 }
 
 
-
 /* 注文住宅ページビルダー 管理画面 */
 // CUSTOMHOME BUILDER ADMIN DISABLED: legacy builder admin removed.
 
@@ -7908,33 +7896,6 @@ if (file_exists($naigai_iezukuri_loader_bridge)) {
 
 
 /* =========================================================
- * MINPAKU LOADER
- * =========================================================
- *
- * 民泊機能の読み込み入口。
- *
- * functions.php を肥大化させないため、民泊専用の読み込みは
- * inc/loaders/minpaku-loader.php に分離する。
- *
- * 読み込みの流れ:
- * functions.php
- *   ↓
- * inc/loaders/minpaku-loader.php
- *   ↓
- * minpaku/inc/loader.php
- *
- * 注意:
- * - functions.php に民泊用CSS/JSの enqueue を直接増やさない。
- * - 民泊関連は minpaku/inc/loader.php 側に集約していく。
- * =========================================================
- */
-$naigai_minpaku_loader_bridge = get_template_directory() . '/inc/loaders/minpaku-loader.php';
-
-if (file_exists($naigai_minpaku_loader_bridge)) {
-    require_once $naigai_minpaku_loader_bridge;
-}
-
-/* =========================================================
  * FUDOUSAN LOADER
  * =========================================================
  *
@@ -7960,8 +7921,6 @@ $naigai_fudousan_loader_bridge = get_template_directory() . '/inc/loaders/fudous
 if (file_exists($naigai_fudousan_loader_bridge)) {
     require_once $naigai_fudousan_loader_bridge;
 }
-
-/* Moved: B2C contact form assets are loaded via minpaku/inc/assets-b2c-contact.php. */
 
 
 /*
@@ -8115,6 +8074,73 @@ add_action('loop_end', function ($query) {
     echo '</nav>';
 }, 9999);
 
-/* 固定ページ編集画面 共通管理CSS */
 
-require_once get_template_directory() . "/inc/functions/functions-admin-page-editor.php";
+/* NAIGAI_REMOVE_PAGE_META_SEPARATOR_START */
+/*
+ * 固定ページのGutenberg互換メタボックスに表示される
+ * WordPress標準の灰色リサイズseparatorだけをDOMから取り外す。
+ *
+ * 独自CSSによる管理画面デザイン変更は行わない。
+ * Classic Editorへの切替も行わない。
+ */
+if (!function_exists('naigai_remove_page_meta_separator')) {
+    function naigai_remove_page_meta_separator() {
+        $screen = get_current_screen();
+
+        if (!$screen || $screen->post_type !== 'page') {
+            return;
+        }
+        ?>
+        <script>
+        (function () {
+            function naigaiRemovePageMetaSeparator() {
+                document
+                    .querySelectorAll('.edit-post-meta-boxes-main__presenter')
+                    .forEach(function (node) {
+                        node.remove();
+                    });
+
+                document
+                    .querySelectorAll('.edit-post-meta-boxes-main')
+                    .forEach(function (node) {
+                        node.classList.remove('is-resizable');
+                        node.style.removeProperty('height');
+                        node.style.removeProperty('min-height');
+                        node.style.removeProperty('max-height');
+                    });
+            }
+
+            naigaiRemovePageMetaSeparator();
+
+            document.addEventListener(
+                'DOMContentLoaded',
+                naigaiRemovePageMetaSeparator
+            );
+
+            new MutationObserver(
+                naigaiRemovePageMetaSeparator
+            ).observe(
+                document.documentElement,
+                {
+                    childList: true,
+                    subtree: true
+                }
+            );
+        })();
+        </script>
+        <?php
+    }
+
+    add_action(
+        'admin_footer-post.php',
+        'naigai_remove_page_meta_separator',
+        9999
+    );
+
+    add_action(
+        'admin_footer-post-new.php',
+        'naigai_remove_page_meta_separator',
+        9999
+    );
+}
+/* NAIGAI_REMOVE_PAGE_META_SEPARATOR_END */
