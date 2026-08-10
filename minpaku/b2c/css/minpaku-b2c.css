@@ -946,7 +946,15 @@
   line-height: 1.4;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.72);
+
+  /*
+   * 小さい英字ラベルに強いぼかし影を付けると、
+   * モバイル表示で文字の輪郭が滲んで読みにくくなる。
+   *
+   * OPERATION / STAY DETAIL 等は
+   * 文字色とfont-weightだけで視認性を確保する。
+   */
+  text-shadow: none;
 }
 
 .minpaku-support-page .wakugui-hero .wakugui-eyebrow,
@@ -3770,3 +3778,36 @@ body.page-template-page-minpaku-support-php .wakugui-hero::after {
   opacity: 0 !important;
 }
 /* === MINPAKU SUPPORT HERO OVERLAY FIX END === */
+
+/* ============================================================
+ * 民泊サポートページ
+ * Light Theme / 小見出し文字色
+ * ============================================================
+ *
+ * Dark Modeでは淡い水色が濃紺背景に対して十分見やすいため、
+ * 既存色をそのまま使用する。
+ *
+ * Light Themeでは背景が白に近く、
+ * #d8f1ff では文字とのコントラストが弱いため、
+ * OPERATION / STAY DETAIL などの小見出しだけ
+ * 少し濃い青へ変更する。
+ *
+ * text-shadow は使用しない。
+ */
+body.naigai-minpaku-context:not(.dark-theme):not(.dark-mode)
+  .minpaku-support-page .wakugui-inner .wakugui-eyebrow {
+  /*
+   * 白・淡色背景の本文エリアだけ濃い青にする。
+   *
+   * .wakugui-inner を指定することで、
+   * 写真上に配置されるHeroの .wakugui-eyebrow には
+   * この本文用配色を適用しない。
+   *
+   * Hero側は既存の
+   * .wakugui-hero .wakugui-eyebrow
+   * の配色を独立して使用する。
+   */
+  color: #477c9b;
+  text-shadow: none;
+}
+
