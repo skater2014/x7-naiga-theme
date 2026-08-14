@@ -8023,4 +8023,100 @@ body.dark-theme .mobile-menu {
 /* IEZUKURI BREADCRUMB LAYOUT END */
 
 
+/* === NAIGAI PRIVACY READABILITY START === */
+/*
+ * Root privacy policy: /privacypolicy/
+ * フロント表示はここで一元管理する。
+ */
+body.privacy-policy #main {
+    float: none !important;
+    width: min(calc(100% - 40px), 960px) !important;
+    max-width: 960px !important;
+    margin: 48px auto 72px !important;
+    padding: 0 !important;
+    box-sizing: border-box;
+}
 
+body.privacy-policy #main > .page {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: clamp(28px, 4vw, 48px) !important;
+    box-sizing: border-box;
+    background: #fff;
+    border: 1px solid #e5e5e5;
+    border-radius: 12px;
+}
+
+body.privacy-policy #main h2 {
+    margin: 0 0 32px !important;
+    padding: 0 0 18px !important;
+    border-bottom: 1px solid #e5e5e5;
+    font-size: clamp(26px, 3vw, 34px) !important;
+    line-height: 1.4 !important;
+}
+
+body.privacy-policy #main h2 a {
+    color: inherit !important;
+    text-decoration: none !important;
+}
+
+body.privacy-policy #main p {
+    margin: 0 0 1.8em !important;
+    font-size: 16px !important;
+    line-height: 2 !important;
+    letter-spacing: 0.015em;
+}
+
+body.privacy-policy #main ul,
+body.privacy-policy #main ol {
+    margin: 0 0 1.8em 1.5em !important;
+    line-height: 1.9 !important;
+}
+
+body.privacy-policy #main li {
+    margin-bottom: 0.55em;
+}
+
+/* Dark Mode */
+body.dark-theme.privacy-policy #main > .page {
+    background: #1f2328 !important;
+    border-color: #3b4148;
+    color: #f1f3f5 !important;
+}
+
+body.dark-theme.privacy-policy #main h2,
+body.dark-theme.privacy-policy #main h2 a {
+    color: #fff !important;
+    border-bottom-color: #3b4148;
+}
+
+body.dark-theme.privacy-policy #main p,
+body.dark-theme.privacy-policy #main ul,
+body.dark-theme.privacy-policy #main ol,
+body.dark-theme.privacy-policy #main li {
+    color: #f1f3f5 !important;
+}
+
+@media (max-width: 767px) {
+    body.privacy-policy #main {
+        width: calc(100% - 24px) !important;
+        margin: 28px auto 48px !important;
+    }
+
+    body.privacy-policy #main > .page {
+        padding: 22px 18px !important;
+        border-radius: 8px;
+    }
+
+    body.privacy-policy #main p {
+        font-size: 15px !important;
+        line-height: 1.9 !important;
+    }
+}
+/* === NAIGAI PRIVACY READABILITY END === */
+
+/* NAIGAI FOOTER PRIVACY LINK */
+/* footer.php のプライバシーポリシーリンク。HTMLへのstyle直書きを避ける。 */
+.footer-privacy-link {
+    margin-left: 1em;
+}

@@ -8131,16 +8131,12 @@ if (!function_exists('naigai_remove_page_meta_separator')) {
         <?php
     }
 
-    add_action(
-        'admin_footer-post.php',
-        'naigai_remove_page_meta_separator',
-        9999
-    );
+    /*
+     * 無効化:
+     * Gutenberg標準のメタボックスDOMを直接変更すると、
+     * 通常固定ページ（例: /privacypolicy/）で
+     * 本文エディタの高さが0になるため実行しない。
+     */
 
-    add_action(
-        'admin_footer-post-new.php',
-        'naigai_remove_page_meta_separator',
-        9999
-    );
 }
 /* NAIGAI_REMOVE_PAGE_META_SEPARATOR_END */

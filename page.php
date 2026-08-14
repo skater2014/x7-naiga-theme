@@ -37,10 +37,19 @@ get_header('77'); ?>
 </div>
 <!-- /main -->
 <!-- /page.php -->
+<?php /* NAIGAI_PRIVACY_NO_SIDEBAR */
+if (!is_page('privacypolicy')) : ?>
 <div id="single">
-	<?php get_sidebar('land'); ?>
+    <?php get_sidebar('land'); ?>
 </div>
+<?php endif; ?>
 
 
 
-<?php get_footer('home1'); ?>
+<?php /* NAIGAI_PRIVACY_STANDARD_FOOTER */
+if (is_page('privacypolicy')) {
+    get_footer();
+} else {
+    get_footer('home1');
+}
+?>

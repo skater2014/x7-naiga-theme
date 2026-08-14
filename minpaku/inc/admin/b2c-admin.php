@@ -311,6 +311,28 @@ function naigai_mpbfix_enqueue_admin_assets($hook)
         return;
     }
 
+    /*
+     * 民泊B2C専用の管理画面CSS/JSは、
+     * page-minpaku-b2c.php を使用する固定ページだけで読み込む。
+     *
+     * 通常固定ページ（/privacypolicy/ 等）へ読み込ませると、
+     * Gutenbergの編集画面を壊す原因になるため対象を限定する。
+     */
+    $post_id = 0;
+
+    if (isset($_GET['post'])) {
+        $post_id = absint($_GET['post']);
+    } elseif (isset($_POST['post_ID'])) {
+        $post_id = absint($_POST['post_ID']);
+    }
+
+    if (
+        $post_id <= 0
+        || !naigai_mpbfix_is_b2c_template_page($post_id)
+    ) {
+        return;
+    }
+
     wp_enqueue_media();
 
     $css_abs = get_template_directory() . '/minpaku/admin/css/minpaku-b2c-admin.css';

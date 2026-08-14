@@ -6,7 +6,7 @@
         <p class="footer-copy">
             &copy; <?php bloginfo('name'); ?> All Rights Reserved.
             <?php if (get_privacy_policy_url()) : ?>
-                <a href="<?php echo esc_url(get_privacy_policy_url()); ?>" style="margin-left: 1em;">プライバシーポリシー</a>
+                <a href="<?php echo esc_url(get_privacy_policy_url()); ?>" class="footer-privacy-link">プライバシーポリシー</a>
             <?php endif; ?>
         </p>
 
