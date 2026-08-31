@@ -859,3 +859,9 @@ if (!function_exists('naigai_iez_admin_save_top_cta_media_items')) {
     }
 }
 add_action('save_post_page', 'naigai_iez_admin_save_top_cta_media_items', 120);
+
+/*
+ * CTA Swiper画像を選択順のまま扱う管理画面UI。
+ */
+require_once __DIR__ . '/cta-gallery-order.php';
+
