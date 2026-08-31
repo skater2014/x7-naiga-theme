@@ -235,11 +235,80 @@ include get_template_directory() . '/hub/pages/iezukuri/templates/top/feature/se
 
 ?>
 
+<?php
+/*
+ * ============================================================
+ * IEZUKURI TOP BODY DATA BRIDGE
+ * ============================================================
+ *
+ * 既存のPHP直書きデータを、
+ * 管理画面保存値へ差し替える。
+ *
+ * HTML/CSSは変更しない。
+ * Intro / Hero / CTAにも触らない。
+ */
+if (
+    function_exists(
+        'naigai_iez_top_editable_data'
+    )
+) {
+
+    /*
+     * 今表示している /iezukuri/ のページID。
+     */
+    $naigai_top_page_id =
+        get_queried_object_id();
+
+
+    /*
+     * 管理画面保存値を取得。
+     */
+    $naigai_top_body =
+        naigai_iez_top_editable_data(
+            $naigai_top_page_id
+        );
+
+
+    /*
+     * 3つの住まい。
+     *
+     * 元々PHPに直書きされていた
+     * $service_items を上書きする。
+     */
+    if (
+        !empty(
+            $naigai_top_body['service_items']
+        )
+    ) {
+        $service_items =
+            $naigai_top_body['service_items'];
+    }
+
+
+
+
+    /*
+     * セクション見出し。
+     */
+    $naigai_services_title =
+        $naigai_top_body['services_title'];
+
+    $naigai_services_text =
+        $naigai_top_body['services_text'];
+
+}
+?>
+
 <section class="ch-section ch-top-services" aria-labelledby="ch-top-services-title">
     <div class="ch-shell">
         <div class="ch-head">
             <p class="ch-eyebrow">Service</p>
-            <h2 id="ch-top-services-title" class="ch-section-title">3つの住まい</h2>
+            <h2 id="ch-top-services-title" class="ch-section-title"><?php
+echo esc_html(
+    $naigai_services_title
+    ?? '3つの住まい'
+);
+?></h2>
             <p class="ch-top-routes__lead">
                 新築住宅、二世帯住宅、住宅リフォーム。気になる住まい方を選ぶと、外観・間取り図・内装を種類別に確認できます。
             </p>

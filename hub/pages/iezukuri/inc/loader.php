@@ -108,6 +108,17 @@ require_once __DIR__ . '/plan-display-metabox.php';
 require_once __DIR__ . '/plan-home-switch-data.php';
 require_once __DIR__ . '/assets.php';
 require_once __DIR__ . '/lightgallery-enqueue.php';
+
+/*
+ * /iezukuri/ TOP 本文編集
+ * Hero / CTA 以外の管理画面編集データをフロントでも使う。
+ */
+$naigai_iez_top_editable_sections = __DIR__ . '/top-editable-sections.php';
+
+if (file_exists($naigai_iez_top_editable_sections)) {
+    require_once $naigai_iez_top_editable_sections;
+}
+
 /* IEZ_ADMIN_LOADER_REQUIRE_START */
 /**
  * 管理画面側入口
