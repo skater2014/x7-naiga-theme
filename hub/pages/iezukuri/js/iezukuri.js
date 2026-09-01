@@ -1953,3 +1953,43 @@ document.addEventListener('DOMContentLoaded', function () {
     initIezPlanMobileModalSwipe();
   }
 })();
+
+/* NASU HOUSE V4 START */
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('[data-nasu-life-swiper]').forEach(function (host) {
+    if (
+      typeof window.Swiper !== 'function' ||
+      host.classList.contains('is-nasu-life-ready')
+    ) {
+      return;
+    }
+
+    host.classList.add('is-nasu-life-ready');
+
+    new window.Swiper(host, {
+      slidesPerView: 1.08,
+      spaceBetween: 14,
+      grabCursor: true,
+      watchOverflow: true,
+      navigation: {
+        prevEl: host.querySelector('.swiper-button-prev'),
+        nextEl: host.querySelector('.swiper-button-next')
+      },
+      pagination: {
+        el: host.querySelector('.swiper-pagination'),
+        clickable: true
+      },
+      breakpoints: {
+        700: {
+          slidesPerView: 2.05,
+          spaceBetween: 18
+        },
+        1080: {
+          slidesPerView: 2.7,
+          spaceBetween: 20
+        }
+      }
+    });
+  });
+});
+/* NASU HOUSE V4 END */
