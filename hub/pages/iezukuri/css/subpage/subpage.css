@@ -4116,3 +4116,520 @@ main.hub-customhome-subpage .ch-rule-page .ch-rule-body {
 /* IEZ_SUB_CONTENT_COMPACT_END */
 
 /* IEZ_SUB_CONTENT_LAYOUT_FORCE_END */
+
+
+/* NASU HOUSE V4 START */
+/* =========================================================
+   /iezukuri/nasu-house/
+   - 2つ目のHeroに見せない
+   - 専門3カテゴリを上でコンパクト表示
+   - Lifestyleは横長写真 + 下キャプション
+   - LAND & LIFEは軽いテキストリンク
+   ========================================================= */
+
+.hub-customhome-subpage--nasu-house .nhg-page {
+  background: var(--iezukuri-bg, #f5f2ec);
+  color: var(--iezukuri-text, #241910);
+}
+
+.hub-customhome-subpage--nasu-house .nhg-shell {
+  width: min(1120px, calc(100% - 48px));
+  margin-inline: auto;
+}
+
+.hub-customhome-subpage--nasu-house .nhg-page .ch-eyebrow {
+  margin: 0 0 10px;
+  color: var(--iezukuri-accent, #8a6a45);
+}
+
+.hub-customhome-subpage--nasu-house .nhg-page h2 {
+  margin: 0;
+  font-size: clamp(30px, 3.6vw, 46px);
+  font-weight: 500;
+  line-height: 1.34;
+  letter-spacing: .02em;
+}
+
+.hub-customhome-subpage--nasu-house .nhg-lead {
+  max-width: 520px;
+  margin: 18px 0 0;
+  color: var(--iezukuri-muted, #5b4b3d);
+  line-height: 1.9;
+}
+
+/* ---------------------------------------------------------
+   INTRO
+   共通Heroの直後なので、ここは「本文導入」。
+   画像を大きなHero風にしない。
+   --------------------------------------------------------- */
+
+.hub-customhome-subpage--nasu-house .nhg-intro {
+  padding: 46px 0 58px;
+}
+
+.hub-customhome-subpage--nasu-house .nhg-intro__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 420px;
+  gap: 56px;
+  align-items: center;
+}
+
+.hub-customhome-subpage--nasu-house .nhg-intro__media {
+  width: 100%;
+  max-width: 420px;
+  aspect-ratio: 3 / 2;
+  margin: 0;
+  overflow: hidden;
+  background: var(--iezukuri-surface-muted, #f3eee7);
+}
+
+.hub-customhome-subpage--nasu-house .nhg-intro__media img {
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+  object-fit: cover !important;
+}
+
+/* ---------------------------------------------------------
+   COMMON SECTION HEAD
+   --------------------------------------------------------- */
+
+.hub-customhome-subpage--nasu-house .nhg-section-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 390px);
+  gap: 40px;
+  align-items: end;
+  margin-bottom: 26px;
+}
+
+.hub-customhome-subpage--nasu-house .nhg-section-head > p {
+  margin: 0;
+  color: var(--iezukuri-muted, #5b4b3d);
+  line-height: 1.8;
+}
+
+/* ---------------------------------------------------------
+   SERVICE ROUTES
+   --------------------------------------------------------- */
+
+.hub-customhome-subpage--nasu-house .nhg-routes {
+  padding: 58px 0 68px;
+  background: var(--iezukuri-surface, #fff);
+}
+
+.hub-customhome-subpage--nasu-house .nhg-routes__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.hub-customhome-subpage--nasu-house .nhg-route {
+  display: block !important;
+  min-width: 0;
+  overflow: hidden;
+  color: inherit;
+  text-decoration: none;
+  background: var(--iezukuri-bg, #f5f2ec);
+}
+
+.hub-customhome-subpage--nasu-house .nhg-route__media {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  margin: 0;
+  overflow: hidden;
+  background: var(--iezukuri-surface-muted, #f3eee7);
+}
+
+.hub-customhome-subpage--nasu-house .nhg-route__media img {
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+  object-fit: cover !important;
+  transition: transform .35s ease;
+}
+
+.hub-customhome-subpage--nasu-house .nhg-route:hover .nhg-route__media img {
+  transform: scale(1.03);
+}
+
+.hub-customhome-subpage--nasu-house .nhg-route__body {
+  padding: 18px 20px 22px;
+}
+
+.hub-customhome-subpage--nasu-house .nhg-route__meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
+  color: var(--iezukuri-accent, #8a6a45);
+  font-size: 11px;
+  letter-spacing: .10em;
+}
+
+.hub-customhome-subpage--nasu-house .nhg-route h3 {
+  margin: 0;
+  font-size: clamp(22px, 2.2vw, 28px);
+  font-weight: 500;
+}
+
+.hub-customhome-subpage--nasu-house .nhg-route p {
+  min-height: 3.4em;
+  margin: 8px 0 15px;
+  color: var(--iezukuri-muted, #5b4b3d);
+  line-height: 1.7;
+}
+
+/* 矢印をカード右端へ飛ばさず、文言のすぐ横へ置く */
+.hub-customhome-subpage--nasu-house .nhg-route__link {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: flex-start !important;
+  gap: 8px;
+  width: auto !important;
+  padding: 0;
+  border: 0;
+  color: var(--iezukuri-accent-2, #7a5b3c);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.hub-customhome-subpage--nasu-house .nhg-route__link span {
+  display: inline-block;
+  transition: transform .2s ease;
+}
+
+.hub-customhome-subpage--nasu-house .nhg-route:hover .nhg-route__link span {
+  transform: translateX(3px);
+}
+
+/* ---------------------------------------------------------
+   LIFESTYLE
+   既存スタイルとの衝突を強く打ち消す。
+   写真上、文章下の普通のカードに固定。
+   --------------------------------------------------------- */
+
+.hub-customhome-subpage--nasu-house .nhg-life {
+  padding: 62px 0 68px;
+  overflow: hidden;
+  background: var(--iezukuri-dark, #24160f);
+  color: var(--iezukuri-surface, #fff);
+}
+
+.hub-customhome-subpage--nasu-house .nhg-life .ch-eyebrow {
+  color: var(--iezukuri-accent-soft, #dfd0bd);
+}
+
+.hub-customhome-subpage--nasu-house .nhg-life h2 {
+  color: #fff;
+}
+
+.hub-customhome-subpage--nasu-house .nhg-section-head--light > p {
+  color: rgba(255,255,255,.68);
+}
+
+.hub-customhome-subpage--nasu-house .nhg-life__swiper {
+  width: 100%;
+  overflow: visible;
+}
+
+.hub-customhome-subpage--nasu-house .nhg-life__swiper .swiper-wrapper {
+  align-items: stretch !important;
+}
+
+.hub-customhome-subpage--nasu-house .nhg-life__swiper .nhg-life-card {
+  display: flex !important;
+  flex-direction: column !important;
+  grid-template-columns: none !important;
+  min-width: 0 !important;
+  height: auto !important;
+  overflow: hidden !important;
+  writing-mode: horizontal-tb !important;
+  background: var(--iezukuri-surface, #fff);
+  color: var(--iezukuri-text, #241910);
+}
+
+.hub-customhome-subpage--nasu-house .nhg-life-card__media {
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+  min-height: 0 !important;
+  aspect-ratio: 16 / 9 !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+  background: var(--iezukuri-surface-muted, #f3eee7);
+}
+
+.hub-customhome-subpage--nasu-house .nhg-life-card__media img {
+  position: static !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  display: block !important;
+  object-fit: cover !important;
+  object-position: center !important;
+}
+
+.hub-customhome-subpage--nasu-house .nhg-life-card__body {
+  display: block !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  min-height: 142px;
+  padding: 18px 20px 22px !important;
+  writing-mode: horizontal-tb !important;
+}
+
+.hub-customhome-subpage--nasu-house .nhg-life-card h3 {
+  display: block !important;
+  width: 100% !important;
+  margin: 0 0 7px !important;
+  font-size: 23px !important;
+  font-weight: 500;
+  line-height: 1.45 !important;
+  white-space: normal !important;
+  word-break: normal !important;
+  writing-mode: horizontal-tb !important;
+}
+
+.hub-customhome-subpage--nasu-house .nhg-life-card p {
+  display: block !important;
+  width: 100% !important;
+  margin: 0 !important;
+  color: var(--iezukuri-muted, #5b4b3d);
+  line-height: 1.75 !important;
+  white-space: normal !important;
+  word-break: normal !important;
+  writing-mode: horizontal-tb !important;
+}
+
+/* JSが動く前でも縦長崩れを起こさないfallback */
+.hub-customhome-subpage--nasu-house
+.nhg-life__swiper:not(.swiper-initialized)
+.swiper-wrapper {
+  display: flex;
+  gap: 18px;
+  overflow-x: auto;
+}
+
+.hub-customhome-subpage--nasu-house
+.nhg-life__swiper:not(.swiper-initialized)
+.nhg-life-card {
+  flex: 0 0 calc((100% - 36px) / 3) !important;
+}
+
+.hub-customhome-subpage--nasu-house .nhg-life__controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 42px;
+  margin-top: 20px;
+}
+
+.hub-customhome-subpage--nasu-house .nhg-life__controls .swiper-pagination {
+  position: static !important;
+  width: auto !important;
+  margin-right: auto;
+}
+
+.hub-customhome-subpage--nasu-house .nhg-life__controls .swiper-pagination-bullet {
+  background: #fff;
+  opacity: .35;
+}
+
+.hub-customhome-subpage--nasu-house .nhg-life__controls .swiper-pagination-bullet-active {
+  opacity: 1;
+}
+
+.hub-customhome-subpage--nasu-house .nhg-life__controls .swiper-button-prev,
+.hub-customhome-subpage--nasu-house .nhg-life__controls .swiper-button-next {
+  position: static !important;
+  width: 40px !important;
+  height: 40px !important;
+  margin: 0 !important;
+  color: #fff !important;
+  border: 1px solid rgba(255,255,255,.34);
+  border-radius: 50%;
+}
+
+.hub-customhome-subpage--nasu-house .nhg-life__controls .swiper-button-prev::after,
+.hub-customhome-subpage--nasu-house .nhg-life__controls .swiper-button-next::after {
+  font-size: 13px !important;
+}
+
+/* ---------------------------------------------------------
+   LAND & LIFE
+   --------------------------------------------------------- */
+
+.hub-customhome-subpage--nasu-house .nhg-land {
+  padding: 66px 0 72px;
+}
+
+.hub-customhome-subpage--nasu-house .nhg-land__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(320px, .95fr);
+  gap: 54px;
+  align-items: center;
+}
+
+.hub-customhome-subpage--nasu-house .nhg-land__media {
+  aspect-ratio: 3 / 2;
+  margin: 0;
+  overflow: hidden;
+  background: var(--iezukuri-surface-muted, #f3eee7);
+}
+
+.hub-customhome-subpage--nasu-house .nhg-land__media img {
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+  object-fit: cover !important;
+}
+
+.hub-customhome-subpage--nasu-house .nhg-land__copy h2 {
+  font-size: clamp(30px, 3.4vw, 43px);
+}
+
+.hub-customhome-subpage--nasu-house .nhg-land__copy > p {
+  margin: 18px 0 17px;
+  color: var(--iezukuri-muted, #5b4b3d);
+  line-height: 1.9;
+}
+
+.hub-customhome-subpage--nasu-house .nhg-land .ch-btn {
+  margin-top: 2px;
+}
+
+@media (max-width: 900px) {
+  .hub-customhome-subpage--nasu-house .nhg-intro__grid,
+  .hub-customhome-subpage--nasu-house .nhg-land__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hub-customhome-subpage--nasu-house .nhg-intro__media {
+    max-width: 620px;
+  }
+
+  .hub-customhome-subpage--nasu-house .nhg-section-head {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .hub-customhome-subpage--nasu-house .nhg-routes__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hub-customhome-subpage--nasu-house
+  .nhg-life__swiper:not(.swiper-initialized)
+  .nhg-life-card {
+    flex-basis: 70vw !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .hub-customhome-subpage--nasu-house .nhg-shell {
+    width: min(100% - 30px, 1120px);
+  }
+
+  .hub-customhome-subpage--nasu-house .nhg-page h2 {
+    font-size: 29px;
+  }
+
+  .hub-customhome-subpage--nasu-house .nhg-intro,
+  .hub-customhome-subpage--nasu-house .nhg-routes,
+  .hub-customhome-subpage--nasu-house .nhg-life,
+  .hub-customhome-subpage--nasu-house .nhg-land {
+    padding-top: 48px;
+    padding-bottom: 54px;
+  }
+
+  .hub-customhome-subpage--nasu-house .nhg-intro__grid {
+    gap: 28px;
+  }
+
+  .hub-customhome-subpage--nasu-house .nhg-intro__media {
+    aspect-ratio: 4 / 3;
+  }
+
+  .hub-customhome-subpage--nasu-house
+  .nhg-life__swiper:not(.swiper-initialized)
+  .nhg-life-card {
+    flex-basis: 84vw !important;
+  }
+
+  .hub-customhome-subpage--nasu-house .nhg-land__media {
+    aspect-ratio: 4 / 3;
+  }
+}
+/* NASU HOUSE V4 END */
+
+/* NASU HOUSE FINAL TUNE START */
+
+.hub-customhome-subpage--nasu-house .nhg-intro__actions {
+  margin-top: 24px;
+}
+
+.hub-customhome-subpage--nasu-house .nhg-intro__actions .ch-btn,
+.hub-customhome-subpage--nasu-house .nhg-land .ch-btn {
+  width: fit-content;
+}
+
+.hub-customhome-subpage--nasu-house .nhg-land__copy > p {
+  margin-bottom: 24px;
+}
+
+/* NASU HOUSE FINAL TUNE END */
+
+/* NASU HOUSE CTA BUTTON FINAL START */
+
+.hub-customhome-subpage--nasu-house .nhg-intro__actions {
+  margin-top: 26px;
+}
+
+.hub-customhome-subpage--nasu-house .nhg-intro__actions .ch-btn,
+.hub-customhome-subpage--nasu-house .nhg-land .ch-btn {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  width: auto !important;
+  min-width: 210px;
+  min-height: 50px;
+  padding: 12px 24px;
+  border: 1px solid var(--iezukuri-accent-2, #7a5b3c) !important;
+  background: var(--iezukuri-accent-2, #7a5b3c) !important;
+  color: var(--iezukuri-surface, #ffffff) !important;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: .03em;
+  text-decoration: none !important;
+  border-radius: 0;
+  box-shadow: none;
+  transition:
+    background-color .2s ease,
+    border-color .2s ease,
+    transform .2s ease;
+}
+
+.hub-customhome-subpage--nasu-house .nhg-intro__actions .ch-btn:hover,
+.hub-customhome-subpage--nasu-house .nhg-land .ch-btn:hover {
+  border-color: var(--iezukuri-dark, #24160f) !important;
+  background: var(--iezukuri-dark, #24160f) !important;
+  color: var(--iezukuri-surface, #ffffff) !important;
+  transform: translateY(-1px);
+}
+
+.hub-customhome-subpage--nasu-house .nhg-intro__actions .ch-btn:focus-visible,
+.hub-customhome-subpage--nasu-house .nhg-land .ch-btn:focus-visible {
+  outline: 2px solid var(--iezukuri-accent, #8a6a45);
+  outline-offset: 3px;
+}
+
+@media (max-width: 640px) {
+  .hub-customhome-subpage--nasu-house .nhg-intro__actions .ch-btn,
+  .hub-customhome-subpage--nasu-house .nhg-land .ch-btn {
+    min-width: 0;
+    width: 100% !important;
+  }
+}
+
+/* NASU HOUSE CTA BUTTON FINAL END */

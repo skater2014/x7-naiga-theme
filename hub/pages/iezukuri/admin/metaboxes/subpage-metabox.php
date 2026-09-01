@@ -2941,3 +2941,259 @@ add_action(
     60
 );
 
+/* NASU HOUSE BODY META BOX START */
+
+if (!function_exists('naigai_iez_nasu_house_body_add_box')) {
+    function naigai_iez_nasu_house_body_add_box($post)
+    {
+        if (
+            !$post ||
+            $post->post_type !== 'page' ||
+            $post->post_name !== 'nasu-house'
+        ) {
+            return;
+        }
+
+        add_meta_box(
+            'naigai_iez_nasu_house_body_box',
+            '那須ハウス本文設定',
+            'naigai_iez_nasu_house_body_render_box',
+            'page',
+            'normal',
+            'high'
+        );
+    }
+
+    add_action(
+        'add_meta_boxes_page',
+        'naigai_iez_nasu_house_body_add_box',
+        40,
+        1
+    );
+}
+
+if (!function_exists('naigai_iez_nasu_house_body_render_box')) {
+    function naigai_iez_nasu_house_body_render_box($post)
+    {
+        wp_nonce_field(
+            'naigai_iez_nasu_house_body_save',
+            'naigai_iez_nasu_house_body_nonce'
+        );
+
+        $get = static function ($key, $default = '') use ($post) {
+            $value = get_post_meta($post->ID, $key, true);
+            return ($value === '' || $value === null) ? $default : $value;
+        };
+
+        echo '<h3>NASU HOUSE</h3>';
+
+        if (function_exists('naigai_iez_admin_media_input')) {
+            naigai_iez_admin_media_input(
+                '_ch_nasu_intro_image_id',
+                '導入画像',
+                $get('_ch_nasu_intro_image_id', ''),
+                'image'
+            );
+        }
+
+        if (function_exists('naigai_iez_admin_text_input')) {
+            naigai_iez_admin_text_input(
+                '_ch_nasu_intro_btn_label',
+                'ボタン文言',
+                $get('_ch_nasu_intro_btn_label', '注文住宅の考え方を見る')
+            );
+        }
+
+        if (function_exists('naigai_iez_admin_url_input')) {
+            naigai_iez_admin_url_input(
+                '_ch_nasu_intro_btn_url',
+                'ボタンURL',
+                $get('_ch_nasu_intro_btn_url', home_url('/iezukuri/concept/'))
+            );
+        }
+
+        echo '<hr>';
+        echo '<h3>暮らし方 / LIFESTYLE</h3>';
+
+        $items = array(
+            1 => array(
+                'title' => '定住',
+                'text'  => '通勤・買い物・家事・収納まで、毎日の生活動線を軸に考えます。',
+            ),
+            2 => array(
+                'title' => '二拠点生活',
+                'text'  => '滞在頻度、留守中の管理、仕事場所や趣味収納まで含めて考えます。',
+            ),
+            3 => array(
+                'title' => '家族・親世帯と暮らす',
+                'text'  => '水回り、駐車、生活時間、将来の変化まで家族の距離感から整理します。',
+            ),
+        );
+
+        foreach ($items as $i => $defaults) {
+            echo '<h4>暮らし方 ' . esc_html((string) $i) . '</h4>';
+
+            if (function_exists('naigai_iez_admin_media_input')) {
+                naigai_iez_admin_media_input(
+                    "_ch_nasu_card{$i}_image_id",
+                    '画像',
+                    $get("_ch_nasu_card{$i}_image_id", ''),
+                    'image'
+                );
+            }
+
+            if (function_exists('naigai_iez_admin_text_input')) {
+                naigai_iez_admin_text_input(
+                    "_ch_nasu_card{$i}_title",
+                    'タイトル',
+                    $get(
+                        "_ch_nasu_card{$i}_title",
+                        $defaults['title']
+                    )
+                );
+            }
+
+            if (function_exists('naigai_iez_admin_textarea')) {
+                naigai_iez_admin_textarea(
+                    "_ch_nasu_card{$i}_text",
+                    '本文',
+                    $get(
+                        "_ch_nasu_card{$i}_text",
+                        $defaults['text']
+                    ),
+                    3
+                );
+            }
+
+            echo '<hr>';
+        }
+
+        echo '<h3>LAND &amp; LIFE</h3>';
+
+        if (function_exists('naigai_iez_admin_media_input')) {
+            naigai_iez_admin_media_input(
+                '_ch_nasu_feature_image_id',
+                '画像',
+                $get('_ch_nasu_feature_image_id', ''),
+                'image'
+            );
+        }
+
+        if (function_exists('naigai_iez_admin_text_input')) {
+            naigai_iez_admin_text_input(
+                '_ch_nasu_feature_btn_label',
+                'ボタン文言',
+                $get('_ch_nasu_feature_btn_label', '間取り・プランを見る')
+            );
+        }
+
+        if (function_exists('naigai_iez_admin_url_input')) {
+            naigai_iez_admin_url_input(
+                '_ch_nasu_feature_btn_url',
+                'ボタンURL',
+                $get(
+                    '_ch_nasu_feature_btn_url',
+                    home_url('/iezukuri/plans/')
+                )
+            );
+        }
+    }
+}
+
+if (!function_exists('naigai_iez_nasu_house_body_save')) {
+    function naigai_iez_nasu_house_body_save($post_id)
+    {
+        if (
+            !isset($_POST['naigai_iez_nasu_house_body_nonce']) ||
+            !wp_verify_nonce(
+                sanitize_text_field(
+                    wp_unslash(
+                        $_POST['naigai_iez_nasu_house_body_nonce']
+                    )
+                ),
+                'naigai_iez_nasu_house_body_save'
+            )
+        ) {
+            return;
+        }
+
+        if (
+            defined('DOING_AUTOSAVE') &&
+            DOING_AUTOSAVE
+        ) {
+            return;
+        }
+
+        if (!current_user_can('edit_post', $post_id)) {
+            return;
+        }
+
+        $post = get_post($post_id);
+
+        if (
+            !$post ||
+            $post->post_type !== 'page' ||
+            $post->post_name !== 'nasu-house'
+        ) {
+            return;
+        }
+
+        $fields = array(
+            '_ch_nasu_intro_image_id' => 'number',
+            '_ch_nasu_intro_btn_label' => 'text',
+            '_ch_nasu_intro_btn_url' => 'url',
+
+            '_ch_nasu_card1_image_id' => 'number',
+            '_ch_nasu_card1_title' => 'text',
+            '_ch_nasu_card1_text' => 'textarea',
+
+            '_ch_nasu_card2_image_id' => 'number',
+            '_ch_nasu_card2_title' => 'text',
+            '_ch_nasu_card2_text' => 'textarea',
+
+            '_ch_nasu_card3_image_id' => 'number',
+            '_ch_nasu_card3_title' => 'text',
+            '_ch_nasu_card3_text' => 'textarea',
+
+            '_ch_nasu_feature_image_id' => 'number',
+            '_ch_nasu_feature_btn_label' => 'text',
+            '_ch_nasu_feature_btn_url' => 'url',
+        );
+
+        foreach ($fields as $key => $type) {
+            if (!isset($_POST[$key])) {
+                continue;
+            }
+
+            $raw = wp_unslash($_POST[$key]);
+
+            if ($type === 'number') {
+                $value = (string) absint($raw);
+            } elseif ($type === 'url') {
+                if (
+                    is_string($raw) &&
+                    isset($raw[0]) &&
+                    $raw[0] === '#'
+                ) {
+                    $value = sanitize_text_field($raw);
+                } else {
+                    $value = esc_url_raw($raw);
+                }
+            } elseif ($type === 'textarea') {
+                $value = sanitize_textarea_field($raw);
+            } else {
+                $value = sanitize_text_field($raw);
+            }
+
+            update_post_meta($post_id, $key, $value);
+        }
+    }
+
+    add_action(
+        'save_post_page',
+        'naigai_iez_nasu_house_body_save',
+        50
+    );
+}
+
+/* NASU HOUSE BODY META BOX END */
