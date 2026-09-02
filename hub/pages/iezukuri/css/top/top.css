@@ -1473,3 +1473,86 @@ body.admin-bar .hub-customhome-page .ch-localnav {
 }
 
 /* === CH TOP FINISH BALANCE END === */
+
+
+/* IEZ_SITE_READING_GRID_FIX_START */
+.ch-site-reading__grid {
+  display: grid !important;
+  grid-template-columns: minmax(280px, .8fr) minmax(0, 1.2fr) !important;
+  gap: clamp(40px, 5.5vw, 78px) !important;
+  align-items: start !important;
+}
+
+.ch-site-reading__body {
+  display: block !important;
+  min-width: 0 !important;
+}
+
+.ch-site-reading__points {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 16px !important;
+  width: 100% !important;
+  margin: 0 !important;
+}
+
+.ch-site-reading__point {
+  display: flex !important;
+  min-width: 0 !important;
+  min-height: 180px !important;
+  flex-direction: column !important;
+  box-sizing: border-box !important;
+  padding: 22px !important;
+  border: 1px solid rgba(122, 91, 60, .18) !important;
+  border-radius: 16px !important;
+  background: rgba(255, 255, 255, .82) !important;
+  box-shadow: 0 8px 24px rgba(36, 22, 15, .035) !important;
+}
+
+.ch-site-reading__point > span {
+  display: inline-flex !important;
+  width: fit-content !important;
+  margin: 0 0 14px !important;
+  padding: 5px 8px !important;
+  border-radius: 999px !important;
+  background: #f3eee7 !important;
+  color: #7a5b3c !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  line-height: 1 !important;
+  letter-spacing: .12em !important;
+}
+
+.ch-site-reading__point h3 {
+  margin: 0 0 9px !important;
+  color: #2b2119 !important;
+  font-size: 18px !important;
+  line-height: 1.45 !important;
+}
+
+.ch-site-reading__point p {
+  margin: 0 !important;
+  color: #5b4b3d !important;
+  font-size: 14px !important;
+  line-height: 1.8 !important;
+}
+
+.ch-site-reading__notice { margin-top: 18px !important; }
+
+.ch-site-reading__actions {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 14px 20px !important;
+  margin-top: 14px !important;
+}
+
+@media (max-width: 980px) {
+  .ch-site-reading__grid { grid-template-columns: 1fr !important; }
+}
+
+@media (max-width: 680px) {
+  .ch-site-reading__points { grid-template-columns: 1fr !important; }
+  .ch-site-reading__point { min-height: 0 !important; }
+}
+/* IEZ_SITE_READING_GRID_FIX_END */
