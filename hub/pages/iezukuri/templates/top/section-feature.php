@@ -419,71 +419,26 @@ echo esc_html(
     <div class="ch-shell ch-site-reading__grid">
         <div class="ch-site-reading__head">
             <p class="ch-eyebrow">Site Reading</p>
-
             <h2 id="ch-site-reading-title" class="ch-section-title">
                 那須の環境と暮らしから、<br>住まいを考える。
             </h2>
-
             <p class="ch-site-reading__summary">
-                建物だけを先に決めるのではなく、
-                敷地条件、那須の気候、家族の暮らし方、将来の変化まで整理しながら、
-                住まいのかたちを考えます。
+                建物だけを先に決めるのではなく、敷地条件、那須の気候、家族の暮らし方、将来の変化まで整理しながら、住まいのかたちを考えます。
             </p>
+            <figure class="ch-site-reading__media">
+                <img src="<?php echo esc_url(get_template_directory_uri() . '/hub/pages/iezukuri/assets/images/nasu-house/nasu-house-forest-residence.png'); ?>" alt="那須の自然に囲まれた住まい" loading="lazy" decoding="async">
+            </figure>
         </div>
-
         <div class="ch-site-reading__body">
             <div class="ch-site-reading__points" aria-label="那須の家づくりで考える4つの視点">
-
-                <article class="ch-site-reading__point">
-                    <span>01</span>
-                    <h3>敷地条件を考える</h3>
-                    <p>
-                        日当たり、道路との関係、駐車、庭、建物の配置など、
-                        敷地全体を見ながら住まいを考えます。
-                    </p>
-                </article>
-
-                <article class="ch-site-reading__point">
-                    <span>02</span>
-                    <h3>那須の気候を考える</h3>
-                    <p>
-                        夏の日差し、冬の寒さ、雪、風、湿気など、
-                        地域の特徴に合わせて断熱・窓・配置を考えます。
-                    </p>
-                </article>
-
-                <article class="ch-site-reading__point">
-                    <span>03</span>
-                    <h3>暮らし方を考える</h3>
-                    <p>
-                        定住、二拠点生活、家族構成、仕事、収納など、
-                        日々の過ごし方から間取りを考えます。
-                    </p>
-                </article>
-
-                <article class="ch-site-reading__point">
-                    <span>04</span>
-                    <h3>将来の変化を考える</h3>
-                    <p>
-                        家族構成の変化やメンテナンスまで見据えて、
-                        長く使いやすい住まいを考えます。
-                    </p>
-                </article>
+                <article class="ch-site-reading__point"><span>01</span><h3>敷地条件を考える</h3><p>日当たり、道路との関係、駐車、庭、建物の配置など、敷地全体を見ながら住まいを考えます。</p></article>
+                <article class="ch-site-reading__point"><span>02</span><h3>那須の気候を考える</h3><p>夏の日差し、冬の寒さ、雪、風、湿気など、地域の特徴に合わせて断熱・窓・配置を考えます。</p></article>
+                <article class="ch-site-reading__point"><span>03</span><h3>暮らし方を考える</h3><p>定住、二拠点生活、家族構成、仕事、収納など、日々の過ごし方から間取りを考えます。</p></article>
+                <article class="ch-site-reading__point"><span>04</span><h3>将来の変化を考える</h3><p>家族構成の変化やメンテナンスまで見据えて、長く使いやすい住まいを考えます。</p></article>
             </div>
-
-            <p class="ch-site-reading__notice">
-                家そのものだけでなく、那須の環境と暮らし方から住まいを考える。
-                その考え方を、那須の家づくりページで詳しくご案内しています。
-            </p>
-
             <div class="ch-site-reading__actions">
-                <a class="ch-btn ch-btn--primary" href="<?php echo esc_url(home_url('/iezukuri/nasu-house/')); ?>">
-                    那須の家づくりを見る
-                </a>
-
-                <a class="ch-inline-link" href="<?php echo esc_url(naigai_iez_top_page_url('iezukuri/concept')); ?>">
-                    注文住宅の考え方を見る
-                </a>
+                <a class="ch-btn ch-btn--primary" href="<?php echo esc_url(home_url('/iezukuri/nasu-house/')); ?>">那須の家づくりを見る</a>
+                <a class="ch-inline-link" href="<?php echo esc_url(naigai_iez_top_page_url('iezukuri/concept')); ?>">注文住宅の考え方を見る</a>
             </div>
         </div>
     </div>

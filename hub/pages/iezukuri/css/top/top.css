@@ -1556,3 +1556,17 @@ body.admin-bar .hub-customhome-page .ch-localnav {
   .ch-site-reading__point { min-height: 0 !important; }
 }
 /* IEZ_SITE_READING_GRID_FIX_END */
+
+
+/* IEZ_SITE_READING_BALANCE_START */
+body.hub-customhome-page.hub-customhome-top .ch-site-reading__summary{max-width:560px}
+body.hub-customhome-page.hub-customhome-top .ch-site-reading__media{width:100%;max-width:560px;margin:clamp(26px,3vw,38px) 0 0!important;overflow:hidden;border-radius:18px;background:#eee8df;box-shadow:0 12px 34px rgba(36,22,15,.07)}
+body.hub-customhome-page.hub-customhome-top .ch-site-reading__media img{display:block;width:100%;aspect-ratio:16/10;object-fit:cover;object-position:center}
+body.hub-customhome-page.hub-customhome-top .ch-site-reading__body{display:flex!important;flex-direction:column!important;min-width:0}
+body.hub-customhome-page.hub-customhome-top .ch-site-reading__points{order:1}
+body.hub-customhome-page.hub-customhome-top .ch-site-reading__notice{display:none!important}
+body.hub-customhome-page.hub-customhome-top .ch-site-reading__actions{order:2;display:flex!important;flex-wrap:wrap!important;align-items:center!important;justify-content:flex-start!important;gap:14px 22px!important;margin:clamp(22px,2.4vw,30px) 0 0!important;padding:0!important}
+body.hub-customhome-page.hub-customhome-top .ch-site-reading__actions .ch-btn{min-width:220px;justify-content:center}
+@media(max-width:1050px){body.hub-customhome-page.hub-customhome-top .ch-site-reading__media{max-width:680px;margin-inline:auto!important}}
+@media(max-width:680px){body.hub-customhome-page.hub-customhome-top .ch-site-reading__media{margin-top:22px!important;border-radius:14px}body.hub-customhome-page.hub-customhome-top .ch-site-reading__actions{flex-direction:column!important;align-items:stretch!important}body.hub-customhome-page.hub-customhome-top .ch-site-reading__actions .ch-btn{width:100%}body.hub-customhome-page.hub-customhome-top .ch-site-reading__actions .ch-inline-link{align-self:flex-start}}
+/* IEZ_SITE_READING_BALANCE_END */
