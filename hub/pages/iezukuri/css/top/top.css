@@ -1647,3 +1647,77 @@ body.hub-customhome-page.hub-customhome-top .ch-site-reading__actions {
   }
 }
 /* IEZ_SITE_READING_IMAGE_CONTAIN_END */
+
+
+/* IEZ_SITE_READING_PHOTO_SIZE_START
+ * Site Reading 左カラム写真を必ずカラム内へ閉じ込める。
+ */
+body.hub-customhome-page.hub-customhome-top .ch-site-reading__head {
+  min-width: 0 !important;
+}
+
+body.hub-customhome-page.hub-customhome-top .ch-site-reading__media {
+  position: relative !important;
+  inset: auto !important;
+  display: block !important;
+  float: none !important;
+  clear: both !important;
+  width: min(100%, 560px) !important;
+  max-width: 560px !important;
+  height: auto !important;
+  min-height: 0 !important;
+  aspect-ratio: 16 / 9 !important;
+  margin: 28px 0 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  border-radius: 18px !important;
+  transform: none !important;
+  grid-column: auto !important;
+  grid-row: auto !important;
+  z-index: 0 !important;
+  box-sizing: border-box !important;
+}
+
+body.hub-customhome-page.hub-customhome-top .ch-site-reading__media img {
+  position: absolute !important;
+  inset: 0 !important;
+  display: block !important;
+  width: 100% !important;
+  max-width: none !important;
+  height: 100% !important;
+  max-height: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  object-fit: cover !important;
+  object-position: center 54% !important;
+  transform: none !important;
+}
+
+body.hub-customhome-page.hub-customhome-top .ch-site-reading__body {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+body.hub-customhome-page.hub-customhome-top .ch-site-reading__actions {
+  position: static !important;
+  z-index: auto !important;
+}
+
+@media (max-width: 1050px) {
+  body.hub-customhome-page.hub-customhome-top .ch-site-reading__media {
+    width: min(100%, 680px) !important;
+    max-width: 680px !important;
+    margin-inline: auto !important;
+  }
+}
+
+@media (max-width: 680px) {
+  body.hub-customhome-page.hub-customhome-top .ch-site-reading__media {
+    width: 100% !important;
+    max-width: none !important;
+    aspect-ratio: 4 / 3 !important;
+    margin-top: 22px !important;
+    border-radius: 14px !important;
+  }
+}
+/* IEZ_SITE_READING_PHOTO_SIZE_END */
