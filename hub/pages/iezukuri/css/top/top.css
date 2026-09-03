@@ -1570,3 +1570,80 @@ body.hub-customhome-page.hub-customhome-top .ch-site-reading__actions .ch-btn{mi
 @media(max-width:1050px){body.hub-customhome-page.hub-customhome-top .ch-site-reading__media{max-width:680px;margin-inline:auto!important}}
 @media(max-width:680px){body.hub-customhome-page.hub-customhome-top .ch-site-reading__media{margin-top:22px!important;border-radius:14px}body.hub-customhome-page.hub-customhome-top .ch-site-reading__actions{flex-direction:column!important;align-items:stretch!important}body.hub-customhome-page.hub-customhome-top .ch-site-reading__actions .ch-btn{width:100%}body.hub-customhome-page.hub-customhome-top .ch-site-reading__actions .ch-inline-link{align-self:flex-start}}
 /* IEZ_SITE_READING_BALANCE_END */
+
+
+/* IEZ_SITE_READING_IMAGE_CONTAIN_START
+ * 左カラムの写真が右カードや次セクションへはみ出さないよう完全に固定。
+ */
+body.hub-customhome-page.hub-customhome-top .ch-site-reading__head {
+  min-width: 0 !important;
+  overflow: visible !important;
+}
+
+body.hub-customhome-page.hub-customhome-top .ch-site-reading__media {
+  position: relative !important;
+  inset: auto !important;
+  display: block !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: 560px !important;
+  height: clamp(220px, 18vw, 290px) !important;
+  min-height: 0 !important;
+  max-height: 290px !important;
+  margin: clamp(24px, 2.8vw, 34px) 0 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  border-radius: 18px !important;
+  background: #eee8df !important;
+  isolation: isolate !important;
+  z-index: 0 !important;
+}
+
+body.hub-customhome-page.hub-customhome-top .ch-site-reading__media img {
+  position: static !important;
+  inset: auto !important;
+  display: block !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  height: 100% !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  max-height: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  object-fit: cover !important;
+  object-position: center 52% !important;
+  transform: none !important;
+  translate: none !important;
+  scale: none !important;
+  z-index: auto !important;
+}
+
+body.hub-customhome-page.hub-customhome-top .ch-site-reading__body,
+body.hub-customhome-page.hub-customhome-top .ch-site-reading__points,
+body.hub-customhome-page.hub-customhome-top .ch-site-reading__actions {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+@media (max-width: 1050px) {
+  body.hub-customhome-page.hub-customhome-top .ch-site-reading__media {
+    width: min(100%, 680px) !important;
+    max-width: 680px !important;
+    height: clamp(240px, 45vw, 360px) !important;
+    max-height: 360px !important;
+    margin-inline: auto !important;
+  }
+}
+
+@media (max-width: 680px) {
+  body.hub-customhome-page.hub-customhome-top .ch-site-reading__media {
+    width: 100% !important;
+    height: 220px !important;
+    max-height: 220px !important;
+    margin-top: 22px !important;
+    border-radius: 14px !important;
+  }
+}
+/* IEZ_SITE_READING_IMAGE_CONTAIN_END */
