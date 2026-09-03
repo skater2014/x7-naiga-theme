@@ -1721,3 +1721,82 @@ body.hub-customhome-page.hub-customhome-top .ch-site-reading__actions {
   }
 }
 /* IEZ_SITE_READING_PHOTO_SIZE_END */
+
+
+/* IEZ_SITE_READING_PHOTO_HARD_RESET_START
+ * Site Reading 左カラム写真専用。
+ * 既存の figure / img の position・grid・transform・width を一度リセットし、
+ * 写真が右カラムや次セクションへ描画されないように固定する。
+ */
+body.hub-customhome-page.hub-customhome-top .ch-site-reading__head {
+  min-width: 0 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+body.hub-customhome-page.hub-customhome-top figure.ch-site-reading__media {
+  all: unset !important;
+  display: block !important;
+  position: relative !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: 560px !important;
+  height: 300px !important;
+  min-height: 0 !important;
+  max-height: 300px !important;
+  margin: 28px 0 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  overflow: clip !important;
+  contain: layout paint !important;
+  isolation: isolate !important;
+  border-radius: 18px !important;
+  background: #eee8df !important;
+  clip-path: inset(0 round 18px) !important;
+}
+
+body.hub-customhome-page.hub-customhome-top figure.ch-site-reading__media > img {
+  all: unset !important;
+  display: block !important;
+  position: absolute !important;
+  inset: 0 !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  max-height: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  object-fit: cover !important;
+  object-position: center center !important;
+  transform: none !important;
+  translate: none !important;
+  scale: none !important;
+  rotate: none !important;
+  opacity: 1 !important;
+}
+
+@media (max-width: 1050px) {
+  body.hub-customhome-page.hub-customhome-top figure.ch-site-reading__media {
+    width: min(100%, 680px) !important;
+    max-width: 680px !important;
+    height: 340px !important;
+    max-height: 340px !important;
+    margin-inline: auto !important;
+  }
+}
+
+@media (max-width: 680px) {
+  body.hub-customhome-page.hub-customhome-top figure.ch-site-reading__media {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 220px !important;
+    max-height: 220px !important;
+    margin-top: 22px !important;
+    border-radius: 14px !important;
+    clip-path: inset(0 round 14px) !important;
+  }
+}
+/* IEZ_SITE_READING_PHOTO_HARD_RESET_END */
