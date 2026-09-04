@@ -417,7 +417,7 @@ echo esc_html(
 
 <section class="ch-section ch-site-reading" aria-labelledby="ch-site-reading-title" data-nasu-site-reading-static="1">
     <div class="ch-shell ch-site-reading__grid">
-        <div class="ch-site-reading__head">
+        <div class="ch-site-reading__head" style="min-width:0 !important; overflow:hidden !important;">
             <p class="ch-eyebrow">Site Reading</p>
             <h2 id="ch-site-reading-title" class="ch-section-title">
                 那須の環境と暮らしから、<br>住まいを考える。
@@ -425,9 +425,47 @@ echo esc_html(
             <p class="ch-site-reading__summary">
                 建物だけを先に決めるのではなく、敷地条件、那須の気候、家族の暮らし方、将来の変化まで整理しながら、住まいのかたちを考えます。
             </p>
-            <figure class="ch-site-reading__media">
-                <img src="<?php echo esc_url(get_template_directory_uri() . '/hub/pages/iezukuri/assets/images/nasu-house/nasu-house-forest-residence.png'); ?>" alt="那須の自然に囲まれた住まい" loading="lazy" decoding="async">
-            </figure>
+            <figure
+    class="ch-site-reading__media"
+    style="
+        display:block !important;
+        position:relative !important;
+        inset:auto !important;
+        width:100% !important;
+        max-width:560px !important;
+        height:300px !important;
+        margin:28px 0 0 !important;
+        padding:0 !important;
+        overflow:hidden !important;
+        box-sizing:border-box !important;
+        border-radius:18px !important;
+        contain:layout paint !important;
+        transform:none !important;
+        z-index:0 !important;
+    "
+>
+    <img
+        src="<?php echo esc_url(get_template_directory_uri() . '/hub/pages/iezukuri/assets/images/nasu-house/nasu-house-forest-residence.png'); ?>"
+        alt="那須の自然に囲まれた住まい"
+        loading="lazy"
+        decoding="async"
+        width="560"
+        height="300"
+        style="
+            display:block !important;
+            position:static !important;
+            inset:auto !important;
+            width:100% !important;
+            max-width:100% !important;
+            height:100% !important;
+            margin:0 !important;
+            padding:0 !important;
+            object-fit:cover !important;
+            object-position:center !important;
+            transform:none !important;
+        "
+    >
+</figure>
         </div>
         <div class="ch-site-reading__body">
             <div class="ch-site-reading__points" aria-label="那須の家づくりで考える4つの視点">
