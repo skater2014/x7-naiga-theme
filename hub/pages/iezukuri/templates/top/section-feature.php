@@ -294,7 +294,7 @@ if (
 }
 ?>
 
-<section class="ch-section ch-top-services" aria-labelledby="ch-top-services-title">
+<section class="ch-section ch-top-services" aria-labelledby="ch-top-services-title" id="customhome-services" data-nav-section="services">
     <div class="ch-shell">
         <div class="ch-head">
             <p class="ch-eyebrow">Service</p>
@@ -410,7 +410,7 @@ echo esc_html(
     </div>
 </section>
 
-<section class="ch-section ch-site-reading" aria-labelledby="ch-site-reading-title" data-nasu-site-reading-static="1">
+<section class="ch-section ch-site-reading" aria-labelledby="ch-site-reading-title" data-nasu-site-reading-static="1" id="customhome-site-reading" data-nav-section="site-reading">
     <div class="ch-shell ch-site-reading__grid">
         <div class="ch-site-reading__head" style="min-width:0 !important; overflow:hidden !important;">
             <p class="ch-eyebrow">Site Reading</p>
