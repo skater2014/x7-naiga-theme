@@ -18,6 +18,7 @@ get_header('customhome');
 <?php
 include get_template_directory() . '/hub/pages/iezukuri/templates/top/context.php';
 include get_template_directory() . '/hub/pages/iezukuri/templates/top/section-hero.php';
+include get_template_directory() . '/hub/pages/iezukuri/templates/top/section-gateway.php';
 /*
  * トップ中間ナビの読み込み。
  * section-localnav.php は WordPress nav location ではなく、
