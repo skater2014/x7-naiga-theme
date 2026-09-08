@@ -2021,18 +2021,42 @@ body.hub-customhome-page.hub-customhome-top .ch-site-reading__actions .ch-inline
 /* IEZ_TOP_FLOW_COMPLETE_END */
 
 /* IEZ_SITE_READING_LAYOUT_CTA_START */
+/* Site Reading: カード自体は維持し、右カラムだけ少し下げる */
 body.hub-customhome-page.hub-customhome-top .ch-site-reading--editorial .ch-site-reading__cards{
   display:grid !important;
   grid-template-columns:repeat(2,minmax(0,1fr)) !important;
   gap:24px !important;
-  margin-top:clamp(42px,4vw,58px) !important;
+  margin-top:48px !important;
   align-self:start !important;
 }
 
+/* 4カードの白いカードUIを明示的に復元 */
+body.hub-customhome-page.hub-customhome-top .ch-site-reading--editorial .ch-site-reading__cards > *{
+  min-width:0 !important;
+  min-height:210px !important;
+  padding:28px 30px !important;
+  border:1px solid rgba(78,55,36,.14) !important;
+  border-radius:22px !important;
+  background:#fff !important;
+  box-shadow:0 8px 24px rgba(56,38,23,.055) !important;
+  box-sizing:border-box !important;
+}
+
+body.hub-customhome-page.hub-customhome-top .ch-site-reading--editorial .ch-site-reading__cards > * h3{
+  margin:18px 0 14px !important;
+  line-height:1.45 !important;
+}
+
+body.hub-customhome-page.hub-customhome-top .ch-site-reading--editorial .ch-site-reading__cards > * p{
+  margin:0 !important;
+  line-height:1.85 !important;
+}
+
+/* CTAはカード群の下に、2本とも同じボタンサイズ */
 body.hub-customhome-page.hub-customhome-top .ch-site-reading--editorial .ch-site-reading__actions{
   display:flex !important;
   flex-wrap:wrap !important;
-  align-items:stretch !important;
+  align-items:center !important;
   gap:16px !important;
   margin-top:22px !important;
 }
@@ -2053,30 +2077,35 @@ body.hub-customhome-page.hub-customhome-top .ch-site-reading--editorial .ch-site
   text-decoration:none !important;
 }
 
+/* 1つ目：既存のゴールド */
 body.hub-customhome-page.hub-customhome-top .ch-site-reading--editorial .ch-site-reading__actions > a:first-child{
-  border:1px solid #c98b3c !important;
-  background:#c98b3c !important;
+  border:1px solid #c98a3a !important;
+  background:#c98a3a !important;
   color:#fff !important;
 }
 
+/* 2つ目：文字リンクではなく、明確な色付きボタン */
 body.hub-customhome-page.hub-customhome-top .ch-site-reading--editorial .ch-site-reading__actions > a:last-child{
-  border:1px solid #b9874f !important;
-  background:rgba(255,255,255,.72) !important;
-  color:#2b2119 !important;
+  border:1px solid #5f4632 !important;
+  background:#5f4632 !important;
+  color:#fff !important;
 }
 
 body.hub-customhome-page.hub-customhome-top .ch-site-reading--editorial .ch-site-reading__actions > a:last-child:hover{
-  background:#f5eadc !important;
-  border-color:#a96f32 !important;
+  border-color:#7a5b42 !important;
+  background:#7a5b42 !important;
+  color:#fff !important;
 }
 
 @media(max-width:1100px){
   body.hub-customhome-page.hub-customhome-top .ch-site-reading--editorial .ch-site-reading__cards{
-    margin-top:34px !important;
+    margin-top:36px !important;
     gap:18px !important;
   }
-  body.hub-customhome-page.hub-customhome-top .ch-site-reading--editorial .ch-site-reading__actions > a{
-    min-width:240px !important;
+
+  body.hub-customhome-page.hub-customhome-top .ch-site-reading--editorial .ch-site-reading__cards > *{
+    min-height:190px !important;
+    padding:24px !important;
   }
 }
 
@@ -2085,11 +2114,13 @@ body.hub-customhome-page.hub-customhome-top .ch-site-reading--editorial .ch-site
     grid-template-columns:1fr !important;
     margin-top:28px !important;
   }
+
   body.hub-customhome-page.hub-customhome-top .ch-site-reading--editorial .ch-site-reading__actions{
     flex-direction:column !important;
+    align-items:stretch !important;
     gap:12px !important;
-    margin-top:18px !important;
   }
+
   body.hub-customhome-page.hub-customhome-top .ch-site-reading--editorial .ch-site-reading__actions > a{
     width:100% !important;
     min-width:0 !important;
